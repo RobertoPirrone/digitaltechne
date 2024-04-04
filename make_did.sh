@@ -11,7 +11,7 @@ function generate_did() {
 }
 
 # The list of canisters of your project
-CANISTERS=parto_da_zero_backend
+CANISTERS=backend
 
 for canister in $(echo $CANISTERS | sed "s/,/ /g")
 do

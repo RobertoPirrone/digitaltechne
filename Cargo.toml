@@ -1,0 +1,5 @@
+[workspace]
+members = [
+    "src/parto_da_zero_backend"
+]
+resolver = "2"

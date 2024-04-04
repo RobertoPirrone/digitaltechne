@@ -10,7 +10,7 @@ import Checkbox from "@mui/material/Checkbox";
 import CircularProgress from '@mui/material/CircularProgress';
 import FormControlLabel from "@mui/material/FormControlLabel";
 import TextField from "@mui/material/TextField";
-// import useStyles from "./useStyles";
+import {DTSubmit} from "./useStyles";
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 import WarningIcon from '@mui/icons-material/Warning';
@@ -135,7 +135,7 @@ export const MostSubmitButton = ({
  }) => {
   // const classes = useStyles();
   return (
-    <Button onClick={onClick} disabled={disabled} type={type} fullWidth variant="contained" color="primary" className={`${classes.submit} ${className}`} >
+    <Button onClick={onClick} disabled={disabled} type={type} fullWidth variant="contained" color="primary" className={`${DTSubmit} ${className}`} >
       {label}
     </Button>
   );

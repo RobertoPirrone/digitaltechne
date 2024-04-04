@@ -3,7 +3,7 @@ import { styled } from '@mui/system';
 export const DTGrow = styled('grow')({
     flexGrow: 1,
 });
-export const DTButton = styled('menuButton')({
+export const DTMenuButton = styled('menuButton')({
     marginRight: 1,
 });
 export const DTFooter = styled('menuButton')({
@@ -17,4 +17,12 @@ export const DTFooter = styled('menuButton')({
     marginTop: 'auto',
     //background-color: '#f5f5f5'
 });
-
+export const DTHeaderTitle = styled('headerTitle')({
+    display: 'block',
+});
+export const DTSectionUser = styled('sectionUser')({
+    display: 'flex',
+});
+export const DTSubmit = styled('submit')({
+    // margin: theme.spacing(3, 0, 2),
+});

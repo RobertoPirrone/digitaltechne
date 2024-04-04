@@ -10,7 +10,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { useTranslation } from 'react-i18next';
 //import logosa from './Smartars.png';
 import logo from './DT-noalpha.png';
-import {DTGrow} from "./components/useStyles";
+import {DTGrow, DTMenuButton, DTHeaderTitle, DTSectionUser } from "./components/useStyles";
 import HelpDialog from "./components/HelpDialog";
 import LanguageIcon from '@mui/icons-material/Language';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -20,10 +20,11 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import Button from "@mui/material/Button";
-// import { useGlobalHook } from '@devhammed/use-global-hook'
+import { useGlobalState } from './state';
+
 
 export function Header(props) {
-  const { userInfo } = useGlobalHook('userStore');
+  const { username, setUsername } = useGlobalState('username');
   const { t, i18n } = useTranslation();
   const [langDialog, setLangDialog] = useState(false);
 
@@ -64,7 +65,6 @@ export function Header(props) {
 
   const catalogoUrl = process.env.REACT_APP_BE+"static/catalogo.html"
 
-  //console.log("userInfo",userInfo);
   return (
     <div className={DTGrow}>
       <AppBar position="fixed" color="inherit" className="Header">
@@ -87,7 +87,7 @@ export function Header(props) {
         ) : (
           <Tooltip title={t("menu")}>
             <IconButton 
-              className={dt_menuButton}
+              className={DTMenuButton}
               edge="start"
               aria-label="menu"
               aria-controls="user-menu"
@@ -105,7 +105,7 @@ export function Header(props) {
           </Tooltip>
         )*/ : (
           <Tooltip title={t("Pagina principale")}>
-            <Link to="/loginok"><img edge="end" src={logo} alt="logo" style={{height:"40px"}} className={dt_headerTitle} /></Link>
+            <Link to="/loginok"><img edge="end" src={logo} alt="logo" style={{height:"40px"}} className={DTHeaderTitle} /></Link>
           </Tooltip>
         )}
           <div className={DTGrow} />
@@ -120,8 +120,8 @@ export function Header(props) {
           </Tooltip>
           { props.empty === "true" ? null :
           (
-              <div className={dt_sectionUser}>
-                <Tooltip title={userInfo.username}>
+              <div className={DTSectionUser}>
+                <Tooltip title={username}>
                   <IconButton
                     edge="end"
                     aria-label={t("account of current user")}
@@ -161,7 +161,7 @@ export function Header(props) {
   open={Boolean(anchorEl1)}
   onClose={handleClose1}
 >
-  <MenuItem disabled>{userInfo.username}</MenuItem>
+  <MenuItem disabled>{username}</MenuItem>
   <MenuItem component={Link} to='/identityM' onClick={handleClose1}>{t("I tuoi dati")}</MenuItem>
   <MenuItem component={Link} to='/changepasswd' onClick={handleClose1}>{t("Cambio password")}</MenuItem>
   <MenuItem component={Link} to='/logout' onClick={handleClose1}>{t("Logout")}</MenuItem>

@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect, useCallback } from "react";
 // import { DataGrid } from '@material-ui/data-grid';
 import { useNavigate } from "react-router-dom";
-// import { useGlobalHook } from "@devhammed/use-global-hook";
+import { useGlobalState } from './state';
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -18,15 +18,15 @@ import {
 import { MostDataGrid } from "./components/MostDataGrid";
 import { Riservato } from "./components/OpusComponents";
 import InVisionDialog from "./components/InVisionDialog";
-// import SettingsIcon from "@material-ui/icons/Settings";
-// import SearchIcon from "@material-ui/icons/Search";
-// import Tooltip from "@material-ui/core/Tooltip";
-// import FormControlLabel from "@material-ui/core/FormControlLabel";
-// import Switch from "@material-ui/core/Switch";
-// import Collapse from "@material-ui/core/Collapse";
-// import PropagateLoader from "react-spinners/PropagateLoader";
+import SettingsIcon from "@mui/icons-material/Settings";
+import SearchIcon from "@mui/icons-material/Search";
+import Tooltip from "@mui/material/Tooltip";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Switch from "@mui/material/Switch";
+import Collapse from "@mui/material/Collapse";
+import PropagateLoader from "react-spinners/PropagateLoader";
 // import { css } from "@emotion/core";
-// import { backend } from "./declarations/backend";
+import { parto_da_zero_backend } from "../../declarations/parto_da_zero_backend";
 
 import {Ed25519KeyIdentity} from '@dfinity/identity';
 import {HttpAgent} from '@dfinity/agent';
@@ -50,8 +50,10 @@ if (isLocal) {
 }
 
 // Canister id can be fetched from URL since frontend in this example is hosted in the same canister as file upload
-const canisterId = new URLSearchParams(window.location.search).get('canisterId') ?? /(.*?)(?:\.raw)?\.ic0.app/.exec(window.location.host)?.[1] ?? /(.*)\.localhost/.exec(window.location.host)?.[1];
-// const canisterId = "bkyz2-fmaaa-aaaaa-qaaaq-cai";
+// const canisterId = new URLSearchParams(window.location.search).get('canisterId') ?? /(.*?)(?:\.raw)?\.ic0.app/.exec(window.location.host)?.[1] ?? /(.*)\.localhost/.exec(window.location.host)?.[1];
+const canisterId = process.env.CANISTER_ID_PARTO_DA_ZERO_BACKEND;
+// console.log(JSON.stringify(process.env));
+// console.log(JSON.stringify(canisterId));
 
 
 // Create asset manager instance for above asset canister
@@ -67,19 +69,9 @@ const assetManager = new AssetManager({canisterId, agent});
   const [dossierVisione, setDossierVisione] = useState([]); //elenco dossier
   const [masterOnly, setMasterOnly] = useState(false); //elenco dossier
   const [checkedPubblici, setCheckedPubblici] = React.useState(false);
-  const { setAlert1, setContent } = useGlobalHook("alertStore");
-  const { userInfo } = useGlobalHook("userStore");
-  const appAlert = useCallback(
-    (text) => {
-      setContent(text);
-      setAlert1(true);
-    },
-    [setContent, setAlert1],
-  );
-  const spinnerCss = css`
-    display: block;
-    margin: 0 auto;
-  `;
+  const [application, setApplication] = useGlobalState('application');
+
+
   useEffect(() => {
     let QP = {
         offset: 0,
@@ -87,11 +79,9 @@ const assetManager = new AssetManager({canisterId, agent});
         autore: 'Elisabetta Villa'
     };
     console.log("QP  is " + JSON.stringify(QP));
-    console.log("backend  is " + JSON.stringify(backend));
-    console.log("backend  is " + JSON.stringify(backend.dossier_query));
     // backend.dossier_query(QP).then((result) => { console.log("The current result is " + JSON.stringify(result)); });
     //MyAxios.get("dossieropera") .then((response) => {
-    backend.dossier_query(QP).then((Ok_data) =>  {
+    parto_da_zero_backend.dossier_query(QP).then((Ok_data) =>  {
         console.log("dossieropera returns: ",JSON.stringify(Ok_data));
         let data = JSON.parse(Ok_data.Ok);
         console.log("data returns: ",JSON.stringify(data));
@@ -109,9 +99,9 @@ const assetManager = new AssetManager({canisterId, agent});
       })
       .catch(function (error) {
         console.error(error);
-        appAlert(error.message ? error.message : JSON.stringify(error));
+        alert(error.message ? error.message : JSON.stringify(error));
       });
-  }, [t, appAlert]);
+  }, [t ]);
 
   const handleChangePubblici = () => {
     setCheckedPubblici((prev) => !prev);
@@ -141,7 +131,7 @@ const assetManager = new AssetManager({canisterId, agent});
     { flex:1, headerName: t("dossier:TipoOpera"), field: "tipoopera"},
   ]
 
-  if (userInfo.application == "elivilla") {
+  if (application == "elivilla") {
     columns.push({ flex:1, headerName: t("dossier:celebrity"), field: "celebrity", });
     columns.push({ flex:1, headerName: t("dossier:year"), field: "year" });
   }
@@ -316,7 +306,7 @@ const assetManager = new AssetManager({canisterId, agent});
           accessor: "fruibilitaopera_id",
         },
       ];
-      if (userInfo.application == "elivilla") {
+      if (application == "elivilla") {
         operaColColumns.push({
           Header: t("dossier:celebrity"),
           accessor: "celebrity",
@@ -375,7 +365,7 @@ const assetManager = new AssetManager({canisterId, agent});
         columns.push([autoreCol, operaCol, altroCol])
       */
       columns.push([imageCol, proprietarioCol, autoreCol, operaCol, altroCol]);
-      if (userInfo.application != "techne")
+      if (application != "techne")
         columns.push([copiesCol, tiraturaCol]);
     }
     return columns;
@@ -395,7 +385,7 @@ const assetManager = new AssetManager({canisterId, agent});
   return (
     <div>
       <Header />
-      {userInfo.application == "techne" ? (
+      {application == "techne" ? (
         <h1>{t("dossier:DossierHeader")}</h1>
       ) : (
         <>
@@ -425,7 +415,7 @@ const assetManager = new AssetManager({canisterId, agent});
             <div>
               <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="MuiContainer-root MuiContainer-maxWidthXs">
-                  {userInfo.application == "techne" ? (
+                  {application == "techne" ? (
                     <MostSubmitButton label={t("dossier:NuovoDossier")} />
                   ) : (
                     <MostSubmitButton label={t("dossier:NuovaFoto")} />
@@ -437,9 +427,9 @@ const assetManager = new AssetManager({canisterId, agent});
         )}
       </div>
 
-      {userInfo.application == "techne" ? (
+      {application == "techne" ? (
         loading ? (
-          <PropagateLoader color="#AAAA00" css={spinnerCss} loading={loading} />
+          <PropagateLoader color="#AAAA00" loading={loading} />
         ) : (
           <React.Fragment>
             <h2>{t("dossier:DossierVisione")}</h2>

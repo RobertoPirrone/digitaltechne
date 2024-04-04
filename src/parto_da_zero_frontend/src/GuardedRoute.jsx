@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { Route, redirect } from "react-router-dom";
 import { now } from "./Utils"
-// import { useGlobalHook } from '@devhammed/use-global-hook'
-// import MyAxios, {check_response} from "./MyAxios";
 
 const GuardedRoute = ({ component: Component, ...rest }) => {
     //console.log("rest",rest);

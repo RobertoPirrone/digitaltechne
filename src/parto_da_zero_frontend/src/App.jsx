@@ -5,7 +5,7 @@ import { BrowserRouter as Router} from 'react-router-dom';
 
 // import { createMuiTheme, ThemeProvider } from '@mui/core/styles';
 // import CssBaseline from "@material-ui/core/CssBaseline";
-// import { GlobalHooksProvider, createGlobalHook } from '@devhammed/use-global-hook'
+
 import GuardedRoute from './GuardedRoute';
 // import { CertificationRequest } from './CertificationRequest';
 import { Dossier } from './Dossier';
@@ -28,6 +28,7 @@ import { Home } from './Home';
 // import { ProvideAuth } from "./use-auth";
 //import logo from './Smartag.png';
 import './App.css';
+
 
 import { parto_da_zero_backend } from 'declarations/parto_da_zero_backend';
 
@@ -52,6 +53,7 @@ function App() {
 
           </Routes>
         </Router>
+
       </div>
   );
 }

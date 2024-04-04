@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, useCallback } from "react";
-// import { DataGrid } from '@mui/data-grid';
+import { DataGrid } from '@mui/x-data-grid';
 
 export const MostDataGrid = ({ 
   columns,
@@ -9,7 +9,7 @@ export const MostDataGrid = ({
 
   return (
     <div style={{ display: 'flex', height: '100%' }}>
-      <Grid autoHeight rowHeight={100} columns={columns} rows={rows} 
+      <DataGrid autoHeight rowHeight={100} columns={columns} rows={rows} 
         disableSelectionOnClick
         pageSize={pageSize}
         onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}

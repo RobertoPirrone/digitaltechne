@@ -30,7 +30,7 @@ import { Home } from './Home';
 import './App.css';
 
 
-import { parto_da_zero_backend } from 'declarations/parto_da_zero_backend';
+import { backend } from 'declarations/backend';
 
 function App() {
   const [greeting, setGreeting] = useState('');
@@ -38,7 +38,7 @@ function App() {
   function handleSubmit(event) {
     event.preventDefault();
     const name = event.target.elements.name.value;
-    parto_da_zero_backend.greet(name).then((greeting) => {
+    backend.greet(name).then((greeting) => {
       setGreeting(greeting);
     });
     return false;

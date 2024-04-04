@@ -1,10 +1,10 @@
 {
-  "name": "parto_da_zero_frontend",
+  "name": "frontend",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "setup": "npm i && dfx canister create parto_da_zero_backend && dfx generate parto_da_zero_backend && dfx deploy",
+    "setup": "npm i && dfx canister create backend && dfx generate backend && dfx deploy",
     "start": "vite --port 3000",
     "prebuild": "dfx generate",
     "build": "tsc && vite build",

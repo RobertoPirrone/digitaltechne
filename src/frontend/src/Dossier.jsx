@@ -26,7 +26,7 @@ import Switch from "@mui/material/Switch";
 import Collapse from "@mui/material/Collapse";
 import PropagateLoader from "react-spinners/PropagateLoader";
 // import { css } from "@emotion/core";
-import { parto_da_zero_backend } from "../../declarations/parto_da_zero_backend";
+import { backend } from "../../declarations/backend";
 
 import {Ed25519KeyIdentity} from '@dfinity/identity';
 import {HttpAgent} from '@dfinity/agent';
@@ -81,7 +81,7 @@ const assetManager = new AssetManager({canisterId, agent});
     console.log("QP  is " + JSON.stringify(QP));
     // backend.dossier_query(QP).then((result) => { console.log("The current result is " + JSON.stringify(result)); });
     //MyAxios.get("dossieropera") .then((response) => {
-    parto_da_zero_backend.dossier_query(QP).then((Ok_data) =>  {
+    backend.dossier_query(QP).then((Ok_data) =>  {
         console.log("dossieropera returns: ",JSON.stringify(Ok_data));
         let data = JSON.parse(Ok_data.Ok);
         console.log("data returns: ",JSON.stringify(data));

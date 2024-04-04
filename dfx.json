@@ -11,20 +11,20 @@
       "type": "custom",
       "wasm": "https://github.com/dfinity/internet-identity/releases/latest/download/internet_identity_dev.wasm.gz"
     },
-    "parto_da_zero_backend": {
-      "candid": "src/parto_da_zero_backend/parto_da_zero_backend.did",
-      "package": "parto_da_zero_backend",
+    "backend": {
+      "candid": "src/backend/backend.did",
+      "package": "backend",
       "type": "rust"
     },
-    "parto_da_zero_frontend": {
+    "frontend": {
       "dependencies": [
-        "parto_da_zero_backend"
+        "backend"
       ],
       "source": [
-        "src/parto_da_zero_frontend/dist"
+        "src/frontend/dist"
       ],
       "type": "assets",
-      "workspace": "parto_da_zero_frontend"
+      "workspace": "frontend"
     }
   },
   "defaults": {

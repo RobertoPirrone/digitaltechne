@@ -1,0 +1,19 @@
+{
+    "NewIdentity": "Aggiungi le tue informazioni Anagrafiche",
+    "Enroll": "Salta e associa direttamente l'indirizzo BlockChain",
+    "Inserisci": "Inserisci i dati anagrafici",
+    "cognome": "cognome",
+    "nome": "nome",
+    "residenza_via": "indirizzo di residenza (via)",
+    "residenza_citta": "indirizzo di residenza (citta)",
+    "residenza_stato": "indirizzo di residenza (stato)",
+    "domicilio_via": "indirizzo di domicilio (via)",
+    "domicilio_citta": "indirizzo di domicilio (citta)",
+    "domicilio_stato": "indirizzo di domicilio (stato)",
+    "cittadinanza": "cittadinanza",
+    "tipodocumento": "tipo documento",
+    "email": "email",
+    "telefono": "telefono",
+    "cellulare": "cellulare",
+    "ruolo": "ruolo"
+}

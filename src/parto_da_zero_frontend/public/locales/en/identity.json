@@ -1,0 +1,19 @@
+{
+  "NewIdentity": "Add your personal information",
+  "Enroll": "Skip and bind the BlockChain address directly",
+  "Inserisci": "Enter your personal data",
+  "cognome": "surname",
+  "nome": "name",
+  "residenza_via": "residential address (street)",
+  "residenza_citta": "residence address (city)",
+  "residenza_stato": "residential address (state)",
+  "domicilio_via": "home address (street)",
+  "domicilio_citta": "domicile address (city)",
+  "domicilio_stato": "domicile address (state)",
+  "cittadinanza": "citizenship",
+  "tipodocumento": "document type",
+  "email": "email",
+  "telefono": "telephone",
+  "cellulare": "mobile phone",
+  "ruolo": "role"
+}

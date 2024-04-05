@@ -37,7 +37,7 @@ if (isLocal) {
 
 // Canister id can be fetched from URL since frontend in this example is hosted in the same canister as file upload
 //const canisterId = new URLSearchParams(window.location.search).get('canisterId') ?? /(.*?)(?:\.raw)?\.ic0.app/.exec(window.location.host)?.[1] ?? /(.*)\.localhost/.exec(window.location.host)?.[1];
-const canisterId = process.env.CANISTER_ID_BACKEND;
+const canisterId = process.env.CANISTER_ID_FRONTEND;
 
 // Create asset manager instance for above asset canister
 const assetManager = new AssetManager({canisterId, agent});
@@ -373,7 +373,7 @@ let params = useParams();
   return (
     <div>
       <Header />
-      application == "techne" ? (
+      {application == "techne" ? (
         <h1>{t("dossier:DossierDetail")}</h1>
       ) : (
         <h1>{t("dossier:ImageDetail")}</h1>

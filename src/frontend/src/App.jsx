@@ -50,8 +50,8 @@ function App() {
           <Routes>
             <Route path='/dossier' key="dossier" element={<Dossier />} />
             <Route path='/dossierdetail/:dossierdetail' element={<DossierDetail />} />
-            <Route path='/newdossier/:newdossier' element={<NewDossier />} />
-            <Route path='/newdocument' key="newdocument" element={<NewDocument />} />
+            <Route path='/newdossier' element={<NewDossier />} />
+            <Route path='/newdocument' element={<NewDocument />} />
             <Route path="/" element={<Home />} />
           </Routes>
         </Router>

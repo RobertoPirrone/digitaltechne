@@ -9,14 +9,14 @@ import { BrowserRouter as Router} from 'react-router-dom';
 import GuardedRoute from './GuardedRoute';
 // import { CertificationRequest } from './CertificationRequest';
 import { Dossier } from './Dossier';
-// import { DossierDetail } from './DossierDetail';
+import { DossierDetail } from './DossierDetail';
 import { Home } from './Home';
 // import { Login, Logout } from './Login';
 // import { LoginOk } from './LoginOk';
 //import { MMLogin} from './MMLogin';
 // import { ForgottenPasswd } from './auth/ForgottenPasswd';
-// import { NewDocument } from './NewDocument';
-// import { NewDossier } from './NewDossier';
+import { NewDocument } from './NewDocument';
+import { NewDossier } from './NewDossier';
 // import { NftInfo } from './NftInfo';
 // import { Reload } from './Reload';
 // import { Register } from './Register';
@@ -49,8 +49,10 @@ function App() {
         <Router>
           <Routes>
             <Route path='/dossier' key="dossier" element={<Dossier />} />
-              <Route path="/" element={<Home />} />
-
+            <Route path='/dossierdetail/:dossierdetail' element={<DossierDetail />} />
+            <Route path='/newdossier/:newdossier' element={<NewDossier />} />
+            <Route path='/newdocument' key="newdocument" element={<NewDocument />} />
+            <Route path="/" element={<Home />} />
           </Routes>
         </Router>
 

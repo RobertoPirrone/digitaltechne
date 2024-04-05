@@ -20,6 +20,11 @@ export const DTFooter = styled('menuButton')({
 export const DTHeaderTitle = styled('headerTitle')({
     display: 'block',
 });
+export const DTRoot = styled('root')({
+    display: 'flex',
+    flexDirection: 'column',
+    minHeight: '100vh',
+});
 export const DTSectionUser = styled('sectionUser')({
     display: 'flex',
 });

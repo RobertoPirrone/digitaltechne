@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
+import { useForm } from "react-hook-form"
 import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
 
@@ -18,17 +18,23 @@ import { DTRoot } from "./components/useStyles";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { backend } from "../../declarations/backend";
+// import { uploads, canisterId as uploads_id } from "../../declarations/uploads";
 
 export const NewDossier = () => {
   const navigate = useNavigate();
   const { username } = useGlobalState('username');
   const { application } = useGlobalState('application');
 //  const { control, register, handleSubmit, errors, setValue } = useForm();
+
+
     const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
-  } = useForm();
+  } = useForm()
+
+
 
   const [disabledButs, setDisabledButs] = useState(false)
   const [newDossierInfo, setNewDossierInfo] = useState({}); //pull down & C.
@@ -44,19 +50,31 @@ export const NewDossier = () => {
 // Should be replaced with authentication method e.g. Internet Identity when deployed on IC
 const identity = Ed25519KeyIdentity.generate(new Uint8Array(Array.from({length: 32}).fill(0)));
 const isLocal = !window.location.host.endsWith('ic0.app');
-const agent = new HttpAgent({
-    host: isLocal ? `http://127.0.0.1:${window.location.port}` : 'https://ic0.app', identity,
-});
-if (isLocal) {
-    agent.fetchRootKey();
-}
+
+            if (false) {
+        const agent = new HttpAgent({
+            host: isLocal ? `http://127.0.0.1:${window.location.port}` : 'https://ic0.app', identity,
+        });
+        if (isLocal) {
+            agent.fetchRootKey();
+        }
+        }
 
 // Canister id can be fetched from URL since frontend in this example is hosted in the same canister as file upload
 // const canisterId = new URLSearchParams(window.location.search).get('canisterId') ?? /(.*?)(?:\.raw)?\.ic0.app/.exec(window.location.host)?.[1] ?? /(.*)\.localhost/.exec(window.location.host)?.[1];
-const canisterId = process.env.CANISTER_ID_BACKEND;
+// const canisterId = process.env.CANISTER_ID_ASSETS;
+const canisterId = 'dmalx-m4aaa-aaaaa-qaanq-cai';
+const asset_pfx = `http://${canisterId}.localhost:4943`;
 
 // Create asset manager instance for above asset canister
+// const assetManager = new AssetManager({canisterId, agent});
+const agent = new HttpAgent({
+    host: isLocal ? `http://127.0.0.1:4943` : 'https://ic0.app', identity,
+});
 const assetManager = new AssetManager({canisterId, agent});
+if (isLocal) {
+    agent.fetchRootKey();
+}
 
 // Get file name, width and height from key
 const detailsFromKey = (key) => {
@@ -188,8 +206,9 @@ const detailsFromFile = async (file) => {
     setLastInsert({what:what, id:id})
   }
 
+
   const onSubmit = (vals) => {
-    console.log("onSubmit: " + JSON.stringify(vals));
+    console.log("dataUpload: " + JSON.stringify(vals));
     if (assetKey == "") {
         appAlert("File immagine non scelto")
         return
@@ -198,14 +217,6 @@ const detailsFromFile = async (file) => {
         // appAlert("File delle firme non scelto")
         // return
     // }
-      if (false) {
-    let formData = new FormData();
-    console.log("onSubmit file2: " + JSON.stringify(uploadInfo[0]));
-    formData.append("document_file", uploadInfo[0]);
-    if (uploadInfoSignatures) 
-      formData.append("signatures_file", uploadInfoSignatures[0]);
-    formData.append("jpayload", JSON.stringify(vals));
-      }
 
       vals.ora_inserimento = new Date();
       vals.username = "pippo";
@@ -254,6 +265,7 @@ const detailsFromFile = async (file) => {
         input.onchange = async () => {
             setProgress(0);
             try {
+                const upload_items = await assetManager.list();
                 const batch = assetManager.batch();
                 const items = await Promise.all(Array.from(input.files).map(async (file) => {
                     const {fileName, width, height} = await detailsFromFile(file);
@@ -299,138 +311,31 @@ const detailsFromFile = async (file) => {
       )}
       <Container component="main" maxWidth="md">
         <div className={DTRoot}>
-                    <button className={'App-upload'} onClick={uploadPhotos}>📂 Upload photo</button>
-          <form onSubmit={handleSubmit(onSubmit)} noValidate >
-            {application == "elivilla" ?  (
-              <Grid container spacing={1} alignItems="center">
-                <Grid item xs={12}>
-                    <MostTextField name="nomeopera" required={true} label={t("dossier:evento")} register={register({ required: true })} />
-                    {errors.nomeopera && <span className="badValue">{t("campo obbligatorio")}</span>}
-                </Grid>
-                <Grid item xs={12}>
-                    <MostTextField name="celebrity" required={true} label={t("dossier:celebrity")} register={register({ required: true })} />
-                    {errors.nomeopera && <span className="badValue">{t("campo obbligatorio")}</span>}
-                </Grid>
-                <Grid item xs={12}>
-                    <MostTextField name="year" type="number" min={1980} max={2040} defaultValue={2023} label={t("dossier:year")} register={register({ required: false })} />
-                </Grid>
-                <Grid item xs={12}>
-                    <MostAutocomplete control={control} name="action" rules={{ required: true }} options={newDossierInfo.action} label={t("dossier:CreaNFT")+ " *"} onChange={actionChange} />
-                </Grid>
-              </Grid>
+       <button className={'App-upload'} onClick={uploadPhotos}>📂 Upload photo</button>
+          <div key={`${asset_pfx}${assetKey}`} className={'App-image'} >
+            <img src={`${asset_pfx}${assetKey}`} width= {'100%'}  loading={'lazy'}/>
+          </div>
+                  {progress !== null && <div className={'App-progress'}>{Math.round(progress * 100)}%</div>}
 
-            ) : ( application == "cottolengo" || application == "hypnos"?  (
-              <Grid container spacing={1} alignItems="center">
-                <Grid item xs={12}>
-                    <MostTextField name="nomeopera" required={true} label={t("dossier:Luogo o personaggio")} register={register({ required: true })} />
-                    {errors.nomeopera && <span className="badValue">{t("campo obbligatorio")}</span>}
-                </Grid>
-                <Grid item xs={12}>
-                    <MostAutocomplete control={control} name="action" rules={{ required: true }} options={newDossierInfo.action} label={t("dossier:CreaNFT")+ " *"} onChange={actionChange} />
-                </Grid>
-              </Grid>
-            ) : (
-              <Grid container spacing={1} alignItems="center">
-                <Grid item xs={12}>
-                    <MostTextField name="nomeopera" required={true} label={t("dossier:nomeopera")} register={register({ required: true })} />
-                    {errors.nomeopera && <span className="badValue">{t("campo obbligatorio")}</span>}
+
+          <form onSubmit={handleSubmit(onSubmit)}>
+
+                    <Grid container spacing={1} alignItems="center">
+
+      <Grid item xs={12}>
+                    <input {...register("nomeopera", { required: true })} label={t("dossier:nomeopera")} />
                 </Grid>
 
-                <Grid item xs={12}>
-                    <MostSelect name="fruibilitaopera" options={newDossierInfo.fruibilitaopera} control={control} placeholder={t("dossier:FruibilitaOpera")} />
-                </Grid>
-                <Grid item xs={6}>
-                  <MostSelect control={control} name="luogoopera" options={newDossierInfo.luogoopera} placeholder={t("dossier:luogoopera")} />
-                </Grid>
+
                 <Grid item xs={3}>
-                  <MostCheckbox register={register} control={control} name="riservatezzaluogo" default={false} label={t("dossier:riservato")} />
+                  <MostCheckbox {...register('nomeopera')}  name="extract_frames" default={false} label={t("dossier:extract_frames")} />
                 </Grid>
-                <Grid item xs={3}>
-                  <FormDialog what="luogo" tipoluogoOptions={newDossierInfo.tipoluogo} setSearchele={setSearchele} disabledButs={disabledButs} onInsert={onInsert} control={control} />
-                </Grid>
-                <Grid item xs={9}>
-                  <MostSelect name="statusopera" options={newDossierInfo.statusopera} control={control} placeholder={t("dossier:statusopera")} />
-                </Grid>
-                <Grid item id="tiposupporto_id" xs={12}>
-                    <MostSelect name="tiposupporto_id" rules={{ required: false }} options={newDossierInfo.tiposupporto} control={control} placeholder={t("dossier:TipoSupporto")+" *"} />
-                    {errors.tiposupporto_id && <span className="badValue">{t("campo obbligatorio")}</span>}
-                </Grid>
-                <Grid item xs={3}>
-                  <MostCheckbox register={register} control={control} name="riservatezzastatus" default={false} label={t("dossier:riservato")} />
-                </Grid>
-                <Grid item xs={9} className="asinistra blackColor">
-                   <span className="padding10">{t("dossier:Proprietario")}: {username}</span>
-                </Grid>
-                <Grid item xs={3}>
-                    <MostCheckbox register={register} control={control} name="riservatezzaproprietario" default={false} label={t("dossier:riservato")} />
-                </Grid>
-                <Grid item xs={12}>
-                    <MostSelect name="fruibilitadossier" rules={{ required: false }} options={newDossierInfo.fruibilitadossier} control={control} placeholder={t("dossier:fruibilitadossier")+" *"} />
-                    {errors.fruibilitadossier && <span className="badValue">{t("campo obbligatorio")}</span>}
-                </Grid>
-
-
-              </Grid>
-            ))}
-                {action == "" ? (
-                  <div></div>
-                ) : ( action == "tokenize" ? (
-                <Grid item xs={12}>
-                    <MostSelect control={control} name="grid_size" options={newDossierInfo.grid_size} placeholder={t("dossier:GridSize")+ " *"} />
-                </Grid>
-                ) : (
-                <div>
-                <Grid item xs={12}>
-                    <MostTextField name="copies" type="number" label={t("dossier:NumeroCopie" + " *")} register={register({ required: true })} />
-                </Grid>
-                <Grid item xs={12}>
-                    <MostSelect control={control} name="signature_position" options={newDossierInfo.signature_position} placeholder={t("dossier:SignaturePosition")+ " *"} register={register({ required: true })} />
-                </Grid>
-                <Grid item xs={12}>
-                    <MostSelect control={control} name="signature_color" options={newDossierInfo.signature_color} placeholder={t("dossier:SignatureColor")+ " *"} register={register({ required: true })} />
-                </Grid>
-                <Grid item xs={6} >
-                  Specimen di firma:
-                </Grid>
-                <Grid item xs={6} >
-                  <FileUpload setUploadInfo={setUploadInfoSignatures} />
-                </Grid>
-                </div>
-                ) 
-                )}
-                {action == "cottolengo" ? (
-                  <></>
-                ) : (
-                <Grid item xs={3}>
-                  <MostCheckbox register={register} control={control} name="extract_frames" default={false} label={t("dossier:extract_frames")} />
-                </Grid>
-                )}
-
-              <Grid container spacing={1} alignItems="center">
-                <Grid item xs={9}>
-                  <MostSelect control={control} name="autore" rules={{ required: false }} options={newDossierInfo.autore} placeholder={t("dossier:autore")+" *"} />
-                  {errors.autore && <span className="badValue">{t("campo obbligatorio")}</span>}
-                </Grid>
-                <Grid item xs={3}>
-                  <FormDialog what="autore" setSearchele={setSearchele} disabledButs={disabledButs} onInsert={onInsert} className="MuiFormControl-marginDense"/>
-                </Grid>
-
-                <Grid item xs={9}>
-                  <MostSelect control={control} name="tipoopera_id" rules={{ required: false }} options={newDossierInfo.tipoopera} placeholder={t("dossier:TipoOpera")+ " *"} />
-                  {errors.tipoopera_id && <span className="badValue">{t("campo obbligatorio")}</span>}
-                </Grid>
-                <Grid item xs={3}>
-                  <FormDialog what="tipoopera" setSearchele={setSearchele} disabledButs={disabledButs} onInsert={onInsert} className="MuiFormControl-marginDense"/>
-                </Grid>
-
-
-              </Grid>
-
-
 
                 <Grid item xs={12}>   &nbsp;</Grid>
+                        <input type="submit" />
 
-            <MostSubmitButton disabled={disabledButs} label={t("dossier:Inserisci")} />
+
+      </Grid>
           </form>
         </div>
       </Container>

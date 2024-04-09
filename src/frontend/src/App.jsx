@@ -11,7 +11,7 @@ import GuardedRoute from './GuardedRoute';
 import { Dossier } from './Dossier';
 import { DossierDetail } from './DossierDetail';
 import { Home } from './Home';
-// import { Login, Logout } from './Login';
+import { IILogin } from './IILogin';
 // import { LoginOk } from './LoginOk';
 //import { MMLogin} from './MMLogin';
 // import { ForgottenPasswd } from './auth/ForgottenPasswd';
@@ -51,7 +51,9 @@ function App() {
             <Route path='/dossier' key="dossier" element={<Dossier />} />
             <Route path='/dossierdetail/:dossierdetail' element={<DossierDetail />} />
             <Route path='/newdossier' element={<NewDossier />} />
-            <Route path='/newdocument' element={<NewDocument />} />
+            <Route path='/newdocument' key="dossier_id" element={<NewDocument />} />
+            <Route path="/login" element={<IILogin />} />
+            <Route path="/loginok" element={<Home />} />
             <Route path="/" element={<Home />} />
           </Routes>
         </Router>

@@ -7,11 +7,13 @@
     "setup": "npm i && dfx canister create backend && dfx generate backend && dfx deploy",
     "start": "vite --port 3000",
     "prebuild": "dfx generate",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build && cp src/.ic-assets.json dist/.ic-assets.json5",
+    "XXXbuild": "tsc && vite build",
     "format": "prettier --write \"src/**/*.{json,js,jsx,ts,tsx,css,scss}\""
   },
   "dependencies": {
     "@dfinity/agent": "^0.15.7",
+    "@dfinity/auth-client": "^0.15.3",
     "@dfinity/candid": "^0.15.7",
     "@dfinity/principal": "^0.15.7",
     "@emotion/react": "^11.11.4",

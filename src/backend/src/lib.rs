@@ -319,17 +319,20 @@ fn document_insert(jv: String) -> ExecResult {
     };
     let count = iter.next().unwrap().unwrap();
     ic_cdk::println!("count: {:?}", count);
+    let image_uri = d.image_uri.to_string();
+    ic_cdk::println!("image_uri: {:?}", image_uri);
     // let wrap = sql_ret.unwrap();
 
     let uuid = count + 1;
-    let sql = format!("insert into documents (id, autore, nomeopera, ora_inserimento, title, versione, dossieropera_id, filename, filesize, mimetype, image_uri) values ({}, '{}', '{}', '{}', '{}', {}, '{}, '{}', {}, '{}, '{}')", uuid, d.autore, d.nomeopera, d.ora_inserimento, d.title, d.versione, d.dossieropera_id, d.filename, d.filesize, d.mimetype, d.image_uri );
+    let sql = format!("insert into documents (id, autore, nomeopera, ora_inserimento, title, versione, dossieropera_id, filename, filesize, mimetype, image_uri) values ({}, '{}', '{}', '{}', '{}', {}, {}, '{}', {}, '{}', '{}')", uuid, d.autore, d.nomeopera, d.ora_inserimento, d.title, d.versione, d.dossieropera_id, d.filename, d.filesize, d.mimetype, image_uri );
+    ic_cdk::println!("document_insert sql: {:?}", sql);
 
     return match conn.execute(
         &sql,
         []
     ) {
-        Ok(e) => Ok(format!("{:?}", e)),
-        Err(err) => Err(MyError::CanisterError {message: format!("{:?}", err) })
+        Ok(e) => Ok(format!("document_insert OK: {:?}", e)),
+        Err(err) => Err(MyError::CanisterError {message: format!("document_insert KO: {:?}", err) })
     }
 }
 

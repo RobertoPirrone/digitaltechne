@@ -22,8 +22,9 @@ import { backend } from "../../declarations/backend";
 
 export const NewDossier = () => {
   const navigate = useNavigate();
-  const { username } = useGlobalState('username');
-  const { application } = useGlobalState('application');
+    const [username, setUsername] = useGlobalState('username');
+    const [application, setapplication] = useGlobalState('application');
+    console.log("username entro: ", username, ", application: ", application);
 //  const { control, register, handleSubmit, errors, setValue } = useForm();
 
 
@@ -218,12 +219,14 @@ const detailsFromFile = async (file) => {
         // return
     // }
 
+      console.log("onSubmit username: ", username);
       vals.ora_inserimento = new Date();
-      vals.username = "pippo";
+      vals.username = username;
       vals.autore = "Elisabetta Villa";
       // vals.icon_uri = "https://techne-test.mostapps.it/ipfs/QmeAV99r5LckFBAJxu5FUwhpMWjQ9XCSRd5cSC2w3k5vWJ" ;
       vals.icon_uri = assetKey;
     setDisabledButs(true)
+      console.log("onSubmit: ", JSON.stringify(vals));
     backend.dossier_insert(JSON.stringify(vals)).then((Ok_data) =>  {
         console.log("dossier_insert returns: ",JSON.stringify(Ok_data));
         let response = JSON.parse(Ok_data.Ok);

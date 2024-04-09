@@ -79,6 +79,7 @@ const assetManager = new AssetManager({canisterId, agent});
   const [masterOnly, setMasterOnly] = useState(false); //elenco dossier
   const [checkedPubblici, setCheckedPubblici] = React.useState(false);
   const [application, setApplication] = useGlobalState('application');
+  const [username, setusername] = useGlobalState('username');
   const [trueidentity, setIdentity] = useGlobalState('identity');
 
 
@@ -91,6 +92,7 @@ const assetManager = new AssetManager({canisterId, agent});
     console.log("QP  is " + JSON.stringify(QP));
     console.log("backend  is " + JSON.stringify(backend));
     console.log("trueidentity  is " + JSON.stringify(trueidentity));
+    console.log("username  is " + JSON.stringify(username));
     // backend.dossier_query(QP).then((result) => { console.log("The current result is " + JSON.stringify(result)); });
     //MyAxios.get("dossieropera") .then((response) => {
     backend.dossier_query(QP).then((Ok_data) =>  {

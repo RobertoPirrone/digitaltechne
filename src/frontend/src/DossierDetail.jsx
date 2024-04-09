@@ -2,6 +2,7 @@ import React, { useState, useMemo, useEffect, useCallback } from "react";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
+import { MostDataGrid } from "./components/MostDataGrid";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -22,22 +23,32 @@ import {Ed25519KeyIdentity} from '@dfinity/identity';
 import {HttpAgent} from '@dfinity/agent';
 import {AssetManager} from '@dfinity/assets';
 
+const canisterId = process.env.CANISTER_ID_FRONTEND;
 let dossier_id = "";
 export const DossierDetail = (props) => {
 // Hardcoded principal: 535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe
 // Should be replaced with authentication method e.g. Internet Identity when deployed on IC
 const identity = Ed25519KeyIdentity.generate(new Uint8Array(Array.from({length: 32}).fill(0)));
 const isLocal = !window.location.host.endsWith('ic0.app');
+const fetchOptions = {
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+    },
+  };
+
 const agent = new HttpAgent({
-    host: isLocal ? `http://127.0.0.1:${window.location.port}` : 'https://ic0.app', identity,
-});
+    // host: isLocal ? `http://${canisterId}.localhost:${window.location.port}` : 'https://ic0.app', identity,
+    host: isLocal ? `http://127.0.0.1:3000` : 'https://ic0.app', identity,
+    //fetch: window.fetch.bind(window),
+    fetchOptions,
+  });
+
 if (isLocal) {
     agent.fetchRootKey();
 }
 
 // Canister id can be fetched from URL since frontend in this example is hosted in the same canister as file upload
 //const canisterId = new URLSearchParams(window.location.search).get('canisterId') ?? /(.*?)(?:\.raw)?\.ic0.app/.exec(window.location.host)?.[1] ?? /(.*)\.localhost/.exec(window.location.host)?.[1];
-const canisterId = process.env.CANISTER_ID_FRONTEND;
 
 // Create asset manager instance for above asset canister
 const assetManager = new AssetManager({canisterId, agent});
@@ -56,6 +67,8 @@ const assetManager = new AssetManager({canisterId, agent});
 
   const { t } = useTranslation(["translation", "documento", "dossier"]);
   const { control, register, handleSubmit, errors } = useForm();
+const [uploads, setUploads] = useState([]);
+
 
   const appAlert = useCallback(
     (text) => {
@@ -69,10 +82,10 @@ const assetManager = new AssetManager({canisterId, agent});
   ];
 
   let react_router_location = useLocation();
-  console.log("react_router_location: " + JSON.stringify(react_router_location));
-  console.log("props: " + JSON.stringify(props));
+  console.log("DossierDetail react_router_location: " + JSON.stringify(react_router_location));
+  console.log("DossierDetail props: " + JSON.stringify(props));
 let params = useParams();
-  console.log("params: " + JSON.stringify(params));
+  console.log("DossierDetail params: " + JSON.stringify(params));
 
   if (params.dossierid) {
     //console.log("Dentro  props: " + JSON.stringify(props.location));
@@ -86,13 +99,21 @@ let params = useParams();
 
   useEffect(() => {
     if (!dossier_id) return;
+      assetManager.list()
+            .then(assets => assets
+                .filter(asset => asset.key.startsWith('/uploads/'))
+                .sort((a, b) => Number(b.encodings[0].modified - a.encodings[0].modified))
+                .map(({key}) => detailsFromKey(key)))
+            .then(setUploads);
+      console.log("assets: ", JSON.stringify(uploads));
+
     let jdata = { dossier_id: dossier_id };
     let QP = {
         dossieropera_id: dossier_id
     };
     console.log("QP  is " + JSON.stringify(QP));
     backend.documenti_query(QP).then((Ok_data) =>  {
-        console.log("documenti_query returns: ",JSON.stringify(Ok_data));
+        console.log("DossierDetail documenti_query returns: ",JSON.stringify(Ok_data));
         let data = JSON.parse(Ok_data.Ok);
         const dossierInfo = data.dossier_info;
         if (false) {
@@ -121,14 +142,15 @@ let params = useParams();
   let columns = [
     { field: 'image_uri', headerName: t('Opera Image'), renderCell: (params)=>{
       return (
-                        <img src={params.icon_uri} width= {'100%'}  loading={'lazy'}/>
+          <div key={params.row.image_uri} className={'App-image'} >
+                        <img src={params.row.image_uri} width= {'100%'}  loading={'lazy'}/>
+          </div>
       )
     } },
-    { flex:1, field: "tiratura", headerName: t("dossier:Tiratura")},
-    { flex:1, field: "nft_copies", headerName: t("dossier:NumeroCopie")},
-    { flex:1, headerName: t("dossier:Autore"), field: "autore"}, 
-    { flex:1, headerName: t("dossier:NomeOpera"), field: "nomeopera"},
-    { flex:1, headerName: t("dossier:TipoOpera"), field: "tipoopera"},
+    { flex:1, headerName: t("documento:author"), field: "autore"}, 
+    { flex:1, headerName: t("documento:title"), field: "title"},
+    { flex:1, headerName: t("NomeOpera"), field: "nomeopera"},
+    { flex:1, headerName: t("documento:filename"), field: "filename"},
   ]
 
   const XXXcolumns = useMemo(() => {
@@ -219,11 +241,10 @@ let params = useParams();
   }, [t, disabledButs]);
 
   const nuovoDoc = () => {
-    console.log("nuovoDoc dossier_id: " + dossier_id);
-    navigate({
-      pathname: "/newdocument",
-      state: { dossier_id: dossier_id },
-    });
+    console.log("DossierDetail nuovoDoc dossier_id: " + dossier_id);
+    navigate( "/newdocument",
+        { state: { dossier_id: dossier_id }},
+    );
   };
 
   const documents2BC = () => {
@@ -576,7 +597,7 @@ let params = useParams();
           !sellOrInviteMode ? (
             <div>
               <h2>{t("Documenti")} </h2>
-              <div className="blackColor margin20 gray">{docs.length ? <Table columns={columns} data={docs} /> : t("dossier:NoDocument") }</div>
+              <div className="blackColor margin20 gray">{docs.length ? <MostDataGrid columns={columns} rows={docs} /> : t("dossier:NoDocument") }</div>
               {dossierInfo && username === username ? (
                 <div>
                   <div className="MuiContainer-root MuiContainer-maxWidthXs">

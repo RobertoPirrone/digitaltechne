@@ -11,13 +11,23 @@
       "type": "custom",
       "wasm": "https://github.com/dfinity/internet-identity/releases/latest/download/internet_identity_dev.wasm.gz"
     },
+
     "backend": {
       "candid": "src/backend/backend.did",
       "package": "backend",
       "type": "rust"
     },
+
+    "uploads": {
+      "type": "assets",
+      "source": [
+        "uploads"
+      ]
+    },
+
     "frontend": {
       "dependencies": [
+        "uploads",
         "backend"
       ],
       "source": [
@@ -27,6 +37,7 @@
       "workspace": "frontend"
     }
   },
+
   "defaults": {
     "build": {
       "args": "",

@@ -54,9 +54,9 @@ export const BexplorerLink = (props) => {
 
 export const GoToHomePage = () => {
     console.error("GoToHomePage")
-    const history = useNavigate();
+    const navigate = useNavigate();
     setTimeout(() => {
-        history.push("/loginok")
+        navigate("/home")
     },100)
     return <div />
 }

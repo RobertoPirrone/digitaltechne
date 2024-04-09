@@ -27,6 +27,7 @@ import Collapse from "@mui/material/Collapse";
 import PropagateLoader from "react-spinners/PropagateLoader";
 // import { css } from "@emotion/core";
 import { backend } from "../../declarations/backend";
+import { uploads } from "../../declarations/uploads";
 
 import {Ed25519KeyIdentity} from '@dfinity/identity';
 import {HttpAgent} from '@dfinity/agent';
@@ -38,14 +39,18 @@ import {AssetManager} from '@dfinity/assets';
  * @component
  */
 export const Dossier = () => {
-const canisterId = process.env.CANISTER_ID_FRONTEND;
+// const canisterId = process.env.CANISTER_ID_UPLOADS;
+const canisterId = 'dmalx-m4aaa-aaaaa-qaanq-cai';
+const asset_pfx = `http://${canisterId}.localhost:4943`;
+// console.log("process.env :", JSON.stringify(process.env));
+console.log("asset_pfx :", asset_pfx);
 // Hardcoded principal: 535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe
 // Should be replaced with authentication method e.g. Internet Identity when deployed on IC
 const identity = Ed25519KeyIdentity.generate(new Uint8Array(Array.from({length: 32}).fill(0)));
 const isLocal = !window.location.host.endsWith('ic0.app');
 const agent = new HttpAgent({
-    host: isLocal ? `http://localhost:${window.location.port}` : 'https://ic0.app', identity,
-    // non funziona comunque host: isLocal ? `http://${canisterId}.localhost:${window.location.port}` : 'https://ic0.app', identity,
+    host: isLocal ? `http://127.0.0.1:${window.location.port}` : 'https://ic0.app', identity,
+    //host: isLocal ? `http://${canisterId}.localhost:${window.location.port}` : 'https://ic0.app', identity,
 });
 if (isLocal) {
     console.log("agent.fetchRootKey");
@@ -74,6 +79,7 @@ const assetManager = new AssetManager({canisterId, agent});
   const [masterOnly, setMasterOnly] = useState(false); //elenco dossier
   const [checkedPubblici, setCheckedPubblici] = React.useState(false);
   const [application, setApplication] = useGlobalState('application');
+  const [trueidentity, setIdentity] = useGlobalState('identity');
 
 
   useEffect(() => {
@@ -84,6 +90,7 @@ const assetManager = new AssetManager({canisterId, agent});
     };
     console.log("QP  is " + JSON.stringify(QP));
     console.log("backend  is " + JSON.stringify(backend));
+    console.log("trueidentity  is " + JSON.stringify(trueidentity));
     // backend.dossier_query(QP).then((result) => { console.log("The current result is " + JSON.stringify(result)); });
     //MyAxios.get("dossieropera") .then((response) => {
     backend.dossier_query(QP).then((Ok_data) =>  {
@@ -123,8 +130,8 @@ const assetManager = new AssetManager({canisterId, agent});
               target="_blank"
               className="nodecoration allCellLink"
               >
-          <div key={params.row.icon_uri} className={'App-image'} >
-            <img src={params.row.icon_uri} width= {'100%'}  loading={'lazy'}/>
+          <div key={`${asset_pfx}${params.row.icon_uri}`} className={'App-image'} >
+            <img src={`${asset_pfx}${params.row.icon_uri}`} width= {'100%'}  loading={'lazy'}/>
           </div>
             </Link>
       )

@@ -31,3 +31,6 @@ export const DTSectionUser = styled('sectionUser')({
 export const DTSubmit = styled('submit')({
     // margin: theme.spacing(3, 0, 2),
 });
+export const DTTable = styled('table')({
+      border: '1px',
+});

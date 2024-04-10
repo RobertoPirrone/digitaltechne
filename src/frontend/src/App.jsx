@@ -3,15 +3,16 @@ import React, { useState, Suspense } from 'react';
 import { Route, Routes } from "react-router";
 import { BrowserRouter as Router} from 'react-router-dom';
 
-// import { createMuiTheme, ThemeProvider } from '@mui/core/styles';
+import { createMuiTheme, ThemeProvider } from '@mui/material/styles';
 // import CssBaseline from "@material-ui/core/CssBaseline";
+import { theme } from './components/theme';
 
 import GuardedRoute from './GuardedRoute';
 // import { CertificationRequest } from './CertificationRequest';
 import { Dossier } from './Dossier';
 import { DossierDetail } from './DossierDetail';
 import { Home } from './Home';
-import { IILogin } from './IILogin';
+import { Login } from './SignIn';
 // import { LoginOk } from './LoginOk';
 //import { MMLogin} from './MMLogin';
 // import { ForgottenPasswd } from './auth/ForgottenPasswd';
@@ -45,6 +46,7 @@ function App() {
   }
 
   return (
+    <ThemeProvider theme={theme}>
       <div className="App">
         <Router>
           <Routes>
@@ -52,13 +54,13 @@ function App() {
             <Route path='/dossierdetail/:dossierdetail' element={<DossierDetail />} />
             <Route path='/newdossier' element={<NewDossier />} />
             <Route path='/newdocument' key="dossier_id" element={<NewDocument />} />
-            <Route path="/login" element={<IILogin />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/loginok" element={<Home />} />
             <Route path="/" element={<Home />} />
           </Routes>
         </Router>
-
       </div>
+    </ThemeProvider>
   );
 }
 export default App;

@@ -40,7 +40,7 @@ import {AssetManager} from '@dfinity/assets';
  */
 export const Dossier = () => {
 // const canisterId = process.env.CANISTER_ID_UPLOADS;
-const canisterId = 'dmalx-m4aaa-aaaaa-qaanq-cai';
+const canisterId = 'br5f7-7uaaa-aaaaa-qaaca-cai';
 const asset_pfx = `http://${canisterId}.localhost:4943`;
 // console.log("process.env :", JSON.stringify(process.env));
 console.log("asset_pfx :", asset_pfx);
@@ -52,21 +52,15 @@ const agent = new HttpAgent({
     host: isLocal ? `http://127.0.0.1:${window.location.port}` : 'https://ic0.app', identity,
     //host: isLocal ? `http://${canisterId}.localhost:${window.location.port}` : 'https://ic0.app', identity,
 });
+    if (false) {
 if (isLocal) {
-    console.log("agent.fetchRootKey");
-    agent.fetchRootKey();
+    agent.fetchRootKey().catch((err) => {
+      console.warn( "Unable to fetch root key. Check to ensure that your local replica is running");
+      console.error(err);
+    });
+}
 }
 
-// Canister id can be fetched from URL since frontend in this example is hosted in the same canister as file upload
-// const canisterId = new URLSearchParams(window.location.search).get('canisterId') ?? /(.*?)(?:\.raw)?\.ic0.app/.exec(window.location.host)?.[1] ?? /(.*)\.localhost/.exec(window.location.host)?.[1];
-// const canisterId = process.env.CANISTER_ID_BACKEND;
-// const canisterId = process.env.CANISTER_ID_FRONTEND;
-// console.log(JSON.stringify(process.env));
-// console.log(JSON.stringify(canisterId));
-
-
-// Create asset manager instance for above asset canister
-const assetManager = new AssetManager({canisterId, agent});
 
   const navigate = useNavigate();
   const { handleSubmit } = useForm();

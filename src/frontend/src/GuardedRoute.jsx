@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import { Route, redirect } from "react-router-dom";
 import { now } from "./Utils"
+import { useGlobalState } from './state';
+
 
 const GuardedRoute = ({ component: Component, ...rest }) => {
     //console.log("rest",rest);
+    const [username, setUsername] = useGlobalState('username');
+
 
     // prop forcereload forza azzeramento stato ad ogni accesso
     // della componente (aggiunta key univoca)
@@ -38,7 +42,7 @@ const GuardedRoute = ({ component: Component, ...rest }) => {
         )
     return(
         <Route {...rest} render={(rest) => (
-            userInfo.username ?
+            username ?
                 (forcereload ? (
                         <Component {...rest} mode={mode} key={isonow()} />
                     ) : (

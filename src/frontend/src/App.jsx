@@ -7,12 +7,13 @@ import { createMuiTheme, ThemeProvider } from '@mui/material/styles';
 // import CssBaseline from "@material-ui/core/CssBaseline";
 import { theme } from './components/theme';
 
-import GuardedRoute from './GuardedRoute';
+// import GuardedRoute from './GuardedRoute';
+import { ProtectedRoute } from './ProtectedRoute';
 // import { CertificationRequest } from './CertificationRequest';
 import { Dossier } from './Dossier';
 import { DossierDetail } from './DossierDetail';
 import { Home } from './Home';
-import { Login } from './SignIn';
+import { Login, Logout } from './SignIn';
 // import { LoginOk } from './LoginOk';
 //import { MMLogin} from './MMLogin';
 // import { ForgottenPasswd } from './auth/ForgottenPasswd';
@@ -50,11 +51,14 @@ function App() {
       <div className="App">
         <Router>
           <Routes>
-            <Route path='/dossier' key="dossier" element={<Dossier />} />
-            <Route path='/dossierdetail/:dossierdetail' element={<DossierDetail />} />
-            <Route path='/newdossier' element={<NewDossier />} />
-            <Route path='/newdocument' key="dossier_id" element={<NewDocument />} />
+            <Route element={<ProtectedRoute />}>
+                <Route path="/dossier" element={<Dossier />} />
+                <Route path='/dossierdetail/:dossierdetail' element={<DossierDetail />} />
+                <Route path='/newdossier' element={<NewDossier />} />
+                <Route path='/newdocument' key="dossier_id" element={<NewDocument />} />
+            </Route>
             <Route path="/login" element={<Login />} />
+            <Route path="/logout" element={<Logout />} />
             <Route path="/loginok" element={<Home />} />
             <Route path="/" element={<Home />} />
           </Routes>

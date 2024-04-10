@@ -1,7 +1,8 @@
+import {useEffect} from 'react';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useTranslation, Trans } from 'react-i18next';
 import { AuthClient } from "@dfinity/auth-client";
 import { HttpAgent } from "@dfinity/agent";
@@ -42,10 +43,11 @@ export const Login = () => {
             setAgent(IIagent);
             }
             backend.whoami().then((Ok_data) =>  {
-                console.log("whoami returns: ",JSON.stringify(Ok_data));
+                // console.log("whoami returns: ",JSON.stringify(Ok_data));
+                console.log("whoami returns: ",Ok_data);
                 setUsername(Ok_data);
+                navigate("/dossier");
             });
-            navigate("/dossier");
         });
     }
 
@@ -77,3 +79,24 @@ export const Login = () => {
     </Container>
   ) 
 };
+
+export const Logout = () => {
+        // let authClient = await AuthClient.create();
+    // await authClient.logout({
+      // onSuccess: () =>{
+        // console.log("logged out");
+      // }
+    // })
+
+    const [username, setUsername] = useGlobalState('username');
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        setUsername("");
+        navigate("/login");
+    })
+
+  // This fix a "sign in -> sign out -> sign in again" flow without window reload.
+  // authClient = null;
+};
+

@@ -1,3 +1,5 @@
+// https://github.com/dfinity/agent-js/tree/main/packages/auth-client
+
 import {useEffect} from 'react';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
@@ -26,6 +28,8 @@ export const Login = () => {
         let authClient = await AuthClient.create();
         await new Promise((resolve) => {
             authClient.login({
+                // 7 days in nanoseconds
+                maxTimeToLive: BigInt(7 * 24 * 60 * 60 * 1000 * 1000 * 1000),
                 identityProvider:
                     process.env.DFX_NETWORK === "ic"
                         ? "https://identity.ic0.app"
@@ -100,3 +104,28 @@ export const Logout = () => {
   // authClient = null;
 };
 
+
+export const checkLoggedUser = () => {
+  const [username, setUsername] = useGlobalState('username');
+    useEffect(() => {
+    (async () => {
+      const client = await AuthClient.create();
+      if (client.isAuthenticated()) {
+          if (username === "") {
+                backend.whoami().then((Ok_data) =>  {
+                    // console.log("whoami returns: ",JSON.stringify(Ok_data));
+                    console.log("whoami returns: ",Ok_data);
+                    setUsername(Ok_data);
+                    return Ok_data;
+                });
+
+          } else {
+            return username;
+          }
+      }
+      return "";
+      const results = await fetchData();
+      console.log(results);
+    })();
+    })
+}

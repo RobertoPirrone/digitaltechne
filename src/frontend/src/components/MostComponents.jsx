@@ -407,3 +407,100 @@ export const MostAutocomplete = ({
   );
 }
 
+export function CountrySelect({ onChange: ignored, options, name, label, control }) {
+  return (
+    <Controller
+      render={({ onChange, ...props }) => (
+        <Autocomplete
+          options={options}
+          getOptionLabel={option => option.label}
+          renderInput={params => (
+            <TextField
+              {...params}
+              label={label}
+              variant="outlined"
+            />
+          )}
+          onChange={(e, data) => onChange(data)}
+          {...props}
+        />
+      )}
+      onChange={([event, data]) => {
+        return data;
+      }}
+      name={name}
+      control={control}
+    />
+  )
+}
+
+export function MyAutocomplete ({
+    onChange,
+    options,
+    value,
+    label
+}) {
+    return (
+        <Autocomplete options={options} value={value} 
+        freeSolo
+          renderInput={params => (
+            <TextField
+              {...params}
+              label={label}
+              variant="outlined"
+            />
+          )}
+          getOptionLabel = {(option) => option }
+          onChange={onChange}
+        />
+    )
+}
+
+export function MyCheckbox ({
+
+    checked,
+    onChange,
+    options,
+    value,
+    label
+}) {
+    return (
+<Checkbox
+  checked={checked}
+  onChange={onChange}
+/>
+    )
+}
+
+export const MyTextField = ({ 
+  name, 
+  label, 
+  defaultValue,
+  autoComplete, 
+  autoFocus=false, 
+  fullWidth=true, 
+  margin="dense",
+  onChange,
+  type="text", 
+  variant="outlined",
+  //variant,
+  required,     // serve per fare aggiungere * al campo obbligatorio, oppure se si usano controlli del browser togliendo noValidate dalla form
+  InputProps,
+  value,
+  disabled=false,
+  register,     // se si vuole avere required gestito da form react bisogna passare register={register({ required: true })}
+}) => {
+  return (
+    <TextField
+      onChange={onChange}
+      name={name}
+      label={label}
+      type={type}
+      id={name}
+      value={value}
+      disabled={disabled}
+    />
+  );
+};
+
+

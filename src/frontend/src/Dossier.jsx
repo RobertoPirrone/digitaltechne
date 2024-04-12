@@ -81,7 +81,7 @@ if (isLocal) {
     let QP = {
         offset: 0,
         limit:50,
-        autore: 'Elisabetta Villa'
+        // autore: 'Elisabetta Villa'
     };
     console.log("QP  is " + JSON.stringify(QP));
     console.log("backend  is " + JSON.stringify(backend));

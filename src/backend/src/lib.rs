@@ -99,7 +99,8 @@ struct Dossier {
     username: String,
     icon_uri: String,
     luogoopera: String,
-    private: bool
+    private: bool,
+    tipoopera: String,
 }
 
 #[derive(CandidType, Debug, Serialize, Deserialize, Default)]
@@ -112,7 +113,8 @@ struct QueryParams {
 struct DossierInfoReturnStruct {
     success: bool,
     autori: Vec<String>,
-    luogooperas: Vec<String>
+    luogooperas: Vec<String>,
+    tipooperas: Vec<String>
     }
 
 #[derive(Serialize, Deserialize)]
@@ -154,6 +156,7 @@ struct ReturnDocumentsStruct {
 
 #[query]
 fn dossier_pulldowns() -> JsonResult {
+    // autore
     let mut dossier_sql = "select distinct autore from dossier";
     let conn = ic_sqlite::CONN.lock().unwrap();
     let mut stmt = match conn.prepare(&dossier_sql) {
@@ -179,6 +182,7 @@ fn dossier_pulldowns() -> JsonResult {
 
     }
 
+    // luogoopera
     dossier_sql = "select distinct luogoopera from dossier";
     let mut stmt = match conn.prepare(&dossier_sql) {
         Ok(e) => e,
@@ -203,10 +207,36 @@ fn dossier_pulldowns() -> JsonResult {
 
     }
 
+    // tipoopera
+    dossier_sql = "select distinct code from tipoopera_code";
+    let mut stmt = match conn.prepare(&dossier_sql) {
+        Ok(e) => e,
+        Err(err) => return Err(MyError::CanisterError {message: format!("{:?}", err) })
+    };
+    let iter = match stmt.query_map([], |row| {
+        Ok(
+            DistinctResult {
+                ele: row.get(0).unwrap()
+            }
+        )
+    }) {
+        Ok(e) => e,
+        Err(err) => return Err(MyError::CanisterError {message: format!("{:?}", err) })
+    };
+    let mut tipooperas = Vec::new();
+    for ele in iter {
+        match ele {
+            Ok(e) => tipooperas.push(e.ele),
+            Err(e) => eprintln!("Error: {e:?}"),
+        }
+
+    }
+
     let rs = DossierInfoReturnStruct {
         success: true,
         autori: autori,
-        luogooperas: luogooperas
+        luogooperas: luogooperas,
+        tipooperas: tipooperas
     };
     let res = serde_json::to_string(&rs).unwrap();
     Ok(res)
@@ -232,7 +262,8 @@ fn dossier_query(params: QueryParams) -> JsonResult {
             username: row.get(4).unwrap(),
             icon_uri: row.get(5).unwrap(),
             luogoopera: row.get(6).unwrap(),
-            private: row.get(7).unwrap()
+            private: row.get(7).unwrap(),
+            tipoopera: row.get(8).unwrap()
         })
     }) {
         Ok(e) => e,
@@ -271,7 +302,11 @@ fn dossier_insert(jv: String) -> ExecResult {
     // let wrap = sql_ret.unwrap();
 
     let uuid = count + 1;
-    let sql = format!("insert into dossier (id, autore, nomeopera, ora_inserimento, username, icon_uri, luogoopera, private) values ({}, '{}', '{}', '{}', '{}', '{}', '{}', {} )", uuid, d.autore, d.nomeopera, d.ora_inserimento, d.username, d.icon_uri , d.luogoopera, d.private);
+    let sql = format!("insert into dossier \
+        (id, autore, nomeopera, ora_inserimento, username, icon_uri, luogoopera, private, tipoopera) 
+        values ({}, '{}', '{}', '{}', '{}', '{}', '{}', {}, '{}' )",
+        uuid, d.autore, d.nomeopera, d.ora_inserimento, d.username, d.icon_uri , d.luogoopera, d.private, d.tipoopera
+        );
     return match conn.execute(
         &sql,
         []
@@ -323,7 +358,8 @@ fn documenti_query(params: QueryDocumentsParams) -> JsonResult {
             username: row.get(4).unwrap(),
             icon_uri: row.get(5).unwrap(),
             luogoopera: row.get(6).unwrap(),
-            private: row.get(7).unwrap()
+            private: row.get(7).unwrap(),
+            tipoopera: row.get(8).unwrap()
         })
     }) {
         Ok(e) => e,

@@ -31,19 +31,9 @@ export const NewDossier = () => {
   const [assetKey, setAssetKey] = useState("");
   const [privateDossier, setPrivateDossier] = useState(false);
   const [nomeOpera, setNomeOpera] = useState("");
+  const [tipoOpera, setTipoOpera] = useState("");
+  const [luogoOpera, setLuogoOpera] = useState("");
   const [autore, setAutore] = useState("");
-  const autoreOptions=[
-      {'code': 'uno', 'label': 'pippo'}, 
-      {'code': 'due', 'label': 'pluto'}, 
-      ];
-  // const selectedAutore = React.useMemo( () => autoreOptions.filter((v) => v.selected), [autoreOptions],);
-
-  const [luogo, setLuogo] = useState("");
-  const luogoOptions=[
-      {'code': 'uno', 'label': 'Luogo1'}, 
-      {'code': 'due', 'label': 'Luogo2'}, 
-      ];
-
 
   const appAlert = useCallback((text) => {
     alert(text);
@@ -51,19 +41,13 @@ export const NewDossier = () => {
 
   useEffect(() => {
     setSearchele(false);
-    //let res = {};
-    // MyAxios.get("dossier_info").then((response) => {
-    let XXQP = {
-        offset: 0,
-        limit:50,
-        // autore: 'Elisabetta Villa'
-    };
     backend.dossier_pulldowns().then((Ok_data) =>  {
         console.log("dossieropera returns: ",JSON.stringify(Ok_data));
         let data = JSON.parse(Ok_data.Ok);
       let pulldowns = {
           autori: data.autori,
-          luogooperas: data.luogooperas
+          luogooperas: data.luogooperas,
+          tipooperas: data.tipooperas
       }
         console.log("struct pulldowns: ",JSON.stringify(pulldowns));
       setNewDossierInfo(pulldowns);
@@ -117,8 +101,9 @@ export const NewDossier = () => {
       vals.ora_inserimento = new Date();
       vals.username = username;
       vals.autore = autore;
-      vals.luogoopera = luogo;
+      vals.luogoopera = luogoOpera;
       vals.nomeopera = nomeOpera;
+      vals.tipoopera = tipoOpera;
       if (privateDossier === null ||privateDossier  == false) {
         vals.private=false;
       } else {
@@ -183,7 +168,10 @@ export const NewDossier = () => {
                   <MyAutocomplete name="autore" label={t("dossier:autore")} options={newDossierInfo.autori} value={autore} onInputChange={(e,v) => setAutore(v)}/>
                 </Grid>
                 <Grid item xs={12}>
-                  <MyAutocomplete name="luogoopera" label={t("dossier:luogoopera")} options={newDossierInfo.luogooperas} onInputChange={(e,v) => setLuogo(v)}/>
+                  <MyAutocomplete name="luogoopera" label={t("dossier:luogoopera")} options={newDossierInfo.luogooperas} onInputChange={(e,v) => setLuogoOpera(v)}/>
+                </Grid>
+                <Grid item xs={12}>
+                  <MyAutocomplete name="tipoopera" label={t("dossier:tipoopera")} options={newDossierInfo.tipooperas} onChange={(e,v) => setTipoOpera(v)}/>
                 </Grid>
 
 

@@ -1,0 +1,12 @@
+Asset Canister:
+* list of every asset
+* converted to json
+* filtered the sha256 blob
+    dfx canister call uploads list '(record {})' |idl2json | jq 'del (.[].encodings[0].sha256)'
+
+* remove asset:
+    dfx canister call uploads delete_asset '(record {key = "/uploads/DSC02231m.1772.1181.jpg";})' 
+
+
+Asset Canister, Brave Browser:
+* disabile the privacy shield for localhost

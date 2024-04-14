@@ -83,22 +83,11 @@ if (isLocal) {
         limit:50,
         // autore: 'Elisabetta Villa'
     };
-    console.log("QP  is " + JSON.stringify(QP));
-    console.log("backend  is " + JSON.stringify(backend));
-    console.log("trueidentity  is " + JSON.stringify(trueidentity));
-    console.log("username  is " + JSON.stringify(username));
-    // backend.dossier_query(QP).then((result) => { console.log("The current result is " + JSON.stringify(result)); });
-    //MyAxios.get("dossieropera") .then((response) => {
+    // console.log("QP  is " + JSON.stringify(QP));
     backend.dossier_query(QP).then((Ok_data) =>  {
-        console.log("dossieropera returns: ",JSON.stringify(Ok_data));
         let data = JSON.parse(Ok_data.Ok);
         console.log("data returns: ",JSON.stringify(data));
-        console.log("raw data returns: ",data);
-        console.log("data success: ",JSON.stringify(data.success));
-        console.log("data ret_owner: ",JSON.stringify(data.ret_owner));
-        // let data = check_response(response);
-        // if (!data.success) { console.error(data.error); appAlert(data.error); return; }
-        // for (let dossier_type of ["ret_owner", "ret_public", "ret_vision"]) { data[dossier_type].forEach((r) => { for (let e of ["fruibilitaopera_id", "statusopera_id"]) { if (r[e]) r[e] = t("dossier:" + e + "." + r[e]); else r[e] = null; } }); }
+        // console.log("raw data returns: ",data);
         setDossierPersonali(data.ret_owner);
         // setDossierPersonaliMaster( data.ret_owner.filter((riga) => riga.master_dossier_id === null),);
         // setDossierPubblici(data.ret_public);
@@ -132,14 +121,15 @@ if (isLocal) {
             </Link>
       )
     } },
-    { flex:1, field: "tiratura", headerName: t("dossier:Tiratura")},
-    { flex:1, field: "nft_copies", headerName: t("dossier:NumeroCopie")},
-    { flex:1, headerName: t("dossier:Autore"), field: "cognome"}, 
+    { flex:1, headerName: t("dossier:Autore"), field: "autore"}, 
     { flex:1, headerName: t("dossier:NomeOpera"), field: "nomeopera"},
     { flex:1, headerName: t("dossier:TipoOpera"), field: "tipoopera"},
+    { flex:1, headerName: t("dossier:LuogoOpera"), field: "luogoopera"},
   ]
 
   if (application == "elivilla") {
+    columns.push({ flex:1, field: "tiratura", headerName: t("dossier:Tiratura")}),
+    columns.push({ flex:1, field: "nft_copies", headerName: t("dossier:NumeroCopie")}),
     columns.push({ flex:1, headerName: t("dossier:celebrity"), field: "celebrity", });
     columns.push({ flex:1, headerName: t("dossier:year"), field: "year" });
   }
@@ -154,231 +144,6 @@ if (isLocal) {
     }
   });
 
-  const XXXcolumns = useMemo(() => {
-    const imageCol = {
-      accessor: "tiratura",
-      Header: t("dossier:Tiratura"),
-    };
-    const tiraturaCol = {
-      accessor: "tiratura",
-      Header: t("dossier:Tiratura"),
-    };
-    const copiesCol = {
-      accessor: "nft_copies",
-      Header: t("dossier:NumeroCopie"),
-    };
-    const proprietarioCol = {
-      Header: t("dossier:Proprietario"),
-      columns: [
-        {
-          Header: "",
-          accessor: "username",
-          Cell: ({ cell: { value }, row: { original } }) => {
-            const ui = original.useridentitydetail;
-            if (ui)
-              return (
-                <span>
-                  {ui.nome + " " + ui.cognome + " (" + value + ")"}
-                  <Riservato reserved={original.riservatezzaproprietario} />
-                </span>
-              );
-            if (!value) return <Riservato reserved={true} />;
-            return (
-              <span>
-                {value}
-                <Riservato reserved={original.riservatezzaproprietario} />
-              </span>
-            );
-          },
-        },
-      ],
-    };
-    const autoreCol = {
-      Header: t("dossier:Autore"),
-      columns: [
-        {
-          Header: t("dossier:Cognome"),
-          accessor: "autoredetail.cognome",
-        },
-        {
-          Header: t("dossier:Nome"),
-          accessor: "autoredetail.nome",
-        },
-        {
-          Header: t("dossier:Detto"),
-          accessor: "autoredetail.nomeinarte",
-        },
-      ],
-    };
-
-    let columns = [];
-    // 0 : propri dossier
-    // 1 : dossier di altri
-    for (let i = 0; i < 2; i++) {
-      let icon;
-      if (i) icon = <SearchIcon />;
-      else icon = <SettingsIcon />;
-      const operaColColumns = [
-        {
-          Header: t("dossier:Dettaglio"),
-          accessor: "id",
-          Cell: ({ cell: { value }, row: { original } }) => {
-            return (
-              <Tooltip title={t("Apri dettaglio")}>
-                <Link
-                  to={{
-                    pathname: "/dossierdetail",
-                    state: { dossier_id: value },
-                  }}
-                  className="nodecoration allCellLink"
-                >
-                  {icon}
-                </Link>
-              </Tooltip>
-            );
-          },
-        },
-        {
-          Header: t("dossier:NomeOpera"),
-          accessor: "nomeopera",
-          Cell: ({ cell: { value }, row: { original } }) => {
-            return (
-              <Tooltip title={t("Apri dettaglio")}>
-                <Link
-                  to={{
-                    pathname: "/dossierdetail",
-                    state: { dossier_id: original.id },
-                  }}
-                  className="nodecoration allCellLink"
-                >
-                  {value}
-                </Link>
-              </Tooltip>
-            );
-          },
-        },
-        {
-          Header: t("dossier:TipoOpera"),
-          accessor: "tipoopera_id",
-        },
-        /*
-          {
-            Header: t("dossier:TipoSupporto"),
-            accessor: "tiposupporto_id",
-          },
-          */
-        {
-          Header: t("dossier:LuogoOpera"),
-          accessor: "luogooperadetail.citta",
-          Cell: ({ cell: { value }, row: { original } }) => {
-            let tipoluogo_id = "";
-            if (
-              original.luogooperadetail &&
-              original.luogooperadetail.tipoluogo_id
-            )
-              tipoluogo_id = t(
-                "dossier:tipoluogo_id." +
-                  original.luogooperadetail.tipoluogo_id,
-              );
-            return (
-              <span>
-                {original.luogooperadetail
-                  ? original.luogooperadetail.citta +
-                    " " +
-                    original.luogooperadetail.indirizzo +
-                    " " +
-                    original.luogooperadetail.nazione +
-                    " (" +
-                    tipoluogo_id +
-                    ")"
-                  : ""}
-                <Riservato reserved={original.riservatezzaluogo} />
-              </span>
-            );
-          },
-        },
-        {
-          Header: t("dossier:StatoOpera"),
-          accessor: "statusopera_id",
-          Cell: ({ cell: { value }, row: { original } }) => {
-            return (
-              <span>
-                {value}
-                <Riservato reserved={original.riservatezzastatus} />
-              </span>
-            );
-          },
-        },
-        {
-          Header: t("dossier:FruibilitaOpera"),
-          accessor: "fruibilitaopera_id",
-        },
-      ];
-      if (application == "elivilla") {
-        operaColColumns.push({
-          Header: t("dossier:celebrity"),
-          accessor: "celebrity",
-        });
-        operaColColumns.push({ Header: t("dossier:year"), accessor: "year" });
-      }
-      const operaCol = {
-        Header: t("Opera"),
-        columns: operaColColumns,
-      };
-
-      const altroColColumns = [
-        {
-          Header: t("dossier:NFT id"),
-          accessor: "token_id",
-        },
-        {
-          Header: t("dossier:In BC"),
-          accessor: "contract_initialized",
-          Cell: ({ cell: { value }, row: { original } }) => {
-            if (value) {
-              if (original.docs_bcsync) return <Check good={true} />;
-              return <WarningIcon />;
-            }
-            return <Check good={false} />;
-          },
-        },
-      ];
-      if (i === 0) {
-        altroColColumns.push({
-          Header: t("dossier:InVisione"),
-          accessor: "visible_cnt",
-          Cell: ({ cell: { value }, row: { original } }) => {
-            if (value) {
-              const inVisionRows = original.inVisionRows;
-              return <InVisionDialog inVisionRows={inVisionRows} />;
-            } else {
-              return "";
-            }
-          },
-        });
-        altroColColumns.push({
-          Header: t("dossier:FruibilitaDossier"),
-          accessor: "fruibilitadossier_id",
-        });
-      }
-      const altroCol = {
-        Header: t("dossier:Dossier"),
-        columns: altroColColumns,
-      };
-
-      /*
-      if(i)
-        columns.push([proprietarioCol, autoreCol, operaCol, altroCol])
-      else
-        columns.push([autoreCol, operaCol, altroCol])
-      */
-      columns.push([imageCol, proprietarioCol, autoreCol, operaCol, altroCol]);
-      if (application != "techne")
-        columns.push([copiesCol, tiraturaCol]);
-    }
-    return columns;
-  }, [t]);
-  //console.log(columns[0])
 
   const masterChange = (e, el) => {
     console.error("masterChange " + el);

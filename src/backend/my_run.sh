@@ -1,5 +1,19 @@
 #!/bin/bash
 
+echo "--- create table tipoopera_codes"
+fields='
+    id INTEGER PRIMARY KEY,                               
+    code TEXT NOT NULL
+    '
+    fields=$(echo $fields)
+    sql_cmd=$(printf "create table tipoopera_code (%s)" "$fields")
+    echo $sql_cmd
+    dfx canister call backend execute "$sql_cmd"
+    dfx canister call backend execute 'insert into tipoopera_code (code) values ("B/W DIGITAL_PHOTO");'
+    dfx canister call backend execute 'insert into tipoopera_code (code) values ("COLOUR DIGITAL_PHOTO");'
+    dfx canister call backend execute 'insert into tipoopera_code (code) values ("CANVASS");'
+    dfx canister call backend execute 'insert into tipoopera_code (code) values ("PAPER");'
+
 echo "--- create table dossier"
 fields='
     id INTEGER PRIMARY KEY,                               
@@ -9,7 +23,8 @@ fields='
     username TEXT NOT NULL,                           
     luogoopera TEXT,
     private BOOLEAN,
-    icon_uri TEXT NOT NULL
+    icon_uri TEXT NOT NULL,
+    tipoopera TEXT NOT NULL
     '
 
     fields=$(echo $fields)

@@ -180,10 +180,10 @@ export const NewDossier = () => {
 
                 </Grid>
                 <Grid item xs={12}>
-                  <MyAutocomplete name="autore" label={t("dossier:autore")} options={newDossierInfo.autori} value={autore} onChange={(e,v) => setAutore(v)}/>
+                  <MyAutocomplete name="autore" label={t("dossier:autore")} options={newDossierInfo.autori} value={autore} onInputChange={(e,v) => setAutore(v)}/>
                 </Grid>
                 <Grid item xs={12}>
-                  <MyAutocomplete name="luogoopera" label={t("dossier:luogoopera")} options={newDossierInfo.luogooperas} onChange={(e,v) => setLuogo(v)}/>
+                  <MyAutocomplete name="luogoopera" label={t("dossier:luogoopera")} options={newDossierInfo.luogooperas} onInputChange={(e,v) => setLuogo(v)}/>
                 </Grid>
 
 

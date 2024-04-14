@@ -435,7 +435,7 @@ export function CountrySelect({ onChange: ignored, options, name, label, control
 }
 
 export function MyAutocomplete ({
-    onChange,
+    onInputChange,
     options,
     value,
     label
@@ -451,7 +451,7 @@ export function MyAutocomplete ({
             />
           )}
           getOptionLabel = {(option) => option }
-          onChange={onChange}
+          onInputChange={onInputChange}
         />
     )
 }

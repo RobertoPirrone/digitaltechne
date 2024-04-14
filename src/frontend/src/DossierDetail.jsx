@@ -23,8 +23,9 @@ import {Ed25519KeyIdentity} from '@dfinity/identity';
 import {HttpAgent} from '@dfinity/agent';
 import {AssetManager} from '@dfinity/assets';
 
-const canisterId = process.env.CANISTER_ID_FRONTEND;
 let dossier_id = "";
+const canisterId = 'br5f7-7uaaa-aaaaa-qaaca-cai';
+const asset_pfx = `http://${canisterId}.localhost:4943`;
 export const DossierDetail = (props) => {
 // Hardcoded principal: 535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe
 // Should be replaced with authentication method e.g. Internet Identity when deployed on IC
@@ -43,15 +44,17 @@ const agent = new HttpAgent({
     fetchOptions,
   });
 
+    if (false) {
 if (isLocal) {
     agent.fetchRootKey();
+}
 }
 
 // Canister id can be fetched from URL since frontend in this example is hosted in the same canister as file upload
 //const canisterId = new URLSearchParams(window.location.search).get('canisterId') ?? /(.*?)(?:\.raw)?\.ic0.app/.exec(window.location.host)?.[1] ?? /(.*)\.localhost/.exec(window.location.host)?.[1];
 
 // Create asset manager instance for above asset canister
-const assetManager = new AssetManager({canisterId, agent});
+// const assetManager = new AssetManager({canisterId, agent});
 
   const navigate = useNavigate();
   const [showjson, setShowjson] = useState(false);
@@ -99,6 +102,7 @@ let params = useParams();
 
   useEffect(() => {
     if (!dossier_id) return;
+      if (false) {
       assetManager.list()
             .then(assets => assets
                 .filter(asset => asset.key.startsWith('/uploads/'))
@@ -106,6 +110,7 @@ let params = useParams();
                 .map(({key}) => detailsFromKey(key)))
             .then(setUploads);
       console.log("assets: ", JSON.stringify(uploads));
+      }
 
     let jdata = { dossier_id: dossier_id };
     let QP = {
@@ -142,8 +147,8 @@ let params = useParams();
   let columns = [
     { field: 'image_uri', headerName: t('Opera Image'), renderCell: (params)=>{
       return (
-          <div key={params.row.image_uri} className={'App-image'} >
-                        <img src={params.row.image_uri} width= {'100%'}  loading={'lazy'}/>
+          <div key={`${asset_pfx}${params.row.image_uri}`} className={'App-image'} >
+            <img src={`${asset_pfx}${params.row.image_uri}`} width= {'100%'}  loading={'lazy'}/>
           </div>
       )
     } },
@@ -412,7 +417,7 @@ let params = useParams();
                       <source src={dossierInfo.image_uri} type="video/mp4" />
                       </video>
                     ) : (
-                      <img src={dossierInfo.icon_uri} width={400} />
+                      <img src={`${asset_pfx}${dossierInfo.icon_uri}`} width={400} />
                     )}
                   </td>
                 </tr>

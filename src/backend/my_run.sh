@@ -47,7 +47,8 @@ fields='
     filename TEXT NOT NULL,                           
     filesize INTEGER,
     mimetype TEXT NOT NULL,                           
-    image_uri TEXT NOT NULL
+    image_uri TEXT NOT NULL,
+    tipo_documento TEXT NOT NULL
     '
 
     fields=$(echo $fields)

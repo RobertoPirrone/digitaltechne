@@ -128,7 +128,6 @@ struct DossierReturnStruct {
 struct Documento {
     id: Option<u64>,
     autore: String,
-    nomeopera: String,
     ora_inserimento: String,
     title: String,
     versione: u64,
@@ -136,7 +135,8 @@ struct Documento {
     filename: String,
     filesize: u64,
     mimetype: String,
-    image_uri: String
+    image_uri: String,
+    tipo_documento: String
 }
 
 struct DistinctResult {
@@ -384,15 +384,15 @@ fn documenti_query(params: QueryDocumentsParams) -> JsonResult {
             Documento {
             id: row.get(0).unwrap(),
             autore: row.get(1).unwrap(),
-            nomeopera: row.get(2).unwrap(),
-            ora_inserimento: row.get(3).unwrap(),
-            title: row.get(4).unwrap(),
-            versione: row.get(5).unwrap(),
-            dossieropera_id: row.get(6).unwrap(),
-            filename: row.get(7).unwrap(),
-            filesize: row.get(8).unwrap(),
-            mimetype: row.get(9).unwrap(),
-            image_uri: row.get(10).unwrap()
+            ora_inserimento: row.get(2).unwrap(),
+            title: row.get(3).unwrap(),
+            versione: row.get(4).unwrap(),
+            dossieropera_id: row.get(5).unwrap(),
+            filename: row.get(6).unwrap(),
+            filesize: row.get(7).unwrap(),
+            mimetype: row.get(8).unwrap(),
+            image_uri: row.get(9).unwrap(),
+            tipo_documento: row.get(10).unwrap()
         })
     }) {
         Ok(e) => e,
@@ -416,25 +416,14 @@ fn document_insert(jv: String) -> ExecResult {
     ic_cdk::println!("document_insert input: {jv} ");
     let d: Documento = serde_json::from_str(&jv).unwrap();
     let conn = ic_sqlite::CONN.lock().unwrap();
-    let mut stmt = match conn.prepare(&format!("select max(id) from {:?}", "documents")) {
-        Ok(e) => e,
-        Err(err) => return Err(MyError::CanisterError {message: format!("{:?}", err) })
-    };
-    let mut iter = match stmt.query_map([], |row| {
-        let count: u64 = row.get(0).unwrap();
-        Ok(count)
-    }) {
-        Ok(e) => e,
-        Err(err) => return Err(MyError::CanisterError {message: format!("count: {:?}", err) })
-    };
-    let count = iter.next().unwrap().unwrap();
-    ic_cdk::println!("count: {:?}", count);
     let image_uri = d.image_uri.to_string();
     ic_cdk::println!("image_uri: {:?}", image_uri);
     // let wrap = sql_ret.unwrap();
 
-    let uuid = count + 1;
-    let sql = format!("insert into documents (id, autore, nomeopera, ora_inserimento, title, versione, dossieropera_id, filename, filesize, mimetype, image_uri) values ({}, '{}', '{}', '{}', '{}', {}, {}, '{}', {}, '{}', '{}')", uuid, d.autore, d.nomeopera, d.ora_inserimento, d.title, d.versione, d.dossieropera_id, d.filename, d.filesize, d.mimetype, image_uri );
+    let sql = format!("insert into documents 
+        (autore, ora_inserimento, title, versione, dossieropera_id, filename, filesize, mimetype, image_uri, tipo_documento) 
+        values ('{}', '{}', '{}', {}, {}, '{}', {}, '{}', '{}', '{}' )", 
+        d.autore, d.ora_inserimento, d.title, d.versione, d.dossieropera_id, d.filename, d.filesize, d.mimetype, image_uri, d.tipo_documento );
     ic_cdk::println!("document_insert sql: {:?}", sql);
 
     return match conn.execute(

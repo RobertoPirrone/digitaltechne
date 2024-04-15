@@ -84,7 +84,7 @@
     "download": "Documento",
     "scaricaDocumento": "Scarica documento con hash ",
     "Accessibilità": "Accessibilità",
-    "In BC": "In BC",
+    "In BC": "Infomrazioni DNA presenti",
     "Operazione non completata": "Operazione non completata",
     "Il resto": "Il resto",
     "Ora inserimento": "Ora inserimento",
@@ -98,6 +98,6 @@
     "Acquirente_gia_registrato?": "L'acquirente è già registrato in DigitalTechne e tu conosci il suo username?",
     "Ospite_gia_registrato?": "Il tuo ospite è già registrato in DigitalTechne e tu conosci il suo username?",
     "username acquirente": "username acquirente",
-    "Registra il Dossier Opera in BlockChain": "Firma l'opera e registra il dossier in BlockChain"
+    "Registra il Dossier Opera in BlockChain": "Associa le informazioni DNA all'opera"
 }
 

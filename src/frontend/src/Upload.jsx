@@ -4,8 +4,9 @@ import {HttpAgent} from '@dfinity/agent';
 import {AssetManager} from '@dfinity/assets';
 
 export const Upload = (props ) => {
-    let assetKey = props.assetKey;
-    let setAssetKey = props.setAssetKey;
+    let asset = props.asset;
+    console.log("Upload: ", JSON.stringify(props));
+    let setAsset = props.setAsset;
     let setDisabledButs = props.setDisabledButs;
 // Hardcoded principal: 535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe
 // Should be replaced with authentication method e.g. Internet Identity when deployed on IC
@@ -61,7 +62,12 @@ const detailsFromFile = async (file) => {
     const name = file.name.split('.');
     const extension = name.pop();
     const fileName = [name, width, height, extension].join('.');
-    return {fileName, width, height}
+    console.error("detailsFromFile: ", JSON.stringify(file.name));
+    const original_filename = file.name;
+    const file_size = 10240;
+    const mimetype = "image/jpeg";
+    // return {fileName, width, height}
+    return {fileName, width, height, original_filename, extension, file_size, mimetype}
 }
 
 const uploadPhotos = () => {
@@ -75,15 +81,23 @@ const uploadPhotos = () => {
                 const upload_items = await assetManager.list();
                 const batch = assetManager.batch();
                 const items = await Promise.all(Array.from(input.files).map(async (file) => {
-                    const {fileName, width, height} = await detailsFromFile(file);
+                    const {fileName, width, height, original_filename, extension, file_size, mimetype} = await detailsFromFile(file);
                     const key = await batch.store(file, {path: '/uploads', fileName});
-                    return {key, fileName, width, height};
+                    return {key, fileName, width, height, original_filename, extension, file_size, mimetype};
                 }));
                 console.error("preawait");
                 await batch.commit({onProgress: ({current, total}) => setProgress(current / total)});
                 console.error("postawait");
                 console.error("items: ", JSON.stringify(items));
-                setAssetKey(items[0].key);
+                let item = items[0];
+                setAsset({
+                    "key": item.key,
+                    "fileName": item.fileName,
+                    "original_filename": item.original_filename,
+                    "extension": item.extension,
+                    "file_size": item.file_size,
+                    "mimetype": item.mimetype
+                });
                 setDisabledButs(false);
             } catch (e) {
                 if (e.message.includes('Caller is not authorized')) {
@@ -100,8 +114,8 @@ const uploadPhotos = () => {
     return (
         <>
         <button className={'App-upload'} onClick={uploadPhotos}>📂 Upload photo</button>
-        <div key={`${asset_pfx}${assetKey}`} className={'App-image'} >
-            <img src={`${asset_pfx}${assetKey}`} width= {'100%'}  loading={'lazy'}/>
+        <div key={`${asset_pfx}${asset.key}`} className={'App-image'} >
+            <img src={`${asset_pfx}${asset.key}`} width= {'100%'}  loading={'lazy'}/>
         </div>
         {progress !== null && <div className={'App-progress'}>{Math.round(progress * 100)}%</div>}
         </>

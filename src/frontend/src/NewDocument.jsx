@@ -1,12 +1,16 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import PropagateLoader from "react-spinners/PropagateLoader";
 // import { css } from "@emotion/core";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { useLocation } from "react-router-dom";
+
+import {Ed25519KeyIdentity} from '@dfinity/identity';
+import {HttpAgent} from '@dfinity/agent';
+import {AssetManager} from '@dfinity/assets';
+
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 // import { FileUpload } from "./components/FileUpload";
@@ -15,6 +19,9 @@ import { DTRoot, DTSubmit } from "./components/useStyles";
 //import MyAxios, { check_response } from "./MyAxios";
 import Grid from "@mui/material/Grid";
 import { GoToHomePage } from "./components/OpusComponents";
+import { Upload } from "./Upload";
+import { MyTextField, MyCheckbox, MyAutocomplete, MostSubmitButton, MostCheckbox, MostSelect, MostTextField, } from "./components/MostComponents";
+import { backend } from "../../declarations/backend";
 
 /**
  * NewDocument: inserimento di un documento in IPFS
@@ -37,130 +44,85 @@ import { GoToHomePage } from "./components/OpusComponents";
  * @param {string} dossier_id id del dossier a cui appartiene il documento, arriva nella URl, non come props
  */
 export const NewDocument = (props) => {
+  const newDossierInfo = props.newDossierInfo;
   const navigate = useNavigate();
   let react_router_location = useLocation();
-  let dossier_id
-  if (props.location.state)
-    dossier_id = props.location.state.dossier_id;
-  else
-    dossier_id = react_router_location.pathname.split("/")[2];
+  console.log("NewDocument location: " + JSON.stringify(react_router_location));
+  let dossier_id = react_router_location.state.dossier_id;
+
+  let autore_list = ['pippo', 'pluto'];
+  let tipodocumento_list = ['immagine', 'titolo_proprietà'];
+
+// Hardcoded principal: 535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe
+// Should be replaced with authentication method e.g. Internet Identity when deployed on IC
+const canisterId = process.env.CANISTER_ID_FRONTEND;
+const identity = Ed25519KeyIdentity.generate(new Uint8Array(Array.from({length: 32}).fill(0)));
+const isLocal = !window.location.host.endsWith('ic0.app');
+const agent = new HttpAgent({
+    // host: isLocal ? `http://127.0.0.1:${window.location.port}` : 'https://ic0.app', identity,
+    host: isLocal ? `http://127.0.0.1:3000` : 'https://ic0.app', identity,
+});
+    if (false) {
+if (isLocal) {
+    agent.fetchRootKey();
+}
+const assetManager = new AssetManager({canisterId, agent});
+}
 
   const { t } = useTranslation(["translation", "documento"]);
   const [loading, setLoading] = useState(false);
-  const spinnerCss = css`
-    display: block;
-    margin: 0 auto;
-  `;
   const [disabledButs, setDisabledButs] = useState(false)
   const [uploadInfo, setUploadInfo] = useState(null);
   const [dossierInfo, setDossierInfo] = useState(null);
   const [docs, setDocs] = useState([]);
   const { control, register, handleSubmit, errors, setValue } = useForm();
-  const { setAlert1, setContent } = useGlobalHook("alertStore");
-  const appAlert = useCallback((text) => {
-    setContent(text);
-    setAlert1(true);
-  }, [setContent,setAlert1])
-  const { setConfirm1, setCContent, setOnConfirm } = useGlobalHook('confirmStore');
-  function appConfirm(text,okHandler) {
-      setCContent(text);
-      setOnConfirm(() => x => {
-        okHandler();
-      });
-      setConfirm1(true);
-  }
-
-  useEffect(() => {
-    if(!dossier_id)
-        return
-    let jdata = { dossier_id: dossier_id };
-    MyAxios.post("/documents", jdata).then((response) => {
-      response = check_response(response);
-      if (!response.success) {
-        appAlert(response.error)
-        setDisabledButs(true)
-        return
-      }
-      //console.log("/documents response:" + JSON.stringify(response));
-      let data = response;
-      setDossierInfo(data.dossierInfo);
-      setDocs(data.rows)
-    })
-    .catch(function (error) {
-        console.error(error);
-        appAlert(error.message?error.message:JSON.stringify(error));
-    });
-  }, [appAlert,dossier_id]);
+  const [tipoDocumento, setTipoDocumento] = useState("");
+  const [autore, setAutore] = useState("");
+  const [titolo, setTitolo] = useState("");
+  const [asset, setAsset] = useState({"key": ""});
+    const [uploads, setUploads] = useState([]);
+    const [progress, setProgress] = useState(null);
+  const appAlert = useCallback(
+    (text) => {
+      alert(text);
+    },
+    [],
+  );
 
   const onSubmit = (vals) => {
     console.log("Entro onSubmit: " + JSON.stringify(vals));
-    if (!uploadInfo) {
+    if (!asset) {
         appAlert("File non scelto")
         return
     }
-    vals["dossieropera_id"] = dossier_id;
+    vals["dossieropera_id"] = Number(dossier_id);
+    vals["title"] = titolo;
+    vals["autore"] = autore;
+    // vals["tipo_documento"] = tipo_documento;
+    vals["tipo_documento"] = tipoDocumento
+    vals["image_uri"] = asset.key;
+    vals["filename"] = asset.original_filename;
+    vals["mimetype"] = asset.mimetype;
+    vals["filesize"] = asset.file_size;
+    vals["versione"] = 1;
+    vals.ora_inserimento = new Date();
 
-    console.log("onSubmit uploadInfo: " + uploadInfo);
     console.log("onSubmit: " + JSON.stringify(vals));
-    //alert("onSubmit: " + JSON.stringify(vals));
-
-    const sep = "|"
-    const att = vals.author.trim()+sep+vals.title.trim()+sep+vals.tassonomiadocumenti.value
-    let versione = 0
-    for (let i in docs) {
-        console.log(docs[i])
-        if(docs[i].author+sep+docs[i].title+sep+docs[i].tassonomiadocumenti_id === att) {
-            if(docs[i].versione > versione) {
-                versione = docs[i].versione
-            }
-        }
-    }
-    if(versione) {
-        versione++
-        const text = "Documento già presente. Inserimento della versione n. "+versione+" ?"
-        appConfirm(text,() => {
-            doSubmit(vals,versione)
-        })
-    } else {
-        doSubmit(vals,1)
-    }
-  }
-
-  const doSubmit = (vals,versione) => {
-    vals["versione"] = versione
-    console.log("doSubmit", vals)
-    let formData = new FormData();
-
-    formData.append("upload", uploadInfo[0]);
-    formData.append("author", vals.author);
-    formData.append("dossieropera_id", dossier_id);
-    formData.append("title", vals.title);
-    formData.append("versione", vals.versione);
-    formData.append(
-      "accessibilitadocumenti",
-      vals.accessibilitadocumenti.value
-    );
-    formData.append("tassonomiadocumenti", vals.tassonomiadocumenti.value);
-
     setDisabledButs(true)
     setLoading(true)
-    MyAxios.post("/newdoc2", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data; boundary=ZZZZZZZZZZZZZZZZZZZ",
-      },
-    })
-      .then((response) => {
-        response = check_response(response);
+
+    backend.document_insert(JSON.stringify(vals)).then((Ok_data) =>  {
+        console.log("document_insert returns: ",JSON.stringify(Ok_data));
+        let response = Ok_data.Ok;
         // alert(JSON.stringify(response));
-        //console.log(response);
-        if (response.success) {
-          let url = "/dossierdetail/" + dossier_id;
-          navigate(url);
+        console.log(response);
+        if (response) {
+          setDisabledButs(true)
+          navigate("/dossier");
         } else {
           console.error(response);
           appAlert(response.error);
           setDisabledButs(false)
-          setLoading(false)
         }
       })
       .catch(function (error) {
@@ -170,10 +132,12 @@ export const NewDocument = (props) => {
         setDisabledButs(false)
         setLoading(false)
       })
-  };
+    }
 
+      console.log("AAAAAAA");
   // manca parametro alla url
   if (!dossier_id) {
+      console.log("BBBBBB");
     return <GoToHomePage />
   }
 
@@ -181,52 +145,38 @@ export const NewDocument = (props) => {
     <div>
       <Header />
       <h1> {t("documento:NewDocument")} </h1>
-        {dossierInfo ? (
-          <Container component="main" maxWidth="md">
-            <table className="ethTable">
-            <tbody>
-               <tr>
-                <td className="w200">{t('documento:Nome')}</td>
-                <td>{dossierInfo.nomeopera}</td>
-               </tr>
-               <tr>
-                <td className="w200">{t('documento:Autore')}</td>
-                <td>{dossierInfo.autoredetail.nome} {dossierInfo.autoredetail.cognome} ({dossierInfo.autoredetail.nomeinarte}) </td>
-               </tr>
-            </tbody>
-            </table>
-          </Container>
-            ) : null }
       <Container component="main" maxWidth="md">
-        <div className={DTroot}>
-          <form onSubmit={handleSubmit(onSubmit)} noValidate>
-            <Grid container spacing={1} alignItems="center">
-              <Grid item xs={12} className="top-margin-10">
-                <FileUpload
-                  setUploadInfo={setUploadInfo}
-                  className="top-margin-10"
-                />
-              </Grid>
-              <DocData
-                t={t}
-                register={register}
-                errors={errors}
-                setValue={setValue}
-                control={control}
-              />
-              <Button
-                type="submit"
-                disabled={disabledButs}
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={DTsubmit}
-              >
-                {t("Inserisci")}
-              </Button>
-              <div className="width100">
-              <PropagateLoader color="#AAAA00" css={spinnerCss} loading={loading} />
-              </div>
+        <div className={DTRoot}>
+          <Upload asset={asset} setAsset={setAsset} setDisabledButs={setDisabledButs} />
+
+
+          <form onSubmit={handleSubmit(onSubmit)}>
+
+                    <Grid container spacing={1} alignItems="center">
+
+      <Grid item xs={12}>
+                          <MyTextField name="title" required={true} label={t("documento:title")} onChange={(e) => setTitolo(e.target.value)}  />
+
+                </Grid>
+                <Grid item xs={12}>
+                  <MyAutocomplete name="autore" label={t("dossier:autore")} options={autore_list} onInputChange={(e,v) => setAutore(v)}/>
+                </Grid>
+                <Grid item xs={12}>
+                  <MyAutocomplete name="tipodocumento" label={t("dossier:tipodocumento")} options={tipodocumento_list} onChange={(e,v) => setTipoDocumento(v)}/>
+                </Grid>
+
+
+                <Grid item xs={3}>
+                <text>Private</text>
+                <MyCheckbox defaultChecked={false} onChange={(e,v) => setPrivateDossier(v.label)}/>
+
+                </Grid>
+
+                <Grid item xs={12}>   &nbsp;</Grid>
+
+      <MostSubmitButton disabled={disabledButs} label={t("dossier:Inserisci")} />
+
+
             </Grid>
           </form>
         </div>

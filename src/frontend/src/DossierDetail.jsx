@@ -144,7 +144,7 @@ let params = useParams();
       });
   }, [appAlert, t]);
 
-  let columns = [
+  let doc_columns = [
     { field: 'image_uri', headerName: t('Opera Image'), renderCell: (params)=>{
       return (
           <div key={`${asset_pfx}${params.row.image_uri}`} className={'App-image'} >
@@ -153,97 +153,11 @@ let params = useParams();
       )
     } },
     { flex:1, headerName: t("documento:author"), field: "autore"}, 
+    { flex:1, headerName: t("documento:tipodocumento"), field: "tipo_documento"},
     { flex:1, headerName: t("documento:title"), field: "title"},
-    { flex:1, headerName: t("NomeOpera"), field: "nomeopera"},
     { flex:1, headerName: t("documento:filename"), field: "filename"},
+    { flex:1, headerName: t("documento:mimetype"), field: "mimetype"},
   ]
-
-  const XXXcolumns = useMemo(() => {
-    const cols = [
-      {
-        Header: t("documento:Documento"),
-        columns: [
-          {
-            Header: t("documento:Accessibilità"),
-            accessor: "accessibilitadocumentidetail.description",
-          },
-          {
-            Header: t("documento:author"),
-            accessor: "author",
-          },
-          {
-            Header: t("documento:title"),
-            accessor: "title",
-          },
-          {
-            Header: t("documento:Tipo Documento"),
-            accessor: "tassonomiadocumentidetail.description",
-          },
-        ],
-      },
-      {
-        Header: t("dossier:Dettaglio"),
-        columns: [
-          {
-            Header: t("documento:Documento"),
-            accessor: "hashipfs",
-            Cell: ({ cell: { value }, row: { original } }) => <IpfsDialog disabledButs={disabledButs} setDisabledButs={setDisabledButs} info={original} />,
-          },
-          {
-            Header: t("documento:version"),
-            accessor: "versione",
-          },
-          {
-            Header: t("documento:filename"),
-            accessor: "filename",
-          },
-          {
-            Header: t("documento:filesize"),
-            accessor: "filesize",
-          },
-          {
-            Header: t("documento:mimetype"),
-            accessor: "mimetype",
-            Cell: ({ cell: { value }, row: { original } }) => {
-              value = value.replace(/\./g, "");
-              return <span>{t("dossier:mimetype." + value)}</span>;
-            },
-          },
-          {
-            Header: t("documento:Ora inserimento"),
-            accessor: "ora_inserimento",
-            Cell: ({ cell: { value }, row: { original } }) => {
-              const s = dmy_hms(new Date(value), 1);
-              return <span>{s}</span>;
-            },
-          },
-          {
-            Header: t("documento:Ora modifica"),
-            accessor: "datamodifica",
-            Cell: ({ cell: { value }, row: { original } }) => {
-              let s = "";
-              if (value) s = dmy_hms(new Date(value), 1);
-              return <span>{s}</span>;
-            },
-          },
-          {
-            Header: t("documento:BC aggiornata"),
-            accessor: "data_sync_bc",
-            Cell: ({ cell: { value }, row: { original } }) => {
-              // controllare data scrittura in BC con data modifica DB
-              if (value && (!original.datamodifica || value > original.datamodifica)) return <Check good={true} />;
-              // Cannot update a component (`Documents`) while rendering a different component (`Cell`)
-              setTimeout(() => {
-                setDoc_bc_sync(false);
-              }, 100);
-              return <Check good={false} />;
-            },
-          },
-        ],
-      },
-    ];
-    return cols;
-  }, [t, disabledButs]);
 
   const nuovoDoc = () => {
     console.log("DossierDetail nuovoDoc dossier_id: " + dossier_id);
@@ -414,7 +328,7 @@ let params = useParams();
                   <td>
                     {isVideo ? (
                       <video controls autoPlay width="400" >
-                      <source src={dossierInfo.image_uri} type="video/mp4" />
+                      <source src={`${asset_pfx}${dossierInfo.icon_uri}`} type="video/mp4" />
                       </video>
                     ) : (
                       <img src={`${asset_pfx}${dossierInfo.icon_uri}`} width={400} />
@@ -422,32 +336,12 @@ let params = useParams();
                   </td>
                 </tr>
                 <tr>
-                  <th>{t("dossier:Tiratura")}</th>
-                  <td>{dossierInfo.tiratura}</td>
-                </tr>
-                <tr>
                   <th>{t("documento:Id")}</th>
                   <td>{dossierInfo.id}</td>
                 </tr>
                 <tr>
                   <th>{t("documento:Proprietario")}</th>
-                  <td>
-                    {dossierInfo.useridentitydetail ? (
-                      <span>
-                        {dossierInfo.useridentitydetail?.nome + " " + dossierInfo.useridentitydetail?.cognome + " (" + dossierInfo.username + ")"}
-                        <Riservato reserved={dossierInfo.riservatezzaproprietario} />
-                      </span>
-                    ) : dossierInfo.username ? (
-                      <span>
-                        {dossierInfo.username}
-                        <Riservato reserved={dossierInfo.riservatezzaproprietario} />
-                      </span>
-                    ) : (
-                      <span>
-                        <Riservato reserved={true} />
-                      </span>
-                    )}
-                  </td>
+                  <td>{dossierInfo.username}</td>
                 </tr>
                 <tr>
                   <th>{t("dossier:nomeopera")}</th>
@@ -480,7 +374,7 @@ let params = useParams();
                 </tr>
                 <tr>
                   <th>{t("dossier:TipoOpera")}</th>
-                  <td>{dossierInfo.tipooperadetail ? dossierInfo.tipooperadetail.description : ""}</td>
+                  <td>{dossierInfo.tipoopera}</td>
                 </tr>
                 {application == "techne" ? (
                   <>
@@ -490,27 +384,11 @@ let params = useParams();
                     </tr>
                     <tr>
                       <th>{t("dossier:LuogoOpera")}</th>
-                      <td>
-                        {dossierInfo.luogooperadetail
-                          ? dossierInfo.luogooperadetail.citta + " " + dossierInfo.luogooperadetail.indirizzo + " " + dossierInfo.luogooperadetail.nazione + " (" + dossierInfo.luogooperadetail.tipoluogo_id + ")"
-                          : ""}
-                        <Riservato reserved={dossierInfo.riservatezzaluogo} />
-                      </td>
+                      <td> {dossierInfo.luogoopera} </td>
                     </tr>
                     <tr>
-                      <th>{t("dossier:StatoOpera")}</th>
-                      <td>
-                        {dossierInfo.statusopera_id}
-                        <Riservato reserved={dossierInfo.riservatezzastatus} />
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>{t("dossier:FruibilitaDossier")}</th>
-                      <td>{dossierInfo.fruibilitadossier_id}</td>
-                    </tr>
-                    <tr>
-                      <th>{t("dossier:FruibilitaOpera")}</th>
-                      <td>{dossierInfo.fruibilitaopera_id}</td>
+                      <th>{t("dossier:riservato")}</th>
+                      <td>{dossierInfo.private}</td>
                     </tr>
                   </>
                 ) : null}
@@ -569,11 +447,8 @@ let params = useParams();
               !dossierInfo.contract_initialized ? (
                 <React.Fragment>
                   <div className="MuiContainer-root MuiContainer-maxWidthXs">
-                    <MostSubmitButton type="button" disabled={disabledButs} onClick={() => navigate("/newdossierBC/" + dossierInfo.id)} label={t("documento:Registra il Dossier Opera in BlockChain")} />
+                    <MostSubmitButton type="button" disabled={disabledButs} onClick={() => alert("Work in Progress")} label={t("documento:Registra il Dossier Opera in BlockChain")} />
                   </div>
-                <div className="MuiContainer-root MuiContainer-maxWidthXs">
-                  <MostSubmitButton type="button" disabled={disabledButs} onClick={clone_mint} label={t("dossier:DoMint")} />
-                </div>
                 </React.Fragment>
               ) : (
                   application == "techne" ? (
@@ -602,7 +477,7 @@ let params = useParams();
           !sellOrInviteMode ? (
             <div>
               <h2>{t("Documenti")} </h2>
-              <div className="blackColor margin20 gray">{docs.length ? <MostDataGrid columns={columns} rows={docs} /> : t("dossier:NoDocument") }</div>
+              <div className="blackColor margin20 gray">{docs.length ? <MostDataGrid columns={doc_columns} rows={docs} /> : t("dossier:NoDocument") }</div>
               {dossierInfo && username === username ? (
                 <div>
                   <div className="MuiContainer-root MuiContainer-maxWidthXs">

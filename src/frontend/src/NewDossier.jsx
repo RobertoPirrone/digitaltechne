@@ -28,7 +28,7 @@ export const NewDossier = () => {
   const [uploadInfo, setUploadInfo] = useState(null);
   const [uploadInfoSignatures, setUploadInfoSignatures] = useState(null);
   const [action, setAction] = useState("");
-  const [assetKey, setAssetKey] = useState("");
+  const [asset, setAsset] = useState({});
   const [privateDossier, setPrivateDossier] = useState(false);
   const [nomeOpera, setNomeOpera] = useState("");
   const [tipoOpera, setTipoOpera] = useState("");
@@ -93,7 +93,7 @@ export const NewDossier = () => {
 
 
   const onSubmit = (vals) => {
-    if (assetKey == "") {
+    if (asset == {}) {
         appAlert("File immagine non scelto")
         return
     }
@@ -109,7 +109,7 @@ export const NewDossier = () => {
       } else {
         vals.private = true;
       }
-      vals.icon_uri = assetKey;
+      vals.icon_uri = asset.key;
     setDisabledButs(true)
       console.log("onSubmit: ", JSON.stringify(vals));
     backend.dossier_insert(JSON.stringify(vals)).then((Ok_data) =>  {
@@ -153,7 +153,7 @@ export const NewDossier = () => {
       )}
       <Container component="main" maxWidth="md">
         <div className={DTRoot}>
-          <Upload assetKey={assetKey} setAssetKey={setAssetKey} setDisabledButs={setDisabledButs} />
+          <Upload asset={asset} setAsset={setAsset} setDisabledButs={setDisabledButs} />
 
 
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -176,6 +176,7 @@ export const NewDossier = () => {
 
 
                 <Grid item xs={3}>
+                <text>Private</text>
                 <MyCheckbox defaultChecked={false} onChange={(e,v) => setPrivateDossier(v.label)}/>
 
                 </Grid>

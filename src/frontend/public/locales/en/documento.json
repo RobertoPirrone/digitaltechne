@@ -97,5 +97,6 @@
   "Acquirente_gia_registrato?": "Is the buyer already registered in DigitalTechne and do you know his username?",
   "Ospite_gia_registrato?": "Is your guest already registered in DigitalTechne and do you know their username?",
   "username acquirente": "buyer username",
-  "Registra il Dossier Opera in BlockChain": "Add DNA Info"
+  "Registra il Dossier Opera in BlockChain": "Add DNA Info",
+  "tipodocumento": "Document Type"
 }

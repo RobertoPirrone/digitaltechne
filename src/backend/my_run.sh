@@ -43,7 +43,6 @@ echo "--- create table documents"
 fields='
     id INTEGER PRIMARY KEY,                               
     autore TEXT NOT NULL,                                
-    nomeopera TEXT NOT NULL,                            
     ora_inserimento TEXT NOT NULL,                     
     title TEXT NOT NULL,                     
     versione INTEGER,
@@ -60,6 +59,7 @@ fields='
     echo $sql_cmd
     dfx canister call $network backend execute "$sql_cmd"
 
+    exit 0
 echo "--- insert dossier"
 # dfx canister call backend execute 'insert into dossier (id, autore, nomeopera, ora_inserimento, username, icon_uri) values (1, "Elisabetta Villa", "Madalina Ghenea", "2024-03-18", "techne_seller", "https://techne-test.mostapps.it/ipfs/Qmc57JrLZiFybNG8T3Vq7x2AumLnXkz73Sq7ZL1EanFZLc" );'
 # dfx canister call backend execute 'insert into dossier (id, autore, nomeopera, ora_inserimento, username, icon_uri) values (2, "Elisabetta Villa", "Scarlett Johansson", "2024-03-18", "techne_seller", "https://techne-test.mostapps.it/ipfs/QmfXAjR2sdZyRTv1xfEcaF6TLRqtKJUbpKMrFihDMHwtmw" );'

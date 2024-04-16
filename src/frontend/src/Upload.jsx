@@ -11,7 +11,7 @@ export const Upload = (props ) => {
 // Hardcoded principal: 535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe
 // Should be replaced with authentication method e.g. Internet Identity when deployed on IC
 const identity = Ed25519KeyIdentity.generate(new Uint8Array(Array.from({length: 32}).fill(0)));
-const isLocal = !window.location.host.endsWith('ic0.app');
+const isLocal = !window.location.host.endsWith('icp0.io');
     const [progress, setProgress] = useState(null);
 
             if (false) {
@@ -26,8 +26,16 @@ const isLocal = !window.location.host.endsWith('ic0.app');
 // Canister id can be fetched from URL since frontend in this example is hosted in the same canister as file upload
 // const canisterId = new URLSearchParams(window.location.search).get('canisterId') ?? /(.*?)(?:\.raw)?\.ic0.app/.exec(window.location.host)?.[1] ?? /(.*)\.localhost/.exec(window.location.host)?.[1];
 // const canisterId = process.env.CANISTER_ID_ASSETS;
-const canisterId = 'br5f7-7uaaa-aaaaa-qaaca-cai';
-const asset_pfx = `http://${canisterId}.localhost:4943`;
+// const canisterId = 'br5f7-7uaaa-aaaaa-qaaca-cai';
+// const canisterId = 'br5f7-7uaaa-aaaaa-qaaca-cai';
+console.log("META: ", JSON.stringify(import.meta));
+console.log("ENV: ", JSON.stringify(import.meta.env));
+const canisterId = import.meta.env.VITE_CANISTER_ID_UPLOADS;
+let asset_pfx = `https://${canisterId}.icp0.io`;
+if (isLocal) {
+    asset_pfx = `http://${canisterId}.localhost:4943`;
+}
+console.log("asset_pfx: ", asset_pfx );
 
 // Create asset manager instance for above asset canister
 // const assetManager = new AssetManager({canisterId, agent});

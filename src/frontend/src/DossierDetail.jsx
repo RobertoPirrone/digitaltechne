@@ -24,13 +24,17 @@ import {HttpAgent} from '@dfinity/agent';
 import {AssetManager} from '@dfinity/assets';
 
 let dossier_id = "";
-const canisterId = 'br5f7-7uaaa-aaaaa-qaaca-cai';
-const asset_pfx = `http://${canisterId}.localhost:4943`;
+const canisterId = import.meta.env.VITE_CANISTER_ID_UPLOADS;
+const isLocal = !window.location.host.endsWith('icp0.io');
+const asset_pfx = `https://${canisterId}.icp0.io`;
+if (isLocal) {
+    const asset_pfx = `http://${canisterId}.localhost:4943`;
+}
+
 export const DossierDetail = (props) => {
 // Hardcoded principal: 535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe
 // Should be replaced with authentication method e.g. Internet Identity when deployed on IC
 const identity = Ed25519KeyIdentity.generate(new Uint8Array(Array.from({length: 32}).fill(0)));
-const isLocal = !window.location.host.endsWith('ic0.app');
 const fetchOptions = {
     headers: {
       "Access-Control-Allow-Origin": "*",

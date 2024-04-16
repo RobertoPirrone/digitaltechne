@@ -97,9 +97,9 @@ struct Dossier {
     nomeopera: String,
     ora_inserimento: String,
     username: String,
-    icon_uri: String,
     luogoopera: String,
     private: bool,
+    icon_uri: String,
     tipoopera: String,
 }
 
@@ -260,9 +260,9 @@ fn dossier_query(params: QueryParams) -> JsonResult {
             nomeopera: row.get(2).unwrap(),
             ora_inserimento: row.get(3).unwrap(),
             username: row.get(4).unwrap(),
-            icon_uri: row.get(5).unwrap(),
-            luogoopera: row.get(6).unwrap(),
-            private: row.get(7).unwrap(),
+            luogoopera: row.get(5).unwrap(),
+            private: row.get(6).unwrap(),
+            icon_uri: row.get(7).unwrap(),
             tipoopera: row.get(8).unwrap()
         })
     }) {
@@ -286,26 +286,11 @@ fn dossier_insert(jv: String) -> ExecResult {
     ic_cdk::println!("dossier_insert input: {jv} ");
     let d: Dossier = serde_json::from_str(&jv).unwrap();
     let conn = ic_sqlite::CONN.lock().unwrap();
-    let mut stmt = match conn.prepare(&format!("select max(id) from {:?}", "dossier")) {
-        Ok(e) => e,
-        Err(err) => return Err(MyError::CanisterError {message: format!("{:?}", err) })
-    };
-    let mut iter = match stmt.query_map([], |row| {
-        let count: u64 = row.get(0).unwrap();
-        Ok(count)
-    }) {
-        Ok(e) => e,
-        Err(err) => return Err(MyError::CanisterError {message: format!("count: {:?}", err) })
-    };
-    let count = iter.next().unwrap().unwrap();
-    ic_cdk::println!("count: {:?}", count);
-    // let wrap = sql_ret.unwrap();
 
-    let uuid = count + 1;
     let sql = format!("insert into dossier \
-        (id, autore, nomeopera, ora_inserimento, username, icon_uri, luogoopera, private, tipoopera) 
-        values ({}, '{}', '{}', '{}', '{}', '{}', '{}', {}, '{}' )",
-        uuid, d.autore, d.nomeopera, d.ora_inserimento, d.username, d.icon_uri , d.luogoopera, d.private, d.tipoopera
+        (autore, nomeopera, ora_inserimento, username, icon_uri, luogoopera, private, tipoopera) 
+        values ('{}', '{}', '{}', '{}', '{}', '{}', {}, '{}' )",
+        d.autore, d.nomeopera, d.ora_inserimento, d.username, d.icon_uri , d.luogoopera, d.private, d.tipoopera
         );
     return match conn.execute(
         &sql,
@@ -356,9 +341,9 @@ fn documenti_query(params: QueryDocumentsParams) -> JsonResult {
             nomeopera: row.get(2).unwrap(),
             ora_inserimento: row.get(3).unwrap(),
             username: row.get(4).unwrap(),
-            icon_uri: row.get(5).unwrap(),
-            luogoopera: row.get(6).unwrap(),
-            private: row.get(7).unwrap(),
+            luogoopera: row.get(5).unwrap(),
+            private: row.get(6).unwrap(),
+            icon_uri: row.get(7).unwrap(),
             tipoopera: row.get(8).unwrap()
         })
     }) {

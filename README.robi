@@ -1,0 +1,22 @@
+II su mainnet: 2340035
+
+export DFX_CYCLES_LEDGER_SUPPORT_ENABLE=1
+ mio principal: 
+cycle ledger address: fmp6s-aqaaa-aaaal-qiy4a-cai
+
+ottenuto con:
+    dfx ledger create-canister 4fbd4-xgdsf-yaql6-cu7ne-b7dto-ub42s-jqbw5-jvh3i-ay3n7-nmxd4-gqe --network ic  --e8s 2000000
+
+dfx ledger balance --ic
+
+
+dfx identity new NuovaIdentitaRobi
+Your seed phrase for identity 'NuovaIdentitaRobi': wrong hurry sail escape raw pool tenant artefact negative abstract model door fossil ankle hour cute rely recipe life bunker motor hammer today cruel
+This can be used to reconstruct your key in case of emergency, so write it down in a safe place.
+Created identity: "NuovaIdentitaRobi".
+
+Identity on Mainnet:
+    * Anchor: 2340035
+    * Identity: 85f5c6c683465bc9af3625a1320a43ad68e52a05460c8e944b5fb98795745bc0
+    * principal: jb6f4-g6jrc-ntsdg-ex6td-wytfc-nzp5t-zqyby-xfe7x-pm35c-bttws-lae
+    * Recovery: 2340035 awake fat pledge travel sunset urban prosper struggle glimpse rabbit coil mail have wish monster pupil tube post spare glove element crazy sport word

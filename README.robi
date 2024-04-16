@@ -20,3 +20,11 @@ Identity on Mainnet:
     * Identity: 85f5c6c683465bc9af3625a1320a43ad68e52a05460c8e944b5fb98795745bc0
     * principal: jb6f4-g6jrc-ntsdg-ex6td-wytfc-nzp5t-zqyby-xfe7x-pm35c-bttws-lae
     * Recovery: 2340035 awake fat pledge travel sunset urban prosper struggle glimpse rabbit coil mail have wish monster pupil tube post spare glove element crazy sport word
+
+Identity NuovaIdentitaRobi
+    * Identity: d0ce78742395de3d05dab13950bcfdb35af0a5e76138988d11ddaaa6ae042ee3
+    * Principal: hw3nb-r37z5-x37iz-w4dtk-4te2g-s5dpk-fiy3m-g2a4g-h62vy-jau4p-xae
+
+Creare cycles wallet su mainnet:
+    dfx ledger --network ic create-canister hw3nb-r37z5-x37iz-w4dtk-4te2g-s5dpk-fiy3m-g2a4g-h62vy-jau4p-xae --amount .25
+    dfx identity --network ic deploy-wallet xrsbu-qyaaa-aaaan-qmflq-cai

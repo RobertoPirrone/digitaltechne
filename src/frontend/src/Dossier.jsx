@@ -40,14 +40,22 @@ import {AssetManager} from '@dfinity/assets';
  */
 export const Dossier = () => {
 // const canisterId = process.env.CANISTER_ID_UPLOADS;
-const canisterId = 'br5f7-7uaaa-aaaaa-qaaca-cai';
-const asset_pfx = `http://${canisterId}.localhost:4943`;
+// const canisterId = 'br5f7-7uaaa-aaaaa-qaaca-cai';
+// const canisterId = 'whzz7-fiaaa-aaaan-qmfoq-cai';
+// const asset_pfx = `http://${canisterId}.localhost:4943`;
+// const asset_pfx = `http://${canisterId}`;
 // console.log("process.env :", JSON.stringify(process.env));
+const isLocal = !window.location.host.endsWith('icp0.io');
+const canisterId = import.meta.env.VITE_CANISTER_ID_UPLOADS;
+const asset_pfx = `https://${canisterId}.icp0.io`;
+if (isLocal) {
+    const asset_pfx = `http://${canisterId}.localhost:4943`;
+}
+
 console.log("asset_pfx :", asset_pfx);
 // Hardcoded principal: 535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe
 // Should be replaced with authentication method e.g. Internet Identity when deployed on IC
 const identity = Ed25519KeyIdentity.generate(new Uint8Array(Array.from({length: 32}).fill(0)));
-const isLocal = !window.location.host.endsWith('ic0.app');
 const agent = new HttpAgent({
     host: isLocal ? `http://127.0.0.1:${window.location.port}` : 'https://ic0.app', identity,
     //host: isLocal ? `http://${canisterId}.localhost:${window.location.port}` : 'https://ic0.app', identity,

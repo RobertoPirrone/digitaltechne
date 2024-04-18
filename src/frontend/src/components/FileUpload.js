@@ -7,7 +7,7 @@ import React from "react";
  * div con due bottoni: selezione file su FS e upload verso IPFS. Manca la crypt AES
  * @component
  */
-export function FileUpload (props) {
+export function FileUpload(props) {
   //const [selectedFiles, setSelectedFiles] = useState(undefined);
   //const [currentFile, setCurrentFile] = useState(undefined);
   //const [message, setMessage] = useState("");
@@ -31,7 +31,6 @@ export function FileUpload (props) {
       <div className="alert alert-light" role="alert">
         {/* message */}
       </div>
-
     </div>
   );
-};
+}

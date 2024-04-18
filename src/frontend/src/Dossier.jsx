@@ -23,7 +23,7 @@ import {
 import { MostDataGrid } from "./components/MostDataGrid";
 import { Riservato } from "./components/OpusComponents";
 import InVisionDialog from "./components/InVisionDialog";
-// import { InternetIdentityLogin }  from "./SignIn";
+import { getBackend }  from "./SignIn";
 // import { css } from "@emotion/core";
 // import { backend } from "../../declarations/backend";
 // import { uploads } from "../../declarations/uploads";
@@ -66,7 +66,7 @@ console.log("asset_pfx :", asset_pfx);
   const [application, setApplication] = useGlobalState('application');
   const [username, setusername] = useGlobalState('username');
   const [trueidentity, setIdentity] = useGlobalState('identity');
-  const [backend, setBackend] = useGlobalState('backend');
+  const backend = getBackend();
 
 
   useEffect(() => {

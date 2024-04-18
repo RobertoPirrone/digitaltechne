@@ -16,7 +16,7 @@ import { GoToHomePage, Riservato, BexplorerLink } from "./components/OpusCompone
 // import IpfsDialog from "./components/IpfsDialog";
 import { dmy_hms, prettyJson } from "./Utils";
 //import { provaE } from "./Crypto";
-// import { backend } from "../../declarations/backend";
+import { getBackend } from "./SignIn";
 
 
 import {Ed25519KeyIdentity} from '@dfinity/identity';
@@ -71,11 +71,11 @@ if (isLocal) {
   const [doc_bc_sync, setDoc_bc_sync] = useState(true);
   const [username, setUsername] = useGlobalState('username');
   const [application, setApplication] = useGlobalState('application');
-  const [backend, setBackend] = useGlobalState('backend');
 
   const { t } = useTranslation(["translation", "documento", "dossier"]);
   const { control, register, handleSubmit, errors } = useForm();
 const [uploads, setUploads] = useState([]);
+    let backend = getBackend();
 
 
   const appAlert = useCallback(

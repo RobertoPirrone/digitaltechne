@@ -1,3 +1,4 @@
+type CartridgeQueryParams = record { offset : nat64; limit : nat64 };
 type MyError = variant {
   CanisterError : record { message : text };
   InvalidCanister;
@@ -7,16 +8,15 @@ type QueryParams = record { offset : nat64; limit : nat64 };
 type Result = variant { Ok : text; Err : MyError };
 type Result_1 = variant { Ok : vec vec text; Err : MyError };
 service : {
+  cartridge_insert : (text) -> (Result);
+  cartridge_query : (CartridgeQueryParams) -> (Result) query;
   document_insert : (text) -> (Result);
   documenti_query : (QueryDocumentsParams) -> (Result) query;
   dossier_insert : (text) -> (Result);
   dossier_pulldowns : () -> (Result) query;
   dossier_query : (QueryParams) -> (Result) query;
   execute : (text) -> (Result);
-  get_counter : () -> (nat32) query;
   greet : (text) -> (text) query;
-  inc_counter : () -> (nat32);
-  instruction_counter : () -> (nat64) query;
   "query" : (text) -> (Result_1) query;
   whoami : () -> (text) query;
 }

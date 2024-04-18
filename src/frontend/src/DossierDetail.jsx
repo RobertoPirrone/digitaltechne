@@ -17,6 +17,7 @@ import { GoToHomePage, Riservato, BexplorerLink } from "./components/OpusCompone
 import { dmy_hms, prettyJson } from "./Utils";
 //import { provaE } from "./Crypto";
 import { backend } from "../../declarations/backend";
+import { canisterId } from "../../declarations/uploads";
 import { getBackend } from "./SignIn";
 
 import { Ed25519KeyIdentity } from "@dfinity/identity";
@@ -24,7 +25,7 @@ import { HttpAgent } from "@dfinity/agent";
 import { AssetManager } from "@dfinity/assets";
 
 let dossier_id = "";
-const canisterId = import.meta.env.VITE_CANISTER_ID_UPLOADS;
+// const canisterId = import.meta.env.VITE_CANISTER_ID_UPLOADS;
 const isLocal = !window.location.host.endsWith("icp0.io");
 let asset_pfx = `https://${canisterId}.icp0.io`;
 if (isLocal) {

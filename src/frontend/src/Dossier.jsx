@@ -22,7 +22,7 @@ import InVisionDialog from "./components/InVisionDialog";
 import { getBackend } from "./SignIn";
 // import { css } from "@emotion/core";
 import { backend } from "../../declarations/backend";
-// import { uploads } from "../../declarations/uploads";
+import { canisterId } from "../../declarations/uploads";
 
 // import {Ed25519KeyIdentity} from '@dfinity/identity';
 // import {HttpAgent} from '@dfinity/agent';
@@ -41,7 +41,7 @@ export const Dossier = () => {
   // const asset_pfx = `http://${canisterId}`;
   // console.log("process.env :", JSON.stringify(process.env));
   const isLocal = !window.location.host.endsWith("icp0.io");
-  const canisterId = import.meta.env.VITE_CANISTER_ID_UPLOADS;
+  // const canisterId = import.meta.env.VITE_CANISTER_ID_UPLOADS;
   let asset_pfx = `https://${canisterId}.icp0.io`;
   if (isLocal) {
     asset_pfx = `http://${canisterId}.localhost:4943`;

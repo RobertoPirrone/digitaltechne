@@ -5,7 +5,7 @@ import { Controller } from "react-hook-form";
 import Select from "react-select";
 //import TextField from "@material-ui/core/TextField";
 // import { useGlobalHook } from '@devhammed/use-global-hook'
-import { useForm } from "react-hook-form"
+import { useForm } from "react-hook-form";
 
 import Grid from "@mui/material/Grid";
 import { MostTextField } from "./MostComponents";
@@ -18,34 +18,28 @@ export const DocData = (props) => {
   const [newDocInfo, setNewDocInfo] = useState({}); //pull down & C.
   const [tassonomiaOptions, setTassonomiaOptions] = useState([]);
 
-        const {
+  const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm()
-      const { t } = useTranslation(["translation", "documento"]);
+  } = useForm();
+  const { t } = useTranslation(["translation", "documento"]);
 
-
-
-  const appAlert = useCallback(
-    (text) => {
-      alert(text);
-    },
-    [],
-  );
+  const appAlert = useCallback((text) => {
+    alert(text);
+  }, []);
 
   const cambioCategoria = (e) => {
     // e: {value: "CAT_IMG_TYPE", label: "Immagini"}
-    console.log(e)
-    let opts = []
+    console.log(e);
+    let opts = [];
     for (let i in newDocInfo.tassonomiadocumenti) {
-        if(newDocInfo.tassonomiadocumenti[i].categoriadocumenti_id === e.value)
-            opts.push(newDocInfo.tassonomiadocumenti[i])
+      if (newDocInfo.tassonomiadocumenti[i].categoriadocumenti_id === e.value) opts.push(newDocInfo.tassonomiadocumenti[i]);
     }
-    setTassonomiaOptions(opts)
-    props.setValue('tassonomiadocumenti',null)
-  }
+    setTassonomiaOptions(opts);
+    props.setValue("tassonomiadocumenti", null);
+  };
 
   //console.log("newDocInfo.tassonomiadocumenti",newDocInfo.tassonomiadocumenti);
 

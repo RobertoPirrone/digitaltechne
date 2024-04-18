@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useParams, useLocation } from "react-router-dom";
-import { useGlobalState } from './state';
+import { useGlobalState } from "./state";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { Table } from "./Table";
@@ -16,49 +16,50 @@ import { GoToHomePage, Riservato, BexplorerLink } from "./components/OpusCompone
 // import IpfsDialog from "./components/IpfsDialog";
 import { dmy_hms, prettyJson } from "./Utils";
 //import { provaE } from "./Crypto";
+import { backend } from "../../declarations/backend";
 import { getBackend } from "./SignIn";
 
-
-import {Ed25519KeyIdentity} from '@dfinity/identity';
-import {HttpAgent} from '@dfinity/agent';
-import {AssetManager} from '@dfinity/assets';
+import { Ed25519KeyIdentity } from "@dfinity/identity";
+import { HttpAgent } from "@dfinity/agent";
+import { AssetManager } from "@dfinity/assets";
 
 let dossier_id = "";
 const canisterId = import.meta.env.VITE_CANISTER_ID_UPLOADS;
-const isLocal = !window.location.host.endsWith('icp0.io');
+const isLocal = !window.location.host.endsWith("icp0.io");
 let asset_pfx = `https://${canisterId}.icp0.io`;
 if (isLocal) {
-    asset_pfx = `http://${canisterId}.localhost:4943`;
+  asset_pfx = `http://${canisterId}.localhost:4943`;
 }
 
 export const DossierDetail = (props) => {
-// Hardcoded principal: 535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe
-// Should be replaced with authentication method e.g. Internet Identity when deployed on IC
-const identity = Ed25519KeyIdentity.generate(new Uint8Array(Array.from({length: 32}).fill(0)));
-const fetchOptions = {
+  if (false) {
+  // Hardcoded principal: 535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe
+  // Should be replaced with authentication method e.g. Internet Identity when deployed on IC
+  const identity = Ed25519KeyIdentity.generate(new Uint8Array(Array.from({ length: 32 }).fill(0)));
+  const fetchOptions = {
     headers: {
       "Access-Control-Allow-Origin": "*",
     },
   };
 
-const agent = new HttpAgent({
+  const agent = new HttpAgent({
     // host: isLocal ? `http://${canisterId}.localhost:${window.location.port}` : 'https://ic0.app', identity,
-    host: isLocal ? `http://127.0.0.1:3000` : 'https://ic0.app', identity,
+    host: isLocal ? `http://127.0.0.1:3000` : "https://ic0.app",
+    identity,
     //fetch: window.fetch.bind(window),
     fetchOptions,
   });
 
-    if (false) {
-if (isLocal) {
-    agent.fetchRootKey();
-}
-}
+    if (isLocal) {
+      agent.fetchRootKey();
+    }
+  }
 
-// Canister id can be fetched from URL since frontend in this example is hosted in the same canister as file upload
-//const canisterId = new URLSearchParams(window.location.search).get('canisterId') ?? /(.*?)(?:\.raw)?\.ic0.app/.exec(window.location.host)?.[1] ?? /(.*)\.localhost/.exec(window.location.host)?.[1];
+  // Canister id can be fetched from URL since frontend in this example is hosted in the same canister as file upload
+  //const canisterId = new URLSearchParams(window.location.search).get('canisterId') ?? /(.*?)(?:\.raw)?\.ic0.app/.exec(window.location.host)?.[1] ?? /(.*)\.localhost/.exec(window.location.host)?.[1];
 
-// Create asset manager instance for above asset canister
-// const assetManager = new AssetManager({canisterId, agent});
+  // Create asset manager instance for above asset canister
+  // const assetManager = new AssetManager({canisterId, agent});
 
   const navigate = useNavigate();
   const [showjson, setShowjson] = useState(false);
@@ -69,21 +70,16 @@ if (isLocal) {
   const [isVideo, setIsVideo] = useState(null);
   const [docs, setDocs] = useState([]); //elenco documenti relativi a dossier_id
   const [doc_bc_sync, setDoc_bc_sync] = useState(true);
-  const [username, setUsername] = useGlobalState('username');
-  const [application, setApplication] = useGlobalState('application');
+  const [username, setUsername] = useGlobalState("username");
+  const [application, setApplication] = useGlobalState("application");
 
   const { t } = useTranslation(["translation", "documento", "dossier"]);
   const { control, register, handleSubmit, errors } = useForm();
-const [uploads, setUploads] = useState([]);
-    let backend = getBackend();
+  const [uploads, setUploads] = useState([]);
 
-
-  const appAlert = useCallback(
-    (text) => {
-      alert(text);
-    },
-    [],
-  );
+  const appAlert = useCallback((text) => {
+    alert(text);
+  }, []);
   const giorniOptions = [
     { label: "15 giorni", value: 15 },
     { label: "30 giorni", value: 30 },
@@ -92,7 +88,7 @@ const [uploads, setUploads] = useState([]);
   let react_router_location = useLocation();
   console.log("DossierDetail react_router_location: " + JSON.stringify(react_router_location));
   console.log("DossierDetail props: " + JSON.stringify(props));
-let params = useParams();
+  let params = useParams();
   console.log("DossierDetail params: " + JSON.stringify(params));
 
   if (params.dossierid) {
@@ -107,72 +103,82 @@ let params = useParams();
 
   useEffect(() => {
     if (!dossier_id) return;
-      if (false) {
-      assetManager.list()
-            .then(assets => assets
-                .filter(asset => asset.key.startsWith('/uploads/'))
-                .sort((a, b) => Number(b.encodings[0].modified - a.encodings[0].modified))
-                .map(({key}) => detailsFromKey(key)))
-            .then(setUploads);
+    // const backend = getBackend();
+    if (false) {
+      assetManager
+        .list()
+        .then((assets) =>
+          assets
+            .filter((asset) => asset.key.startsWith("/uploads/"))
+            .sort((a, b) => Number(b.encodings[0].modified - a.encodings[0].modified))
+            .map(({ key }) => detailsFromKey(key)),
+        )
+        .then(setUploads);
       console.log("assets: ", JSON.stringify(uploads));
-      }
+    }
 
     let jdata = { dossier_id: dossier_id };
     let QP = {
-        dossieropera_id: dossier_id
+      dossieropera_id: dossier_id,
     };
     console.log("QP  is " + JSON.stringify(QP));
-      if (backend === null ) {
-          console.log("navigo su /login");
-        navigate("/login");
-      } else {
-    backend.documenti_query(QP).then((Ok_data) =>  {
-        console.log("DossierDetail documenti_query returns: ",JSON.stringify(Ok_data));
-        let data = JSON.parse(Ok_data.Ok);
-        const dossierInfo = data.dossier_info;
-        if (false) {
-        setIsVideo(dossierInfo.isVideo);
-        // nazionalizzazione: attenzione cambiamo struttura ricevuta via ipc
-        if (dossierInfo.bccontract_address) dossierInfo.bccontract_address = dossierInfo.bccontract_address.toLowerCase();
-        dossierInfo.tiposupporto_id = t("dossier:tiposupporto_id." + dossierInfo.tiposupporto_id);
-        dossierInfo.fruibilitadossier_id = t("dossier:fruibilitadossier_id." + dossierInfo.fruibilitadossierdetail.code);
-        if (dossierInfo.luogooperadetail) {
-          if (dossierInfo.luogooperadetail.tipoluogo_id) dossierInfo.luogooperadetail.tipoluogo_id = t("dossier:tipoluogo_id." + dossierInfo.luogooperadetail.tipoluogo_id);
-          else dossierInfo.luogooperadetail.tipoluogo_id = "";
-        }
-        if (dossierInfo.statusopera_id) dossierInfo.statusopera_id = t("dossier:statusopera_id." + dossierInfo.statusopera_id);
-        if (dossierInfo.fruibilitaopera_id) dossierInfo.fruibilitaopera_id = t("dossier:fruibilitaopera_id." + dossierInfo.fruibilitaopera_id);
-        }
-        setDossierInfo(dossierInfo);
-            console.error(dossierInfo);
-        setDocs(data.rows);
-      })
-      .catch(function (error) {
-        console.error(error);
-        appAlert(error.message ? error.message : JSON.stringify(error));
-      })};
+    if (backend === null) {
+      console.log("navigo su /login");
+      navigate("/login");
+    } else {
+      backend
+        .documenti_query(QP)
+        .then((Ok_data) => {
+          console.log("DossierDetail documenti_query returns: ", JSON.stringify(Ok_data));
+          let data = JSON.parse(Ok_data.Ok);
+          const dossierInfo = data.dossier_info;
+          if (false) {
+            setIsVideo(dossierInfo.isVideo);
+            // nazionalizzazione: attenzione cambiamo struttura ricevuta via ipc
+            if (dossierInfo.bccontract_address) dossierInfo.bccontract_address = dossierInfo.bccontract_address.toLowerCase();
+            dossierInfo.tiposupporto_id = t("dossier:tiposupporto_id." + dossierInfo.tiposupporto_id);
+            dossierInfo.fruibilitadossier_id = t("dossier:fruibilitadossier_id." + dossierInfo.fruibilitadossierdetail.code);
+            if (dossierInfo.luogooperadetail) {
+              if (dossierInfo.luogooperadetail.tipoluogo_id)
+                dossierInfo.luogooperadetail.tipoluogo_id = t("dossier:tipoluogo_id." + dossierInfo.luogooperadetail.tipoluogo_id);
+              else dossierInfo.luogooperadetail.tipoluogo_id = "";
+            }
+            if (dossierInfo.statusopera_id) dossierInfo.statusopera_id = t("dossier:statusopera_id." + dossierInfo.statusopera_id);
+            if (dossierInfo.fruibilitaopera_id) dossierInfo.fruibilitaopera_id = t("dossier:fruibilitaopera_id." + dossierInfo.fruibilitaopera_id);
+          }
+          setDossierInfo(dossierInfo);
+          console.error(dossierInfo);
+          setDocs(data.rows);
+        })
+        .catch(function (error) {
+          console.error(error);
+          appAlert(error.message ? error.message : JSON.stringify(error));
+        });
+    }
   }, [appAlert, t]);
 
   let doc_columns = [
-    { field: 'image_uri', headerName: t('Opera Image'), renderCell: (params)=>{
-      return (
-          <div key={`${asset_pfx}${params.row.image_uri}`} className={'App-image'} >
-            <img src={`${asset_pfx}${params.row.image_uri}`} width= {'100%'}  loading={'lazy'}/>
+    {
+      field: "image_uri",
+      headerName: t("Opera Image"),
+      renderCell: (params) => {
+        return (
+          <div key={`${asset_pfx}${params.row.image_uri}`} className={"App-image"}>
+            <img src={`${asset_pfx}${params.row.image_uri}`} width={"100%"} loading={"lazy"} />
           </div>
-      )
-    } },
-    { flex:1, headerName: t("documento:author"), field: "autore"}, 
-    { flex:1, headerName: t("documento:tipodocumento"), field: "tipo_documento"},
-    { flex:1, headerName: t("documento:title"), field: "title"},
-    { flex:1, headerName: t("documento:filename"), field: "filename"},
-    { flex:1, headerName: t("documento:mimetype"), field: "mimetype"},
-  ]
+        );
+      },
+    },
+    { flex: 1, headerName: t("documento:author"), field: "autore" },
+    { flex: 1, headerName: t("documento:tipodocumento"), field: "tipo_documento" },
+    { flex: 1, headerName: t("documento:title"), field: "title" },
+    { flex: 1, headerName: t("documento:filename"), field: "filename" },
+    { flex: 1, headerName: t("documento:mimetype"), field: "mimetype" },
+  ];
 
   const nuovoDoc = () => {
     console.log("DossierDetail nuovoDoc dossier_id: " + dossier_id);
-    navigate( "/newdocument",
-        { state: { dossier_id: dossier_id }},
-    );
+    navigate("/newdocument", { state: { dossier_id: dossier_id } });
   };
 
   const documents2BC = () => {
@@ -322,11 +328,7 @@ let params = useParams();
   return (
     <div>
       <Header />
-      {application == "techne" ? (
-        <h1>{t("dossier:DossierDetail")}</h1>
-      ) : (
-        <h1>{t("dossier:ImageDetail")}</h1>
-      )}
+      {application == "techne" ? <h1>{t("dossier:DossierDetail")}</h1> : <h1>{t("dossier:ImageDetail")}</h1>}
       {dossierInfo ? (
         <div>
           <Container component="main" maxWidth="md">
@@ -336,8 +338,8 @@ let params = useParams();
                   <th>{t("dossier:Immagine")}</th>
                   <td>
                     {isVideo ? (
-                      <video controls autoPlay width="400" >
-                      <source src={`${asset_pfx}${dossierInfo.icon_uri}`} type="video/mp4" />
+                      <video controls autoPlay width="400">
+                        <source src={`${asset_pfx}${dossierInfo.icon_uri}`} type="video/mp4" />
                       </video>
                     ) : (
                       <img src={`${asset_pfx}${dossierInfo.icon_uri}`} width={400} />
@@ -370,16 +372,14 @@ let params = useParams();
                   </>
                 ) : null}
                 {application != "techne" ? (
-                <tr>
-                  <th>{t("dossier:mint_info")}</th>
-                  <td>{JSON.stringify(dossierInfo.mint_info)}</td>
-                </tr>
+                  <tr>
+                    <th>{t("dossier:mint_info")}</th>
+                    <td>{JSON.stringify(dossierInfo.mint_info)}</td>
+                  </tr>
                 ) : null}
                 <tr>
                   <th>{t("dossier:autore")}</th>
-                  <td>
-                    {dossierInfo.autore}  {" "}
-                  </td>
+                  <td>{dossierInfo.autore} </td>
                 </tr>
                 <tr>
                   <th>{t("dossier:TipoOpera")}</th>
@@ -456,20 +456,29 @@ let params = useParams();
               !dossierInfo.contract_initialized ? (
                 <React.Fragment>
                   <div className="MuiContainer-root MuiContainer-maxWidthXs">
-                    <MostSubmitButton type="button" disabled={disabledButs} onClick={() => alert("Work in Progress")} label={t("documento:Registra il Dossier Opera in BlockChain")} />
+                    <MostSubmitButton
+                      type="button"
+                      disabled={disabledButs}
+                      onClick={() => alert("Work in Progress")}
+                      label={t("documento:Registra il Dossier Opera in BlockChain")}
+                    />
                   </div>
                 </React.Fragment>
-              ) : (
-                  application == "techne" ? (
+              ) : application == "techne" ? (
                 <div className="MuiContainer-root MuiContainer-maxWidthXs">
                   {dossierInfo.fruibilitadossierdetail.code !== "DOSSIER_FRUIBILITY_COMPLETELY_PUBLIC" ? (
                     <div>
-                      <MostSubmitButton type="button" disabled={disabledButs} onClick={invite} label={t("documento:Invita un ospite a visualizzare il tuo Dossier Opera")} />
+                      <MostSubmitButton
+                        type="button"
+                        disabled={disabledButs}
+                        onClick={invite}
+                        label={t("documento:Invita un ospite a visualizzare il tuo Dossier Opera")}
+                      />
                     </div>
                   ) : null}
                   <MostSubmitButton type="button" disabled={disabledButs} onClick={sell} label={t("documento:Cedi la tua opera ad un acquirente")} />
                 </div>
-              ): null)
+              ) : null
             ) : null}
             {application != "techne" ? (
               <>
@@ -480,19 +489,18 @@ let params = useParams();
             ) : null}
           </Container>
 
-          {application != "techne" ? (
-            null
-          ) : (
-          !sellOrInviteMode ? (
+          {application != "techne" ? null : !sellOrInviteMode ? (
             <div>
               <h2>{t("Documenti")} </h2>
-              <div className="blackColor margin20 gray">{docs.length ? <MostDataGrid columns={doc_columns} rows={docs} /> : t("dossier:NoDocument") }</div>
+              <div className="blackColor margin20 gray">{docs.length ? <MostDataGrid columns={doc_columns} rows={docs} /> : t("dossier:NoDocument")}</div>
               {dossierInfo && username === username ? (
                 <div>
                   <div className="MuiContainer-root MuiContainer-maxWidthXs">
                     <MostSubmitButton type="button" disabled={disabledButs} onClick={nuovoDoc} label={t("dossier:NuovoDocumento")} />
                     {/* se dossier gia' in BC e se almeno 1 doc non gia' in BC */}
-                    {dossierInfo.contract_initialized && !doc_bc_sync ? <MostSubmitButton type="button" disabled={disabledButs} onClick={documents2BC} label={t("dossier:Registra i documenti in BlockChain")} /> : null}
+                    {dossierInfo.contract_initialized && !doc_bc_sync ? (
+                      <MostSubmitButton type="button" disabled={disabledButs} onClick={documents2BC} label={t("dossier:Registra i documenti in BlockChain")} />
+                    ) : null}
                   </div>
                 </div>
               ) : null}
@@ -503,15 +511,32 @@ let params = useParams();
               <div className="blackColor">
                 {sellOrInviteMode === "sell" ? t("documento:Acquirente_gia_registrato?") : t("documento:Ospite_gia_registrato?")}
                 <br />
-                <MostButton2 variab={controparteUsername} variab_value={true} onClick={() => setControparteUsername(true)} label={t("dossier:Si")} className="margin-sg-10" />{" "}
-                <MostButton2 variab={controparteUsername} variab_value={false} onClick={() => setControparteUsername(false)} label={t("dossier:No")} className="margin-sg-10" />
+                <MostButton2
+                  variab={controparteUsername}
+                  variab_value={true}
+                  onClick={() => setControparteUsername(true)}
+                  label={t("dossier:Si")}
+                  className="margin-sg-10"
+                />{" "}
+                <MostButton2
+                  variab={controparteUsername}
+                  variab_value={false}
+                  onClick={() => setControparteUsername(false)}
+                  label={t("dossier:No")}
+                  className="margin-sg-10"
+                />
                 {controparteUsername === true ? (
                   <div>
                     <Container component="main" maxWidth="md">
                       <form onSubmit={handleSubmit(onSubmitSellOrInvite)} noValidate>
                         {sellOrInviteMode === "sell" ? (
                           <Grid item xs={12}>
-                            <MostTextField name="acquirente" required={true} label={t("documento:username acquirente")} register={register({ required: true })} />
+                            <MostTextField
+                              name="acquirente"
+                              required={true}
+                              label={t("documento:username acquirente")}
+                              register={register({ required: true })}
+                            />
                             {errors.acquirente && <span className="badValue">{t("campo obbligatorio")}</span>}
                           </Grid>
                         ) : (
@@ -521,7 +546,13 @@ let params = useParams();
                               {errors.ospite && <span className="badValue">{t("campo obbligatorio")}</span>}
                             </Grid>
                             <Grid item xs={12}>
-                              <MostSelect control={control} name="giorni" options={giorniOptions} rules={{ required: true }} placeholder={t("dossier:durata della condivisione") + " *"} />
+                              <MostSelect
+                                control={control}
+                                name="giorni"
+                                options={giorniOptions}
+                                rules={{ required: true }}
+                                placeholder={t("dossier:durata della condivisione") + " *"}
+                              />
                               {errors.giorni && <span className="badValue">{t("campo obbligatorio")}</span>}
                             </Grid>
                           </React.Fragment>
@@ -535,7 +566,7 @@ let params = useParams();
                 ) : null}
               </div>
             </div>
-          ))}
+          )}
         </div>
       ) : (
         <></>
@@ -544,4 +575,3 @@ let params = useParams();
     </div>
   );
 };
-

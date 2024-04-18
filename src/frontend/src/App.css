@@ -1,4 +1,3 @@
-
 /*
     primary (vedi App.js palette primary main)
             vedi anche PropagateLoader in BC.js
@@ -10,24 +9,26 @@
 */
 
 body {
-    font-family: Calibri, Segoe, Helvetica, sans-serif !important ;
+  font-family: Calibri, Segoe, Helvetica, sans-serif !important ;
 }
 
-table, td, th {
-    border-collapse: collapse;
+table,
+td,
+th {
+  border-collapse: collapse;
 }
 .margin20 {
-    margin-right: 20px;
-    margin-left: 20px;
+  margin-right: 20px;
+  margin-left: 20px;
 }
 
 :any-link {
-  color: #AAAA00;
+  color: #aaaa00;
 }
 
 .App {
   text-align: center;
-  color: #AAAA00;
+  color: #aaaa00;
 }
 
 .App-logo {
@@ -53,7 +54,7 @@ table, td, th {
   color: white;
 }
 .Home-header :any-link {
-  color: #DBDB00;
+  color: #dbdb00;
 }
 
 .App-link {
@@ -70,143 +71,143 @@ table, td, th {
 }
 
 #MMLogin button {
-    width: 400px;
+  width: 400px;
 }
 .ethTable {
-    border: 1px black solid;
-    margin: auto;
-    color: black;
-    margin-top: 0;
-    margin-bottom: 30px;
-    width: 400px;
+  border: 1px black solid;
+  margin: auto;
+  color: black;
+  margin-top: 0;
+  margin-bottom: 30px;
+  width: 400px;
 }
 .ethTable th,
 .ethTable td {
-    text-align: left;
-    padding: 0 20px !important;
+  text-align: left;
+  padding: 0 20px !important;
 }
 .ethTable {
-    width: 100%;
+  width: 100%;
 }
 .w200,
-.ethTable  th {
-    width: 200px;
+.ethTable th {
+  width: 200px;
 }
 .reteKovan {
-    color: blue;
-    font-weight: bold;
+  color: blue;
+  font-weight: bold;
 }
 .goodValue {
-    color: #0a0;
-    font-weight: bold;
+  color: #0a0;
+  font-weight: bold;
 }
 .error,
 .badValue {
-    color: red;
-    /* font-weight: bold; */
+  color: red;
+  /* font-weight: bold; */
 }
 .gold {
-  color: #AAAA00;
+  color: #aaaa00;
 }
 #languageDiv {
-    width: 100%;
+  width: 100%;
 }
 #languageDiv button {
-    float: right;
-    margin: 10px 10px 10px 0;
-    border: 0;
-    padding: 0;
-    height: 24px;
-    cursor: -webkit-grab; 
-    cursor: grab;
+  float: right;
+  margin: 10px 10px 10px 0;
+  border: 0;
+  padding: 0;
+  height: 24px;
+  cursor: -webkit-grab;
+  cursor: grab;
 }
 .cursorPointer {
-    cursor: pointer;
+  cursor: pointer;
 }
 .hidden {
-    display: none;
+  display: none;
 }
 .block {
-    display: block;
+  display: block;
 }
 #HomeDiv {
-    font-family: "Maven Pro", "maven pro";
+  font-family: "Maven Pro", "maven pro";
 }
 .UnderFooter {
-    height: 44px;
+  height: 44px;
 }
 .smartarsName {
-    font-size: 40px !important;
-    font-weight: bold !important;
+  font-size: 40px !important;
+  font-weight: bold !important;
 }
 .xxxxApp-logo {
-    max-width: 100%;
-    max-width: 600px;
-    padding-left: 40px;
-    padding-right: 40px;
+  max-width: 100%;
+  max-width: 600px;
+  padding-left: 40px;
+  padding-right: 40px;
 }
 .logopiccolo {
-    width: 120px;
-    vertical-align: middle;
+  width: 120px;
+  vertical-align: middle;
 }
 .logopiccolosa {
-    width: 100px;
-    vertical-align: middle;
+  width: 100px;
+  vertical-align: middle;
 }
 .margintop30 {
-    margin-top: 30px;
+  margin-top: 30px;
 }
 .backbutton {
-    padding-top: 20px;
+  padding-top: 20px;
 }
 .asinistra {
-    text-align: left;
-    width: 80%;
-    margin-left: auto;
-    margin-right: auto;
+  text-align: left;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
 }
 .tuttoasinistra {
-    text-align: left;
-    width: 100%;
+  text-align: left;
+  width: 100%;
 }
 
 .Header.MuiPaper-root,
 .Header :any-link,
 .Header .MuiIconButton-root {
   background-color: #282c34 !important;
-  color: #DBDB00 !important;
+  color: #dbdb00 !important;
 }
 .blackColor,
 .blackColor :any-link {
-    color: black;
+  color: black;
 }
 .top-margin-10 {
-    margin-top: 10px;
+  margin-top: 10px;
 }
 .margin-sg-10 {
-    margin-top: 10px !important;
-    margin-bottom: 10px !important;
+  margin-top: 10px !important;
+  margin-bottom: 10px !important;
 }
 .vertMiddle {
-    vertical-align: middle;
+  vertical-align: middle;
 }
 .esitiTable {
-    margin-top: 30px;
+  margin-top: 30px;
 }
 .esitiTable :any-link {
-    font-weight: bold;
+  font-weight: bold;
 }
 .esiti {
-    padding: 0 20px;
+  padding: 0 20px;
 }
 .loginokTab,
 .loginokTab :any-link {
-    color: black;
+  color: black;
 }
 .loginokTab td,
 .loginokTab th {
-    text-align: left;
-    padding: 4px 10px;
+  text-align: left;
+  padding: 4px 10px;
 }
 /* per riuscire a vedere l'elenco delle scelte di una select
    dentro dialog
@@ -215,71 +216,71 @@ table, td, th {
  */
 #form-dialog .MuiPaper-root,
 #form-dialog .MuiDialogContent-root {
-    overflow-y: visible !important;
+  overflow-y: visible !important;
 }
 .small-logo {
-    max-width: 400px;
-    padding: 40px 40px 0 40px;
+  max-width: 400px;
+  padding: 40px 40px 0 40px;
 }
 .gray th {
-    background-color: #ddd;
-    color: #440;
+  background-color: #ddd;
+  color: #440;
 }
 .fontSizeSmall {
-    font-size: 14px;
+  font-size: 14px;
 }
 .bianco {
-    color: white;
+  color: white;
 }
 .vertalignTop {
-    vertical-align: top;
+  vertical-align: top;
 }
 .dossierDettaglioTable td,
 .dossierDettaglioTable th {
-    border: 1px #ccc solid;
+  border: 1px #ccc solid;
 }
 .padding10 {
-    padding: 0 10px;
+  padding: 0 10px;
 }
 .riservato {
-    color: #AAAA00;
-    font-style: italic;
-    vertical-align: sub;
-    font-size: 11px;
+  color: #aaaa00;
+  font-style: italic;
+  vertical-align: sub;
+  font-size: 11px;
 }
 .b_loginok {
-    margin: 0 !important;
-    vertical-align: middle !important;
+  margin: 0 !important;
+  vertical-align: middle !important;
 }
 .down {
-    caption-side: bottom;
+  caption-side: bottom;
 }
 .gray .radioCol {
-    width: 20px !important;
-    padding: 0  0 0 10px !important;
+  width: 20px !important;
+  padding: 0 0 0 10px !important;
 }
 .nriproduzioni {
-    width: 50px;
+  width: 50px;
 }
 .width100,
 .notetextarea {
-    width: 100%;
+  width: 100%;
 }
 .nodecoration {
-    text-decoration: none;
+  text-decoration: none;
 }
 .allCellLink {
-    display: block;
+  display: block;
 }
 .bcenter {
-    margin: auto !important;
-    display: block !important;
+  margin: auto !important;
+  display: block !important;
 }
 #form-dialog td,
 #form-dialog th {
-    padding: 2px 8px;
+  padding: 2px 8px;
 }
 #form-dialog th {
-    background-color: #eee;
-    border-color: white;
+  background-color: #eee;
+  border-color: white;
 }

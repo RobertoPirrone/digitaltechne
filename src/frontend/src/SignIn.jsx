@@ -142,3 +142,32 @@ export const checkLoggedUser = () => {
     })();
     })
 }
+
+export const getBackend = () => {
+    const [backend, setBackend] = useGlobalState('backend');
+    if (backend !== null ) {
+        return backend
+    } else {
+    (async () => {
+      const client = await AuthClient.create();
+      if (client.isAuthenticated()) {
+          console.log("backend is ", backend);
+                if (backend === null || backend == "") {
+            const identity = client.getIdentity();
+            const actor = Actor.createActor(idlFactory, {
+              agent: new HttpAgent({
+                identity,
+              }),
+              canisterId,
+            });
+      setBackend(actor);
+      return actor;
+                }
+      } else {
+                    async () => await InternetIdentityLogin();
+      setBackend(actor);
+      return actor;
+      }
+    })();
+    }
+}

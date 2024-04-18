@@ -12,13 +12,13 @@ import { DTRoot } from "./components/useStyles";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { Upload } from "./Upload";
-// import { backend } from "../../declarations/backend";
+import { backend } from "../../declarations/backend";
 
 export const NewDossier = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useGlobalState("username");
   const [application, setapplication] = useGlobalState("application");
-  const [backend, setBackend] = useGlobalState("backend");
+  // const [backend, setBackend] = useGlobalState("backend");
   const {
     control,
     register,

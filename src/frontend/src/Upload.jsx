@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Ed25519KeyIdentity } from "@dfinity/identity";
 import { HttpAgent } from "@dfinity/agent";
 import { AssetManager } from "@dfinity/assets";
+import { canisterId } from "../../declarations/uploads";
 
 export const Upload = (props) => {
   let asset = props.asset;
@@ -31,7 +32,7 @@ export const Upload = (props) => {
   // const canisterId = 'br5f7-7uaaa-aaaaa-qaaca-cai';
   console.log("META: ", JSON.stringify(import.meta));
   console.log("ENV: ", JSON.stringify(import.meta.env));
-  const canisterId = import.meta.env.VITE_CANISTER_ID_UPLOADS;
+  // const canisterId = import.meta.env.VITE_CANISTER_ID_UPLOADS;
   let asset_pfx = `https://${canisterId}.icp0.io`;
   if (isLocal) {
     asset_pfx = `http://${canisterId}.localhost:4943`;

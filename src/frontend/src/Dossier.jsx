@@ -1,11 +1,16 @@
 import React, { useState, useMemo, useEffect, useCallback } from "react";
-// import { DataGrid } from '@material-ui/data-grid';
 import { useNavigate } from "react-router-dom";
 import { useGlobalState } from './state';
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-// import MyAxios, { check_response } from "./MyAxios";
+import SettingsIcon from "@mui/icons-material/Settings";
+import SearchIcon from "@mui/icons-material/Search";
+import Tooltip from "@mui/material/Tooltip";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Switch from "@mui/material/Switch";
+import Collapse from "@mui/material/Collapse";
+import PropagateLoader from "react-spinners/PropagateLoader";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { Table } from "./Table";
@@ -18,20 +23,14 @@ import {
 import { MostDataGrid } from "./components/MostDataGrid";
 import { Riservato } from "./components/OpusComponents";
 import InVisionDialog from "./components/InVisionDialog";
-import SettingsIcon from "@mui/icons-material/Settings";
-import SearchIcon from "@mui/icons-material/Search";
-import Tooltip from "@mui/material/Tooltip";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Switch from "@mui/material/Switch";
-import Collapse from "@mui/material/Collapse";
-import PropagateLoader from "react-spinners/PropagateLoader";
+// import { InternetIdentityLogin }  from "./SignIn";
 // import { css } from "@emotion/core";
-import { backend } from "../../declarations/backend";
-import { uploads } from "../../declarations/uploads";
+// import { backend } from "../../declarations/backend";
+// import { uploads } from "../../declarations/uploads";
 
-import {Ed25519KeyIdentity} from '@dfinity/identity';
-import {HttpAgent} from '@dfinity/agent';
-import {AssetManager} from '@dfinity/assets';
+// import {Ed25519KeyIdentity} from '@dfinity/identity';
+// import {HttpAgent} from '@dfinity/agent';
+// import {AssetManager} from '@dfinity/assets';
 
 /**
  * Component for showing dossier rows
@@ -47,28 +46,12 @@ export const Dossier = () => {
 // console.log("process.env :", JSON.stringify(process.env));
 const isLocal = !window.location.host.endsWith('icp0.io');
 const canisterId = import.meta.env.VITE_CANISTER_ID_UPLOADS;
-const asset_pfx = `https://${canisterId}.icp0.io`;
+let asset_pfx = `https://${canisterId}.icp0.io`;
 if (isLocal) {
-    const asset_pfx = `http://${canisterId}.localhost:4943`;
+    asset_pfx = `http://${canisterId}.localhost:4943`;
 }
 
 console.log("asset_pfx :", asset_pfx);
-// Hardcoded principal: 535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe
-// Should be replaced with authentication method e.g. Internet Identity when deployed on IC
-const identity = Ed25519KeyIdentity.generate(new Uint8Array(Array.from({length: 32}).fill(0)));
-const agent = new HttpAgent({
-    host: isLocal ? `http://127.0.0.1:${window.location.port}` : 'https://ic0.app', identity,
-    //host: isLocal ? `http://${canisterId}.localhost:${window.location.port}` : 'https://ic0.app', identity,
-});
-    if (false) {
-if (isLocal) {
-    agent.fetchRootKey().catch((err) => {
-      console.warn( "Unable to fetch root key. Check to ensure that your local replica is running");
-      console.error(err);
-    });
-}
-}
-
 
   const navigate = useNavigate();
   const { handleSubmit } = useForm();
@@ -83,6 +66,7 @@ if (isLocal) {
   const [application, setApplication] = useGlobalState('application');
   const [username, setusername] = useGlobalState('username');
   const [trueidentity, setIdentity] = useGlobalState('identity');
+  const [backend, setBackend] = useGlobalState('backend');
 
 
   useEffect(() => {
@@ -91,7 +75,13 @@ if (isLocal) {
         limit:50,
         // autore: 'Elisabetta Villa'
     };
-    // console.log("QP  is " + JSON.stringify(QP));
+    console.log("backend  is " + JSON.stringify(backend));
+    console.log("username  is " + JSON.stringify(username));
+      // if (backend === null || backend == "" || backend.dossier_query === null) {
+      if (backend === null ) {
+          console.log("navigo su /login");
+        navigate("/login");
+      } else {
     backend.dossier_query(QP).then((Ok_data) =>  {
         let data = JSON.parse(Ok_data.Ok);
         console.log("data returns: ",JSON.stringify(data));
@@ -105,7 +95,7 @@ if (isLocal) {
       .catch(function (error) {
         console.error(error);
         alert(error.message ? error.message : JSON.stringify(error));
-      });
+      })};
   }, [t ]);
 
   const handleChangePubblici = () => {

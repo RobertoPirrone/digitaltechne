@@ -8,19 +8,20 @@ import Grid from '@mui/material/Grid';
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useTranslation, Trans } from 'react-i18next';
 import { AuthClient } from "@dfinity/auth-client";
-import { HttpAgent } from "@dfinity/agent";
+import { Actor, HttpAgent } from "@dfinity/agent";
 import { Principal } from "@dfinity/principal";
 import { useGlobalState } from './state';
 import logo from './DT-noalpha.png';
 import { DTPaper, DTForm, DTSubmit } from './components/useStyles';
 import { MostSubmitButton} from './components/MostComponents';
-import { backend } from "../../declarations/backend";
+import { canisterId, idlFactory } from "../../declarations/backend";
 
 export const Login = () => {
     const navigate = useNavigate();
     const { t, i18n } = useTranslation();
     const IIcanisterId = process.env.CANISTER_ID_INTERNET_IDENTITY;
     const [username, setUsername] = useGlobalState('username');
+    const [backend, setBackend] = useGlobalState('backend');
     const infoUrl = "/info.html"
     // console.log(JSON.stringify(i18n));
 
@@ -36,18 +37,25 @@ export const Login = () => {
                         ? "https://identity.ic0.app"
                         : `http://${IIcanisterId}.localhost:4943`
             });
+            const identity = authClient.getIdentity();
+            const actor = Actor.createActor(idlFactory, {
+              agent: new HttpAgent({
+                identity,
+              }),
+              canisterId,
+            });
+            console.log("IIprincipal: ",  identity.getPrincipal().toText());
+
             if (false) {
-            const IIidentity = authClient.getIdentity();
             console.log(IIidentity);
             setIdentity(IIidentity);
-            const IIprincipal = authClient.getIdentity().getPrincipal();
-            console.log("principal: ", IIprincipal);
-
             const IIagent = new HttpAgent({ identity });
             console.log(JSON.stringify(IIagent));
             setAgent(IIagent);
             }
-            backend.whoami().then((Ok_data) =>  {
+            console.log(JSON.stringify(actor));
+            setBackend(actor);
+            actor.whoami().then((Ok_data) =>  {
                 // console.log("whoami returns: ",JSON.stringify(Ok_data));
                 console.log("whoami returns: ",Ok_data);
                 setUsername(Ok_data);
@@ -108,18 +116,22 @@ export const Logout = () => {
 
 export const checkLoggedUser = () => {
   const [username, setUsername] = useGlobalState('username');
+    const [backend, setBackend] = useGlobalState('backend');
     useEffect(() => {
     (async () => {
       const client = await AuthClient.create();
       if (client.isAuthenticated()) {
           if (username === "") {
+                if (backend === null) {
+                    async () => await InternetIdentityLogin();
+                } else {
                 backend.whoami().then((Ok_data) =>  {
                     // console.log("whoami returns: ",JSON.stringify(Ok_data));
                     console.log("whoami returns: ",Ok_data);
                     setUsername(Ok_data);
                     return Ok_data;
                 });
-
+                }
           } else {
             return username;
           }

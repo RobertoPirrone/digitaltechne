@@ -16,7 +16,7 @@ import { GoToHomePage, Riservato, BexplorerLink } from "./components/OpusCompone
 // import IpfsDialog from "./components/IpfsDialog";
 import { dmy_hms, prettyJson } from "./Utils";
 //import { provaE } from "./Crypto";
-import { backend } from "../../declarations/backend";
+// import { backend } from "../../declarations/backend";
 
 
 import {Ed25519KeyIdentity} from '@dfinity/identity';
@@ -26,9 +26,9 @@ import {AssetManager} from '@dfinity/assets';
 let dossier_id = "";
 const canisterId = import.meta.env.VITE_CANISTER_ID_UPLOADS;
 const isLocal = !window.location.host.endsWith('icp0.io');
-const asset_pfx = `https://${canisterId}.icp0.io`;
+let asset_pfx = `https://${canisterId}.icp0.io`;
 if (isLocal) {
-    const asset_pfx = `http://${canisterId}.localhost:4943`;
+    asset_pfx = `http://${canisterId}.localhost:4943`;
 }
 
 export const DossierDetail = (props) => {
@@ -71,6 +71,7 @@ if (isLocal) {
   const [doc_bc_sync, setDoc_bc_sync] = useState(true);
   const [username, setUsername] = useGlobalState('username');
   const [application, setApplication] = useGlobalState('application');
+  const [backend, setBackend] = useGlobalState('backend');
 
   const { t } = useTranslation(["translation", "documento", "dossier"]);
   const { control, register, handleSubmit, errors } = useForm();
@@ -121,6 +122,10 @@ let params = useParams();
         dossieropera_id: dossier_id
     };
     console.log("QP  is " + JSON.stringify(QP));
+      if (backend === null ) {
+          console.log("navigo su /login");
+        navigate("/login");
+      } else {
     backend.documenti_query(QP).then((Ok_data) =>  {
         console.log("DossierDetail documenti_query returns: ",JSON.stringify(Ok_data));
         let data = JSON.parse(Ok_data.Ok);
@@ -145,7 +150,7 @@ let params = useParams();
       .catch(function (error) {
         console.error(error);
         appAlert(error.message ? error.message : JSON.stringify(error));
-      });
+      })};
   }, [appAlert, t]);
 
   let doc_columns = [

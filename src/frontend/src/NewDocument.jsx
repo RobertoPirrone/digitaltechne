@@ -21,7 +21,7 @@ import Grid from "@mui/material/Grid";
 import { GoToHomePage } from "./components/OpusComponents";
 import { Upload } from "./Upload";
 import { MyTextField, MyCheckbox, MyAutocomplete, MostSubmitButton, MostCheckbox, MostSelect, MostTextField, } from "./components/MostComponents";
-import { backend } from "../../declarations/backend";
+//import { backend } from "../../declarations/backend";
 
 /**
  * NewDocument: inserimento di un documento in IPFS
@@ -44,6 +44,7 @@ import { backend } from "../../declarations/backend";
  * @param {string} dossier_id id del dossier a cui appartiene il documento, arriva nella URl, non come props
  */
 export const NewDocument = (props) => {
+  const [backend, setBackend] = useGlobalState('backend');
   const newDossierInfo = props.newDossierInfo;
   const navigate = useNavigate();
   let react_router_location = useLocation();
@@ -53,6 +54,12 @@ export const NewDocument = (props) => {
   let autore_list = ['pippo', 'pluto'];
   let tipodocumento_list = ['immagine', 'titolo_proprietà'];
 
+  useEffect(() => {
+      if (backend === null) {
+        navigate("/login");
+      }}); 
+
+    if (false) {
 // Hardcoded principal: 535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe
 // Should be replaced with authentication method e.g. Internet Identity when deployed on IC
 const canisterId = process.env.CANISTER_ID_FRONTEND;
@@ -62,7 +69,6 @@ const agent = new HttpAgent({
     // host: isLocal ? `http://127.0.0.1:${window.location.port}` : 'https://ic0.app', identity,
     host: isLocal ? `http://127.0.0.1:3000` : 'https://ic0.app', identity,
 });
-    if (false) {
 if (isLocal) {
     agent.fetchRootKey();
 }

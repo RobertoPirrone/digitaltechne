@@ -13,12 +13,13 @@ import { DTRoot } from "./components/useStyles";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { Upload } from "./Upload";
-import { backend } from "../../declarations/backend";
+// import { backend } from "../../declarations/backend";
 
 export const NewDossier = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useGlobalState('username');
   const [application, setapplication] = useGlobalState('application');
+  const [backend, setBackend] = useGlobalState('backend');
   const { control, register, handleSubmit, watch, formState: { errors }, } = useForm()
   const [disabledButs, setDisabledButs] = useState(true)
   const [newDossierInfo, setNewDossierInfo] = useState({}); //pull down & C.
@@ -41,6 +42,9 @@ export const NewDossier = () => {
 
   useEffect(() => {
     setSearchele(false);
+      if (backend === null) {
+        navigate("/login");
+      } else {
     backend.dossier_pulldowns().then((Ok_data) =>  {
         console.log("dossieropera returns: ",JSON.stringify(Ok_data));
         let data = JSON.parse(Ok_data.Ok);
@@ -79,7 +83,7 @@ export const NewDossier = () => {
     .catch(function (error) {
         console.error(error);
         appAlert(error.message?error.message:JSON.stringify(error));
-    });
+    })};
   }, [t, searchele, appAlert, lastInsert]);
 
   const actionChange = (e, el) => {

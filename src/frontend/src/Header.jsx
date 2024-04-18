@@ -4,7 +4,7 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 //import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import MenuIcon from "@mui/material/Menu";
+import MenuIcon from '@mui/icons-material/Menu';
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useTranslation } from "react-i18next";
@@ -23,9 +23,9 @@ import Button from "@mui/material/Button";
 import { useGlobalState } from "./state";
 
 export function Header(props) {
-  const { username, setUsername } = useGlobalState("username");
   const { t, i18n } = useTranslation();
   const [langDialog, setLangDialog] = useState(false);
+  const [ username, setUsername ] = useGlobalState("username");
 
   function linguaWin() {
     setLangDialog(true);
@@ -62,38 +62,17 @@ export function Header(props) {
 
   // const classes = useStyles();
 
-  const catalogoUrl = process.env.REACT_APP_BE + "static/catalogo.html";
+  const catalogoUrl = "/catalogo.html";
 
   return (
-    <div className={DTGrow}>
+    <div >
       <AppBar position="fixed" color="inherit" className="Header">
         <Toolbar>
-          {props.empty === "true" ? /*
-          <Tooltip title={t("pagina iniziale")}>
-            <Link to="/">
-                <IconButton
-                    className={classes.menuButton}
-                    edge="start"
-                    color="inherit"
-                >
-                    <ArrowBackIcon />
-                </IconButton>
-            </Link>
-          </Tooltip>
-          */
+          {props.empty === "true" ? 
+          /*<Tooltip title={t("pagina iniziale")}> <Link to="/"> <IconButton className={classes.menuButton} edge="start" color="inherit" > <ArrowBackIcon /> </IconButton> </Link> </Tooltip> */
           null : (
-            <Tooltip title={t("menu")}>
-              <IconButton
-                className={DTMenuButton}
-                edge="start"
-                aria-label="menu"
-                aria-controls="user-menu"
-                aria-haspopup="true"
-                onClick={handleClick}
-                color="inherit"
-              >
-                <MenuIcon />
-              </IconButton>
+            <Tooltip title={"menu"}> 
+              <IconButton edge="start" aria-label="menu" aria-controls="user-menu" aria-haspopup="true" onClick={handleClick} color="inherit" > <MenuIcon /> </IconButton> 
             </Tooltip>
           )}
           {props.empty === "true" ? null /*(
@@ -101,13 +80,11 @@ export function Header(props) {
             <a href="https://www.smartars.eu/" rel="noreferrer" target="_blank"><img edge="end" src={logosa} alt="logo" style={{height:"40px"}} className={dt_headerTitle} /></a>
           </Tooltip>
         )*/ : (
-            <Tooltip title={t("Pagina principale")}>
-              <Link to="/loginok">
-                <img edge="end" src={logo} alt="logo" style={{ height: "40px" }} className={DTHeaderTitle} />
-              </Link>
+            <Tooltip title={t("Pagina principale")}> 
+                <Link to="/loginok"> <img edge="end" src={logo} alt="logo" style={{ height: "40px" }} className={DTHeaderTitle} /> </Link> 
             </Tooltip>
           )}
-          <div className={DTGrow} />
+          <div />
           <HelpDialog />
           <Tooltip title={t("Lingua")}>
             <IconButton onClick={linguaWin} color="inherit">
@@ -116,17 +93,8 @@ export function Header(props) {
           </Tooltip>
           {props.empty === "true" ? null : (
             <div className={DTSectionUser}>
-              <Tooltip title={username}>
-                <IconButton
-                  edge="end"
-                  aria-label={t("account of current user")}
-                  aria-controls="user-menu"
-                  aria-haspopup="true"
-                  onClick={handleClick1}
-                  color="inherit"
-                >
-                  <AccountCircleIcon />
-                </IconButton>
+              <Tooltip title={"username"}> 
+                <IconButton edge="end" aria-label={t("account of current user")} aria-controls="user-menu" aria-haspopup="true" onClick={handleClick1} color="inherit" > <AccountCircleIcon /> </IconButton> 
               </Tooltip>
             </div>
           )}

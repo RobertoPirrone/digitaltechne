@@ -1,0 +1,10 @@
+[
+    {
+        "match": "**/*",
+        "headers": {
+            "Access-Control-Allow-Origin" : "*",
+            "Vary": "Origin"
+        },
+        "ignore": false
+    }
+]

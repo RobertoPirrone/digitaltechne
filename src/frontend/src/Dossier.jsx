@@ -70,13 +70,10 @@ export const Dossier = () => {
       limit: 50,
       // autore: 'Elisabetta Villa'
     };
-    console.log("backend  is " + JSON.stringify(backend));
-    // if (backend === null || backend == "" || backend.dossier_query === null) {
-      backend
-        .dossier_query(QP)
+      backend.dossier_query(QP)
         .then((Ok_data) => {
           let data = JSON.parse(Ok_data.Ok);
-          console.log("data returns: ", JSON.stringify(data));
+          // console.log("data returns: ", JSON.stringify(data));
           // console.log("raw data returns: ",data);
           setDossierPersonali(data.ret_owner);
           // setDossierPersonaliMaster( data.ret_owner.filter((riga) => riga.master_dossier_id === null),);

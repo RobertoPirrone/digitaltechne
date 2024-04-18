@@ -9,7 +9,7 @@
     "prebuild": "dfx generate",
     "build": "tsc && vite build && cp src/.ic-assets.json dist/.ic-assets.json5",
     "XXXbuild": "tsc && vite build",
-    "format": "prettier --write \"src/**/*.{json,js,jsx,ts,tsx,css,scss}\""
+    "format": "../../node_modules/.bin/prettier --print-width 160 --write \"src/**/*.{json,js,jsx,ts,tsx,css,scss}\""
   },
   "dependencies": {
     "@dfinity/agent": "^0.15.7",

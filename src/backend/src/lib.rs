@@ -1,27 +1,16 @@
-//#[macro_use]
 extern crate ic_cdk_macros;
-//#[macro_use]
 extern crate serde;
-
 use ic_cdk::{query, update};
 use ic_cdk::api::call::RejectionCode;
-
 use candid::CandidType;
 use rusqlite::types::Type;
-
 use serde::{Deserialize, Serialize};
 
-use std::cell::RefCell;
+pub mod my_utils;
+pub mod cartridge;
+pub use crate::cartridge::{CartridgeQueryParams, cartridge_insert, cartridge_query};
+//use crate::cartridge::CartridgeQueryParams;
 
-thread_local! {
-    static COUNTER : RefCell<u32> = RefCell::new(0);
-}
-
-
-#[query]
-fn instruction_counter() -> u64 {
-    ic_cdk::api::instruction_counter()
-}
 
 #[update]
 fn execute(sql: String) -> ExecResult {
@@ -306,19 +295,6 @@ fn dossier_insert(jv: String) -> ExecResult {
 fn whoami() -> String {
     let caller = ic_cdk::caller();
     caller.to_string()
-}
-
-#[query]
-fn get_counter() -> u32 {
-    COUNTER.with(|counter| *counter.borrow())
-}
-
-#[update]
-fn inc_counter() -> u32 {
-    COUNTER.with(|counter| {
-        *counter.borrow_mut() += 1;
-        *counter.borrow()
-    })
 }
 
 #[query]

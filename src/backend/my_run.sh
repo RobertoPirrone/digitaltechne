@@ -1,8 +1,27 @@
 #!/bin/bash
 export DFX_NETWORK=ic
 network="--ic"
+network=""
 
 
+
+echo "--- create table cartridge"
+fields='
+    id INTEGER PRIMARY KEY,                               
+    dull_code TEXT NOT NULL,                                
+    dna_text TEXT NOT NULL,                            
+    dna_file_asset TEXT NOT NULL,                           
+    username TEXT NOT NULL,
+    lab_name TEXT NOT NULL,
+    ora_inserimento TEXT NOT NULL
+    '
+
+    fields=$(echo $fields)
+    sql_cmd=$(printf "create table cartridge (%s)" "$fields")
+    echo $sql_cmd
+    dfx canister call $network backend execute "$sql_cmd"
+
+exit 0
 
 echo "--- create table tipoopera_codes"
 fields='

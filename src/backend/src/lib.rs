@@ -8,9 +8,10 @@ use serde::{Deserialize, Serialize};
 
 pub mod my_utils;
 pub mod cartridge;
+pub mod artwork_mark;
+pub use crate::artwork_mark::{ArtworkMarkQueryParams, artwork_mark_insert, artwork_mark_query};
 pub use crate::cartridge::{CartridgeQueryParams, cartridge_insert, cartridge_query};
-//use crate::cartridge::CartridgeQueryParams;
-
+// use crate::cartridge::CartridgeQueryParams;
 
 #[update]
 fn execute(sql: String) -> ExecResult {

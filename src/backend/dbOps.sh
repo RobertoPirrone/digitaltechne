@@ -10,6 +10,23 @@ fi
 echo Uso network $network, con identity $(dfx identity whoami)
 
 
+echo "--- create table artwork_mark"
+fields='
+    id INTEGER PRIMARY KEY,                               
+    dossier_id TEXT NOT NULL,                                
+    username TEXT NOT NULL,
+    ora_inserimento TEXT NOT NULL,
+    mark_dull_code TEXT NOT NULL,                                
+    mark_position TEXT NOT NULL,                                
+    note TEXT NOT NULL
+    '
+
+    fields=$(echo $fields)
+    sql_cmd=$(printf "create table artwork_mark (%s)" "$fields")
+    echo $sql_cmd
+    dfx canister call $network backend execute "$sql_cmd"
+
+
 echo "--- create table cartridge"
 fields='
     id INTEGER PRIMARY KEY,                               

@@ -1,3 +1,4 @@
+type ArtworkMarkQueryParams = record { offset : nat64; limit : nat64 };
 type CartridgeQueryParams = record { offset : nat64; limit : nat64 };
 type MyError = variant {
   CanisterError : record { message : text };
@@ -8,6 +9,8 @@ type QueryParams = record { offset : nat64; limit : nat64 };
 type Result = variant { Ok : text; Err : MyError };
 type Result_1 = variant { Ok : vec vec text; Err : MyError };
 service : {
+  artwork_mark_insert : (text) -> (Result);
+  artwork_mark_query : (ArtworkMarkQueryParams) -> (Result) query;
   cartridge_insert : (text) -> (Result);
   cartridge_query : (CartridgeQueryParams) -> (Result) query;
   document_insert : (text) -> (Result);

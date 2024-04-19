@@ -19,13 +19,7 @@ export const NewDossier = () => {
   const [username, setUsername] = useGlobalState("username");
   const [application, setapplication] = useGlobalState("application");
   // const [backend, setBackend] = useGlobalState("backend");
-  const {
-    control,
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm();
+  const { control, register, handleSubmit, watch, formState: { errors }, } = useForm();
   const [disabledButs, setDisabledButs] = useState(true);
   const [newDossierInfo, setNewDossierInfo] = useState({}); //pull down & C.
   const [searchele, setSearchele] = useState(false);

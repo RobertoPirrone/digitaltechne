@@ -2,7 +2,6 @@ extern crate ic_cdk_macros;
 extern crate serde;
 use ic_cdk::{query, update};
 use candid::CandidType;
-// use rusqlite::types::Type;
 use serde::{Deserialize, Serialize};
 
 use crate::my_utils::*;
@@ -10,12 +9,13 @@ use crate::my_utils::*;
 #[derive(Debug, Serialize, Deserialize)]
 struct Cartridge {
     id: Option<u64>,
-    dull_code: String, // uuid4()
+    dull_code: String, 
     dna_text: String,
     dna_file_asset: String,
     username: String,
     lab_name: String,
-    ora_inserimento: String
+    ora_inserimento: String,
+    note: String
 }
 
 #[derive(CandidType, Debug, Serialize, Deserialize, Default)]
@@ -50,7 +50,8 @@ pub fn cartridge_query(params: CartridgeQueryParams) -> JsonResult {
             dna_file_asset: row.get(3).unwrap(),
             username: row.get(4).unwrap(),
             lab_name: row.get(5).unwrap(),
-            ora_inserimento: row.get(6).unwrap()
+            ora_inserimento: row.get(6).unwrap(),
+            note: row.get(7).unwrap()
         })
     }) {
         Ok(e) => e,
@@ -74,11 +75,13 @@ pub fn cartridge_insert(jv: String) -> ExecResult {
     ic_cdk::println!("cartridge_insert input: {jv} ");
     let d: Cartridge = serde_json::from_str(&jv).unwrap();
     let conn = ic_sqlite::CONN.lock().unwrap();
+    let caller = ic_cdk::caller().to_string();
+    ic_cdk::println!("caller : {caller} ");
 
     let sql = format!("insert into cartridge \
-        (dull_code, dna_text, dna_file_asset, username, lab_name, ora_inserimento) 
-        values ('{}', '{}', '{}', '{}', {}, '{}' )",
-        d.dull_code, d.dna_text, d.dna_file_asset, d.username, d.lab_name , d.ora_inserimento
+        (dull_code, dna_text, dna_file_asset, username, lab_name, ora_inserimento, note) 
+        values ('{}', '{}', '{}', '{}', '{}', '{}', '{}' )",
+        d.dull_code, d.dna_text, d.dna_file_asset, caller, d.lab_name , d.ora_inserimento, d.note
         );
     return match conn.execute(
         &sql,

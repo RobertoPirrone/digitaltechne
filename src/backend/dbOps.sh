@@ -18,7 +18,8 @@ fields='
     dna_file_asset TEXT NOT NULL,                           
     username TEXT NOT NULL,
     lab_name TEXT NOT NULL,
-    ora_inserimento TEXT NOT NULL
+    ora_inserimento TEXT NOT NULL,
+    note TEXT NOT NULL
     '
 
     fields=$(echo $fields)

@@ -10,6 +10,6 @@ export const ProtectedRoute = () => {
     console.log("ProtectedRoute No Auth");
     navigate("/login");
   }
-  console.log("ProtectedRoute username: ", username);
+  // console.log("ProtectedRoute username: ", username);
   return <Outlet />;
 };

@@ -182,9 +182,9 @@ export const DossierDetail = (props) => {
     navigate("/newdocument", { state: { dossier_id: dossier_id } });
   };
 
-  const documents2BC = () => {
-    console.log("documents2BC dossier_id: " + dossier_id);
-    let url = "/docsBC/" + dossier_id;
+  const artwork_mark = () => {
+    console.log("artwork_mark dossier_id: " + dossier_id);
+    let url = "/artwork_mark/" + dossier_id;
     navigate(url);
   };
 
@@ -460,7 +460,7 @@ export const DossierDetail = (props) => {
                     <MostSubmitButton
                       type="button"
                       disabled={disabledButs}
-                      onClick={() => alert("Work in Progress")}
+                      onClick={artwork_mark}
                       label={t("documento:Registra il Dossier Opera in BlockChain")}
                     />
                   </div>

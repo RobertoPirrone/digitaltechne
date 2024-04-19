@@ -41,7 +41,7 @@ function App() {
               <Route path="/newdossier" element={<NewDossier />} />
               <Route path="/newdocument" key="dossier_id" element={<NewDocument />} />
               <Route path="/cartridge_insert" element={<CartridgeInsert />} />
-              <Route path="/artwork_mark" element={<ArtworkMark />} />
+              <Route path="/artwork_mark/:dossierdetail" element={<ArtworkMark />} />
               <Route path="/verify_mark" element={<VerifyMark />} />
               <Route path="/user_roles" element={<UserRoles />} />
             </Route>

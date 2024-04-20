@@ -16,6 +16,25 @@ import { DTPaper, DTForm, DTSubmit } from './components/useStyles';
 import { MostSubmitButton} from './components/MostComponents';
 import { canisterId, idlFactory } from "../../declarations/backend";
 
+// ricostruisce l'actor che parla con il Backend, con IIdentity e lo mette in GlobalState
+const AuthBackendActor = (authClient) => {
+    const identity = authClient.getIdentity();
+    let agent = new HttpAgent({ identity, });
+    const actor = Actor.createActor(idlFactory, {
+      agent: agent,
+      canisterId,
+    });
+    console.log("IIprincipal: ",  identity.getPrincipal().toText());
+    if (process.env.DFX_NETWORK !== "ic") {
+            agent.fetchRootKey();
+    }
+    console.log(JSON.stringify(actor));
+    actor.whoami().then((Ok_data) =>  {
+        // console.log("whoami returns: ",JSON.stringify(Ok_data));
+        console.log("whoami returns: ",Ok_data);
+    });
+    return actor;
+}
 export const Login = () => {
     const navigate = useNavigate();
     const { t, i18n } = useTranslation();
@@ -24,6 +43,8 @@ export const Login = () => {
     const [backend, setBackend] = useGlobalState('backend');
     const infoUrl = "/info.html"
     // console.log(JSON.stringify(i18n));
+
+
 
 
     async function InternetIdentityLogin() {
@@ -37,30 +58,10 @@ export const Login = () => {
                         ? "https://identity.ic0.app"
                         : `http://${IIcanisterId}.localhost:4943`
             });
-            const identity = authClient.getIdentity();
-            const actor = Actor.createActor(idlFactory, {
-              agent: new HttpAgent({
-                identity,
-              }),
-              canisterId,
-            });
-            console.log("IIprincipal: ",  identity.getPrincipal().toText());
 
-            if (false) {
-            console.log(IIidentity);
-            setIdentity(IIidentity);
-            const IIagent = new HttpAgent({ identity });
-            console.log(JSON.stringify(IIagent));
-            setAgent(IIagent);
-            }
-            console.log(JSON.stringify(actor));
+            const actor = AuthBackendActor(authClient);
             setBackend(actor);
-            actor.whoami().then((Ok_data) =>  {
-                // console.log("whoami returns: ",JSON.stringify(Ok_data));
-                console.log("whoami returns: ",Ok_data);
-                setUsername(Ok_data);
-                navigate("/dossier");
-            });
+            navigate("/dossier");
         });
     }
 
@@ -117,21 +118,18 @@ export const Logout = () => {
 export const checkLoggedUser = () => {
   const [username, setUsername] = useGlobalState('username');
     const [backend, setBackend] = useGlobalState('backend');
-    useEffect(() => {
     (async () => {
       const client = await AuthClient.create();
       if (client.isAuthenticated()) {
           if (username === "") {
-                if (backend === null) {
-                    async () => await InternetIdentityLogin();
-                } else {
-                backend.whoami().then((Ok_data) =>  {
+                const actor = AuthBackendActor(client);
+                setBackend(actor);
+                actor.whoami().then((Ok_data) =>  {
                     // console.log("whoami returns: ",JSON.stringify(Ok_data));
                     console.log("whoami returns: ",Ok_data);
                     setUsername(Ok_data);
                     return Ok_data;
                 });
-                }
           } else {
             return username;
           }
@@ -140,7 +138,6 @@ export const checkLoggedUser = () => {
       const results = await fetchData();
       console.log(results);
     })();
-    })
 }
 
 export const getBackend = () => {

@@ -6,6 +6,7 @@ import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { v4 as uuidv4 } from 'uuid';
 
 import { Ed25519KeyIdentity } from "@dfinity/identity";
 import { HttpAgent } from "@dfinity/agent";
@@ -100,6 +101,7 @@ export const NewDocument = (props) => {
       appAlert("File non scelto");
       return;
     }
+    vals.uuid = uuidv4();
     vals["dossieropera_id"] = Number(dossier_id);
     vals["title"] = titolo;
     vals["autore"] = autore;

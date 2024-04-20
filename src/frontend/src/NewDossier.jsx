@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
 import Autocomplete from "@mui/material/Autocomplete";
+import { v4 as uuidv4 } from 'uuid';
 
 import { MyTextField, MyCheckbox, MyAutocomplete, MostSubmitButton, MostCheckbox, MostSelect, MostTextField } from "./components/MostComponents";
 import { useGlobalState } from "./state";
@@ -103,6 +104,7 @@ export const NewDossier = () => {
       return;
     }
 
+    vals.uuid = uuidv4();
     vals.ora_inserimento = new Date();
     vals.username = username;
     vals.autore = autore;

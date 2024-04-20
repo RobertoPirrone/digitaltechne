@@ -9,7 +9,7 @@ use crate::my_utils::*;
 #[derive(Debug, Serialize, Deserialize)]
 struct Cartridge {
     id: Option<u64>,
-    dull_code: String, 
+    uuid: String, 
     dna_text: String,
     dna_file_asset: String,
     username: String,
@@ -45,7 +45,7 @@ pub fn cartridge_query(params: CartridgeQueryParams) -> JsonResult {
         Ok(
             Cartridge {
             id: row.get(0).unwrap(),
-            dull_code: row.get(1).unwrap(),
+            uuid: row.get(1).unwrap(),
             dna_text: row.get(2).unwrap(),
             dna_file_asset: row.get(3).unwrap(),
             username: row.get(4).unwrap(),
@@ -79,9 +79,9 @@ pub fn cartridge_insert(jv: String) -> ExecResult {
     ic_cdk::println!("caller : {caller} ");
 
     let sql = format!("insert into cartridge \
-        (dull_code, dna_text, dna_file_asset, username, lab_name, ora_inserimento, note) 
+        (uuid, dna_text, dna_file_asset, username, lab_name, ora_inserimento, note) 
         values ('{}', '{}', '{}', '{}', '{}', '{}', '{}' )",
-        d.dull_code, d.dna_text, d.dna_file_asset, caller, d.lab_name , d.ora_inserimento, d.note
+        d.uuid, d.dna_text, d.dna_file_asset, caller, d.lab_name , d.ora_inserimento, d.note
         );
     return match conn.execute(
         &sql,

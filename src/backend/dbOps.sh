@@ -13,6 +13,7 @@ echo Uso network $network, con identity $(dfx identity whoami)
 echo "--- create table artwork_mark"
 fields='
     id INTEGER PRIMARY KEY,                               
+    uuid TEXT NOT NULL,                                
     dossier_id TEXT NOT NULL,                                
     username TEXT NOT NULL,
     ora_inserimento TEXT NOT NULL,
@@ -30,7 +31,7 @@ fields='
 echo "--- create table cartridge"
 fields='
     id INTEGER PRIMARY KEY,                               
-    dull_code TEXT NOT NULL,                                
+    uuid TEXT NOT NULL,                                
     dna_text TEXT NOT NULL,                            
     dna_file_asset TEXT NOT NULL,                           
     username TEXT NOT NULL,
@@ -62,6 +63,7 @@ fields='
 echo "--- create table dossier"
 fields='
     id INTEGER PRIMARY KEY,                               
+    uuid TEXT NOT NULL,                                
     autore TEXT NOT NULL,                                
     nomeopera TEXT NOT NULL,                            
     ora_inserimento TEXT NOT NULL,                     
@@ -83,6 +85,7 @@ dfx canister call $network backend execute 'create index id on dossier(id)'
 echo "--- create table documents"
 fields='
     id INTEGER PRIMARY KEY,                               
+    uuid TEXT NOT NULL,                                
     autore TEXT NOT NULL,                                
     ora_inserimento TEXT NOT NULL,                     
     title TEXT NOT NULL,                     

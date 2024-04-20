@@ -33,7 +33,7 @@ export const CartridgeInsert = () => {
       return;
     }
 
-    vals.dull_code = uuidv4();
+    vals.uuid = uuidv4();
     vals.dna_text = dnaText;
     vals.dna_file_asset = pdfAsset.key;
     vals.lab_name = "Laboratorio CNR Catania";

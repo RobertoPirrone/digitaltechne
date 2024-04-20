@@ -2,12 +2,19 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Ed25519KeyIdentity } from "@dfinity/identity";
 import { HttpAgent } from "@dfinity/agent";
 import { AssetManager } from "@dfinity/assets";
+import mime from "mime";
+import { v4 as uuidv4 } from 'uuid';
+
 import { canisterId } from "../../declarations/uploads";
 
 export const Upload = (props) => {
-  let asset = props.asset;
   console.log("Upload: ", JSON.stringify(props));
+  let asset = props.asset;
   let setAsset = props.setAsset;
+  let accept = "image/*";
+  if (props.accept) {
+    let accept = props.accept;
+  }
   let setDisabledButs = props.setDisabledButs;
   // Hardcoded principal: 535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe
   // Should be replaced with authentication method e.g. Internet Identity when deployed on IC
@@ -15,24 +22,8 @@ export const Upload = (props) => {
   const isLocal = !window.location.host.endsWith("icp0.io");
   const [progress, setProgress] = useState(null);
 
-  if (false) {
-    const agent = new HttpAgent({
-      host: isLocal ? `http://127.0.0.1:${window.location.port}` : "https://ic0.app",
-      identity,
-    });
-    if (isLocal) {
-      agent.fetchRootKey();
-    }
-  }
-
-  // Canister id can be fetched from URL since frontend in this example is hosted in the same canister as file upload
-  // const canisterId = new URLSearchParams(window.location.search).get('canisterId') ?? /(.*?)(?:\.raw)?\.ic0.app/.exec(window.location.host)?.[1] ?? /(.*)\.localhost/.exec(window.location.host)?.[1];
-  // const canisterId = process.env.CANISTER_ID_ASSETS;
-  // const canisterId = 'br5f7-7uaaa-aaaaa-qaaca-cai';
-  // const canisterId = 'br5f7-7uaaa-aaaaa-qaaca-cai';
-  console.log("META: ", JSON.stringify(import.meta));
-  console.log("ENV: ", JSON.stringify(import.meta.env));
-  // const canisterId = import.meta.env.VITE_CANISTER_ID_UPLOADS;
+  // console.log("META: ", JSON.stringify(import.meta));
+  // console.log("ENV: ", JSON.stringify(import.meta.env));
   let asset_pfx = `https://${canisterId}.icp0.io`;
   if (isLocal) {
     asset_pfx = `http://${canisterId}.localhost:4943`;
@@ -72,11 +63,12 @@ export const Upload = (props) => {
     });
     const name = file.name.split(".");
     const extension = name.pop();
-    const fileName = [name, width, height, extension].join(".");
+    const fileName = [uuidv4(), extension].join(".");
+    // const fileName = [name, width, height, extension].join(".");
     console.error("detailsFromFile: ", JSON.stringify(file.name));
     const original_filename = file.name;
-    const file_size = 10240;
-    const mimetype = "image/jpeg";
+    const file_size = file.size;
+    const mimetype = mime.getType(original_filename)
     // return {fileName, width, height}
     return { fileName, width, height, original_filename, extension, file_size, mimetype };
   };
@@ -84,7 +76,7 @@ export const Upload = (props) => {
   const uploadPhotos = () => {
     const input = document.createElement("input");
     input.type = "file";
-    input.accept = "image/*";
+    input.accept = accept;
     input.multiple = true;
     input.onchange = async () => {
       setProgress(0);
@@ -127,7 +119,7 @@ export const Upload = (props) => {
   return (
     <>
       <button className={"App-upload"} onClick={uploadPhotos}>
-        📂 Upload photo
+        📂 Upload file
       </button>
       <div key={`${asset_pfx}${asset.key}`} className={"App-image"}>
         <img src={`${asset_pfx}${asset.key}`} width={"100%"} loading={"lazy"} />

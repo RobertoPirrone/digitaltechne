@@ -118,6 +118,7 @@ export const Dossier = () => {
     { flex: 1, headerName: t("dossier:NomeOpera"), field: "nomeopera" },
     { flex: 1, headerName: t("dossier:TipoOpera"), field: "tipoopera" },
     { flex: 1, headerName: t("dossier:LuogoOpera"), field: "luogoopera" },
+    { flex: 1, headerName: t("dossier:Private"), field: "private" },
   ];
 
   if (application == "elivilla") {

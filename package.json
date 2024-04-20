@@ -16,6 +16,7 @@
     "src/frontend"
   ],
   "dependencies": {
+    "mime": "^4.0.1",
     "prettier": "^3.2.5",
     "uuid": "^9.0.1"
   }

@@ -14,12 +14,14 @@ import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { Upload } from "./Upload";
 import { backend } from "../../declarations/backend";
+import { updateBackendActor } from "./SignIn";
 
-export const NewDossier = () => {
+export const NewDossier = (props) => {
+  const backendActor = props.backendActor;
   const navigate = useNavigate();
   const [username, setUsername] = useGlobalState("username");
+  // const [backendActor, setBackendActor] = useGlobalState("backendActor");
   const [application, setapplication] = useGlobalState("application");
-  // const [backend, setBackend] = useGlobalState("backend");
   const { control, register, handleSubmit, watch, formState: { errors }, } = useForm();
   const [disabledButs, setDisabledButs] = useState(true);
   const [newDossierInfo, setNewDossierInfo] = useState({}); //pull down & C.
@@ -42,10 +44,10 @@ export const NewDossier = () => {
 
   useEffect(() => {
     setSearchele(false);
-    if (backend === null) {
+    if (backendActor === null) {
       navigate("/login");
     } else {
-      backend
+      backendActor
         .dossier_pulldowns()
         .then((Ok_data) => {
           console.log("dossieropera returns: ", JSON.stringify(Ok_data));
@@ -119,7 +121,7 @@ export const NewDossier = () => {
     vals.icon_uri = asset.key;
     setDisabledButs(true);
     console.log("onSubmit: ", JSON.stringify(vals));
-    backend
+    backendActor
       .dossier_insert(JSON.stringify(vals))
       .then((Ok_data) => {
         console.log("dossier_insert returns: ", JSON.stringify(Ok_data));

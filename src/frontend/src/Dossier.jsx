@@ -33,7 +33,7 @@ import { canisterId } from "../../declarations/uploads";
  *
  * @component
  */
-export const Dossier = () => {
+export const Dossier = (props) => {
   // const canisterId = process.env.CANISTER_ID_UPLOADS;
   // const canisterId = 'br5f7-7uaaa-aaaaa-qaaca-cai';
   // const canisterId = 'whzz7-fiaaa-aaaan-qmfoq-cai';
@@ -62,6 +62,7 @@ export const Dossier = () => {
   const [application, setApplication] = useGlobalState("application");
   const [username, setusername] = useGlobalState("username");
   const [trueidentity, setIdentity] = useGlobalState("identity");
+  const [backendActor, setBackendActor] = useGlobalState("backendActor");
 
   useEffect(() => {
     // const backend = getBackend();
@@ -70,7 +71,7 @@ export const Dossier = () => {
       limit: 50,
       // autore: 'Elisabetta Villa'
     };
-      backend.dossier_query(QP)
+      backendActor.dossier_query(QP)
         .then((Ok_data) => {
           let data = JSON.parse(Ok_data.Ok);
           // console.log("data returns: ", JSON.stringify(data));
@@ -148,7 +149,7 @@ export const Dossier = () => {
   };
 
   const onSubmit = () => {
-    navigate("/newdossier");
+    navigate("/newdossier", {backendActor: backendActor});
   };
 
   // anche ospiti possono avere token

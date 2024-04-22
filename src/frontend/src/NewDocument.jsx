@@ -12,6 +12,7 @@ import { Ed25519KeyIdentity } from "@dfinity/identity";
 import { HttpAgent } from "@dfinity/agent";
 import { AssetManager } from "@dfinity/assets";
 
+import { getBackendActor } from "./SignIn";
 import { useGlobalState } from "./state";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
@@ -46,6 +47,7 @@ import { backend } from "../../declarations/backend";
  * @param {string} dossier_id id del dossier a cui appartiene il documento, arriva nella URl, non come props
  */
 export const NewDocument = (props) => {
+  const backendActor = getBackendActor();
   const newDossierInfo = props.newDossierInfo;
   const navigate = useNavigate();
   let react_router_location = useLocation();

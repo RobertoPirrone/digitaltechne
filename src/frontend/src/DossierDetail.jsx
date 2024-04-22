@@ -185,7 +185,7 @@ export const DossierDetail = () => {
 
   const nuovoDoc = () => {
     console.log("DossierDetail nuovoDoc dossier_id: " + dossier_id);
-    navigate("/newdocument", { state: { dossier_id: dossier_id } });
+    navigate("/newdocument", { replace: true, state: { dossier_id: dossier_id } });
   };
 
   const artwork_mark = () => {

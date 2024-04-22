@@ -129,7 +129,8 @@ export const NewDocument = (props) => {
         console.log(response);
         if (response) {
           setDisabledButs(true);
-          navigate("/dossier");
+          let url = "/dossierdetail/" + dossier_id;
+          navigate(url, {replace: true});
         } else {
           console.error(response);
           appAlert(response.error);

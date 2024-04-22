@@ -66,7 +66,9 @@ export function Header(props) {
           )}
           <div />
           <HelpDialog />
-          <Tooltip title={t("Lingua")}> <IconButton onClick={linguaWin} color="inherit"> <LanguageIcon /> </IconButton> </Tooltip>
+          <Tooltip title={t("Lingua")}> 
+            <IconButton edge="start" aria-label="menu" aria-controls="user-menu" aria-haspopup="true"  onClick={linguaWin} color="inherit"> <LanguageIcon /> </IconButton> 
+          </Tooltip>
           {props.empty === "true" ? null : (
             <div className={DTSectionUser}>
               <Tooltip title={"username"}> 

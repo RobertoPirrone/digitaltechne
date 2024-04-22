@@ -17,8 +17,9 @@ import { GoToHomePage, Riservato, BexplorerLink } from "./components/OpusCompone
 import { dmy_hms, prettyJson } from "./Utils";
 //import { provaE } from "./Crypto";
 import { backend } from "../../declarations/backend";
+// import { getBackend } from "./SignIn";
 import { canisterId } from "../../declarations/uploads";
-import { getBackend } from "./SignIn";
+import { updateBackendActor } from "./SignIn";
 
 import { Ed25519KeyIdentity } from "@dfinity/identity";
 import { HttpAgent } from "@dfinity/agent";
@@ -33,6 +34,7 @@ if (isLocal) {
 }
 
 export const DossierDetail = (props) => {
+  const [backendActor, setBackendActor] = useGlobalState("backendActor");
   if (false) {
   // Hardcoded principal: 535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe
   // Should be replaced with authentication method e.g. Internet Identity when deployed on IC
@@ -104,6 +106,13 @@ export const DossierDetail = (props) => {
 
   useEffect(() => {
     if (!dossier_id) return;
+    if (backendActor === null) {
+        console.log("DossierDetail backendActor null:", JSON.stringify(backendActor));
+        console.log("DossierDetail username null:", JSON.stringify(username));
+        console.log("DossierDetail backend null:", JSON.stringify(backend));
+        return;
+      // navigate("/login");
+    }
     // const backend = getBackend();
     if (false) {
       assetManager
@@ -353,7 +362,7 @@ export const DossierDetail = (props) => {
                 </tr>
                 <tr>
                   <th>{t("documento:Proprietario")}</th>
-                  <td>{dossierInfo.username}</td>
+                  <td>{dossierInfo.inserted_by}</td>
                 </tr>
                 <tr>
                   <th>{t("dossier:nomeopera")}</th>
@@ -453,7 +462,7 @@ export const DossierDetail = (props) => {
                 </tr>
               </tbody>
             </table>
-            {!sellOrInviteMode && dossierInfo.username === username ? (
+            {!sellOrInviteMode && dossierInfo.inserted_by === username ? (
               !dossierInfo.contract_initialized ? (
                 <React.Fragment>
                   <div className="MuiContainer-root MuiContainer-maxWidthXs">

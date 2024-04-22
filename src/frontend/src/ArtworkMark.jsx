@@ -25,6 +25,7 @@ import { MyTextField, MyCheckbox, MyAutocomplete, MostSubmitButton, MostCheckbox
 import { backend } from "../../declarations/backend";
 
 export const ArtworkMark = (props) => {
+  const [backendActor, setBackendActor] = useGlobalState("backendActor");
   const newDossierInfo = props.newDossierInfo;
   const navigate = useNavigate();
   let react_router_location = useLocation();
@@ -36,7 +37,7 @@ export const ArtworkMark = (props) => {
   let tipodocumento_list = ["immagine", "titolo_proprietà"];
 
   useEffect(() => {
-    if (backend === null) {
+    if (backendActor === null) {
       navigate("/login");
     }
   });
@@ -92,7 +93,7 @@ export const ArtworkMark = (props) => {
     setDisabledButs(true);
     setLoading(true);
 
-    backend
+    backendActor
       .artwork_mark_insert(JSON.stringify(vals))
       .then((Ok_data) => {
         console.log("artwork_mark returns: ", JSON.stringify(Ok_data));

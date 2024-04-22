@@ -14,7 +14,7 @@ import { useGlobalState } from './state';
 import logo from './DT-noalpha.png';
 import { DTPaper, DTForm, DTSubmit } from './components/useStyles';
 import { MostSubmitButton} from './components/MostComponents';
-import { canisterId, idlFactory } from "../../declarations/backend";
+import { canisterId, idlFactory, backend } from "../../declarations/backend";
 
 // ricostruisce l'actor che parla con il Backend, con IIdentity e lo mette in GlobalState
 const AuthBackendActor = (authClient) => {
@@ -41,11 +41,8 @@ export const Login = () => {
     const IIcanisterId = process.env.CANISTER_ID_INTERNET_IDENTITY;
     const [username, setUsername] = useGlobalState('username');
     const [backend, setBackend] = useGlobalState('backend');
+    const [backendActor, setBackendActor] = useGlobalState('backendActor');
     const infoUrl = "/info.html"
-    // console.log(JSON.stringify(i18n));
-
-
-
 
     async function InternetIdentityLogin() {
         let authClient = await AuthClient.create();
@@ -59,8 +56,21 @@ export const Login = () => {
                         : `http://${IIcanisterId}.localhost:4943`
             });
 
-            const actor = AuthBackendActor(authClient);
+            const identity = authClient.getIdentity();
+            let agent = new HttpAgent({ identity, });
+            const actor = Actor.createActor(idlFactory, {
+              agent: agent,
+              canisterId,
+            });
+            console.log("IIprincipal: ",  identity.getPrincipal().toText());
+            if (process.env.DFX_NETWORK !== "ic") {
+                    agent.fetchRootKey();
+            }
+            console.log("Login prima di localStorage.setItem: ", JSON.stringify(actor));
             setBackend(actor);
+            setBackendActor(actor);
+            localStorage.setItem("backendActor", JSON.stringify(actor));
+            localStorage.setItem("identity", identity);
             navigate("/dossier");
         });
     }
@@ -103,10 +113,13 @@ export const Logout = () => {
     // })
 
     const [username, setUsername] = useGlobalState('username');
+    const [backendActor, setBackendActor] = useGlobalState('backendActor');
     const navigate = useNavigate();
 
     useEffect(() => {
         setUsername("");
+        setBackendActor(null);
+        localStorage.removeItem("backendActor");
         navigate("/login");
     })
 
@@ -117,27 +130,15 @@ export const Logout = () => {
 
 export const checkLoggedUser = () => {
   const [username, setUsername] = useGlobalState('username');
-    const [backend, setBackend] = useGlobalState('backend');
-    (async () => {
-      const client = await AuthClient.create();
-      if (client.isAuthenticated()) {
-          if (username === "") {
-                const actor = AuthBackendActor(client);
-                setBackend(actor);
-                actor.whoami().then((Ok_data) =>  {
-                    // console.log("whoami returns: ",JSON.stringify(Ok_data));
-                    console.log("whoami returns: ",Ok_data);
-                    setUsername(Ok_data);
-                    return Ok_data;
-                });
-          } else {
-            return username;
-          }
-      }
-      return "";
-      const results = await fetchData();
-      console.log(results);
-    })();
+  // const [backendActor, setBackendActor] = useGlobalState('backendActor');
+  const backendActor = getBackendActor();
+    console.log("checkLoggedUser backendActor: ", JSON.stringify(backendActor));
+    console.log("checkLoggedUser backendActor: ", backendActor);
+    backendActor.whoami().then((Ok_data) =>  {
+        console.log("whoami returns: ",Ok_data);
+        setUsername(Ok_data);
+        return Ok_data;
+    })
 }
 
 export const getBackend = () => {
@@ -167,4 +168,7 @@ export const getBackend = () => {
       }
     })();
     }
+}
+export const getBackendActor = () => {
+    return backend
 }

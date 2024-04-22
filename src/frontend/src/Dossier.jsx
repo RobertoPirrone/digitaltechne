@@ -19,7 +19,7 @@ import { MostCheckbox, MostSubmitButton, WarningIcon, Check } from "./components
 import { MostDataGrid } from "./components/MostDataGrid";
 import { Riservato } from "./components/OpusComponents";
 import InVisionDialog from "./components/InVisionDialog";
-import { getBackend } from "./SignIn";
+import { getBackendActor } from "./SignIn";
 // import { css } from "@emotion/core";
 import { backend } from "../../declarations/backend";
 import { canisterId } from "../../declarations/uploads";
@@ -33,15 +33,8 @@ import { canisterId } from "../../declarations/uploads";
  *
  * @component
  */
-export const Dossier = (props) => {
-  // const canisterId = process.env.CANISTER_ID_UPLOADS;
-  // const canisterId = 'br5f7-7uaaa-aaaaa-qaaca-cai';
-  // const canisterId = 'whzz7-fiaaa-aaaan-qmfoq-cai';
-  // const asset_pfx = `http://${canisterId}.localhost:4943`;
-  // const asset_pfx = `http://${canisterId}`;
-  // console.log("process.env :", JSON.stringify(process.env));
+export const Dossier = () => {
   const isLocal = !window.location.host.endsWith("icp0.io");
-  // const canisterId = import.meta.env.VITE_CANISTER_ID_UPLOADS;
   let asset_pfx = `https://${canisterId}.icp0.io`;
   if (isLocal) {
     asset_pfx = `http://${canisterId}.localhost:4943`;
@@ -62,10 +55,10 @@ export const Dossier = (props) => {
   const [application, setApplication] = useGlobalState("application");
   const [username, setusername] = useGlobalState("username");
   const [trueidentity, setIdentity] = useGlobalState("identity");
-  const [backendActor, setBackendActor] = useGlobalState("backendActor");
 
   useEffect(() => {
-    // const backend = getBackend();
+
+    const backendActor = getBackendActor();
     let QP = {
       offset: 0,
       limit: 50,
@@ -149,7 +142,7 @@ export const Dossier = (props) => {
   };
 
   const onSubmit = () => {
-    navigate("/newdossier", {backendActor: backendActor});
+    navigate("/newdossier");
   };
 
   // anche ospiti possono avere token

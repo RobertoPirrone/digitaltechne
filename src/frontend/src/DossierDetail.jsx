@@ -17,9 +17,8 @@ import { GoToHomePage, Riservato, BexplorerLink } from "./components/OpusCompone
 import { dmy_hms, prettyJson } from "./Utils";
 //import { provaE } from "./Crypto";
 import { backend } from "../../declarations/backend";
-// import { getBackend } from "./SignIn";
+import { getBackendActor } from "./SignIn";
 import { canisterId } from "../../declarations/uploads";
-import { updateBackendActor } from "./SignIn";
 
 import { Ed25519KeyIdentity } from "@dfinity/identity";
 import { HttpAgent } from "@dfinity/agent";
@@ -33,8 +32,8 @@ if (isLocal) {
   asset_pfx = `http://${canisterId}.localhost:4943`;
 }
 
-export const DossierDetail = (props) => {
-  const [backendActor, setBackendActor] = useGlobalState("backendActor");
+export const DossierDetail = () => {
+  const backendActor = getBackendActor();
   if (false) {
   // Hardcoded principal: 535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe
   // Should be replaced with authentication method e.g. Internet Identity when deployed on IC
@@ -90,12 +89,10 @@ export const DossierDetail = (props) => {
 
   let react_router_location = useLocation();
   console.log("DossierDetail react_router_location: " + JSON.stringify(react_router_location));
-  console.log("DossierDetail props: " + JSON.stringify(props));
   let params = useParams();
   console.log("DossierDetail params: " + JSON.stringify(params));
 
   if (params.dossierid) {
-    //console.log("Dentro  props: " + JSON.stringify(props.location));
     dossier_id = params.dossierid;
     //console.log("DENTRO dossier_id: " + dossier_id);
   } else {

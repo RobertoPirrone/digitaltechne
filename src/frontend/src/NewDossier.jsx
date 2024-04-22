@@ -14,10 +14,10 @@ import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { Upload } from "./Upload";
 import { backend } from "../../declarations/backend";
-import { updateBackendActor } from "./SignIn";
+import { getBackendActor } from "./SignIn";
 
-export const NewDossier = (props) => {
-  const backendActor = props.backendActor;
+export const NewDossier = () => {
+  const backendActor = getBackendActor();
   const navigate = useNavigate();
   const [username, setUsername] = useGlobalState("username");
   // const [backendActor, setBackendActor] = useGlobalState("backendActor");

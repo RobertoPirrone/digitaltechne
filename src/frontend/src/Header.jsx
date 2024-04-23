@@ -110,10 +110,8 @@ export function Header(props) {
         <MenuItem component={Link} to="/loginok" onClick={handleClose}> {t("Pagina principale")} </MenuItem>
         <MenuItem component={Link} to="/dossier" onClick={handleClose}> {t("Dossier aperti")} </MenuItem>
         <MenuItem component="a" href={catalogoUrl} target="_blank" onClick={handleClose}> {t("Catalogo servizi")} </MenuItem>
-        <MenuItem component={Link} to="/cartridge_insert" onClick={handleClose}> {t("CartridgeInsert")} </MenuItem>
         <MenuItem component={Link} to="/user_roles" onClick={handleClose}> {t("UserRoles")} </MenuItem>
-        <MenuItem component={Link} to="/artwork_mark" onClick={handleClose}> {t("ArtworkMark")} </MenuItem>
-        <MenuItem component={Link} to="/verify_mark" onClick={handleClose}> {t("VerifyMark")} </MenuItem>
+        <MenuItem component={Link} to="/cartridge_insert" onClick={handleClose}> {t("CartridgeInsert")} </MenuItem>
       </Menu>
 
       <Menu id="user-menu" anchorEl={anchorEl1} anchorOrigin={{ vertical: "top", horizontal: "right" }} transformOrigin={{ vertical: "top", horizontal: "right" }} 

@@ -6,7 +6,7 @@ import { Footer } from "./Footer";
 import logo from "./DT-noalpha.png";
 //import logosa from './Smartars.png';
 
-export function Home() {
+export function LandingPage() {
   const { t, i18n } = useTranslation();
   const changeLanguage = (lng) => {
     i18n.changeLanguage(lng);

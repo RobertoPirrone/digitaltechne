@@ -15,7 +15,12 @@ Your seed phrase for identity 'NuovaIdentitaRobi': wrong hurry sail escape raw p
 This can be used to reconstruct your key in case of emergency, so write it down in a safe place.
 Created identity: "NuovaIdentitaRobi".
 
-Identity on Mainnet:
+Identity on Mainnet (Chrome):
+    * Anchor: 2436928
+    * Identity: 9c1d95303ecd80dd03feaa6c030b35ab4146127817bd9c5c7f92b3a9be218d62
+    * principal: jb6f4-g6jrc-ntsdg-ex6td-wytfc-nzp5t-zqyby-xfe7x-pm35c-bttws-lae
+
+Identity on Mainnet (Brave):
     * Anchor: 2340035
     * Identity: 85f5c6c683465bc9af3625a1320a43ad68e52a05460c8e944b5fb98795745bc0
     * principal: jb6f4-g6jrc-ntsdg-ex6td-wytfc-nzp5t-zqyby-xfe7x-pm35c-bttws-lae

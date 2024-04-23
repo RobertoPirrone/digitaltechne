@@ -1,3 +1,5 @@
+//https://forum.dfinity.org/t/dfinity-auth-client-sessionstorage/12400
+//https://erxue-5aaaa-aaaab-qaagq-cai.ic0.app/auth-client/interfaces/AuthClientStorage.html
 // https://github.com/dfinity/agent-js/tree/main/packages/auth-client
 // https://forum.dfinity.org/t/keeping-user-logged-in-between-browser-refreshes-or-how-to-stringify-authclient-agent-actor/15035/16
 
@@ -170,6 +172,5 @@ export const getBackend = () => {
     }
 }
 export const getBackendActor = () => {
-    //https://erxue-5aaaa-aaaab-qaagq-cai.ic0.app/auth-client/interfaces/AuthClientStorage.html
     return backend
 }

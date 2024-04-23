@@ -109,6 +109,9 @@
     "Cessione all'utente ": "Cessione all'utente ",
     "BackPage": "Torna alla pagina precedente",
     "Dossier già registrato in BlockChain": "Già registrato in BlockChain",
-    "Pagina principale": "Pagina principale"
+    "CartridgeInsert": "Registrazione di una cartuccia DNA", 
+    "Pagina principale": "Pagina principale",
+  "DnaFileXls": "DNA  Record (XLS) *",
+  "DnaFilePdf": "Optional DNA  Record (PDF)"
 }
 

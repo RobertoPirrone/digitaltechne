@@ -109,5 +109,8 @@
   "Cessione all'utente ": "Assignment to the user",
   "BackPage": "Go to previous page",
   "Dossier già registrato in BlockChain": "Already registred in BlockChain",
-  "Pagina principale": "Main page"
+  "CartridgeInsert": "Register a DNA Cartridge", 
+  "Pagina principale": "Main page",
+  "DnaFileXls": "DNA  Record (XLS) *",
+  "DnaFilePdf": "Optional DNA  Record (PDF)"
 }

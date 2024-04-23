@@ -15,6 +15,10 @@ export const Upload = (props) => {
   if (props.accept) {
     let accept = props.accept;
   }
+  let show = false;
+  if (props.show) {
+    let show = props.show;
+  }
   let setDisabledButs = props.setDisabledButs;
   // Hardcoded principal: 535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe
   // Should be replaced with authentication method e.g. Internet Identity when deployed on IC
@@ -121,9 +125,11 @@ export const Upload = (props) => {
       <button className={"App-upload"} onClick={uploadPhotos}>
         📂 Upload file
       </button>
+      {show ?(
       <div key={`${asset_pfx}${asset.key}`} className={"App-image"}>
         <img src={`${asset_pfx}${asset.key}`} width={"100%"} loading={"lazy"} />
       </div>
+    ) : null }
       {progress !== null && <div className={"App-progress"}>{Math.round(progress * 100)}%</div>}
     </>
   );

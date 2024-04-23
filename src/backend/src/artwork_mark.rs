@@ -17,7 +17,7 @@ struct ArtworkMark {
     id: Option<u64>,
     uuid: String,
     dossier_id: String,
-    username: String,
+    inserted_by: Option<String>,
     ora_inserimento: String,
     mark_dull_code: String, 
     mark_position: String, 
@@ -52,7 +52,7 @@ pub fn artwork_mark_query(params: ArtworkMarkQueryParams) -> JsonResult {
             id: row.get(0).unwrap(),
             uuid: row.get(1).unwrap(),
             dossier_id: row.get(2).unwrap(),
-            username: row.get(3).unwrap(),
+            inserted_by: row.get(3).unwrap(),
             ora_inserimento: row.get(4).unwrap(),
             mark_dull_code: row.get(5).unwrap(),
             mark_position: row.get(6).unwrap(),
@@ -84,7 +84,7 @@ pub fn artwork_mark_insert(jv: String) -> ExecResult {
     ic_cdk::println!("caller : {caller} ");
 
     let sql = format!("insert into artwork_mark \
-        (uuid, dossier_id, username, ora_inserimento, mark_dull_code, mark_position, note) 
+        (uuid, dossier_id, inserted_by, ora_inserimento, mark_dull_code, mark_position, note) 
         values ( '{}', '{}', '{}', '{}', '{}', '{}', '{}' )",
         d.uuid, d.dossier_id, caller, d.ora_inserimento, d.mark_dull_code , d.mark_position , d.note
         );

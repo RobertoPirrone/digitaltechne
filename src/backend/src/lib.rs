@@ -83,10 +83,11 @@ impl From<(RejectionCode, String)> for MyError {
 #[derive(Debug, Serialize, Deserialize)]
 struct Dossier {
     id: Option<u64>,
+    uuid: String,
     autore: String,
     nomeopera: String,
     ora_inserimento: String,
-    username: String,
+    inserted_by: Option<String>,
     luogoopera: String,
     private: bool,
     icon_uri: String,
@@ -117,6 +118,7 @@ struct DossierReturnStruct {
 #[derive(Debug, Serialize, Deserialize)]
 struct Documento {
     id: Option<u64>,
+    uuid: String,
     autore: String,
     ora_inserimento: String,
     title: String,
@@ -126,6 +128,7 @@ struct Documento {
     filesize: u64,
     mimetype: String,
     image_uri: String,
+    inserted_by: Option<String>,
     tipo_documento: String
 }
 
@@ -246,14 +249,15 @@ fn dossier_query(params: QueryParams) -> JsonResult {
         Ok(
             Dossier {
             id: row.get(0).unwrap(),
-            autore: row.get(1).unwrap(),
-            nomeopera: row.get(2).unwrap(),
-            ora_inserimento: row.get(3).unwrap(),
-            username: row.get(4).unwrap(),
-            luogoopera: row.get(5).unwrap(),
-            private: row.get(6).unwrap(),
-            icon_uri: row.get(7).unwrap(),
-            tipoopera: row.get(8).unwrap()
+            uuid: row.get(1).unwrap(),
+            autore: row.get(2).unwrap(),
+            nomeopera: row.get(3).unwrap(),
+            ora_inserimento: row.get(4).unwrap(),
+            inserted_by: row.get(5).unwrap(),
+            luogoopera: row.get(6).unwrap(),
+            private: row.get(7).unwrap(),
+            icon_uri: row.get(8).unwrap(),
+            tipoopera: row.get(9).unwrap()
         })
     }) {
         Ok(e) => e,
@@ -275,12 +279,13 @@ fn dossier_query(params: QueryParams) -> JsonResult {
 fn dossier_insert(jv: String) -> ExecResult {
     ic_cdk::println!("dossier_insert input: {jv} ");
     let d: Dossier = serde_json::from_str(&jv).unwrap();
+    let caller = ic_cdk::caller().to_string();
     let conn = ic_sqlite::CONN.lock().unwrap();
 
     let sql = format!("insert into dossier \
-        (autore, nomeopera, ora_inserimento, username, icon_uri, luogoopera, private, tipoopera) 
-        values ('{}', '{}', '{}', '{}', '{}', '{}', {}, '{}' )",
-        d.autore, d.nomeopera, d.ora_inserimento, d.username, d.icon_uri , d.luogoopera, d.private, d.tipoopera
+        (uuid, autore, nomeopera, ora_inserimento, inserted_by, icon_uri, luogoopera, private, tipoopera) 
+        values ('{}', '{}', '{}', '{}', '{}', '{}', '{}', {}, '{}' )",
+        d.uuid, d.autore, d.nomeopera, d.ora_inserimento, caller, d.icon_uri , d.luogoopera, d.private, d.tipoopera
         );
     return match conn.execute(
         &sql,
@@ -314,14 +319,15 @@ fn documenti_query(params: QueryDocumentsParams) -> JsonResult {
         Ok(
             Dossier {
             id: row.get(0).unwrap(),
-            autore: row.get(1).unwrap(),
-            nomeopera: row.get(2).unwrap(),
-            ora_inserimento: row.get(3).unwrap(),
-            username: row.get(4).unwrap(),
-            luogoopera: row.get(5).unwrap(),
-            private: row.get(6).unwrap(),
-            icon_uri: row.get(7).unwrap(),
-            tipoopera: row.get(8).unwrap()
+            uuid: row.get(1).unwrap(),
+            autore: row.get(2).unwrap(),
+            nomeopera: row.get(3).unwrap(),
+            ora_inserimento: row.get(4).unwrap(),
+            inserted_by: row.get(5).unwrap(),
+            luogoopera: row.get(6).unwrap(),
+            private: row.get(7).unwrap(),
+            icon_uri: row.get(8).unwrap(),
+            tipoopera: row.get(9).unwrap()
         })
     }) {
         Ok(e) => e,
@@ -345,16 +351,18 @@ fn documenti_query(params: QueryDocumentsParams) -> JsonResult {
         Ok(
             Documento {
             id: row.get(0).unwrap(),
-            autore: row.get(1).unwrap(),
-            ora_inserimento: row.get(2).unwrap(),
-            title: row.get(3).unwrap(),
-            versione: row.get(4).unwrap(),
-            dossieropera_id: row.get(5).unwrap(),
-            filename: row.get(6).unwrap(),
-            filesize: row.get(7).unwrap(),
-            mimetype: row.get(8).unwrap(),
-            image_uri: row.get(9).unwrap(),
-            tipo_documento: row.get(10).unwrap()
+            uuid: row.get(1).unwrap(),
+            autore: row.get(2).unwrap(),
+            ora_inserimento: row.get(3).unwrap(),
+            title: row.get(4).unwrap(),
+            versione: row.get(5).unwrap(),
+            dossieropera_id: row.get(6).unwrap(),
+            filename: row.get(7).unwrap(),
+            filesize: row.get(8).unwrap(),
+            mimetype: row.get(9).unwrap(),
+            image_uri: row.get(10).unwrap(),
+            inserted_by: row.get(10).unwrap(),
+            tipo_documento: row.get(11).unwrap()
         })
     }) {
         Ok(e) => e,
@@ -380,12 +388,13 @@ fn document_insert(jv: String) -> ExecResult {
     let conn = ic_sqlite::CONN.lock().unwrap();
     let image_uri = d.image_uri.to_string();
     ic_cdk::println!("image_uri: {:?}", image_uri);
+    let caller = ic_cdk::caller().to_string();
     // let wrap = sql_ret.unwrap();
 
     let sql = format!("insert into documents 
-        (autore, ora_inserimento, title, versione, dossieropera_id, filename, filesize, mimetype, image_uri, tipo_documento) 
-        values ('{}', '{}', '{}', {}, {}, '{}', {}, '{}', '{}', '{}' )", 
-        d.autore, d.ora_inserimento, d.title, d.versione, d.dossieropera_id, d.filename, d.filesize, d.mimetype, image_uri, d.tipo_documento );
+        (uuid, autore, ora_inserimento, title, versione, dossieropera_id, filename, filesize, mimetype, image_uri, inserted_by, tipo_documento) 
+        values ('{}', '{}', '{}', '{}', {}, {}, '{}', {}, '{}', '{}', '{}', '{}' )", 
+        d.uuid, d.autore, d.ora_inserimento, d.title, d.versione, d.dossieropera_id, d.filename, d.filesize, d.mimetype, image_uri, caller, d.tipo_documento );
     ic_cdk::println!("document_insert sql: {:?}", sql);
 
     return match conn.execute(

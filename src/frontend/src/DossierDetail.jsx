@@ -191,7 +191,13 @@ export const DossierDetail = () => {
   const artwork_mark = () => {
     console.log("artwork_mark dossier_id: " + dossier_id);
     let url = "/artwork_mark/" + dossier_id;
-    navigate(url);
+    navigate(url, {replace: true});
+  };
+
+  const verify_mark = () => {
+    console.log("verify_mark dossier_id: " + dossier_id);
+    let url = "/verify_mark/" + dossier_id;
+    navigate(url, {replace: true});
   };
 
   const sell = () => {
@@ -409,7 +415,7 @@ export const DossierDetail = () => {
                   </>
                 ) : null}
                 <tr>
-                  <th className="vertalignTop">{t("documento:In BC")}</th>
+                  <th className="vertalignTop">{t("dossier:InBC")}</th>
                   <td>
                     {dossierInfo.contract_initialized ? (
                       <div>
@@ -461,16 +467,15 @@ export const DossierDetail = () => {
             </table>
             {!sellOrInviteMode && dossierInfo.inserted_by === username ? (
               !dossierInfo.contract_initialized ? (
-                <React.Fragment>
+                <>
                   <div className="MuiContainer-root MuiContainer-maxWidthXs">
-                    <MostSubmitButton
-                      type="button"
-                      disabled={disabledButs}
-                      onClick={artwork_mark}
-                      label={t("documento:Registra il Dossier Opera in BlockChain")}
-                    />
+                    <MostSubmitButton type="button" disabled={disabledButs} onClick={artwork_mark} label={t("dossier:ApplicaDNA")} />
                   </div>
-                </React.Fragment>
+                  <div><p></p></div>
+                  <div className="MuiContainer-root MuiContainer-maxWidthXs">
+                    <MostSubmitButton type="button" disabled={disabledButs} onClick={verify_mark} label={t("dossier:ComparaDNA")} />
+                  </div>
+                </>
               ) : application == "techne" ? (
                 <div className="MuiContainer-root MuiContainer-maxWidthXs">
                   {dossierInfo.fruibilitadossierdetail.code !== "DOSSIER_FRUIBILITY_COMPLETELY_PUBLIC" ? (

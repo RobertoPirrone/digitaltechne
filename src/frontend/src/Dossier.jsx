@@ -125,7 +125,7 @@ export const Dossier = () => {
   columns.push({ flex: 1, headerName: t("dossier:NFT id"), field: "token_id" });
   columns.push({
     flex: 1,
-    headerName: t("dossier:In BC"),
+    headerName: t("dossier:InBC"),
     field: "contract_initialized",
     renderCell: (params) => {
       if (params.row.contract_initialized) {

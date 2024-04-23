@@ -15,7 +15,7 @@ fields='
     id INTEGER PRIMARY KEY,                               
     uuid TEXT NOT NULL,                                
     dossier_id TEXT NOT NULL,                                
-    username TEXT NOT NULL,
+    inserted_by TEXT NOT NULL,
     ora_inserimento TEXT NOT NULL,
     mark_dull_code TEXT NOT NULL,                                
     mark_position TEXT NOT NULL,                                
@@ -34,7 +34,7 @@ fields='
     uuid TEXT NOT NULL,                                
     dna_text TEXT NOT NULL,                            
     dna_file_asset TEXT NOT NULL,                           
-    username TEXT NOT NULL,
+    inserted_by TEXT NOT NULL,
     lab_name TEXT NOT NULL,
     ora_inserimento TEXT NOT NULL,
     note TEXT NOT NULL
@@ -67,7 +67,7 @@ fields='
     autore TEXT NOT NULL,                                
     nomeopera TEXT NOT NULL,                            
     ora_inserimento TEXT NOT NULL,                     
-    username TEXT NOT NULL,                           
+    inserted_by TEXT NOT NULL,                           
     luogoopera TEXT,
     private BOOLEAN,
     icon_uri TEXT NOT NULL,
@@ -95,6 +95,7 @@ fields='
     filesize INTEGER,
     mimetype TEXT NOT NULL,                           
     image_uri TEXT NOT NULL,
+    inserted_by TEXT NOT NULL,
     tipo_documento TEXT NOT NULL
     '
 
@@ -115,4 +116,9 @@ dfx canister call backend dossier_query 'record {limit=10; offset=0; autore= "El
 dfx canister call backend  query "select max(id) from dossier"
 # insert via JSON
 # dfx canister call backend  dossier_insert '{ "autore": "Pinco Pallino", "nomeopera": "pippo paappo", "ora_inserimento": "2024-03-25", "username": "pluto", "icon_uri":"https://techne-test.mostapps.it/ipfs/QmeAV99r5LckFBAJxu5FUwhpMWjQ9XCSRd5cSC2w3k5vWJ" }'
+
+dfx canister call backend execute 'drop table dossier'
+dfx canister call backend execute 'drop table documents'
+dfx canister call backend execute 'drop table cartridge'
+dfx canister call backend execute 'drop table artwork_mark'
 

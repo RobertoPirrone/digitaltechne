@@ -12,7 +12,7 @@ struct Cartridge {
     uuid: String, 
     dna_text: String,
     dna_file_asset: String,
-    username: String,
+    inserted_by: Option<String>,
     lab_name: String,
     ora_inserimento: String,
     note: String
@@ -48,7 +48,7 @@ pub fn cartridge_query(params: CartridgeQueryParams) -> JsonResult {
             uuid: row.get(1).unwrap(),
             dna_text: row.get(2).unwrap(),
             dna_file_asset: row.get(3).unwrap(),
-            username: row.get(4).unwrap(),
+            inserted_by: row.get(4).unwrap(),
             lab_name: row.get(5).unwrap(),
             ora_inserimento: row.get(6).unwrap(),
             note: row.get(7).unwrap()
@@ -79,7 +79,7 @@ pub fn cartridge_insert(jv: String) -> ExecResult {
     ic_cdk::println!("caller : {caller} ");
 
     let sql = format!("insert into cartridge \
-        (uuid, dna_text, dna_file_asset, username, lab_name, ora_inserimento, note) 
+        (uuid, dna_text, dna_file_asset, inserted_by, lab_name, ora_inserimento, note) 
         values ('{}', '{}', '{}', '{}', '{}', '{}', '{}' )",
         d.uuid, d.dna_text, d.dna_file_asset, caller, d.lab_name , d.ora_inserimento, d.note
         );

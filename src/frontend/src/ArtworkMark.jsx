@@ -6,6 +6,7 @@ import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { v4 as uuidv4 } from 'uuid';
 
 import { Ed25519KeyIdentity } from "@dfinity/identity";
 import { HttpAgent } from "@dfinity/agent";
@@ -21,11 +22,12 @@ import { DTRoot, DTSubmit } from "./components/useStyles";
 import Grid from "@mui/material/Grid";
 import { GoToHomePage } from "./components/OpusComponents";
 import { Upload } from "./Upload";
+import { getBackendActor } from "./SignIn";
 import { MyTextField, MyCheckbox, MyAutocomplete, MostSubmitButton, MostCheckbox, MostSelect, MostTextField } from "./components/MostComponents";
 import { backend } from "../../declarations/backend";
 
 export const ArtworkMark = (props) => {
-  const [backendActor, setBackendActor] = useGlobalState("backendActor");
+  const backendActor = getBackendActor();
   const newDossierInfo = props.newDossierInfo;
   const navigate = useNavigate();
   let react_router_location = useLocation();
@@ -88,6 +90,7 @@ export const ArtworkMark = (props) => {
     vals.mark_dull_code = "xxxx-yyy-zzz";
     vals.mark_position = "retro, x: 10, y:0";
     vals.note = "boh, qualcosa";
+    vals.uuid = uuidv4();
 
     console.log("onSubmit: " + JSON.stringify(vals));
     setDisabledButs(true);
@@ -101,7 +104,8 @@ export const ArtworkMark = (props) => {
         console.log(response);
         if (response) {
           setDisabledButs(true);
-          navigate("/dossier");
+          let url = "/dossierdetail/" + dossier_id;
+          navigate(url, {replace: true});
         } else {
           console.error(response);
           appAlert(response.error);
@@ -133,13 +137,13 @@ export const ArtworkMark = (props) => {
 
           <form onSubmit={handleSubmit(onSubmit)}>
             <Grid container spacing={1} alignItems="center">
-              <Grid item xs={12}> <MyTextField name="mark_dull_code" required={true} label={t("mark_dull_code")} onChange={(e) => setMarkDullCode(e.target.value)} /> </Grid>
-              <Grid item xs={12}> <MyTextField name="mark_position" required={true} label={t("mark_position")} onChange={(e) => setMarkPosition(e.target.value)} /> </Grid>
+                <Grid item xs={6}> <span className="padding10">{t("CodiceDNA")} </span></Grid>
+                <Grid item xs={6}> <MyTextField name="mark_dull_code" required={true} label={t("mark_dull_code")} onChange={(e) => setMarkDullCode(e.target.value)} /> </Grid>
 
-              <Grid item xs={12}>
-                {" "}
-                &nbsp;
-              </Grid>
+                <Grid item xs={6}> <span className="padding10">{t("PosizioneDNA")}</span></Grid>
+                <Grid item xs={6}> <MyTextField name="mark_position" required={true} label={t("mark_position")} onChange={(e) => setMarkPosition(e.target.value)} /> </Grid>
+
+              <Grid item xs={12}> {" "} &nbsp; </Grid>
 
               <MostSubmitButton disabled={disabledButs} label={t("dossier:Inserisci")} />
             </Grid>

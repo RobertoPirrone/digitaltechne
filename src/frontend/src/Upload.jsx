@@ -13,11 +13,11 @@ export const Upload = (props) => {
   let setAsset = props.setAsset;
   let accept = "image/*";
   if (props.accept) {
-    let accept = props.accept;
+    accept = props.accept;
   }
   let show = false;
   if (props.show) {
-    let show = props.show;
+    show = props.show;
   }
   let setDisabledButs = props.setDisabledButs;
   // Hardcoded principal: 535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe
@@ -54,17 +54,22 @@ export const Upload = (props) => {
   };
 
   // Get file name, width and height from file
-  const detailsFromFile = async (file) => {
+  const detailsFromFile = async (file, accept) => {
+      let width=0;
+      let height=0;
     const src = await new Promise((resolve) => {
       const reader = new FileReader();
       reader.onload = () => resolve(reader.result);
       reader.readAsDataURL(file);
     });
-    const [width, height] = await new Promise((resolve) => {
-      const img = new Image();
-      img.onload = () => resolve([img.naturalWidth, img.naturalHeight]);
-      img.src = src;
-    });
+      if ( accept == "image/*") {
+          console.log("IIIIIIII");
+        const [width, height] = await new Promise((resolve) => {
+          const img = new Image();
+          img.onload = () => resolve([img.naturalWidth, img.naturalHeight]);
+          img.src = src;
+        });
+      }
     const name = file.name.split(".");
     const extension = name.pop();
     const fileName = [uuidv4(), extension].join(".");
@@ -89,7 +94,7 @@ export const Upload = (props) => {
         const batch = assetManager.batch();
         const items = await Promise.all(
           Array.from(input.files).map(async (file) => {
-            const { fileName, width, height, original_filename, extension, file_size, mimetype } = await detailsFromFile(file);
+            const { fileName, width, height, original_filename, extension, file_size, mimetype } = await detailsFromFile(file, accept);
             const key = await batch.store(file, { path: "/uploads", fileName });
             return { key, fileName, width, height, original_filename, extension, file_size, mimetype };
           }),

@@ -23,7 +23,6 @@ export const CartridgeInsert = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [pdfAsset, setPdfAsset] = useState({});
-  const [xlsAsset, setXlsAsset] = useState({});
   const [disabledButs, setDisabledButs] = useState(true);
   const [searchele, setSearchele] = useState(false);
   const [note, setNote] = useState("");
@@ -32,31 +31,32 @@ export const CartridgeInsert = () => {
   const [jsonData, setJsonData] = useState("");
 
 
-    const Xls2Json = () => {
-    if (file) {
+    const gotXls = (e) => {
+        console.log("gotXls: ");
+        setFile(e.target.files[0]);
       const reader = new FileReader();
       reader.onload = (e) => {
         const data = e.target.result;
         const workbook = XLSX.read(data, { type: "binary" });
-        const sheetName = workbook.SheetNames[0];
+        const sheetName = workbook.SheetNames[1];
         const worksheet = workbook.Sheets[sheetName];
         const json = XLSX.utils.sheet_to_json(worksheet);
+          console.log("json: ", json);
         setJsonData(JSON.stringify(json, null, 2));
       };
-      reader.readAsBinaryString(file);
+      reader.readAsBinaryString(e.target.files[0]);
+        setDisabledButs(false);
     }
-  };
 
   const onSubmit = (vals) => {
     if (! file ) {
-      appAlert("File Xls Analisi non scelto");
+      alert("File Xls Analisi non scelto");
       return;
     }
-      Xls2Json();
     vals.uuid = uuidv4();
     vals.dna_text = jsonData;
       if (pdfAsset == {} ) {
-        vals.dna_file_asset = "";
+        vals.dna_file_asset = "NO file";
       } else {
         vals.dna_file_asset = pdfAsset.key;
       }
@@ -85,7 +85,7 @@ export const CartridgeInsert = () => {
       })
       .catch(function (error) {
         console.error(error);
-        appAlert(error.message ? error.message : JSON.stringify(error));
+        alert(error.message ? error.message : JSON.stringify(error));
         setDisabledButs(false);
       });
 
@@ -100,16 +100,15 @@ export const CartridgeInsert = () => {
         <div className={DTRoot}>
             <Grid container spacing={1} alignItems="center">
                 <Grid item xs={6}> <span className="padding10">{t("DnaFileXls")}</span></Grid>
-                <Grid> <input type="file" accept=".xls,.xlsx" onChange={(e) => setFile(e.target.files[0])} /> </Grid>
+                <Grid item xs={6} > <input type="file" accept=".xls,.xlsx" onChange={gotXls} /> </Grid>
 
                 <Grid item xs={6}> <span className="padding10">{t("DnaFilePdf")}</span></Grid>
-                <Grid item xs={6}> <Upload asset={pdfAsset} setAsset={setPdfAsset} setDisabledButs={setDisabledButs} accept={"application/pdf"} show={false} /> </Grid>
+                <Grid item xs={6}> <Upload accept={"application/pdf"} asset={pdfAsset} setAsset={setPdfAsset} setDisabledButs={setDisabledButs} show={false} /> </Grid>
                 <Grid item xs={12}> {" "} &nbsp; </Grid>
       </Grid>
 
           <form onSubmit={handleSubmit(onSubmit)}>
             <Grid container spacing={1} alignItems="center">
-              <Grid item xs={12}> <MyTextField name="dna_text" label={t("DnaText")} onChange={(e) => setDnaText(e.target.value)} /> </Grid>
               <Grid item xs={12}> <MyTextField name="note" label={t("note")} onChange={(e) => setNote(e.target.value)} /> </Grid>
 
               <Grid item xs={12}> {" "} &nbsp; </Grid>

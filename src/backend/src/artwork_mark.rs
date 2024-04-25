@@ -7,7 +7,7 @@ use serde::{Deserialize, Serialize};
 use crate::my_utils::*;
 
 #[derive(Debug, Serialize, Deserialize)]
-struct Mark {
+struct KOMark {
     dull_code: String, 
     position: String, 
 }
@@ -24,39 +24,38 @@ struct ArtworkMark {
     note: String
 }
 
+#[derive(Debug, Serialize, Deserialize)]
+struct Mark {
+    mark_position: String,
+    dna_text: String
+}
+
 #[derive(CandidType, Debug, Serialize, Deserialize, Default)]
 pub struct ArtworkMarkQueryParams {
-    limit: usize,
-    offset: usize,
+    dossier_id: String
 }
 
 #[derive(Serialize, Deserialize)]
 struct ArtworkMarkReturnStruct {
     success: bool,
-    artwork_marks: Vec<ArtworkMark>
+    artwork_marks: Vec<Mark>
     }
 
 #[query]
 #[no_mangle]
 pub fn artwork_mark_query(params: ArtworkMarkQueryParams) -> JsonResult {
-    let artwork_mark_sql = "select * from artwork_mark limit ?1 offset ?2";
+    let artwork_mark_sql = "select mark_position, dna_text from artwork_mark, cartridge  where dossier_id =  ?1 and mark_dull_code = cartridge.uuid";
     ic_cdk::println!("Query: {artwork_mark_sql} ");
     let conn = ic_sqlite::CONN.lock().unwrap();
     let mut stmt = match conn.prepare(&artwork_mark_sql) {
         Ok(e) => e,
         Err(err) => return Err(MyError::CanisterError {message: format!("{:?}", err) })
     };
-    let artwork_mark_iter = match stmt.query_map((params.limit, params.offset), |row| {
+    let artwork_mark_iter = match stmt.query_map((params.dossier_id,), |row| {
         Ok(
-            ArtworkMark {
-            id: row.get(0).unwrap(),
-            uuid: row.get(1).unwrap(),
-            dossier_id: row.get(2).unwrap(),
-            inserted_by: row.get(3).unwrap(),
-            ora_inserimento: row.get(4).unwrap(),
-            mark_dull_code: row.get(5).unwrap(),
-            mark_position: row.get(6).unwrap(),
-            note: row.get(7).unwrap()
+            Mark {
+            mark_position: row.get(0).unwrap(),
+            dna_text: row.get(1).unwrap()
         })
     }) {
         Ok(e) => e,

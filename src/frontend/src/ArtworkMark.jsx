@@ -78,7 +78,10 @@ export const ArtworkMark = (props) => {
     alert(text);
   }, []);
   const [markDullCode, setMarkDullCode] = useState("");
+  const mark_position_list = [ "top_left", "top_center", "top_right", "center_left", "center_center", "center_right", "bottom_left", "bottom_center", "bottom_right"]
   const [markPosition, setMarkPosition] = useState("");
+  const mark_side_list = [ "front", "right", "frame"]
+  const [markSide, setMarkSide] = useState("");
 
   const onSubmit = (vals) => {
     console.log("Entro onSubmit: " + JSON.stringify(vals));
@@ -87,8 +90,8 @@ export const ArtworkMark = (props) => {
     vals.dossier_id = dossier_id;
     vals.username = "xxx";
     vals.ora_inserimento = new Date();
-    vals.mark_dull_code = "xxxx-yyy-zzz";
-    vals.mark_position = "retro, x: 10, y:0";
+    vals.mark_dull_code = markDullCode;
+    vals.mark_position = markSide + " " + markPosition;
     vals.note = "boh, qualcosa";
     vals.uuid = uuidv4();
 
@@ -137,11 +140,15 @@ export const ArtworkMark = (props) => {
 
           <form onSubmit={handleSubmit(onSubmit)}>
             <Grid container spacing={1} alignItems="center">
+
                 <Grid item xs={6}> <span className="padding10">{t("CodiceDNA")} </span></Grid>
-                <Grid item xs={6}> <MyTextField name="mark_dull_code" required={true} label={t("mark_dull_code")} onChange={(e) => setMarkDullCode(e.target.value)} /> </Grid>
+                <Grid item xs={6}> <MyAutocomplete name="mark_dull_code" required={true} label={t("mark_dull_code")} options={["uno", "due"]} freeSolo={false} onChange={(e,v) => setMarkDullCode(v)} /> </Grid>
+
+                <Grid item xs={6}> <span className="padding10">{t("MarkSide")} </span></Grid>
+                <Grid item xs={6}> <MyAutocomplete name="mark_side" required={true} label={t("mark_side")} options={mark_side_list} onChange={(e, v) => setMarkSide(v)} /> </Grid>
 
                 <Grid item xs={6}> <span className="padding10">{t("PosizioneDNA")}</span></Grid>
-                <Grid item xs={6}> <MyTextField name="mark_position" required={true} label={t("mark_position")} onChange={(e) => setMarkPosition(e.target.value)} /> </Grid>
+                <Grid item xs={6}> <MyAutocomplete name="mark_position" required={true} label={t("mark_position")} options={mark_position_list} onChange={(e, v) => setMarkPosition(v)} /> </Grid>
 
               <Grid item xs={12}> {" "} &nbsp; </Grid>
 

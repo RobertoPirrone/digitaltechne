@@ -405,12 +405,12 @@ export function CountrySelect({ onChange: ignored, options, name, label, control
   );
 }
 
-export function MyAutocomplete({ onInputChange, onChange, options, value, label }) {
+export function MyAutocomplete({ onInputChange, onChange, options, value, label, freeSolo=true }) {
   return (
     <Autocomplete
       options={options}
       value={value}
-      freeSolo
+      freeSolo={freeSolo}
       renderInput={(params) => <TextField {...params} label={label} variant="outlined" />}
       getOptionLabel={(option) => option}
       onInputChange={onInputChange}

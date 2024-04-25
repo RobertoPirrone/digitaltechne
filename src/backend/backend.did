@@ -1,4 +1,4 @@
-type ArtworkMarkQueryParams = record { offset : nat64; limit : nat64 };
+type ArtworkMarkQueryParams = record { dossier_id : text };
 type CartridgeQueryParams = record { offset : nat64; limit : nat64 };
 type MyError = variant {
   CanisterError : record { message : text };

@@ -20,8 +20,7 @@ struct Cartridge {
 
 #[derive(CandidType, Debug, Serialize, Deserialize, Default)]
 pub struct CartridgeQueryParams {
-    limit: usize,
-    offset: usize,
+    uuid: String,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -33,7 +32,7 @@ struct CartridgeReturnStruct {
 #[query]
 #[no_mangle]
 pub fn cartridge_query(params: CartridgeQueryParams) -> JsonResult {
-    let cartridge_sql = "select * from cartridge limit ?1 offset ?2";
+    let cartridge_sql = "select * from cartridge where uuid = ?1";
     //let dossier_sql = "select * from dossier where autore = ?3 limit ?1 offset ?2";
     ic_cdk::println!("Query: {cartridge_sql} ");
     let conn = ic_sqlite::CONN.lock().unwrap();
@@ -41,7 +40,7 @@ pub fn cartridge_query(params: CartridgeQueryParams) -> JsonResult {
         Ok(e) => e,
         Err(err) => return Err(MyError::CanisterError {message: format!("{:?}", err) })
     };
-    let cartridge_iter = match stmt.query_map((params.limit, params.offset), |row| {
+    let cartridge_iter = match stmt.query_map((params.uuid,), |row| {
         Ok(
             Cartridge {
             id: row.get(0).unwrap(),

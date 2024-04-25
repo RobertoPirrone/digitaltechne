@@ -15,11 +15,11 @@ import { DTRoot } from "./useStyles";
 
 export const DnaFile = (props) => {
     const setDnaText = props.setDnaText;
+    const setDisabledButs = props.setDisabledButs;
   const { control, register, handleSubmit, watch, formState: { errors }, } = useForm();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [pdfAsset, setPdfAsset] = useState({});
-  const [disabledButs, setDisabledButs] = useState(true);
   const [searchele, setSearchele] = useState(false);
   const [note, setNote] = useState("");
     const [file, setFile] = useState(null);
@@ -39,9 +39,9 @@ export const DnaFile = (props) => {
           console.log("json: ", json);
         setJsonData(JSON.stringify(json, null, 2));
         setDnaText(JSON.stringify(json, null, 2));
-          return;
       };
       reader.readAsBinaryString(e.target.files[0]);
+        setDisabledButs(false);
     }
 
   return (

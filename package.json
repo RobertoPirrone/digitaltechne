@@ -18,6 +18,8 @@
   "dependencies": {
     "mime": "^4.0.1",
     "prettier": "^3.2.5",
-    "uuid": "^9.0.1"
+    "react-draggable": "^4.4.6",
+    "uuid": "^9.0.1",
+    "xlsx": "^0.18.5"
   }
 }

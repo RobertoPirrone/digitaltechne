@@ -191,7 +191,7 @@ export const DossierDetail = () => {
   const artwork_mark = () => {
     console.log("artwork_mark dossier_id: " + dossier_id);
     let url = "/artwork_mark/" + dossier_id;
-    navigate(url, {replace: true});
+    navigate(url, { state: {dossierInfo: dossierInfo}, replace: true});
   };
 
   const verify_mark = () => {

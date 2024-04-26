@@ -1,21 +1,96 @@
-import React from "react";
-import Typography from "@mui/material/Typography";
+import React, { useState, useMemo, useEffect, useCallback } from "react"; import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import Grid from '@mui/material/Grid';
 import Link from "@mui/material/Link";
 import { useTranslation } from "react-i18next";
+import { useParams, useLocation } from "react-router-dom";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { DTGrow, DTFooter } from "./components/useStyles";
+import { DnaFile } from "./components/DnaFile";
+import { MyTextField, MostSubmitButton, MyAutocomplete } from "./components/MostComponents";
+import { getBackendActor } from "./SignIn";
 
-export const Purchase = () => {
-  const { t } = useTranslation();
+export const Purchase = (props) => {
+  let react_router_location = useLocation();
+  console.log("DossierDetail react_router_location: " + JSON.stringify(react_router_location));
+  let params = useParams();
+  console.log("DossierDetail params: " + JSON.stringify(params));
+    let dossier_id = "";
+
+  if (params.dossierid) {
+    dossier_id = params.dossierid;
+    //console.log("DENTRO dossier_id: " + dossier_id);
+  } else {
+    //console.log("uselocation: " + JSON.stringify(react_router_location));
+    dossier_id = react_router_location.pathname.split("/")[2];
+  }
+  const { t } = useTranslation(["dossier"]);
+  const backendActor = getBackendActor();
+  const [disabledButs, setDisabledButs] = useState(true);
+    const [dnaText, setDnaText] = useState("");
+  const mark_position_list = [ "top_left", "top_center", "top_right", "center_left", "center_center", "center_right", "bottom_left", "bottom_center", "bottom_right"]
+  const [amount, setAmount] = useState("");
+  const cartridge_count_list = [ "1", "2", "3"]
+
+  const ComputeAmount = (v) => {
+      console.log("Comopute am: ", v);
+      let a = (Number(v) *2).toString();
+      console.log("Comopute a: ", a);
+      setAmount(a);
+      setDisabledButs(false);
+  }
+
+  const onSubmit = () => {
+      let vals = {}
+    // vals.mark_position = markSide + " " + markPosition;
+      // vals.dna_text = dnaText;
+    vals.dossier_id = dossier_id;
+    console.log("onSubmit: " + JSON.stringify(vals));
+    setDisabledButs(true);
+    // setLoading(true);
+
+    backendActor
+      .artwork_mark_query(vals)
+      .then((Ok_data) => {
+        console.log("artwork_mark returns: ", JSON.stringify(Ok_data));
+        let response = Ok_data.Ok;
+        console.log(response);
+        if (response) {
+          setDisabledButs(true);
+          let url = "/dossierdetail/" + dossier_id;
+          navigate(url, {replace: true});
+        } else {
+          console.error(response);
+          appAlert(response.error);
+          setDisabledButs(false);
+        }
+      })
+      .catch(function (error) {
+        // handle error
+        console.error(error);
+        appAlert(error.message ? error.message : JSON.stringify(error));
+        setDisabledButs(false);
+        // setLoading(false);
+      });
+  };
+
+
 
   return (
     <>
       <Header />
       <h1>{t("Purchase")}</h1>
       <Container maxWidth="sm">
-        <Typography variant="body1">TBD</Typography>
+        <Typography variant="body1">Insert DNA</Typography>
+            <Grid container spacing={1} alignItems="center">
+                <Grid item xs={6}> <span className="padding10">{t("MarkSide")} </span></Grid>
+                <Grid item xs={6}> <MyAutocomplete name="cartridge_count" required={true} label={t("cartridge_count")} options={cartridge_count_list} freeSolo={true} onChange={(e, v) => ComputeAmount(v)} /> </Grid>
+
+                <Grid item xs={6}> <span className="padding10">{t("Importo")}</span></Grid>
+      <MyTextField name="amount" value={amount} label={t("amount")} />
+              <MostSubmitButton onClick={onSubmit} disabled={disabledButs} label={t("Acquista")} />
+      </Grid>
       </Container>
       <Footer />
     </>

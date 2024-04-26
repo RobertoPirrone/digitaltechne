@@ -16,9 +16,16 @@
     "src/frontend"
   ],
   "dependencies": {
+    "@dfinity/agent": "^1.2.1",
+    "@dfinity/assets": "^1.2.1",
+    "@dfinity/auth-client": "^1.2.1",
+    "@dfinity/candid": "^1.2.1",
+    "@dfinity/identity": "^1.2.1",
+    "@dfinity/principal": "^1.2.1",
     "mime": "^4.0.1",
     "prettier": "^3.2.5",
     "react-draggable": "^4.4.6",
+    "react-json-view-compare": "^2.0.2",
     "uuid": "^9.0.1",
     "xlsx": "^0.18.5"
   }

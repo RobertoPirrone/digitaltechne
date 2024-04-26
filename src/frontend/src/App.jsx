@@ -10,6 +10,7 @@ import { DossierDetail } from "./DossierDetail";
 import { Home } from "./Home";
 import { LandingPage } from "./LandingPage";
 import { Login, Logout } from "./SignIn";
+import { JsonCompare } from "./JsonCompare";
 import { Manual } from "./Manual";
 import { NewDocument } from "./NewDocument";
 import { NewDossier } from "./NewDossier";
@@ -45,6 +46,7 @@ function App() {
               <Route path="/home" element={<Home />} />
               <Route path="/dossier" element={<Dossier />} />
               <Route path="/dossierdetail/:dossierdetail" element={<DossierDetail />} />
+              <Route path="/json_compare" element={<JsonCompare />} />
               <Route path="/loginok" element={<Home />} />
               <Route path="/manual" element={<Manual />} />
               <Route path="/newdocument" key="dossier_id" element={<NewDocument />} />

@@ -12,10 +12,11 @@
     "format": "../../node_modules/.bin/prettier --print-width 160 --write \"src/**/*.{json,js,jsx,ts,tsx,css,scss}\""
   },
   "dependencies": {
-    "@dfinity/agent": "^0.15.7",
-    "@dfinity/auth-client": "^0.15.3",
-    "@dfinity/candid": "^0.15.7",
-    "@dfinity/principal": "^0.15.7",
+    "@dfinity/assets": "^1.2.1",
+    "@dfinity/auth-client": "^1.2.1",
+    "@dfinity/candid": "^1.2.1",
+    "@dfinity/identity": "^1.2.1",
+    "@dfinity/principal": "^1.2.1",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@mui/icons-material": "^5.15.15",
@@ -30,6 +31,7 @@
     "react-hook-form": "^7.51.2",
     "react-hooks-global-state": "^2.1.0",
     "react-i18next": "^14.1.0",
+    "react-json-view-compare": "^2.0.2",
     "react-router": "^6.22.3",
     "react-router-dom": "^6.22.3",
     "react-select": "^5.8.0",

@@ -3,7 +3,8 @@ import Container from "@mui/material/Container";
 import Grid from '@mui/material/Grid';
 import Link from "@mui/material/Link";
 import { useTranslation } from "react-i18next";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
+
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { DTGrow, DTFooter } from "./components/useStyles";
@@ -12,6 +13,7 @@ import { MostSubmitButton, MyAutocomplete } from "./components/MostComponents";
 import { getBackendActor } from "./SignIn";
 
 export const VerifyMark = (props) => {
+    const navigate = useNavigate();
   let react_router_location = useLocation();
   console.log("DossierDetail react_router_location: " + JSON.stringify(react_router_location));
   let params = useParams();
@@ -47,12 +49,23 @@ export const VerifyMark = (props) => {
       .artwork_mark_query(vals)
       .then((Ok_data) => {
         console.log("artwork_mark returns: ", JSON.stringify(Ok_data));
-        let response = Ok_data.Ok;
+          let response = JSON.parse(Ok_data.Ok);
+
         console.log(response);
         if (response) {
           setDisabledButs(true);
-          let url = "/dossierdetail/" + dossier_id;
-          navigate(url, {replace: true});
+        console.log(response.artwork_marks);
+            let oldData= JSON.parse(response.artwork_marks[0].dna_text);
+            console.log("oldData: ", oldData);
+            let newData= JSON.parse(dnaText);
+            console.log("newData: ", newData);
+            console.log("oldData post: ", oldData);
+            let pos = markSide + " " + markPosition;
+            newData.mark_position = { "mark_location": pos};
+            pos =  response.artwork_marks[0].mark_position;
+            oldData.mark_position = { "mark_location": pos};
+            console.log("newData post: ", newData);
+            navigate("/json_compare", { state: {oldData: oldData, newData: newData}, replace: true});
         } else {
           console.error(response);
           appAlert(response.error);
@@ -68,8 +81,6 @@ export const VerifyMark = (props) => {
       });
   };
 
-
-
   return (
     <>
       <Header />
@@ -83,7 +94,7 @@ export const VerifyMark = (props) => {
 
                 <Grid item xs={6}> <span className="padding10">{t("PosizioneDNA")}</span></Grid>
                 <Grid item xs={6}> <MyAutocomplete name="mark_position" required={true} label={t("mark_position")} options={mark_position_list} onChange={(e, v) => setMarkPosition(v)} /> </Grid>
-              <MostSubmitButton onClick={onSubmit} disabled={disabledButs} label={t("dossier:Inserisci")} />
+              <MostSubmitButton onClick={onSubmit} disabled={disabledButs} label={t("dossier:Verify")} />
       </Grid>
       </Container>
       <Footer />

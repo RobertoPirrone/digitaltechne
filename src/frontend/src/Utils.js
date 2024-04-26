@@ -1,3 +1,5 @@
+import { canisterId } from "../../declarations/uploads";
+
 export const dmy_hms = (d, full) => {
   var ret = "";
   if (full) ret = ("0" + d.getDate()).slice(-2) + "/" + ("0" + (d.getMonth() + 1)).slice(-2) + "/" + d.getFullYear() + " ";
@@ -26,4 +28,15 @@ export const prettyJson = (obj, preformatted, nl2br) => {
   if (nl2br) pretty = pretty.replace(/[\n]/g, "<br>");
   if (preformatted) pretty = "<pre>" + pretty + "</pre>";
   return pretty;
+};
+
+export const getAssetPfx = () => {
+  const isLocal = !window.location.host.endsWith("icp0.io");
+  let asset_pfx = `https://${canisterId}.icp0.io`;
+  if (isLocal) {
+    asset_pfx = `http://${canisterId}.localhost:4943`;
+  }
+
+  console.log("asset_pfx :", asset_pfx);
+  return asset_pfx;
 };

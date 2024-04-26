@@ -25,13 +25,16 @@ import { Upload } from "./Upload";
 import { getBackendActor } from "./SignIn";
 import { MyTextField, MyCheckbox, MyAutocomplete, MostSubmitButton, MostCheckbox, MostSelect, MostTextField } from "./components/MostComponents";
 import { backend } from "../../declarations/backend";
+import { getAssetPfx } from "./utils";
 
 export const ArtworkMark = (props) => {
   const backendActor = getBackendActor();
-  const newDossierInfo = props.newDossierInfo;
+  const asset_pfx = getAssetPfx();
   const navigate = useNavigate();
   let react_router_location = useLocation();
   console.log("ArtworkMark location: " + JSON.stringify(react_router_location));
+  const dossierInfo = react_router_location.state.dossierInfo;
+  console.log("dossierInfo: " + JSON.stringify(dossierInfo));
   // let dossier_id = react_router_location.state.dossier_id;
   let  dossier_id = react_router_location.pathname.split("/")[2];
 
@@ -65,7 +68,6 @@ export const ArtworkMark = (props) => {
   const [loading, setLoading] = useState(false);
   const [disabledButs, setDisabledButs] = useState(false);
   const [uploadInfo, setUploadInfo] = useState(null);
-  const [dossierInfo, setDossierInfo] = useState(null);
   const [docs, setDocs] = useState([]);
   const { control, register, handleSubmit, errors, setValue } = useForm();
   const [tipoDocumento, setTipoDocumento] = useState("");
@@ -139,21 +141,25 @@ export const ArtworkMark = (props) => {
         <div className={DTRoot}>
 
           <form onSubmit={handleSubmit(onSubmit)}>
-            <Grid container spacing={1} alignItems="center">
+            <Grid container spacing={1} >
+              <Grid item xs={12} spacing={1}>
+                        <img src={`${asset_pfx}${dossierInfo.icon_uri}`} width={200} /> 
+              </Grid>
 
-                <Grid item xs={6}> <span className="padding10">{t("CodiceDNA")} </span></Grid>
+                <Grid item xs={6}> <span className="padding10">{t("DNA Code")} </span></Grid>
                 <Grid item xs={6}> <MyAutocomplete name="mark_dull_code" required={true} label={t("mark_dull_code")} options={["uno", "due"]} freeSolo={false} onChange={(e,v) => setMarkDullCode(v)} /> </Grid>
 
-                <Grid item xs={6}> <span className="padding10">{t("MarkSide")} </span></Grid>
+                <Grid item xs={6}> <span className="padding10">{t("Mark Side")} </span></Grid>
                 <Grid item xs={6}> <MyAutocomplete name="mark_side" required={true} label={t("mark_side")} options={mark_side_list} onChange={(e, v) => setMarkSide(v)} /> </Grid>
 
-                <Grid item xs={6}> <span className="padding10">{t("PosizioneDNA")}</span></Grid>
+                <Grid item xs={6}> <span className="padding10">{t("Mark Position")}</span></Grid>
                 <Grid item xs={6}> <MyAutocomplete name="mark_position" required={true} label={t("mark_position")} options={mark_position_list} onChange={(e, v) => setMarkPosition(v)} /> </Grid>
 
-              <Grid item xs={12}> {" "} &nbsp; </Grid>
+              <Grid item xs={6}> {" "} &nbsp; </Grid>
 
               <MostSubmitButton disabled={disabledButs} label={t("dossier:Inserisci")} />
             </Grid>
+
           </form>
         </div>
       </Container>

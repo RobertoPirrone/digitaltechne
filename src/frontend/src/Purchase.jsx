@@ -1,3 +1,8 @@
+// Aquisto di cartucce (già esistenti su tavola cartridge):
+//  Diventato disponbili per l'utente nella tavola cartridge_use
+// TBD Gestione pagamento
+// TBD http outcall per delivery fisica delle cartucce
+
 import React, { useState, useMemo, useEffect, useCallback } from "react"; import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Grid from '@mui/material/Grid';
@@ -30,6 +35,7 @@ export const Purchase = (props) => {
   const [disabledButs, setDisabledButs] = useState(true);
     const [dnaText, setDnaText] = useState("");
   const mark_position_list = [ "top_left", "top_center", "top_right", "center_left", "center_center", "center_right", "bottom_left", "bottom_center", "bottom_right"]
+  const [count, setCount] = useState("0");
   const [amount, setAmount] = useState("");
   const cartridge_count_list = [ "1", "2", "3"]
 
@@ -38,6 +44,7 @@ export const Purchase = (props) => {
       let a = (Number(v) *2).toString();
       console.log("Comopute a: ", a);
       setAmount(a);
+      setCount(v);
       setDisabledButs(false);
   }
 
@@ -45,13 +52,14 @@ export const Purchase = (props) => {
       let vals = {}
     // vals.mark_position = markSide + " " + markPosition;
       // vals.dna_text = dnaText;
-    vals.dossier_id = dossier_id;
+    vals.count = count;
+    vals.insert_time = new Date();
     console.log("onSubmit: " + JSON.stringify(vals));
     setDisabledButs(true);
     // setLoading(true);
 
     backendActor
-      .artwork_mark_query(vals)
+      .cartridge_use_insert(vals)
       .then((Ok_data) => {
         console.log("artwork_mark returns: ", JSON.stringify(Ok_data));
         let response = Ok_data.Ok;

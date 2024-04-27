@@ -63,7 +63,7 @@ export const CartridgeInsert = () => {
     vals.lab_name = "Laboratorio CNR Catania";
     vals.note = note;
 
-    vals.ora_inserimento = new Date();
+    vals.insert_time = new Date();
     vals.username = "proprio io";
 
     setDisabledButs(true);

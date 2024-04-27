@@ -10,11 +10,12 @@ pub mod my_utils;
 pub mod cartridge;
 pub mod artwork_mark;
 pub use crate::artwork_mark::{ArtworkMarkQueryParams, artwork_mark_insert, artwork_mark_query};
-pub use crate::cartridge::{CartridgeQueryParams, cartridge_insert, cartridge_query};
+pub use crate::cartridge::{CartridgeQueryParams, CartridgeUseParams, cartridge_insert, cartridge_query, cartridge_use_insert};
 // use crate::cartridge::CartridgeQueryParams;
 
 #[update]
 fn execute(sql: String) -> ExecResult {
+    ic_cdk::println!("Execute {sql}");
     let conn = ic_sqlite::CONN.lock().unwrap();
     return match conn.execute(
         &sql,

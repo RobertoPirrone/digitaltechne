@@ -10,6 +10,26 @@ fi
 echo Uso network $network, con identity $(dfx identity whoami)
 
 
+echo "--- create table cartridge_use"
+fields='
+    id INTEGER PRIMARY KEY,                               
+    uuid TEXT NOT NULL,                                
+    cartridge_uuid TEXT NOT NULL,                                
+    purchase_time TEXT NOT NULL,
+    owned_by TEXT NOT NULL,
+    usage_time TEXT,
+    dossier_id TEXT
+    '
+
+    sql_cmd=$(printf "drop table cartridge_use")
+    dfx canister call $network backend execute "$sql_cmd"
+
+    fields=$(echo $fields)
+    sql_cmd=$(printf "create table cartridge_use (%s)" "$fields")
+    echo $sql_cmd
+    dfx canister call $network backend execute "$sql_cmd"
+
+
 echo "--- create table artwork_mark"
 fields='
     id INTEGER PRIMARY KEY,                               
@@ -36,15 +56,18 @@ fields='
     dna_file_asset TEXT NOT NULL,                           
     inserted_by TEXT NOT NULL,
     lab_name TEXT NOT NULL,
-    ora_inserimento TEXT NOT NULL,
+    insert_time TEXT NOT NULL,
+    purchase_time TEXT,
     note TEXT NOT NULL
     '
 
+    dfx canister call $network backend execute "drop table cartridge"
     fields=$(echo $fields)
     sql_cmd=$(printf "create table cartridge (%s)" "$fields")
     echo $sql_cmd
     dfx canister call $network backend execute "$sql_cmd"
 
+    exit 0
 
 echo "--- create table tipoopera_codes"
 fields='

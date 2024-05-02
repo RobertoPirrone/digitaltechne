@@ -1,16 +1,28 @@
 #!/bin/bash
-export DFX_NETWORK=ic
 if [ $# -eq 1 -a $1 = "--ic" ] ; then
     network="--ic"
     dfx identity use NuovaIdentitaRobi
+    export DFX_NETWORK=ic
 else
     network=""
     dfx identity use default
 fi
 echo Uso network $network, con identity $(dfx identity whoami)
 
+create_table() {
+    table=$1
+    fields="$2"
 
-echo "--- create table cartridge_use"
+    echo "--- create table $table"
+    sql_cmd=$(printf "drop table %s" $table)
+    dfx canister call $network backend execute "$sql_cmd"
+
+    fields=$(echo $fields)
+    sql_cmd=$(printf "create table %s (%s)" $table "$fields")
+    # echo $sql_cmd
+    dfx canister call $network backend execute "$sql_cmd"
+}
+
 fields='
     id INTEGER PRIMARY KEY,                               
     uuid TEXT NOT NULL,                                
@@ -20,17 +32,8 @@ fields='
     usage_time TEXT,
     dossier_id TEXT
     '
+    create_table cartridge_use "$fields"
 
-    sql_cmd=$(printf "drop table cartridge_use")
-    dfx canister call $network backend execute "$sql_cmd"
-
-    fields=$(echo $fields)
-    sql_cmd=$(printf "create table cartridge_use (%s)" "$fields")
-    echo $sql_cmd
-    dfx canister call $network backend execute "$sql_cmd"
-
-
-echo "--- create table artwork_mark"
 fields='
     id INTEGER PRIMARY KEY,                               
     uuid TEXT NOT NULL,                                
@@ -41,14 +44,8 @@ fields='
     mark_position TEXT NOT NULL,                                
     note TEXT NOT NULL
     '
+    create_table artwork_mark "$fields"
 
-    fields=$(echo $fields)
-    sql_cmd=$(printf "create table artwork_mark (%s)" "$fields")
-    echo $sql_cmd
-    dfx canister call $network backend execute "$sql_cmd"
-
-
-echo "--- create table cartridge"
 fields='
     id INTEGER PRIMARY KEY,                               
     uuid TEXT NOT NULL,                                
@@ -60,12 +57,40 @@ fields='
     purchase_time TEXT,
     note TEXT NOT NULL
     '
+    create_table cartridge "$fields"
 
-    dfx canister call $network backend execute "drop table cartridge"
-    fields=$(echo $fields)
-    sql_cmd=$(printf "create table cartridge (%s)" "$fields")
-    echo $sql_cmd
-    dfx canister call $network backend execute "$sql_cmd"
+fields='
+    id INTEGER PRIMARY KEY,                               
+    uuid TEXT NOT NULL,                                
+    autore TEXT NOT NULL,                                
+    nomeopera TEXT NOT NULL,                            
+    ora_inserimento TEXT NOT NULL,                     
+    inserted_by TEXT NOT NULL,                           
+    luogoopera TEXT,
+    private BOOLEAN,
+    icon_uri TEXT NOT NULL,
+    tipoopera TEXT NOT NULL
+    '
+    create_table dossier "$fields"
+    # echo "--- create dossier name index"
+    # dfx canister call $network backend execute 'create index id on dossier(id)'
+
+fields='
+    id INTEGER PRIMARY KEY,                               
+    uuid TEXT NOT NULL,                                
+    autore TEXT NOT NULL,                                
+    ora_inserimento TEXT NOT NULL,                     
+    title TEXT NOT NULL,                     
+    versione INTEGER,
+    dossieropera_id INTEGER NULL,                           
+    filename TEXT NOT NULL,                           
+    filesize INTEGER,
+    mimetype TEXT NOT NULL,                           
+    image_uri TEXT NOT NULL,
+    inserted_by TEXT NOT NULL,
+    tipo_documento TEXT NOT NULL
+    '
+    create_table documents "$fields"
 
     exit 0
 
@@ -83,65 +108,13 @@ fields='
     dfx canister call $network backend execute 'insert into tipoopera_code (code) values ("CANVASS");'
     dfx canister call $network backend execute 'insert into tipoopera_code (code) values ("PAPER");'
 
-echo "--- create table dossier"
-fields='
-    id INTEGER PRIMARY KEY,                               
-    uuid TEXT NOT NULL,                                
-    autore TEXT NOT NULL,                                
-    nomeopera TEXT NOT NULL,                            
-    ora_inserimento TEXT NOT NULL,                     
-    inserted_by TEXT NOT NULL,                           
-    luogoopera TEXT,
-    private BOOLEAN,
-    icon_uri TEXT NOT NULL,
-    tipoopera TEXT NOT NULL
-    '
-
-    fields=$(echo $fields)
-    sql_cmd=$(printf "create table dossier (%s)" "$fields")
-    echo $sql_cmd
-    dfx canister call $network backend execute "$sql_cmd"
-
-echo "--- create dossier name index"
-dfx canister call $network backend execute 'create index id on dossier(id)'
-
-echo "--- create table documents"
-fields='
-    id INTEGER PRIMARY KEY,                               
-    uuid TEXT NOT NULL,                                
-    autore TEXT NOT NULL,                                
-    ora_inserimento TEXT NOT NULL,                     
-    title TEXT NOT NULL,                     
-    versione INTEGER,
-    dossieropera_id INTEGER NULL,                           
-    filename TEXT NOT NULL,                           
-    filesize INTEGER,
-    mimetype TEXT NOT NULL,                           
-    image_uri TEXT NOT NULL,
-    inserted_by TEXT NOT NULL,
-    tipo_documento TEXT NOT NULL
-    '
-
-    fields=$(echo $fields)
-    sql_cmd=$(printf "create table documents (%s)" "$fields")
-    echo $sql_cmd
-    dfx canister call $network backend execute "$sql_cmd"
-
-    exit 0
-echo "--- insert dossier"
-# dfx canister call backend execute 'insert into dossier (id, autore, nomeopera, ora_inserimento, username, icon_uri) values (1, "Elisabetta Villa", "Madalina Ghenea", "2024-03-18", "techne_seller", "https://techne-test.mostapps.it/ipfs/Qmc57JrLZiFybNG8T3Vq7x2AumLnXkz73Sq7ZL1EanFZLc" );'
-# dfx canister call backend execute 'insert into dossier (id, autore, nomeopera, ora_inserimento, username, icon_uri) values (2, "Elisabetta Villa", "Scarlett Johansson", "2024-03-18", "techne_seller", "https://techne-test.mostapps.it/ipfs/QmfXAjR2sdZyRTv1xfEcaF6TLRqtKJUbpKMrFihDMHwtmw" );'
-# dfx canister call backend execute 'insert into dossier (id, autore, nomeopera, ora_inserimento, username, icon_uri) values (3, "Elisabetta Villa", "Charlize Theron", "2024-03-18", "techne_seller", "https://techne-test.mostapps.it/ipfs/QmeWxE3KhYmm32f2YgtcVHf2A9p9VdoLGB7amviBaruJx7" );'
 
 exit 0 
+echo "--- insert dossier"
+# dfx canister call backend execute 'insert into dossier (id, autore, nomeopera, ora_inserimento, username, icon_uri) values (1, "Elisabetta Villa", "Madalina Ghenea", "2024-03-18", "techne_seller", "https://techne-test.mostapps.it/ipfs/Qmc57JrLZiFybNG8T3Vq7x2AumLnXkz73Sq7ZL1EanFZLc" );'
+
 # Query:
 dfx canister call backend dossier_query 'record {limit=10; offset=0; autore= "Elisabetta Villa"}'
 dfx canister call backend  query "select max(id) from dossier"
 # insert via JSON
 # dfx canister call backend  dossier_insert '{ "autore": "Pinco Pallino", "nomeopera": "pippo paappo", "ora_inserimento": "2024-03-25", "username": "pluto", "icon_uri":"https://techne-test.mostapps.it/ipfs/QmeAV99r5LckFBAJxu5FUwhpMWjQ9XCSRd5cSC2w3k5vWJ" }'
-
-dfx canister call backend execute 'drop table dossier'
-dfx canister call backend execute 'drop table documents'
-dfx canister call backend execute 'drop table cartridge'
-dfx canister call backend execute 'drop table artwork_mark'
-

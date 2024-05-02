@@ -41,10 +41,11 @@ struct ArtworkMarkReturnStruct {
     artwork_marks: Vec<Mark>
     }
 
+// richiamato da Verify
 #[query]
 #[no_mangle]
 pub fn artwork_mark_query(params: ArtworkMarkQueryParams) -> JsonResult {
-    let artwork_mark_sql = "select mark_position, dna_text from artwork_mark, cartridge  where dossier_id =  ?1 and mark_dull_code = cartridge.uuid";
+    let artwork_mark_sql = "select mark_position, dna_text from artwork_mark, cartridge, cartridge_use  where artwork_mark.dossier_id =  ?1 and mark_dull_code = cartridge_use.uuid and cartridge.uuid = cartridge_use.cartridge_uuid";
     ic_cdk::println!("Query: {artwork_mark_sql} ");
     let conn = ic_sqlite::CONN.lock().unwrap();
     let mut stmt = match conn.prepare(&artwork_mark_sql) {
@@ -73,6 +74,7 @@ pub fn artwork_mark_query(params: ArtworkMarkQueryParams) -> JsonResult {
     Ok(res)
 }
 
+// aggiunta di un mark. necessario invalidare la riga di cartridge_use
 #[update]
 #[no_mangle]
 pub fn artwork_mark_insert(jv: String) -> ExecResult {
@@ -82,10 +84,19 @@ pub fn artwork_mark_insert(jv: String) -> ExecResult {
     let caller = ic_cdk::caller().to_string();
     ic_cdk::println!("caller : {caller} ");
 
+    let sql0 = format!("update cartridge_use set usage_time = '{:?}' where uuid = '{:?}'", d.uuid, d.ora_inserimento);
+    let _update_ret =  match conn.execute(
+        &sql0,
+        []
+    ) {
+        Ok(e) => Ok(format!("{:?}", e)),
+        Err(err) => Err(MyError::CanisterError {message: format!("{:?}", err) })
+    };
+
     let sql = format!("insert into artwork_mark \
         (uuid, dossier_id, inserted_by, ora_inserimento, mark_dull_code, mark_position, note) 
         values ( '{}', '{}', '{}', '{}', '{}', '{}', '{}' )",
-        d.uuid, d.dossier_id, caller, d.ora_inserimento, d.mark_dull_code , d.mark_position , d.note
+        d.uuid, d.dossier_id, caller, d.ora_inserimento, d.mark_dull_code, d.mark_position, d.note
         );
     return match conn.execute(
         &sql,

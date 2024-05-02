@@ -1,5 +1,10 @@
 type ArtworkMarkQueryParams = record { dossier_id : text };
-type CartridgeQueryParams = record { offset : nat64; limit : nat64 };
+type CartridgeQueryParams = record { uuid : text };
+type CartridgeUseParams = record {
+  count : text;
+  uuid : text;
+  purchase_time : text;
+};
 type MyError = variant {
   CanisterError : record { message : text };
   InvalidCanister;
@@ -13,6 +18,9 @@ service : {
   artwork_mark_query : (ArtworkMarkQueryParams) -> (Result) query;
   cartridge_insert : (text) -> (Result);
   cartridge_query : (CartridgeQueryParams) -> (Result) query;
+  cartridge_use_available : () -> (Result);
+  cartridge_use_insert : (CartridgeUseParams) -> (Result);
+  cartridge_use_update : (text) -> (Result);
   document_insert : (text) -> (Result);
   documenti_query : (QueryDocumentsParams) -> (Result) query;
   dossier_insert : (text) -> (Result);

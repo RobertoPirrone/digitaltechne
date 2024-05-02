@@ -40,8 +40,32 @@ export const ArtworkMark = (props) => {
 
   let autore_list = ["pippo", "pluto"];
   let tipodocumento_list = ["immagine", "titolo_proprietà"];
+  const [cartridgeUuids, setCartridgeUuids] = useState([]);
 
   useEffect(() => {
+      backendActor.cartridge_use_available()
+      .then((Ok_data) => {
+        console.log("useEffect returns: ", JSON.stringify(Ok_data));
+        let response = JSON.parse(Ok_data.Ok);
+        console.log(response);
+        if (response) {
+          let uuids = (response.cartridge_uses.map((item) => {
+            return item.uuid 
+          }));
+          setCartridgeUuids(uuids);
+        } else {
+          console.error(response);
+          appAlert(response.error);
+          setDisabledButs(false);
+        }
+      })
+      .catch(function (error) {
+        // handle error
+        console.error(error);
+        appAlert(error.message ? error.message : JSON.stringify(error));
+        setDisabledButs(false);
+        setLoading(false);
+      });
     if (backendActor === null) {
       navigate("/login");
     }
@@ -147,7 +171,7 @@ export const ArtworkMark = (props) => {
               </Grid>
 
                 <Grid item xs={6}> <span className="padding10">{t("DNA Code")} </span></Grid>
-                <Grid item xs={6}> <MyAutocomplete name="mark_dull_code" required={true} label={t("mark_dull_code")} options={["uno", "due"]} freeSolo={false} onChange={(e,v) => setMarkDullCode(v)} /> </Grid>
+                <Grid item xs={6}> <MyAutocomplete name="mark_dull_code" required={true} label={t("mark_dull_code")} options={cartridgeUuids} freeSolo={false} onChange={(e,v) => setMarkDullCode(v)} /> </Grid>
 
                 <Grid item xs={6}> <span className="padding10">{t("Mark Side")} </span></Grid>
                 <Grid item xs={6}> <MyAutocomplete name="mark_side" required={true} label={t("mark_side")} options={mark_side_list} onChange={(e, v) => setMarkSide(v)} /> </Grid>

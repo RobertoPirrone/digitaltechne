@@ -112,6 +112,13 @@ struct CartridgeUse {
     dossier_id: Option<String>
 }
 
+#[derive(Serialize, Deserialize)]
+struct CartridgeUseReturnStruct {
+    success: bool,
+    cartridge_uses: Vec<CartridgeUse>
+    }
+
+
 // il caller acquista una cartuccia (in futuro n)
 #[update]
 #[no_mangle]
@@ -187,5 +194,47 @@ pub fn cartridge_use_update(jv: String) -> ExecResult {
         Ok(e) => Ok(format!("{:?}", e)),
         Err(err) => Err(MyError::CanisterError {message: format!("cartridge_use_update {:?}", err) })
     }
+}
+
+// restituisce gli id delle cartucce utilizzabili dall'utente
+#[update]
+#[no_mangle]
+pub fn cartridge_use_available() -> JsonResult {
+    let mut res = Vec::new();
+    let caller = ic_cdk::caller().to_string();
+    let sql = format!("select * from cartridge_use where usage_time is null and owned_by = '{}'", caller);
+    let conn = ic_sqlite::CONN.lock().unwrap();
+    let mut stmt = conn.prepare(&sql).unwrap();
+    let mut rows = stmt.query([]).unwrap();
+    loop {
+        match rows.next()   {
+            Ok(row) => {
+                match row {
+                    Some(row) => {
+                        let res_row = 
+                            CartridgeUse {
+                                id: row.get(0).unwrap(),
+                                uuid: row.get(1).unwrap(),
+                                cartridge_uuid: row.get(2).unwrap(), 
+                                purchase_time: row.get(3).unwrap(),
+                                owned_by: row.get(4).unwrap(),
+                                usage_time: row.get(5).unwrap(),
+                                dossier_id: row.get(6).unwrap()
+                            };
+
+                        res.push(res_row)
+                    },
+                    None => break
+                }
+            },
+            Err(err) => return Err(MyError::CanisterError {message: format!("{:?}", err) })
+            }
+    }
+    let rs = CartridgeUseReturnStruct {
+        success: true,
+        cartridge_uses: res
+    };
+    let res = serde_json::to_string(&rs).unwrap();
+    Ok(res)
 }
 

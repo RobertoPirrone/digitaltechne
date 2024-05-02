@@ -3,20 +3,24 @@
 // TBD Gestione pagamento
 // TBD http outcall per delivery fisica delle cartucce
 
-import React, { useState, useMemo, useEffect, useCallback } from "react"; import Typography from "@mui/material/Typography";
+import React, { useState, useMemo, useEffect, useCallback } from "react"; 
+import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Grid from '@mui/material/Grid';
 import Link from "@mui/material/Link";
 import { useTranslation } from "react-i18next";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
+import { v4 as uuidv4 } from 'uuid';
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { DTGrow, DTFooter } from "./components/useStyles";
 import { DnaFile } from "./components/DnaFile";
 import { MyTextField, MostSubmitButton, MyAutocomplete } from "./components/MostComponents";
 import { getBackendActor } from "./SignIn";
+import { appAlert } from "./Utils";
 
 export const Purchase = (props) => {
+    const navigate = useNavigate();
   let react_router_location = useLocation();
   console.log("DossierDetail react_router_location: " + JSON.stringify(react_router_location));
   let params = useParams();
@@ -53,7 +57,8 @@ export const Purchase = (props) => {
     // vals.mark_position = markSide + " " + markPosition;
       // vals.dna_text = dnaText;
     vals.count = count;
-    vals.insert_time = new Date();
+    vals.uuid = uuidv4();
+    vals.purchase_time = new Date().toISOString();
     console.log("onSubmit: " + JSON.stringify(vals));
     setDisabledButs(true);
     // setLoading(true);
@@ -66,11 +71,10 @@ export const Purchase = (props) => {
         console.log(response);
         if (response) {
           setDisabledButs(true);
-          let url = "/dossierdetail/" + dossier_id;
+          let url = "/dossier";
           navigate(url, {replace: true});
         } else {
-          console.error(response);
-          appAlert(response.error);
+          appAlert(JSON.stringify(Ok_data.Err));
           setDisabledButs(false);
         }
       })
@@ -92,10 +96,10 @@ export const Purchase = (props) => {
       <Container maxWidth="sm">
         <Typography variant="body1">Insert DNA</Typography>
             <Grid container spacing={1} alignItems="center">
-                <Grid item xs={6}> <span className="padding10">{t("MarkSide")} </span></Grid>
+                <Grid item xs={6}> <span className="padding10">{t("CartridgeCount")} </span></Grid>
                 <Grid item xs={6}> <MyAutocomplete name="cartridge_count" required={true} label={t("cartridge_count")} options={cartridge_count_list} freeSolo={true} onChange={(e, v) => ComputeAmount(v)} /> </Grid>
 
-                <Grid item xs={6}> <span className="padding10">{t("Importo")}</span></Grid>
+                <Grid item xs={6}> <span className="padding10">{t("Total Amount")}</span></Grid>
       <MyTextField name="amount" value={amount} label={t("amount")} />
               <MostSubmitButton onClick={onSubmit} disabled={disabledButs} label={t("Acquista")} />
       </Grid>

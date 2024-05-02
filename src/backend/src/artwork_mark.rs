@@ -74,7 +74,7 @@ pub fn artwork_mark_query(params: ArtworkMarkQueryParams) -> JsonResult {
     Ok(res)
 }
 
-// aggiunta di un mark. necessario invalidare la riga di cartridge_use
+// aggiunta di un mark. necessario invalidare la riga di cartridge_use, e aggiornare boold di dossier
 #[update]
 #[no_mangle]
 pub fn artwork_mark_insert(jv: String) -> ExecResult {
@@ -84,14 +84,27 @@ pub fn artwork_mark_insert(jv: String) -> ExecResult {
     let caller = ic_cdk::caller().to_string();
     ic_cdk::println!("caller : {caller} ");
 
-    let sql0 = format!("update cartridge_use set usage_time = '{:?}' where uuid = '{:?}'", d.uuid, d.ora_inserimento);
-    let _update_ret =  match conn.execute(
+    let sql0 = format!("update cartridge_use set usage_time = {:?}, dossier_id = {:?}  where uuid = {:?}", d.ora_inserimento, d.dossier_id, d.mark_dull_code);
+    ic_cdk::println!("sql0 : {sql0} ");
+    let update_ret0 =  match conn.execute(
         &sql0,
         []
     ) {
         Ok(e) => Ok(format!("{:?}", e)),
         Err(err) => Err(MyError::CanisterError {message: format!("{:?}", err) })
     };
+    ic_cdk::println!("update_ret0 : {:?} ", update_ret0);
+
+    let sql1 = format!("update dossier set has_artwork_mark = true where id = {:?}", d.dossier_id);
+    ic_cdk::println!("sql1 : {sql1} ");
+    let update_ret =  match conn.execute(
+        &sql1,
+        []
+    ) {
+        Ok(e) => Ok (format!("{:?}", e)),
+        Err(err) => Err (MyError::CanisterError {message: format!("{:?}", err) })
+    };
+    ic_cdk::println!("update_ret : {:?} ", update_ret);
 
     let sql = format!("insert into artwork_mark \
         (uuid, dossier_id, inserted_by, ora_inserimento, mark_dull_code, mark_position, note) 

@@ -69,7 +69,8 @@ fields='
     luogoopera TEXT,
     private BOOLEAN,
     icon_uri TEXT NOT NULL,
-    tipoopera TEXT NOT NULL
+    tipoopera TEXT NOT NULL,
+    has_artwork_mark BOOLEAN
     '
     create_table dossier "$fields"
     # echo "--- create dossier name index"

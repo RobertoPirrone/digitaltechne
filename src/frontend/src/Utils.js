@@ -1,4 +1,5 @@
 import { canisterId } from "../../declarations/uploads";
+import React, { useCallback } from "react";
 
 export const dmy_hms = (d, full) => {
   var ret = "";
@@ -40,3 +41,8 @@ export const getAssetPfx = () => {
   console.log("asset_pfx :", asset_pfx);
   return asset_pfx;
 };
+
+export const appAlert = (text) => {
+    alert(text);
+  };
+

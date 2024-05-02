@@ -93,6 +93,7 @@ struct Dossier {
     private: bool,
     icon_uri: String,
     tipoopera: String,
+    has_artwork_mark: Option<bool>
 }
 
 #[derive(CandidType, Debug, Serialize, Deserialize, Default)]
@@ -258,7 +259,8 @@ fn dossier_query(params: QueryParams) -> JsonResult {
             luogoopera: row.get(6).unwrap(),
             private: row.get(7).unwrap(),
             icon_uri: row.get(8).unwrap(),
-            tipoopera: row.get(9).unwrap()
+            tipoopera: row.get(9).unwrap(),
+            has_artwork_mark: row.get(10).unwrap()
         })
     }) {
         Ok(e) => e,
@@ -328,7 +330,8 @@ fn documenti_query(params: QueryDocumentsParams) -> JsonResult {
             luogoopera: row.get(6).unwrap(),
             private: row.get(7).unwrap(),
             icon_uri: row.get(8).unwrap(),
-            tipoopera: row.get(9).unwrap()
+            tipoopera: row.get(9).unwrap(),
+            has_artwork_mark: row.get(10).unwrap()
         })
     }) {
         Ok(e) => e,

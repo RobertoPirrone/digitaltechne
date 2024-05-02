@@ -161,7 +161,7 @@ export const NewDossier = () => {
       )}
       <Container component="main" maxWidth="md">
         <div className={DTRoot}>
-          <Upload asset={asset} setAsset={setAsset} setDisabledButs={setDisabledButs} />
+          <Upload asset={asset} show={true} setAsset={setAsset} setDisabledButs={setDisabledButs} />
 
           <form onSubmit={handleSubmit(onSubmit)}>
             <Grid container spacing={1} alignItems="center">

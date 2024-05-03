@@ -1,17 +1,18 @@
 extern crate ic_cdk_macros;
 extern crate serde;
-use ic_cdk::{query, update};
+use ic_cdk::{export_candid, query, update};
 use ic_cdk::api::call::RejectionCode;
 use candid::CandidType;
 use rusqlite::types::Type;
 use serde::{Deserialize, Serialize};
 
 pub mod my_utils;
-pub mod cartridge;
 pub mod artwork_mark;
+pub mod cartridge;
+pub mod dossier;
 pub use crate::artwork_mark::{ArtworkMarkQueryParams, artwork_mark_insert, artwork_mark_query};
 pub use crate::cartridge::{CartridgeQueryParams, CartridgeUseParams, cartridge_insert, cartridge_query, cartridge_use_insert};
-// use crate::cartridge::CartridgeQueryParams;
+pub use crate::dossier::{Dossier, QueryParams, dossier_insert, dossier_query, dossier_struct_query, dossier_pulldowns};
 
 #[update]
 fn execute(sql: String) -> ExecResult {
@@ -82,42 +83,6 @@ impl From<(RejectionCode, String)> for MyError {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-struct Dossier {
-    id: Option<u64>,
-    uuid: String,
-    autore: String,
-    nomeopera: String,
-    ora_inserimento: String,
-    inserted_by: Option<String>,
-    luogoopera: String,
-    private: bool,
-    icon_uri: String,
-    tipoopera: String,
-    has_artwork_mark: Option<bool>
-}
-
-#[derive(CandidType, Debug, Serialize, Deserialize, Default)]
-struct QueryParams {
-    limit: usize,
-    offset: usize,
-}
-
-#[derive(Serialize, Deserialize)]
-struct DossierInfoReturnStruct {
-    success: bool,
-    autori: Vec<String>,
-    luogooperas: Vec<String>,
-    tipooperas: Vec<String>
-    }
-
-#[derive(Serialize, Deserialize)]
-struct DossierReturnStruct {
-    success: bool,
-    ret_owner: Vec<Dossier>
-    }
-
-
-#[derive(Debug, Serialize, Deserialize)]
 struct Documento {
     id: Option<u64>,
     uuid: String,
@@ -134,9 +99,6 @@ struct Documento {
     tipo_documento: String
 }
 
-struct DistinctResult {
-    ele: String
-}
 #[derive(CandidType, Debug, Serialize, Deserialize, Default)]
 struct QueryDocumentsParams {
     dossieropera_id: String
@@ -149,156 +111,6 @@ struct ReturnDocumentsStruct {
     rows: Vec<Documento>
     }
 
-#[query]
-fn dossier_pulldowns() -> JsonResult {
-    // autore
-    let mut dossier_sql = "select distinct autore from dossier";
-    let conn = ic_sqlite::CONN.lock().unwrap();
-    let mut stmt = match conn.prepare(&dossier_sql) {
-        Ok(e) => e,
-        Err(err) => return Err(MyError::CanisterError {message: format!("{:?}", err) })
-    };
-    let iter = match stmt.query_map([], |row| {
-        Ok(
-            DistinctResult {
-                ele: row.get(0).unwrap()
-            }
-        )
-    }) {
-        Ok(e) => e,
-        Err(err) => return Err(MyError::CanisterError {message: format!("{:?}", err) })
-    };
-    let mut autori = Vec::new();
-    for ele in iter {
-        match ele {
-            Ok(e) => autori.push(e.ele),
-            Err(e) => eprintln!("Error: {e:?}"),
-        }
-
-    }
-
-    // luogoopera
-    dossier_sql = "select distinct luogoopera from dossier";
-    let mut stmt = match conn.prepare(&dossier_sql) {
-        Ok(e) => e,
-        Err(err) => return Err(MyError::CanisterError {message: format!("{:?}", err) })
-    };
-    let iter = match stmt.query_map([], |row| {
-        Ok(
-            DistinctResult {
-                ele: row.get(0).unwrap()
-            }
-        )
-    }) {
-        Ok(e) => e,
-        Err(err) => return Err(MyError::CanisterError {message: format!("{:?}", err) })
-    };
-    let mut luogooperas = Vec::new();
-    for ele in iter {
-        match ele {
-            Ok(e) => luogooperas.push(e.ele),
-            Err(e) => eprintln!("Error: {e:?}"),
-        }
-
-    }
-
-    // tipoopera
-    dossier_sql = "select distinct code from tipoopera_code";
-    let mut stmt = match conn.prepare(&dossier_sql) {
-        Ok(e) => e,
-        Err(err) => return Err(MyError::CanisterError {message: format!("{:?}", err) })
-    };
-    let iter = match stmt.query_map([], |row| {
-        Ok(
-            DistinctResult {
-                ele: row.get(0).unwrap()
-            }
-        )
-    }) {
-        Ok(e) => e,
-        Err(err) => return Err(MyError::CanisterError {message: format!("{:?}", err) })
-    };
-    let mut tipooperas = Vec::new();
-    for ele in iter {
-        match ele {
-            Ok(e) => tipooperas.push(e.ele),
-            Err(e) => eprintln!("Error: {e:?}"),
-        }
-
-    }
-
-    let rs = DossierInfoReturnStruct {
-        success: true,
-        autori: autori,
-        luogooperas: luogooperas,
-        tipooperas: tipooperas
-    };
-    let res = serde_json::to_string(&rs).unwrap();
-    Ok(res)
-}
-
-#[query]
-fn dossier_query(params: QueryParams) -> JsonResult {
-    let dossier_sql = "select * from dossier limit ?1 offset ?2";
-    //let dossier_sql = "select * from dossier where autore = ?3 limit ?1 offset ?2";
-    ic_cdk::println!("Query: {dossier_sql} ");
-    let conn = ic_sqlite::CONN.lock().unwrap();
-    let mut stmt = match conn.prepare(&dossier_sql) {
-        Ok(e) => e,
-        Err(err) => return Err(MyError::CanisterError {message: format!("{:?}", err) })
-    };
-    let dossier_iter = match stmt.query_map((params.limit, params.offset), |row| {
-        Ok(
-            Dossier {
-            id: row.get(0).unwrap(),
-            uuid: row.get(1).unwrap(),
-            autore: row.get(2).unwrap(),
-            nomeopera: row.get(3).unwrap(),
-            ora_inserimento: row.get(4).unwrap(),
-            inserted_by: row.get(5).unwrap(),
-            luogoopera: row.get(6).unwrap(),
-            private: row.get(7).unwrap(),
-            icon_uri: row.get(8).unwrap(),
-            tipoopera: row.get(9).unwrap(),
-            has_artwork_mark: row.get(10).unwrap()
-        })
-    }) {
-        Ok(e) => e,
-        Err(err) => return Err(MyError::CanisterError {message: format!("{:?}", err) })
-    };
-    let mut dossiers = Vec::new();
-    for dossier in dossier_iter {
-        dossiers.push(dossier.unwrap());
-    }
-    let rs = DossierReturnStruct {
-        success: true,
-        ret_owner: dossiers
-    };
-    let res = serde_json::to_string(&rs).unwrap();
-    Ok(res)
-}
-
-#[update]
-fn dossier_insert(jv: String) -> ExecResult {
-    ic_cdk::println!("dossier_insert input: {jv} ");
-    let d: Dossier = serde_json::from_str(&jv).unwrap();
-    let caller = ic_cdk::caller().to_string();
-    let conn = ic_sqlite::CONN.lock().unwrap();
-
-    let sql = format!("insert into dossier \
-        (uuid, autore, nomeopera, ora_inserimento, inserted_by, icon_uri, luogoopera, private, tipoopera) 
-        values ('{}', '{}', '{}', '{}', '{}', '{}', '{}', {}, '{}' )",
-        d.uuid, d.autore, d.nomeopera, d.ora_inserimento, caller, d.icon_uri , d.luogoopera, d.private, d.tipoopera
-        );
-    return match conn.execute(
-        &sql,
-        []
-    ) {
-        Ok(e) => Ok(format!("{:?}", e)),
-        Err(err) => Err(MyError::CanisterError {message: format!("{:?}", err) })
-    }
-}
-
 
 #[query]
 fn whoami() -> String {
@@ -309,42 +121,21 @@ fn whoami() -> String {
 #[query]
 fn documenti_query(params: QueryDocumentsParams) -> JsonResult {
     // devo anche restituire i dati del dossier
+    let dossier_infos: Vec<Dossier> ;
     let id = params.dossieropera_id.clone();
-    let dossier_sql = "select * from dossier where id = ?1";
+    let dossier_sql = format!("select * from dossier where id = {:?}",id);
     // let dossier_sql = "select * from dossier";
     ic_cdk::println!("Query: {dossier_sql} ");
-    let conn = ic_sqlite::CONN.lock().unwrap();
-    let mut stmt = match conn.prepare(&dossier_sql) {
-        Ok(e) => e,
-        Err(err) => return Err(MyError::CanisterError {message: format!("{:?}", err) })
-    };
-    let mut dossier_iter = match stmt.query_map((id,), |row| {
-        Ok(
-            Dossier {
-            id: row.get(0).unwrap(),
-            uuid: row.get(1).unwrap(),
-            autore: row.get(2).unwrap(),
-            nomeopera: row.get(3).unwrap(),
-            ora_inserimento: row.get(4).unwrap(),
-            inserted_by: row.get(5).unwrap(),
-            luogoopera: row.get(6).unwrap(),
-            private: row.get(7).unwrap(),
-            icon_uri: row.get(8).unwrap(),
-            tipoopera: row.get(9).unwrap(),
-            has_artwork_mark: row.get(10).unwrap()
-        })
-    }) {
-        Ok(e) => e,
-        Err(err) => return Err(MyError::CanisterError {message: format!("{:?}", err) })
-    };
 
-    let dossier_info: Dossier = dossier_iter.next().unwrap().unwrap();
-    ic_cdk::println!("dossier_info: {:?}", dossier_info);
+    dossier_infos = dossier_struct_query(dossier_sql.to_string());
+    let dossier_info = dossier_infos[0].clone();
+    ic_cdk::println!("dossier_info: {:?}", dossier_infos[0]);
 
     // ora i  documenti
     let documenti_sql = "select * from documents where dossieropera_id = ?1";
     // let dossier_sql = "select * from dossier";
     ic_cdk::println!("Query: {documenti_sql} ");
+    let conn = ic_sqlite::CONN.lock().unwrap();
     let mut stmt = match conn.prepare(&documenti_sql) {
         Ok(e) => e,
         Err(err) => return Err(MyError::CanisterError {message: format!("{:?}", err) })
@@ -416,5 +207,5 @@ fn greet(name: String) -> String {
 }
 
 
-ic_cdk::export_candid!();
+export_candid!();
 

@@ -1,20 +1,18 @@
 extern crate ic_cdk_macros;
 extern crate serde;
 use ic_cdk::{export_candid, query, update};
-use ic_cdk::api::call::RejectionCode;
-use candid::CandidType;
 use rusqlite::types::Type;
-use serde::{Deserialize};
 
-pub mod my_utils;
 pub mod artwork_mark;
 pub mod cartridge;
 pub mod documents;
 pub mod dossier;
+pub mod my_utils;
 pub use crate::artwork_mark::{ArtworkMarkQueryParams, artwork_mark_insert, artwork_mark_query};
 pub use crate::cartridge::{CartridgeQueryParams, CartridgeUseParams, cartridge_insert, cartridge_query, cartridge_use_insert};
 pub use crate::documents::{Documento, QueryDocumentsParams, document_insert, documenti_query};
 pub use crate::dossier::{Dossier, QueryParams, dossier_insert, dossier_query, dossier_struct_query, dossier_pulldowns};
+use crate::my_utils::*;
 
 #[update]
 fn execute(sql: String) -> ExecResult {
@@ -64,25 +62,6 @@ fn query(sql: String) -> QueryResult {
     Ok(res)
 }
 
-#[derive(Debug, CandidType, Deserialize)]
-enum MyError {
-    InvalidCanister,
-    CanisterError { message: String },
-}
-
-type ExecResult<T = String, E = MyError> = std::result::Result<T, E>;
-type JsonResult<T = String, E = MyError> = std::result::Result<T, E>;
-
-type QueryResult<T = Vec<Vec<String>>, E = MyError> = std::result::Result<T, E>;
-
-impl From<(RejectionCode, String)> for MyError {
-    fn from((code, message): (RejectionCode, String)) -> Self {
-        match code {
-            RejectionCode::CanisterError => Self::CanisterError { message },
-            _ => Self::InvalidCanister,
-        }
-    }
-}
 #[query]
 fn whoami() -> String {
     let caller = ic_cdk::caller();
@@ -93,7 +72,6 @@ fn whoami() -> String {
 fn greet(name: String) -> String {
     format!("Hello, {}!", name)
 }
-
 
 export_candid!();
 

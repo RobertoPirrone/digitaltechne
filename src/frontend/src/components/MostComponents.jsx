@@ -443,3 +443,12 @@ export const MyTextField = ({
 }) => {
   return <TextField onChange={onChange} name={name} label={label} type={type} id={name} value={value} disabled={disabled} />;
 };
+
+export const MyCheckIcon = ({
+  value
+}) => {
+      if (value) {
+        return <Check good={true} />;
+      }
+      return <Check good={false} />;
+};

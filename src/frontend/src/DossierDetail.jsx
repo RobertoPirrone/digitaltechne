@@ -11,7 +11,7 @@ import { useGlobalState } from "./state";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { Table } from "./Table";
-import { Loading, MostSelect, MostTextField, MostButton2, MostSubmitButton, Check, WarningIcon } from "./components/MostComponents";
+import { MyCheckIcon, Loading, MostSelect, MostTextField, MostButton2, MostSubmitButton, Check, WarningIcon } from "./components/MostComponents";
 import { GoToHomePage, Riservato, BexplorerLink } from "./components/OpusComponents";
 // import IpfsDialog from "./components/IpfsDialog";
 import { dmy_hms, prettyJson } from "./Utils";
@@ -336,7 +336,7 @@ export const DossierDetail = () => {
     return <GoToHomePage />;
   }
 
-  //console.log("DOCS",docs)
+  console.log("dossierInfo: ",dossierInfo)
   //console.log("doc_bc_sync",doc_bc_sync)
   return (
     <div>
@@ -417,88 +417,36 @@ export const DossierDetail = () => {
                 <tr>
                   <th className="vertalignTop">{t("dossier:InBC")}</th>
                   <td>
-                    {dossierInfo.contract_initialized ? (
                       <div>
-                        <Check good={true} />
-                        <br />
-                        {t("dossier:Indirizzo contratto")}: {dossierInfo.bccontract_address} <BexplorerLink address={dossierInfo.bccontract_address} />
-                        <br />
-                        {t("dossier:Hash transazione")}: {dossierInfo.bccontract_hash} <BexplorerLink tx_hash={dossierInfo.bccontract_hash} />
+                        <MyCheckIcon value={dossierInfo.has_artwork_mark} />
+                        { dossierInfo.has_icon_mark ? (
+                            <>
                         <br />
                         NFT TokenId: {dossierInfo.token_id}
                         <br />
                         NFT URI: {dossierInfo.tokenURI}
                         <br />
-                        {/*
-                            <span className="cursorPointer"><Link underline="always" color="secondary" onClick={() => showUri(dossierInfo.token_id,dossierInfo.tokenURI)}>Mostra</Link></span>
-                            */}
-                        {showjson ? (
-                          <div>
-                            <div dangerouslySetInnerHTML={{ __html: prettyJson(dossierInfo.tokenURI_content, 1) }} />
-                            {dossierInfo.fruibilitadossierdetail.code === "DOSSIER_FRUIBILITY_COMPLETELY_PRIVATE" ? (
-                              <span className="cursorPointer">
-                                <Link underline="always" color="secondary" onClick={() => navigate("/checkBC/" + dossierInfo.id)}>
-                                  Mostra in chiaro
-                                </Link>
-                              </span>
-                            ) : null}
-                          </div>
-                        ) : (
-                          <span className="cursorPointer">
-                            <Link underline="always" color="secondary" onClick={() => setShowjson(true)}>
-                              {t("dossier:Mostra")}
-                            </Link>
-                          </span>
-                        )}
+                            </>
+                        ) : null }
                         {/*
                             <MostButton2 className="bcenter" onClick={() => provaE()} label="xxx PROVE xxx" />
                             */}
                       </div>
-                    ) : dossierInfo.bccontract_address ? (
-                      <span>
-                        <WarningIcon /> {t("documento:Operazione non completata")}
-                      </span>
-                    ) : (
-                      <Check good={false} />
-                    )}
                   </td>
                 </tr>
               </tbody>
             </table>
             {!sellOrInviteMode && dossierInfo.inserted_by === username ? (
-              !dossierInfo.contract_initialized ? (
-                <>
+              !dossierInfo.has_artwork_mark ? (
                   <div className="MuiContainer-root MuiContainer-maxWidthXs">
                     <MostSubmitButton type="button" disabled={disabledButs} onClick={artwork_mark} label={t("dossier:ApplicaDNA")} />
                   </div>
-                  <div><p></p></div>
+              ) : (
                   <div className="MuiContainer-root MuiContainer-maxWidthXs">
                     <MostSubmitButton type="button" disabled={disabledButs} onClick={verify_mark} label={t("dossier:ComparaDNA")} />
                   </div>
-                </>
-              ) : application == "techne" ? (
-                <div className="MuiContainer-root MuiContainer-maxWidthXs">
-                  {dossierInfo.fruibilitadossierdetail.code !== "DOSSIER_FRUIBILITY_COMPLETELY_PUBLIC" ? (
-                    <div>
-                      <MostSubmitButton
-                        type="button"
-                        disabled={disabledButs}
-                        onClick={invite}
-                        label={t("documento:Invita un ospite a visualizzare il tuo Dossier Opera")}
-                      />
-                    </div>
-                  ) : null}
-                  <MostSubmitButton type="button" disabled={disabledButs} onClick={sell} label={t("documento:Cedi la tua opera ad un acquirente")} />
-                </div>
-              ) : null
-            ) : null}
-            {application != "techne" ? (
-              <>
-                <div className="MuiContainer-root MuiContainer-maxWidthXs">
-                  <MostSubmitButton type="button" disabled={disabledButs} onClick={clone_create} label={t("dossier:DoClone")} />
-                </div>
-              </>
-            ) : null}
+              )
+              ) : null}
           </Container>
 
           {application != "techne" ? null : !sellOrInviteMode ? (

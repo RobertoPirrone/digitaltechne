@@ -8,60 +8,23 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useParams, useLocation } from "react-router-dom";
 import { useGlobalState } from "./state";
-import { Header } from "./Header";
 import { Footer } from "./Footer";
+import { Header } from "./Header";
+import { IconCode } from "./IconCode";
 import { Table } from "./Table";
 import { MyCheckIcon, Loading, MostSelect, MostTextField, MostButton2, MostSubmitButton, Check, WarningIcon } from "./components/MostComponents";
 import { GoToHomePage, Riservato, BexplorerLink } from "./components/OpusComponents";
-// import IpfsDialog from "./components/IpfsDialog";
 import { dmy_hms, prettyJson } from "./Utils";
-//import { provaE } from "./Crypto";
 import { backend } from "../../declarations/backend";
 import { getBackendActor } from "./SignIn";
-import { canisterId } from "../../declarations/uploads";
 
 import { Ed25519KeyIdentity } from "@dfinity/identity";
 import { HttpAgent } from "@dfinity/agent";
-import { AssetManager } from "@dfinity/assets";
 
 let dossier_id = "";
-// const canisterId = import.meta.env.VITE_CANISTER_ID_UPLOADS;
-const isLocal = !window.location.host.endsWith("icp0.io");
-let asset_pfx = `https://${canisterId}.icp0.io`;
-if (isLocal) {
-  asset_pfx = `http://${canisterId}.localhost:4943`;
-}
 
 export const DossierDetail = () => {
   const backendActor = getBackendActor();
-  if (false) {
-  // Hardcoded principal: 535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe
-  // Should be replaced with authentication method e.g. Internet Identity when deployed on IC
-  const identity = Ed25519KeyIdentity.generate(new Uint8Array(Array.from({ length: 32 }).fill(0)));
-  const fetchOptions = {
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-    },
-  };
-
-  const agent = new HttpAgent({
-    // host: isLocal ? `http://${canisterId}.localhost:${window.location.port}` : 'https://ic0.app', identity,
-    host: isLocal ? `http://127.0.0.1:3000` : "https://ic0.app",
-    identity,
-    //fetch: window.fetch.bind(window),
-    fetchOptions,
-  });
-
-    if (isLocal) {
-      agent.fetchRootKey();
-    }
-  }
-
-  // Canister id can be fetched from URL since frontend in this example is hosted in the same canister as file upload
-  //const canisterId = new URLSearchParams(window.location.search).get('canisterId') ?? /(.*?)(?:\.raw)?\.ic0.app/.exec(window.location.host)?.[1] ?? /(.*)\.localhost/.exec(window.location.host)?.[1];
-
-  // Create asset manager instance for above asset canister
-  // const assetManager = new AssetManager({canisterId, agent});
 
   const navigate = useNavigate();
   const [showjson, setShowjson] = useState(false);
@@ -170,9 +133,7 @@ export const DossierDetail = () => {
       headerName: t("Opera Image"),
       renderCell: (params) => {
         return (
-          <div key={`${asset_pfx}${params.row.image_uri}`} className={"App-image"}>
-            <img src={`${asset_pfx}${params.row.image_uri}`} width={"100%"} loading={"lazy"} />
-          </div>
+            <IconCode row={params.row} />
         );
       },
     },
@@ -350,13 +311,7 @@ export const DossierDetail = () => {
                 <tr>
                   <th>{t("dossier:Immagine")}</th>
                   <td>
-                    {isVideo ? (
-                      <video controls autoPlay width="400">
-                        <source src={`${asset_pfx}${dossierInfo.icon_uri}`} type="video/mp4" />
-                      </video>
-                    ) : (
-                      <img src={`${asset_pfx}${dossierInfo.icon_uri}`} width={400} />
-                    )}
+                    <IconCode row={dossierInfo} />
                   </td>
                 </tr>
                 <tr>

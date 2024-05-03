@@ -71,7 +71,7 @@ export const Dossier = () => {
           // console.log("raw data returns: ",data);
           setDossierPersonali(data.ret_owner);
           // setDossierPersonaliMaster( data.ret_owner.filter((riga) => riga.master_dossier_id === null),);
-          // setDossierPubblici(data.ret_public);
+          setDossierPubblici(data.ret_public);
           // setDossierVisione(data.ret_vision);
           setLoading(false);
         })
@@ -179,43 +179,10 @@ export const Dossier = () => {
       </div>
 
       {application == "techne" ? (
-        loading ? (
-          <PropagateLoader color="#AAAA00" loading={loading} />
-        ) : (
-          <React.Fragment>
-            <h2>{t("dossier:DossierVisione")}</h2>
-            <div className="blackColor">
-              {dossierVisione.length ? (
-                <React.Fragment>
-                  <div className="margin20 gray">
-                    <Table columns={columns[1]} data={dossierVisione} />
-                  </div>
-                </React.Fragment>
-              ) : (
-                t("dossier:NoDossier")
-              )}
-            </div>
-
+          <>
             <h2>{t("dossier:DossierPubblici")}</h2>
-            <div className="blackColor">
-              {dossierPubblici.length ? (
-                <React.Fragment>
-                  <FormControlLabel
-                    control={<Routes color="primary" checked={checkedPubblici} onChange={handleChangePubblici} />}
-                    label={t("dossier:Mostra") + " (" + dossierPubblici.length + " " + t("dossier") + ")"}
-                  />
-                  <div className="margin20 gray">
-                    <Collapse in={checkedPubblici}>
-                      <Table columns={columns[1]} data={dossierPubblici} />
-                    </Collapse>
-                  </div>
-                </React.Fragment>
-              ) : (
-                t("dossier:NoDossier")
-              )}
-            </div>
-          </React.Fragment>
-        )
+                <MostDataGrid columns={columns} rows={dossierPubblici} />
+          </>
       ) : null}
 
       <Footer />

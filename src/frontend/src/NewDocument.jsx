@@ -159,7 +159,7 @@ export const NewDocument = (props) => {
       <h1> {t("documento:NewDocument")} </h1>
       <Container component="main" maxWidth="md">
         <div className={DTRoot}>
-          <Upload asset={asset} show={true} setAsset={setAsset} setDisabledButs={setDisabledButs} />
+          <Upload asset={asset} show={true} accept={"*/*"} setAsset={setAsset} setDisabledButs={setDisabledButs} />
 
           <form onSubmit={handleSubmit(onSubmit)}>
             <Grid container spacing={1} alignItems="center">

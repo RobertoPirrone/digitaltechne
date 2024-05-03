@@ -112,6 +112,14 @@
     "CartridgeInsert": "Registrazione di una cartuccia DNA", 
     "Pagina principale": "Pagina principale",
   "DnaFileXls": "DNA  Record (XLS) *",
-  "DnaFilePdf": "Optional DNA  Record (PDF)"
+  "DnaFilePdf": "Optional DNA  Record (PDF)",
+    "Gestione Utenti": "Gestione Utenti",
+    "Mostra Opere": "Mostra Opere",
+    "Inserisci una nuova opera": "Inserisci una nuova opera",
+    "Acquista Cartucce DNA": "Acquista Cartucce DNA",
+    "Registrazione Cartucce": "Registrazione Cartucce in BlockChain",
+    "Manuale On Line": "Manuale On Line",
+    "Funzioni per tutti gli utenti": "Funzioni per tutti gli utenti"
 }
+
 

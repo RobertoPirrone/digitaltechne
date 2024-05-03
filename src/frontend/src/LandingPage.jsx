@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 import { Footer } from "./Footer";
-import logo from "./DT-noalpha.png";
+import logo from "/DT-noalpha.png";
 //import logosa from './Smartars.png';
 
 export function LandingPage() {

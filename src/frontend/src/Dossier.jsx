@@ -122,7 +122,7 @@ export const Dossier = () => {
     columns.push({ flex: 1, headerName: t("dossier:year"), field: "year" });
   }
 
-  columns.push({ flex: 1, headerName: t("dossier:NFT id"), field: "token_id" });
+  columns.push({ flex: 1, headerName: t("dossier:NFTid"), field: "token_id" });
   columns.push({
     flex: 1,
     headerName: t("dossier:InBC"),

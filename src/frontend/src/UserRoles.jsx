@@ -8,7 +8,7 @@ import { Footer } from "./Footer";
 import { DTGrow, DTFooter } from "./components/useStyles";
 
 export const UserRoles = () => {
-  const { t } = useTranslation(["dossier"]);
+  const { t } = useTranslation();
 
   return (
     <>

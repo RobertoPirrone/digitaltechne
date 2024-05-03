@@ -112,5 +112,12 @@
   "CartridgeInsert": "Register a DNA Cartridge", 
   "Pagina principale": "Main page",
   "DnaFileXls": "DNA  Record (XLS) *",
-  "DnaFilePdf": "Optional DNA  Record (PDF)"
+  "DnaFilePdf": "Optional DNA  Record (PDF)",
+    "Gestione Utenti": "User Administration",
+    "Mostra Opere": "Show Artwork",
+    "Inserisci una nuova opera": "Add New Artwork",
+    "Acquista Cartucce DNA": "Buy DNA Cartridges",
+    "Registrazione Cartucce": "Load Cartridge Code in BlockChain",
+    "Manuale On Line": "On Line Manual",
+    "Funzioni per tutti gli utenti": "Common Functions"
 }

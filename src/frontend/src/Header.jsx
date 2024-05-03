@@ -9,7 +9,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useTranslation } from "react-i18next";
 //import logosa from './Smartars.png';
-import logo from "./DT-noalpha.png";
+import logo from "/DT-noalpha.png";
 import { DTGrow, DTMenuButton, DTHeaderTitle, DTSectionUser } from "./components/useStyles";
 import HelpDialog from "./components/HelpDialog";
 import LanguageIcon from "@mui/icons-material/Language";

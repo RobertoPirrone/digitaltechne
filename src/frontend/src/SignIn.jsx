@@ -13,7 +13,7 @@ import { AuthClient } from "@dfinity/auth-client";
 import { Actor, HttpAgent } from "@dfinity/agent";
 import { Principal } from "@dfinity/principal";
 import { useGlobalState } from './state';
-import logo from './DT-noalpha.png';
+import logo from '/DT-noalpha.png';
 import { DTPaper, DTForm, DTSubmit } from './components/useStyles';
 import { MostSubmitButton} from './components/MostComponents';
 import { canisterId, idlFactory, backend } from "../../declarations/backend";

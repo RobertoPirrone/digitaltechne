@@ -15,7 +15,7 @@ import { useGlobalState } from "./state";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { Table } from "./Table";
-import { MostCheckbox, MostSubmitButton, WarningIcon, Check } from "./components/MostComponents";
+import { MyCheckIcon, MostCheckbox, MostSubmitButton, WarningIcon, Check } from "./components/MostComponents";
 import { MostDataGrid } from "./components/MostDataGrid";
 import { Riservato } from "./components/OpusComponents";
 import InVisionDialog from "./components/InVisionDialog";
@@ -67,7 +67,7 @@ export const Dossier = () => {
       backendActor.dossier_query(QP)
         .then((Ok_data) => {
           let data = JSON.parse(Ok_data.Ok);
-          // console.log("data returns: ", JSON.stringify(data));
+          console.log("data returns: ", JSON.stringify(data));
           // console.log("raw data returns: ",data);
           setDossierPersonali(data.ret_owner);
           // setDossierPersonaliMaster( data.ret_owner.filter((riga) => riga.master_dossier_id === null),);
@@ -128,11 +128,7 @@ export const Dossier = () => {
     headerName: t("dossier:InBC"),
     field: "contract_initialized",
     renderCell: (params) => {
-      if (params.row.contract_initialized) {
-        if (params.row.docs_bcsync) return <Check good={true} />;
-        return <WarningIcon />;
-      }
-      return <Check good={false} />;
+        return <MyCheckIcon value={params.row.has_artwork_mark} />
     },
   });
 

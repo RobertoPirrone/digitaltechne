@@ -11,6 +11,7 @@ Welcome to DigitalTechne's documentation!
    :caption: Contents:
 
    MISC/first_info
+   USER_MANUAL/user_manual
 
 
 

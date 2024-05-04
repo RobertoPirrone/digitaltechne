@@ -69,7 +69,7 @@ export const ArtworkMark = (props) => {
     if (backendActor === null) {
       navigate("/login");
     }
-  });
+  }, []);
 
   if (false) {
     // Hardcoded principal: 535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe

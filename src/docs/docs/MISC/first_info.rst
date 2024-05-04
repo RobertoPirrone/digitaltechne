@@ -23,7 +23,6 @@ Please note that the BlockChain contains not only the textual information, but a
 How you can use the platform
 ============================
 So:
-
     * you own an artwork
     * you want to securely assess your ownership of it
     * you want to register all the informations and images that you deem worthwhile
@@ -40,4 +39,9 @@ You can proceed as follows:
             * use a swab to pick some DNA material from the artwork
             * give the DNA to a genetic laboratory
             * load the laboratory results on DigitalTechne
-            * Digital Techne willi display every genome difference, along with the the position of the drop on the artwork
+            * DigitalTechne will display every genome difference, along with the the position of the drop on the artwork
+
+
+Help
+====
+Every page of the software application has a Contextual Help Page, reachable through the question mark on the title bar, that will explain what you have to do

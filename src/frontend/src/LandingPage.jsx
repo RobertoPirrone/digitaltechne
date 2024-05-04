@@ -1,4 +1,5 @@
 import React from "react";
+import Container from "@mui/material/Container";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
@@ -11,13 +12,12 @@ export function LandingPage() {
   const changeLanguage = (lng) => {
     i18n.changeLanguage(lng);
   };
-  //changeLanguage(i18n.language);
-
-  const infoUrl = process.env.REACT_APP_BE + "static/info.html";
+  const infoUrl = "/html/MISC/first_info.html";
   const app_instance = process.env.REACT_APP_INSTANCEE;
 
   return (
     <div id="HomeDiv">
+      <Container maxWidth="md">
       <div className="Home-header">
         <div id="languageDiv">
           <button onClick={() => changeLanguage("de")}>
@@ -30,35 +30,32 @@ export function LandingPage() {
             <img src="https://flagcdn.com/h24/it.png" height="24" width="48" alt="Italiano" title="Italiano" />
           </button>
         </div>
-        <img src={logo} className="xxxxApp-logo" alt="logo digitaltechne" />
+        <img src={logo} width={400} className="xxxxApp-logo" alt="logo digitaltechne" />
         <div className="margintop30">
           <p>
-            {t("Benvenuto")} su <big>DigitalTechne {app_instance}</big>
+            {t("Benvenuto")} <big>DigitalTechne {app_instance}</big>
           </p>
-          L'applicazione per la certificazione delle opere d'arte.
+            {t("Benvenuto2")}
           <br />
         </div>
         <div className="asinistra margintop30">
           <p>
-            Sei nuovo dell'applicazione?
             <br />
-            Sul sito{" "}
-            <a href="https://www.digitaltechne.it" target="_blank" rel="noreferrer">
-              <b>digitaltechne.it</b>
-            </a>{" "}
-            puoi approfondire cosa fa l'applicazione e le sue innovative tecnologie.
+            {t("ToKnowMore2")}
+            <a href="https://www.digitaltechne.it" target="_blank" rel="noreferrer"> <b>digitaltechne.it</b> </a>
+            {t("ToKnowMore3")}
           </p>
           <p>
             <Link to="/login">{t("Accedi")}</Link>
-            <br />
-            <Link to="/register">{t("Registrati")}</Link>
           </p>
-          Prima di registrarti sulla piattaforma,{" "}
-          <a href={infoUrl} rel="noreferrer">
-            leggi le info ai nuovi utenti
+            {t("ReadFirstInfo")}
+          <a href={infoUrl} target="_blank" rel="noreferrer">
+            {t("ReadFirstInfo2")}
           </a>
+            <p></p>
         </div>
       </div>
+      </Container>
       <Footer />
     </div>
   );

@@ -10,6 +10,8 @@ Welcome to DigitalTechne's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   MISC/first_info
+
 
 
 Indices and tables

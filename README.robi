@@ -33,3 +33,20 @@ Identity NuovaIdentitaRobi
 Creare cycles wallet su mainnet:
     dfx ledger --network ic create-canister hw3nb-r37z5-x37iz-w4dtk-4te2g-s5dpk-fiy3m-g2a4g-h62vy-jau4p-xae --amount .25
     dfx identity --network ic deploy-wallet xrsbu-qyaaa-aaaan-qmflq-cai
+
+
+
+Ricarica del canister di FE:
+https://support.dfinity.org/hc/en-us/articles/7649994048660-How-do-I-add-cycles-to-a-wallet-using-command-lines
+    # questo comando fallisce, vedere sotto quello che funziona
+    dfx cycles top-up    --network ic way7l-iqaaa-aaaan-qmfoa-cai 4000000000
+
+Balance:
+    dfx ledger --network=ic balance
+
+    dfx wallet --network=ic balance
+
+
+# questo funziona
+https://internetcomputer.org/docs/current/developer-docs/smart-contracts/topping-up/topping-up-canister#:~:text=If%20you%20have%20a%20cycles%20wallet%20you%20control%20via%20dfx,.
+    dfx wallet send  --network ic way7l-iqaaa-aaaan-qmfoa-cai 40000000000

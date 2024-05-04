@@ -99,6 +99,8 @@ export function Header(props) {
         )
     }
 
+    let user_role = "UNK";
+
   return (
     <div >
       <AppBar position="fixed" color="inherit" className="Header">
@@ -110,8 +112,13 @@ export function Header(props) {
         <MenuItem component={Link} to="/loginok" onClick={handleClose}> {t("Pagina principale")} </MenuItem>
         <MenuItem component={Link} to="/dossier" onClick={handleClose}> {t("Dossier aperti")} </MenuItem>
         <MenuItem component="a" href={catalogoUrl} target="_blank" onClick={handleClose}> {t("Catalogo servizi")} </MenuItem>
-        <MenuItem component={Link} to="/user_roles" onClick={handleClose}> {t("UserRoles")} </MenuItem>
-        <MenuItem component={Link} to="/cartridge_insert" onClick={handleClose}> {t("CartridgeInsert")} </MenuItem>
+        <MenuItem component={Link} to="/purchase" onClick={handleClose}> {t("Buy Cartridges")} </MenuItem>
+        {(user_role == "ADMIN") ? (
+            <MenuItem component={Link} to="/user_roles" onClick={handleClose}> {t("UserRoles")} </MenuItem>
+        ) : null}
+        {(user_role == "LABORATORY") ? (
+            <MenuItem component={Link} to="/cartridge_insert" onClick={handleClose}> {t("CartridgeInsert")} </MenuItem>
+        ) : null}
       </Menu>
 
       <Menu id="user-menu" anchorEl={anchorEl1} anchorOrigin={{ vertical: "top", horizontal: "right" }} transformOrigin={{ vertical: "top", horizontal: "right" }} 

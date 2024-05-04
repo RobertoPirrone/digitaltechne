@@ -14,10 +14,10 @@ import { useLocation } from "react-router-dom";
 // import { getLang } from "../i18n";
 
 
-function getLocation(location) {
-  location = location.pathname.substr(1);
-  let slash = location.indexOf("/");
-  location = location.substr(slash+1);
+function getLocation(rawlocation) {
+  let uri_array = rawlocation.pathname.split("/");
+  let location = uri_array[1]
+    // console.log("getLocation returns: ", location);
   return location
 }
 export function getFullManualUrl(lang) {
@@ -28,7 +28,8 @@ export function getFullManualUrl(lang) {
 function getManualUrl(lang,fullManualUrl,location) {
     if(location === "")
         return fullManualUrl
-    const manualUrl = '/HelpOnLine/' + lang + '/USER_MANUAL/'+location+'.html?'
+    const manualUrl = `html/USER_MANUAL/${location}/${location}.html`
+    console.log(manualUrl);
     return manualUrl
 }
 function getBodyHeight() {

@@ -5,6 +5,19 @@ type CartridgeUseParams = record {
   uuid : text;
   purchase_time : text;
 };
+type Dossier = record {
+  id : opt nat64;
+  inserted_by : opt text;
+  has_artwork_mark : opt bool;
+  uuid : text;
+  ora_inserimento : text;
+  autore : text;
+  icon_uri : text;
+  private : bool;
+  luogoopera : text;
+  nomeopera : text;
+  tipoopera : text;
+};
 type MyError = variant {
   CanisterError : record { message : text };
   InvalidCanister;
@@ -26,6 +39,7 @@ service : {
   dossier_insert : (text) -> (Result);
   dossier_pulldowns : () -> (Result) query;
   dossier_query : (QueryParams) -> (Result) query;
+  dossier_struct_query : (text) -> (vec Dossier) query;
   execute : (text) -> (Result);
   greet : (text) -> (text) query;
   "query" : (text) -> (Result_1) query;

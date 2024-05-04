@@ -1,0 +1,2 @@
+convert -resize 192x DT-notext.png dt.png
+convert dt.png favicon.ico

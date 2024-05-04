@@ -44,7 +44,7 @@ export const Login = () => {
     const [username, setUsername] = useGlobalState('username');
     const [backend, setBackend] = useGlobalState('backend');
     const [backendActor, setBackendActor] = useGlobalState('backendActor');
-    const infoUrl = "/info.html"
+    const infoUrl = "/html/MISC/first_info.html";
 
     async function InternetIdentityLogin() {
         let authClient = await AuthClient.create();

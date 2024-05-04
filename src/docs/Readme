@@ -1,0 +1,11 @@
+# First install
+# apt-get install -y sphinx-intl python3-stemmer
+python -m venv .venv
+source .venv/bin/activate
+pip3 install Sphinx sphinx_rtd_theme sphinx-theme rinohtype
+deactivate
+
+# Run
+source .venv/bin/activate
+sphinx-build -M html docs docs/_build
+deactivate

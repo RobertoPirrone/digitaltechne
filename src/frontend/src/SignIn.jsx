@@ -85,7 +85,7 @@ export const Login = () => {
           <LockOutlinedIcon />
         </Avatar>
         */}
-        <img src={logo} className="XXXApp-logo" alt="logo" />
+        <img src={logo} width={400} className="XXXApp-logo" alt="logo" />
         <Typography component="h1" variant="h5">
           <Trans i18nKey="techneTitle" />
         </Typography>

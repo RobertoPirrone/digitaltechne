@@ -106,7 +106,7 @@ export const ArtworkMark = (props) => {
   const [markDullCode, setMarkDullCode] = useState("");
   const mark_position_list = [ "top_left", "top_center", "top_right", "center_left", "center_center", "center_right", "bottom_left", "bottom_center", "bottom_right"]
   const [markPosition, setMarkPosition] = useState("");
-  const mark_side_list = [ "front", "right", "frame"]
+  const mark_side_list = [ "front", "back", "frame"]
   const [markSide, setMarkSide] = useState("");
 
   const onSubmit = (vals) => {

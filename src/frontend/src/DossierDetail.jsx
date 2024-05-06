@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useCallback } from "react";
+import React, { useContext, useState, useMemo, useEffect, useCallback } from "react";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
@@ -14,6 +14,7 @@ import { IconCode } from "./IconCode";
 import { Table } from "./Table";
 import { MyCheckIcon, Loading, MostSelect, MostTextField, MostButton2, MostSubmitButton, Check, WarningIcon } from "./components/MostComponents";
 import { GoToHomePage, Riservato, BexplorerLink } from "./components/OpusComponents";
+import { myContext } from "./components/MyContext";
 import { dmy_hms, prettyJson } from "./Utils";
 import { backend } from "../../declarations/backend";
 import { getBackendActor } from "./SignIn";
@@ -24,7 +25,6 @@ import { HttpAgent } from "@dfinity/agent";
 let dossier_id = "";
 
 export const DossierDetail = () => {
-  const backendActor = getBackendActor();
 
   const navigate = useNavigate();
   const [showjson, setShowjson] = useState(false);
@@ -35,8 +35,9 @@ export const DossierDetail = () => {
   const [isVideo, setIsVideo] = useState(null);
   const [docs, setDocs] = useState([]); //elenco documenti relativi a dossier_id
   const [doc_bc_sync, setDoc_bc_sync] = useState(true);
-  const [username, setUsername] = useGlobalState("username");
   const [application, setApplication] = useGlobalState("application");
+  const [ whoami, backendActor ] = useContext(myContext);
+  // const [ whoami, setWhoami, backendActor, setBackendActor, assetPfx, setAssetPfx ] = useContext(myContext);
 
   const { t } = useTranslation(["translation", "documento", "dossier"]);
   const { control, register, handleSubmit, errors } = useForm();
@@ -68,7 +69,7 @@ export const DossierDetail = () => {
     if (!dossier_id) return;
     if (backendActor === null) {
         console.log("DossierDetail backendActor null:", JSON.stringify(backendActor));
-        console.log("DossierDetail username null:", JSON.stringify(username));
+        console.log("DossierDetail username null:", JSON.stringify(whoami));
         console.log("DossierDetail backend null:", JSON.stringify(backend));
         return;
       // navigate("/login");
@@ -298,7 +299,7 @@ export const DossierDetail = () => {
   }
 
   console.log("dossierInfo: ",dossierInfo)
-  //console.log("doc_bc_sync",doc_bc_sync)
+  console.log("application:",application)
   return (
     <div>
       <Header />
@@ -391,7 +392,7 @@ export const DossierDetail = () => {
                 </tr>
               </tbody>
             </table>
-            {!sellOrInviteMode && dossierInfo.inserted_by === username ? (
+            {!sellOrInviteMode && dossierInfo.inserted_by === whoami ? (
               !dossierInfo.has_artwork_mark ? (
                   <div className="MuiContainer-root MuiContainer-maxWidthXs">
                     <MostSubmitButton type="button" disabled={disabledButs} onClick={artwork_mark} label={t("dossier:ApplicaDNA")} />
@@ -408,7 +409,7 @@ export const DossierDetail = () => {
             <div>
               <h2>{t("Documenti")} </h2>
               <div className="blackColor margin20 gray">{docs.length ? <MostDataGrid columns={doc_columns} rows={docs} /> : t("dossier:NoDocument")}</div>
-              {dossierInfo && username === username ? (
+              {dossierInfo && whoami === whoami ? (
                 <div>
                   <div className="MuiContainer-root MuiContainer-maxWidthXs">
                     <MostSubmitButton type="button" disabled={disabledButs} onClick={nuovoDoc} label={t("dossier:NuovoDocumento")} />

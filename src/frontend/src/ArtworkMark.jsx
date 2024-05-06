@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useContext, useState, useMemo, useEffect, useCallback } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import PropagateLoader from "react-spinners/PropagateLoader";
 // import { css } from "@emotion/core";
@@ -21,6 +21,7 @@ import { DTRoot, DTSubmit } from "./components/useStyles";
 //import MyAxios, { check_response } from "./MyAxios";
 import Grid from "@mui/material/Grid";
 import { GoToHomePage } from "./components/OpusComponents";
+import { myContext } from "./components/MyContext";
 import { Upload } from "./Upload";
 import { getBackendActor } from "./SignIn";
 import { MyTextField, MyCheckbox, MyAutocomplete, MostSubmitButton, MostCheckbox, MostSelect, MostTextField } from "./components/MostComponents";
@@ -28,7 +29,6 @@ import { backend } from "../../declarations/backend";
 import { getAssetPfx } from "./utils";
 
 export const ArtworkMark = (props) => {
-  const backendActor = getBackendActor();
   const asset_pfx = getAssetPfx();
   const navigate = useNavigate();
   let react_router_location = useLocation();
@@ -41,6 +41,7 @@ export const ArtworkMark = (props) => {
   let autore_list = ["pippo", "pluto"];
   let tipodocumento_list = ["immagine", "titolo_proprietà"];
   const [cartridgeUuids, setCartridgeUuids] = useState([]);
+  const [ whoami, setWhoami, backendActor, setBackendActor, assetPfx, setAssetPfx ] = useContext(myContext);
 
   useEffect(() => {
       backendActor.cartridge_use_available()

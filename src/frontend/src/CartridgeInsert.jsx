@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useContext, useState, useMemo, useEffect, useCallback } from "react";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
@@ -15,6 +15,7 @@ import { DTGrow, DTFooter } from "./components/useStyles";
 import { MyTextField, MyCheckbox, MyAutocomplete, MostSubmitButton, MostCheckbox, MostSelect, MostTextField } from "./components/MostComponents";
 import { useGlobalState } from "./state";
 import { DTRoot } from "./components/useStyles";
+import { myContext } from "./components/MyContext";
 import { Upload } from "./Upload";
 import { backend } from "../../declarations/backend";
 
@@ -27,8 +28,9 @@ export const CartridgeInsert = () => {
   const [searchele, setSearchele] = useState(false);
   const [note, setNote] = useState("");
   const [dnaText, setDnaText] = useState("");
-    const [file, setFile] = useState(null);
+  const [file, setFile] = useState(null);
   const [jsonData, setJsonData] = useState("");
+  const [ whoami, setWhoami, backendActor, setBackendActor, assetPfx, setAssetPfx ] = useContext(myContext);
 
 
     const gotXls = (e) => {
@@ -68,7 +70,7 @@ export const CartridgeInsert = () => {
 
     setDisabledButs(true);
     console.log("onSubmit: ", JSON.stringify(vals));
-    backend
+    backendActor
       .cartridge_insert(JSON.stringify(vals))
       .then((Ok_data) => {
         console.log("cartridge_insert returns: ", JSON.stringify(Ok_data));

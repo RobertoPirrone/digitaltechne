@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -14,10 +14,10 @@ import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { Upload } from "./Upload";
 import { backend } from "../../declarations/backend";
+import { myContext } from "./components/MyContext";
 import { getBackendActor } from "./SignIn";
 
 export const NewDossier = () => {
-  const backendActor = getBackendActor();
   const navigate = useNavigate();
   const [username, setUsername] = useGlobalState("username");
   // const [backendActor, setBackendActor] = useGlobalState("backendActor");
@@ -37,6 +37,7 @@ export const NewDossier = () => {
   const [tipoOpera, setTipoOpera] = useState("");
   const [luogoOpera, setLuogoOpera] = useState("");
   const [autore, setAutore] = useState("");
+  const [ whoami, setWhoami, backendActor, setBackendActor, assetPfx, setAssetPfx ] = useContext(myContext);
 
   const appAlert = useCallback((text) => {
     alert(text);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import PropagateLoader from "react-spinners/PropagateLoader";
 // import { css } from "@emotion/core";
@@ -12,7 +12,7 @@ import { Ed25519KeyIdentity } from "@dfinity/identity";
 import { HttpAgent } from "@dfinity/agent";
 import { AssetManager } from "@dfinity/assets";
 
-import { getBackendActor } from "./SignIn";
+import { checkLoggedUser, getBackendActor } from "./SignIn";
 import { useGlobalState } from "./state";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
@@ -22,6 +22,7 @@ import { DTRoot, DTSubmit } from "./components/useStyles";
 //import MyAxios, { check_response } from "./MyAxios";
 import Grid from "@mui/material/Grid";
 import { GoToHomePage } from "./components/OpusComponents";
+import { myContext } from "./components/MyContext";
 import { Upload } from "./Upload";
 import { MyTextField, MyCheckbox, MyAutocomplete, MostSubmitButton, MostCheckbox, MostSelect, MostTextField } from "./components/MostComponents";
 import { backend } from "../../declarations/backend";
@@ -47,7 +48,8 @@ import { backend } from "../../declarations/backend";
  * @param {string} dossier_id id del dossier a cui appartiene il documento, arriva nella URl, non come props
  */
 export const NewDocument = (props) => {
-  const backendActor = getBackendActor();
+    console.log("NewDocument, whoami: ", checkLoggedUser());
+
   const newDossierInfo = props.newDossierInfo;
   const navigate = useNavigate();
   let react_router_location = useLocation();
@@ -96,6 +98,7 @@ export const NewDocument = (props) => {
   const appAlert = useCallback((text) => {
     alert(text);
   }, []);
+  const [ whoami, setWhoami, backendActor, setBackendActor, assetPfx, setAssetPfx ] = useContext(myContext);
 
   const onSubmit = (vals) => {
     console.log("Entro onSubmit: " + JSON.stringify(vals));
@@ -120,7 +123,7 @@ export const NewDocument = (props) => {
     setDisabledButs(true);
     setLoading(true);
 
-    backend
+    backendActor
       .document_insert(JSON.stringify(vals))
       .then((Ok_data) => {
         console.log("document_insert returns: ", JSON.stringify(Ok_data));

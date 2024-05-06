@@ -3,7 +3,7 @@
 // TBD Gestione pagamento
 // TBD http outcall per delivery fisica delle cartucce
 
-import React, { useState, useMemo, useEffect, useCallback } from "react"; 
+import React, { useContext, useState, useMemo, useEffect, useCallback } from "react";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Grid from '@mui/material/Grid';
@@ -15,6 +15,7 @@ import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { DTGrow, DTFooter } from "./components/useStyles";
 import { DnaFile } from "./components/DnaFile";
+import { myContext } from "./components/MyContext";
 import { MyTextField, MostSubmitButton, MyAutocomplete } from "./components/MostComponents";
 import { getBackendActor } from "./SignIn";
 import { appAlert } from "./Utils";
@@ -35,13 +36,13 @@ export const Purchase = (props) => {
     dossier_id = react_router_location.pathname.split("/")[2];
   }
   const { t } = useTranslation(["dossier"]);
-  const backendActor = getBackendActor();
   const [disabledButs, setDisabledButs] = useState(true);
     const [dnaText, setDnaText] = useState("");
   const mark_position_list = [ "top_left", "top_center", "top_right", "center_left", "center_center", "center_right", "bottom_left", "bottom_center", "bottom_right"]
   const [count, setCount] = useState("0");
   const [amount, setAmount] = useState("");
   const cartridge_count_list = [ "1", "2", "3"]
+  const [ whoami, setWhoami, backendActor, setBackendActor, assetPfx, setAssetPfx ] = useContext(myContext);
 
   const ComputeAmount = (v) => {
       console.log("Comopute am: ", v);

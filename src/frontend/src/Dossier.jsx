@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useCallback } from "react";
+import React, { useContext, useState, useMemo, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -19,6 +19,7 @@ import { MyCheckIcon, MostCheckbox, MostSubmitButton, WarningIcon, Check } from 
 import { MostDataGrid } from "./components/MostDataGrid";
 import { Riservato } from "./components/OpusComponents";
 import InVisionDialog from "./components/InVisionDialog";
+import { myContext } from "./components/MyContext";
 import { getBackendActor } from "./SignIn";
 // import { css } from "@emotion/core";
 import { backend } from "../../declarations/backend";
@@ -40,7 +41,7 @@ export const Dossier = () => {
     asset_pfx = `http://${canisterId}.localhost:4943`;
   }
 
-  console.log("asset_pfx :", asset_pfx);
+  // console.log("asset_pfx :", asset_pfx);
 
   const navigate = useNavigate();
   const { handleSubmit } = useForm();
@@ -55,10 +56,16 @@ export const Dossier = () => {
   const [application, setApplication] = useGlobalState("application");
   const [username, setusername] = useGlobalState("username");
   const [trueidentity, setIdentity] = useGlobalState("identity");
+  const [ whoami, setWhoami, backendActor, setBackendActor, assetPfx, setAssetPfx ] = useContext(myContext);
+
 
   useEffect(() => {
+      console.log("useEffect entro: ");
 
-    const backendActor = getBackendActor();
+    if (backendActor == null) { 
+        console.log("Dossier, backendActor null");
+        return; 
+    }
     let QP = {
       offset: 0,
       limit: 50,
@@ -79,7 +86,7 @@ export const Dossier = () => {
           console.error(error);
           alert(error.message ? error.message : JSON.stringify(error));
         });
-  }, [t]);
+  }, [t, backendActor]);
 
   const handleChangePubblici = () => {
     setCheckedPubblici((prev) => !prev);

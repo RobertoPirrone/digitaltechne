@@ -19,6 +19,7 @@ import { Purchase } from "./Purchase";
 import { UserRoles } from "./UserRoles";
 import { VerifyMark } from "./VerifyMark";
 import { theme } from "./components/theme";
+import MyContext from "./components/MyContext";
 import "./App.css";
 
 import { backend } from "declarations/backend";
@@ -38,6 +39,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
+      <MyContext>
         <Router>
           <Routes>
             <Route element={<ProtectedRoute />}>
@@ -60,6 +62,7 @@ function App() {
             <Route path="/" element={<LandingPage />} />
           </Routes>
         </Router>
+      </MyContext>
       </div>
     </ThemeProvider>
   );

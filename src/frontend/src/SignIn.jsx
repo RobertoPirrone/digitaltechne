@@ -77,14 +77,16 @@ export const Login = () => {
   ) 
 };
 
-export const Logout = () => {
+export const Logout = async () => {
+    const [ whoami, setWhoami, backendActor, setBackendActor, assetPfx, setAssetPfx ] = useContext(myContext);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        localStorage.setItem("backendActor",null);
-        localStorage.setItem("whoami","");
+        setBackendActor(null);
+        setWhoami("");
+        let authClient = await AuthClient.create();
+        authClient.logout({ returnTo: "/login" });
+
         navigate("/login");
-    })
 };
 
 

@@ -94,6 +94,7 @@ export const Logout = async () => {
 
 export function checkLoggedUser () {
     const [ whoami, setWhoami, backendActor, setBackendActor, assetPfx, setAssetPfx ] = useContext(myContext);
+    const navigate = useNavigate();
     //let authClient = await AuthClient.create();
     let authClient = null;
     AuthClient.create()
@@ -102,7 +103,7 @@ export function checkLoggedUser () {
             const identity = authClient.getIdentity();
 
             if ( ! authClient.isAuthenticated()) {
-                navigate("/login");
+                return "";
             } else {
                 if ( ! identity.getPrincipal().isAnonymous() ) {
                     console.log( `checkLoggedUser non anonimo, identity ${identity}, whoami ${whoami}`);
@@ -111,25 +112,27 @@ export function checkLoggedUser () {
                         console.log( "checkLoggedUser non anonimo, principal: ", principal);
                         return principal;
                     }
-                }
 
-                console.log( "checkLoggedUser identity: ", identity);
-                let agent = new HttpAgent({ identity, });
-                const actor = Actor.createActor(idlFactory, {
-                  agent: agent,
-                  canisterId,
-                });
-                setBackendActor(actor);
-                console.log("IIprincipal: ",  identity.getPrincipal().toText());
-                if (process.env.DFX_NETWORK !== "ic") {
-                        agent.fetchRootKey();
+                    console.log( "checkLoggedUser identity: ", identity);
+                    console.log( "checkLoggedUser principal: ", identity.getPrincipal().toText());
+                    let agent = new HttpAgent({ identity, });
+                    const actor = Actor.createActor(idlFactory, {
+                      agent: agent,
+                      canisterId,
+                    });
+                    setBackendActor(actor);
+                    console.log("IIprincipal: ",  identity.getPrincipal().toText());
+                    if (process.env.DFX_NETWORK !== "ic") {
+                            agent.fetchRootKey();
+                    }
+                    actor.whoami().then((Ok_data) =>  {
+                        console.log("InternetIdentityLogin, whoami returns: ",Ok_data);
+                        setWhoami(Ok_data);
+                        localStorage.setItem("whoami", Ok_data);
+                        return Ok_data;
+                    })
                 }
-                actor.whoami().then((Ok_data) =>  {
-                    console.log("InternetIdentityLogin, whoami returns: ",Ok_data);
-                    setWhoami(Ok_data);
-                    localStorage.setItem("whoami", Ok_data);
-                    return Ok_data;
-                })
+                return "";
             }
         });
 }

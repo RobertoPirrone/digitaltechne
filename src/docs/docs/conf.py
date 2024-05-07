@@ -8,7 +8,7 @@
 
 project = 'DigitalTechne'
 copyright = '2024, DigitalTechne'
-author = 'Roberto Pirrone'
+author = 'the Digital Techne Team'
 release = '0.2'
 
 # -- General configuration ---------------------------------------------------
@@ -31,3 +31,27 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # html_theme = 'alabaster'
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
+
+rinoh_documents = [dict(doc='USER_MANUAL/user_manual',        # top-level file (index.rst)
+    target='UserManual',
+    )]
+
+latex_elements = {
+     # The paper size ('letterpaper' or 'a4paper').
+     #
+     # 'papersize': 'letterpaper',
+     'papersize': 'a4paper',
+
+     # The font size ('10pt', '11pt' or '12pt').
+     #
+     # 'pointsize': '10pt',
+
+     # Additional stuff for the LaTeX preamble.
+     #
+     # 'preamble': '',
+
+     # Latex figure (float) alignment
+     #
+     # 'figure_align': 'htbp',
+    'extraclassoptions': 'openany',
+}

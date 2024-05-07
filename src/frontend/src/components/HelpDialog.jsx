@@ -22,7 +22,7 @@ function getLocation(rawlocation) {
 }
 export function getFullManualUrl(lang) {
   // const fullManualUrl = app_server_url + '/Docs/' + lang + '/USER_MANUAL/USER_MANUAL.html?'+window._env_.FE_VERSION
-  const fullManualUrl = '/Docs/' + lang + '/USER_MANUAL/USER_MANUAL.html?'
+  const fullManualUrl = 'UserManual.pdf'
   return fullManualUrl
 }
 function getManualUrl(lang,fullManualUrl,location) {

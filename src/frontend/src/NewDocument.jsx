@@ -56,8 +56,8 @@ export const NewDocument = (props) => {
   console.log("NewDocument location: " + JSON.stringify(react_router_location));
   let dossier_id = react_router_location.state.dossier_id;
 
-  let autore_list = ["pippo", "pluto"];
-  let tipodocumento_list = ["immagine", "titolo_proprietà"];
+  let autore_list = ["Federico Zeri", "Vittorio Sgarbi"];
+  let tipodocumento_list = ["image", "condition report", "authenticity attribution", "certificate of ownership"];
 
   useEffect(() => {
     if (backend === null) {

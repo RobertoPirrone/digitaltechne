@@ -1,0 +1,15 @@
+version: '3.3'
+services:
+    php:
+        build: .
+        working_dir: /var/www/html
+        # command: sleep 600
+        container_name: digitaltechne_site
+        # image: php:8-apache
+        image: php_locale
+        volumes:
+           - ./:/var/www/html/
+           - /etc/ssmtp/ssmtp.conf:/etc/ssmtp/ssmtp.conf
+networks:
+    default:
+        name: most

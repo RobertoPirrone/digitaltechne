@@ -86,7 +86,7 @@ export const Dossier = () => {
           console.error(error);
           alert(error.message ? error.message : JSON.stringify(error));
         });
-  }, [t, whoami, backendActor]);
+  }, [t, whoami]);
 
   const handleChangePubblici = () => {
     setCheckedPubblici((prev) => !prev);

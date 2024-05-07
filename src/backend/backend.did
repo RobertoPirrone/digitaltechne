@@ -35,6 +35,7 @@ service : {
   cartridge_use_insert : (CartridgeUseParams) -> (Result);
   cartridge_use_update : (text) -> (Result);
   document_insert : (text) -> (Result);
+  documenti_pulldowns : () -> (Result) query;
   documenti_query : (QueryDocumentsParams) -> (Result) query;
   dossier_insert : (text) -> (Result);
   dossier_pulldowns : () -> (Result) query;

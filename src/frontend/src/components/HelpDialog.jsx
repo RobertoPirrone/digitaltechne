@@ -72,8 +72,8 @@ export default function HelpDialog(props) {
         const setIframeHeight1 = () => {
             try {
               // dipende da dimensione dialog: con sm 552 x 415
-              let ih = 415 - 44
-              let iw = 552
+              let ih = 815 - 44
+              let iw = 1024
               // per firefox
               ih -= 2;
               iw -= 2;
@@ -117,11 +117,12 @@ export default function HelpDialog(props) {
   let iw = 800
   let ih = 600
   if(size) {
+  console.log("size: " + JSON.stringify(size));
     iw = size[0]
     ih = size[1]
   }
+  console.log(`iw ${iw}, ih ${ih}`);
 
-  // log.debug("props: " + JSON.stringify(props));
   //log.debug("FormDialog luogo ",luogo);
 
   // xxxx https://wt3.mostapps.it/Docs/USER_MANUAL/USER_MANUAL.html
@@ -140,7 +141,7 @@ export default function HelpDialog(props) {
         id="helpDialog"
         open={open}
         scroll="paper"
-        maxWidth="sm"
+        maxWidth="lg"
         fullWidth={true}
         onClose={handleClose}
         PaperComponent={PaperComponent}
@@ -156,7 +157,7 @@ export default function HelpDialog(props) {
         </DialogContent>
         <DialogActions>
           <Button onClick={fullManual} variant="outlined" color="secondary">
-            {t("Manuale completo")}
+            {t("Manuale Completo")}
           </Button>
           <Button onClick={handleClose} variant="outlined" color="secondary">
             {t("Chiudi")}

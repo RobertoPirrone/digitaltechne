@@ -42,7 +42,7 @@ export function LandingPage() {
           <p>
             <br />
             {t("ToKnowMore2")}
-            <a href="https://www.digitaltechne.it" target="_blank" rel="noreferrer"> <b>digitaltechne.it</b> </a>
+            <a href="/digitaltechne_site/index.html" target="_blank" rel="noreferrer"> <b>{t("SiteName")}</b> </a>
             {t("ToKnowMore3")}
           </p>
           <p>

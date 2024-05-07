@@ -11,7 +11,7 @@ After usage the cartridge will be useless, the DNA material will be destroyed by
 
 Please note that the ink is completely transparent at the naked eye, and, obviously has been engineered for a long lasting stability
 
-.. image:: ./unvisible_ink.png
+.. image:: ./invisible_ink.png
   :width: 400
   :alt: Dossier
 

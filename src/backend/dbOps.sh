@@ -1,5 +1,5 @@
 #!/bin/bash
-if [ $# -eq 1 -a $1 = "--ic" ] ; then
+if [ $# -eq 1 -a x$1 = "x--ic" ] ; then
     network="--ic"
     dfx identity use NuovaIdentitaRobi
     export DFX_NETWORK=ic

@@ -17,6 +17,7 @@ import { useGlobalState } from "./state";
 import { DTRoot } from "./components/useStyles";
 import { myContext } from "./components/MyContext";
 import { Upload } from "./Upload";
+import { getBackendActor } from "./SignIn";
 import { backend } from "../../declarations/backend";
 
 export const CartridgeInsert = () => {

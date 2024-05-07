@@ -75,7 +75,6 @@ export const DossierDetail = () => {
         return;
       // navigate("/login");
     }
-    // const backend = getBackend();
     if (false) {
       assetManager
         .list()

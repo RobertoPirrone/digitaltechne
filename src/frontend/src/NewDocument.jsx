@@ -56,14 +56,9 @@ export const NewDocument = (props) => {
   console.log("NewDocument location: " + JSON.stringify(react_router_location));
   let dossier_id = react_router_location.state.dossier_id;
 
-  let autore_list = ["Federico Zeri", "Vittorio Sgarbi"];
+  const [autoreList, setAutoreList] = useState([]);
   let tipodocumento_list = ["image", "condition report", "authenticity attribution", "certificate of ownership"];
 
-  useEffect(() => {
-    if (backend === null) {
-      navigate("/login");
-    }
-  });
 
   if (false) {
     // Hardcoded principal: 535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe
@@ -101,6 +96,27 @@ export const NewDocument = (props) => {
   // const [ whoami, setWhoami, backendActor, setBackendActor, assetPfx, setAssetPfx ] = useContext(myContext);
   const backendActor = getBackendActor();
   const whoami = "2vxsx-fae";
+          let list = [];
+
+  useEffect(() => {
+    if (backend === null) {
+      navigate("/login");
+    }
+    backendActor.documenti_pulldowns()
+      .then((result) => {
+            let res = JSON.parse(result.Ok);
+          console.log(res);
+            res.forEach((r) => {
+                list.push(r)
+            })
+          // va in loop!!!
+          // setAutoreList(list);
+      })
+        .catch(function (error) {
+          console.error(error);
+          appAlert(error.message ? error.message : JSON.stringify(error));
+        });
+  }), [t];
 
   const onSubmit = (vals) => {
     console.log("Entro onSubmit: " + JSON.stringify(vals));
@@ -172,7 +188,7 @@ export const NewDocument = (props) => {
                 <MyTextField name="title" required={true} label={t("documento:title")} onChange={(e) => setTitolo(e.target.value)} />
               </Grid>
               <Grid item xs={12}>
-                <MyAutocomplete name="autore" label={t("dossier:autore")} options={autore_list} onInputChange={(e, v) => setAutore(v)} />
+                <MyAutocomplete name="autore" label={t("dossier:autore")} options={autoreList} onInputChange={(e, v) => setAutore(v)} />
               </Grid>
               <Grid item xs={12}>
                 <MyAutocomplete name="tipodocumento" label={t("dossier:tipodocumento")} options={tipodocumento_list} onChange={(e, v) => setTipoDocumento(v)} />

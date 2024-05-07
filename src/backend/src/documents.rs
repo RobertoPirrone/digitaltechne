@@ -74,8 +74,8 @@ pub fn documenti_query(params: QueryDocumentsParams) -> JsonResult {
             filesize: row.get(8).unwrap(),
             mimetype: row.get(9).unwrap(),
             image_uri: row.get(10).unwrap(),
-            inserted_by: row.get(10).unwrap(),
-            tipo_documento: row.get(11).unwrap()
+            inserted_by: row.get(11).unwrap(),
+            tipo_documento: row.get(12).unwrap()
         })
     }) {
         Ok(e) => e,
@@ -117,4 +117,34 @@ pub fn document_insert(jv: String) -> ExecResult {
         Ok(e) => Ok(format!("document_insert OK: {:?}", e)),
         Err(err) => Err(MyError::CanisterError {message: format!("document_insert KO: {:?}", err) })
     }
+}
+#[derive(Serialize, Deserialize)]
+pub struct DocumentsInfoReturnStruct {
+    success: bool,
+    autori: Vec<String>
+    }
+
+#[query]
+pub fn documenti_pulldowns() -> JsonResult {
+    let mut res: Vec<String> = Vec::new();
+    let caller = ic_cdk::caller().to_string();
+    let sql = format!("select distinct autore from documents where inserted_by = '{}'", caller);
+    let conn = ic_sqlite::CONN.lock().unwrap();
+    let mut stmt = conn.prepare(&sql).unwrap();
+    let mut rows = stmt.query([]).unwrap();
+    loop {
+        match rows.next()   {
+            Ok(row) => {
+                match row {
+                    Some(row) => {
+                        res.push(row.get(0).unwrap())
+                    },
+                    None => break
+                }
+            },
+            Err(err) => return Err(MyError::CanisterError {message: format!("{:?}", err) })
+            }
+    }
+    let res = serde_json::to_string(&res).unwrap();
+    Ok(res)
 }

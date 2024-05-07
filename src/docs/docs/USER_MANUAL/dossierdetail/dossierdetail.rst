@@ -13,6 +13,6 @@ When the Dna mark is already registered, a different button will appear: **Verif
 
 
 .. image:: ./dossier_detail.png
-  :width: 800
+  :width: 400
   :alt: Dossier Detail
 

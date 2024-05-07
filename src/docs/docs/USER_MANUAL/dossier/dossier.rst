@@ -12,6 +12,6 @@ Clicking on a picture will lead you to the detailed information :ref:`Dossier De
 A green check icon will indicate that the DNA ink has already been placed on the opera  and the genomic record has been recorded in BlockChain
 
 .. image:: ./dossier.png
-  :width: 800
+  :width: 400
   :alt: Dossier
 

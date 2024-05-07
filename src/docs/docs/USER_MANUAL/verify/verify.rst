@@ -16,7 +16,7 @@ Verify operation on DigitalTechne is shown here:
     * select from the second pull down menu the drop position 
 
 .. image:: ./verify1.png
-  :width: 800
+  :width: 400
   :alt: Dossier
 
 
@@ -25,6 +25,6 @@ The result is a page that will show the genomic details, where the differences w
 Moreover, the system will show also the possible differences of the ink position on the artwork
 
 .. image:: ./verify2.png
-  :width: 800
+  :width: 400
   :alt: Dossier
 

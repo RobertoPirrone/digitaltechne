@@ -125,7 +125,6 @@ export function Header(props) {
         keepMounted open={Boolean(anchorEl1)} onClose={handleClose1} >
         <MenuItem disabled>{username}</MenuItem>
         <MenuItem component={Link} to="/identityM" onClick={handleClose1}> {t("I tuoi dati")} </MenuItem>
-        <MenuItem component={Link} to="/changepasswd" onClick={handleClose1}> {t("Cambio password")} </MenuItem>
         <MenuItem component={Link} to="/logout" onClick={handleClose1}> {t("Logout")} </MenuItem>
       </Menu>
 

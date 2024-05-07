@@ -1,0 +1,17 @@
+[Unit]
+Description=%p
+After= network.target docker.service
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/%p
+ExecStart=/usr/bin/docker-compose up 
+ExecStop=-/usr/bin/docker-compose stop %p
+ExecStopPost=-/usr/bin/docker stop %p
+
+# Give a reasonable amount of time for the server to start up/shut down
+TimeoutSec=10
+
+[Install]
+WantedBy=multi-user.target
+

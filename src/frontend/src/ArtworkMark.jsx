@@ -41,7 +41,9 @@ export const ArtworkMark = (props) => {
   let autore_list = ["pippo", "pluto"];
   let tipodocumento_list = ["immagine", "titolo_proprietà"];
   const [cartridgeUuids, setCartridgeUuids] = useState([]);
-  const [ whoami, setWhoami, backendActor, setBackendActor, assetPfx, setAssetPfx ] = useContext(myContext);
+  // const [ whoami, setWhoami, backendActor, setBackendActor, assetPfx, setAssetPfx ] = useContext(myContext);
+  const backendActor = getBackendActor();
+  const whoami = "2vxsx-fae";
 
   useEffect(() => {
       backendActor.cartridge_use_available()

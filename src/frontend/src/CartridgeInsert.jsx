@@ -30,7 +30,9 @@ export const CartridgeInsert = () => {
   const [dnaText, setDnaText] = useState("");
   const [file, setFile] = useState(null);
   const [jsonData, setJsonData] = useState("");
-  const [ whoami, setWhoami, backendActor, setBackendActor, assetPfx, setAssetPfx ] = useContext(myContext);
+  // const [ whoami, setWhoami, backendActor, setBackendActor, assetPfx, setAssetPfx ] = useContext(myContext);
+  const backendActor = getBackendActor();
+  const whoami = "2vxsx-fae";
 
 
     const gotXls = (e) => {

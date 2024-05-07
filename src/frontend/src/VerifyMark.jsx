@@ -36,7 +36,9 @@ export const VerifyMark = (props) => {
   const [markPosition, setMarkPosition] = useState("");
   const mark_side_list = [ "front", "back", "frame"]
   const [markSide, setMarkSide] = useState("");
-  const [ whoami, setWhoami, backendActor, setBackendActor, assetPfx, setAssetPfx ] = useContext(myContext);
+  // const [ whoami, setWhoami, backendActor, setBackendActor, assetPfx, setAssetPfx ] = useContext(myContext);
+  const backendActor = getBackendActor();
+  const whoami = "2vxsx-fae";
 
   const onSubmit = () => {
       let vals = {}

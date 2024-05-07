@@ -37,7 +37,9 @@ export const NewDossier = () => {
   const [tipoOpera, setTipoOpera] = useState("");
   const [luogoOpera, setLuogoOpera] = useState("");
   const [autore, setAutore] = useState("");
-  const [ whoami, setWhoami, backendActor, setBackendActor, assetPfx, setAssetPfx ] = useContext(myContext);
+  // const [ whoami, setWhoami, backendActor, setBackendActor, assetPfx, setAssetPfx ] = useContext(myContext);
+  const backendActor = getBackendActor();
+  const whoami = "2vxsx-fae";
 
   const appAlert = useCallback((text) => {
     alert(text);

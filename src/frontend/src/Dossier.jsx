@@ -56,7 +56,8 @@ export const Dossier = () => {
   const [application, setApplication] = useGlobalState("application");
   const [username, setusername] = useGlobalState("username");
   const [trueidentity, setIdentity] = useGlobalState("identity");
-  const [ whoami, setWhoami, backendActor, setBackendActor, assetPfx, setAssetPfx ] = useContext(myContext);
+  // const [ whoami, setWhoami, backendActor, setBackendActor, assetPfx, setAssetPfx ] = useContext(myContext);
+  const backendActor = getBackendActor();
 
 
   useEffect(() => {
@@ -86,7 +87,7 @@ export const Dossier = () => {
           console.error(error);
           alert(error.message ? error.message : JSON.stringify(error));
         });
-  }, [t, whoami]);
+  }, [t]);
 
   const handleChangePubblici = () => {
     setCheckedPubblici((prev) => !prev);

@@ -48,7 +48,7 @@ import { backend } from "../../declarations/backend";
  * @param {string} dossier_id id del dossier a cui appartiene il documento, arriva nella URl, non come props
  */
 export const NewDocument = (props) => {
-    console.log("NewDocument, whoami: ", checkLoggedUser());
+    // console.log("NewDocument, whoami: ", checkLoggedUser());
 
   const newDossierInfo = props.newDossierInfo;
   const navigate = useNavigate();
@@ -98,7 +98,9 @@ export const NewDocument = (props) => {
   const appAlert = useCallback((text) => {
     alert(text);
   }, []);
-  const [ whoami, setWhoami, backendActor, setBackendActor, assetPfx, setAssetPfx ] = useContext(myContext);
+  // const [ whoami, setWhoami, backendActor, setBackendActor, assetPfx, setAssetPfx ] = useContext(myContext);
+  const backendActor = getBackendActor();
+  const whoami = "2vxsx-fae";
 
   const onSubmit = (vals) => {
     console.log("Entro onSubmit: " + JSON.stringify(vals));

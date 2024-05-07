@@ -36,8 +36,9 @@ export const DossierDetail = () => {
   const [docs, setDocs] = useState([]); //elenco documenti relativi a dossier_id
   const [doc_bc_sync, setDoc_bc_sync] = useState(true);
   const [application, setApplication] = useGlobalState("application");
-  const [ whoami, backendActor ] = useContext(myContext);
-  // const [ whoami, setWhoami, backendActor, setBackendActor, assetPfx, setAssetPfx ] = useContext(myContext);
+  // const [ whoami, backendActor ] = useContext(myContext);
+  const backendActor = getBackendActor();
+  const whoami = "2vxsx-fae";
 
   const { t } = useTranslation(["translation", "documento", "dossier"]);
   const { control, register, handleSubmit, errors } = useForm();
@@ -69,7 +70,7 @@ export const DossierDetail = () => {
     if (!dossier_id) return;
     if (backendActor === null) {
         console.log("DossierDetail backendActor null:", JSON.stringify(backendActor));
-        console.log("DossierDetail username null:", JSON.stringify(whoami));
+        // console.log("DossierDetail username null:", JSON.stringify(whoami));
         console.log("DossierDetail backend null:", JSON.stringify(backend));
         return;
       // navigate("/login");
@@ -97,7 +98,7 @@ export const DossierDetail = () => {
       console.log("navigo su /login");
       navigate("/login");
     } else {
-      backend
+      backendActor
         .documenti_query(QP)
         .then((Ok_data) => {
           console.log("DossierDetail documenti_query returns: ", JSON.stringify(Ok_data));
@@ -300,6 +301,7 @@ export const DossierDetail = () => {
 
   console.log("dossierInfo: ",dossierInfo)
   console.log("application:",application)
+  // console.log("whoami:",whoami)
   return (
     <div>
       <Header />

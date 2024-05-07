@@ -42,7 +42,9 @@ export const Purchase = (props) => {
   const [count, setCount] = useState("0");
   const [amount, setAmount] = useState("");
   const cartridge_count_list = [ "1", "2", "3"]
-  const [ whoami, setWhoami, backendActor, setBackendActor, assetPfx, setAssetPfx ] = useContext(myContext);
+  // const [ whoami, setWhoami, backendActor, setBackendActor, assetPfx, setAssetPfx ] = useContext(myContext);
+  const backendActor = getBackendActor();
+  const whoami = "2vxsx-fae";
 
   const ComputeAmount = (v) => {
       console.log("Comopute am: ", v);

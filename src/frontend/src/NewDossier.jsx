@@ -16,6 +16,7 @@ import { Upload } from "./Upload";
 import { backend } from "../../declarations/backend";
 import { myContext } from "./components/MyContext";
 import { getBackendActor } from "./SignIn";
+import { useAuth } from "./auth/use-auth-client";
 
 export const NewDossier = () => {
   const navigate = useNavigate();
@@ -37,9 +38,9 @@ export const NewDossier = () => {
   const [tipoOpera, setTipoOpera] = useState("");
   const [luogoOpera, setLuogoOpera] = useState("");
   const [autore, setAutore] = useState("");
-  // const [ whoami, setWhoami, backendActor, setBackendActor, assetPfx, setAssetPfx ] = useContext(myContext);
-  const backendActor = getBackendActor();
-  const whoami = "2vxsx-fae";
+  // const [ hoami, setWhoami, backendActor, setBackendActor, assetPfx, setAssetPfx ] = useContext(myContext);
+  const { backendActor, principal } = useAuth();
+  // const backendActor = getBackendActor();
 
   const appAlert = useCallback((text) => {
     alert(text);
@@ -148,6 +149,7 @@ export const NewDossier = () => {
 
   console.log("newDossierInfo: ", JSON.stringify(newDossierInfo));
   console.log("newDossierInfo: ", JSON.stringify(newDossierInfo.autori));
+  console.log("princiapl: ", principal.toText());
   return (
     <div>
       <Header />

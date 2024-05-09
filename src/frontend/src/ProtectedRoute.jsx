@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Navigate, Outlet, useNavigate } from "react-router-dom";
-import Grid from "@mui/material/Grid";
-import { checkLoggedUser } from "./SignIn";
+import { useAuth, AuthProvider } from "./auth/use-auth-client";
 
 export const ProtectedRoute = () => {
-  const navigate = useNavigate();
-  let username = checkLoggedUser();
-  if (username === "") {
-    console.log("ProtectedRoute No Auth");
-    navigate("/login");
-  }
-  // console.log("ProtectedRoute username: ", username);
-  return <Outlet />;
+    const { isAuthenticated, identity , principal} = useAuth();
+    if (isAuthenticated) {
+        console.log(`ProtectedRoute isAuthenticated ${isAuthenticated}, principal ${principal.toText()}`);
+    } else {
+        console.log(`ProtectedRoute isAuthenticated ${isAuthenticated}`);
+    }
+
+    return 
+        isAuthenticated ? 
+            <Outlet /> : 
+            <LoggedOut /> 
 };
+
+// auth.token ? <Outlet/> : <Navigate to='/login'/>

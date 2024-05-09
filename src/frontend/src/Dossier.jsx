@@ -22,8 +22,9 @@ import InVisionDialog from "./components/InVisionDialog";
 import { myContext } from "./components/MyContext";
 import { getBackendActor } from "./SignIn";
 // import { css } from "@emotion/core";
-import { backend } from "../../declarations/backend";
+// import { backend } from "../../declarations/backend";
 import { canisterId } from "../../declarations/uploads";
+import { useAuth } from "./auth/use-auth-client";
 
 // import {Ed25519KeyIdentity} from '@dfinity/identity';
 // import {HttpAgent} from '@dfinity/agent';
@@ -41,8 +42,9 @@ export const Dossier = () => {
     asset_pfx = `http://${canisterId}.localhost:4943`;
   }
 
-  // console.log("asset_pfx :", asset_pfx);
+  console.log("Dossier asset_pfx :", asset_pfx);
 
+  const { backendActor, logout } = useAuth();
   const navigate = useNavigate();
   const { handleSubmit } = useForm();
   const { t } = useTranslation(["dossier"]);
@@ -57,16 +59,25 @@ export const Dossier = () => {
   const [username, setusername] = useGlobalState("username");
   const [trueidentity, setIdentity] = useGlobalState("identity");
   // const [ whoami, setWhoami, backendActor, setBackendActor, assetPfx, setAssetPfx ] = useContext(myContext);
-  const backendActor = getBackendActor();
+  // const backendActor = getBackendActor();
 
 
   useEffect(() => {
       console.log("useEffect entro: ");
 
-    if (backendActor == null) { 
+    if (backendActor === null) { 
         console.log("Dossier, backendActor null");
         return; 
     }
+    if (backendActor === "") { 
+        console.log("Dossier, backendActor empty");
+        return; 
+    }
+    if (backendActor == "2vxsx-fae") { 
+        console.log("Dossier, backendActor 2vxsx-fae");
+        return; 
+    }
+    console.log("Dossier, backendActor: ", backendActor);
     let QP = {
       offset: 0,
       limit: 50,
@@ -87,7 +98,7 @@ export const Dossier = () => {
           console.error(error);
           alert(error.message ? error.message : JSON.stringify(error));
         });
-  }, [t]);
+  }, [t, backendActor]);
 
   const handleChangePubblici = () => {
     setCheckedPubblici((prev) => !prev);

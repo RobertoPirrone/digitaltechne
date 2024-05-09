@@ -9,7 +9,9 @@ import { Dossier } from "./Dossier";
 import { DossierDetail } from "./DossierDetail";
 import { Home } from "./Home";
 import { LandingPage } from "./LandingPage";
-import { Login, Logout } from "./SignIn";
+// import { Login, Logout } from "./SignIn";
+import LoggedOut from "./auth/LoggedOut";
+import {Logout} from "./auth/Logout";
 import { JsonCompare } from "./JsonCompare";
 import { Manual } from "./Manual";
 import { NewDocument } from "./NewDocument";
@@ -19,30 +21,20 @@ import { Purchase } from "./Purchase";
 import { UserRoles } from "./UserRoles";
 import { VerifyMark } from "./VerifyMark";
 import { theme } from "./components/theme";
-import MyContext from "./components/MyContext";
 import "./App.css";
+import { useAuth, AuthProvider } from "./auth/use-auth-client";
 
 import { backend } from "declarations/backend";
 
 function App() {
-  const [greeting, setGreeting] = useState("");
-
-  function handleSubmit(event) {
-    event.preventDefault();
-    const name = event.target.elements.name.value;
-    backend.greet(name).then((greeting) => {
-      setGreeting(greeting);
-    });
-    return false;
-  }
+  const { isAuthenticated, identity } = useAuth();
 
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
-      <MyContext>
+      {isAuthenticated ? 
         <Router>
           <Routes>
-            <Route element={<ProtectedRoute />}>
               <Route path="/artwork_mark/:dossierdetail" element={<ArtworkMark />} />
               <Route path="/cartridge_insert" element={<CartridgeInsert />} />
               <Route path="/home" element={<Home />} />
@@ -56,15 +48,19 @@ function App() {
               <Route path="/purchase" element={<Purchase />} />
               <Route path="/user_roles" element={<UserRoles />} />
               <Route path="/verify_mark/:dossierdetail" element={<VerifyMark />} />
-            </Route>
-            <Route path="/login" element={<Login />} />
+            <Route path="/login" element={<LoggedOut />} />
             <Route path="/logout" element={<Logout />} />
             <Route path="/" element={<LandingPage />} />
           </Routes>
         </Router>
-      </MyContext>
+
+          : <LoggedOut />}
       </div>
     </ThemeProvider>
   );
 }
-export default App;
+export default () => (
+    <AuthProvider>
+    <App />
+    </AuthProvider>
+);

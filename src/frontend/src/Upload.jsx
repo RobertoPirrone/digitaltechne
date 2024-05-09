@@ -6,8 +6,10 @@ import mime from "mime";
 import { v4 as uuidv4 } from 'uuid';
 
 import { canisterId } from "../../declarations/uploads";
+import { useAuth } from "./auth/use-auth-client";
 
 export const Upload = (props) => {
+  const {principal, identity} = useAuth();
   console.log("Upload: ", JSON.stringify(props));
   let asset = props.asset;
   let setAsset = props.setAsset;
@@ -20,9 +22,11 @@ export const Upload = (props) => {
     show = props.show;
   }
   let setDisabledButs = props.setDisabledButs;
+    if (false) {
   // Hardcoded principal: 535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe
   // Should be replaced with authentication method e.g. Internet Identity when deployed on IC
   const identity = Ed25519KeyIdentity.generate(new Uint8Array(Array.from({ length: 32 }).fill(0)));
+    }
   const isLocal = !window.location.host.endsWith("icp0.io");
   const [progress, setProgress] = useState(null);
 
@@ -33,6 +37,7 @@ export const Upload = (props) => {
     asset_pfx = `http://${canisterId}.localhost:4943`;
   }
   console.log("asset_pfx: ", asset_pfx);
+  console.log("asset_pfx principal: ", principal.toText());
 
   // Create asset manager instance for above asset canister
   // const assetManager = new AssetManager({canisterId, agent});

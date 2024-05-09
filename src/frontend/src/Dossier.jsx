@@ -44,7 +44,7 @@ export const Dossier = () => {
 
   console.log("Dossier asset_pfx :", asset_pfx);
 
-  const { backendActor, logout } = useAuth();
+  const { backendActor, principal } = useAuth();
   const navigate = useNavigate();
   const { handleSubmit } = useForm();
   const { t } = useTranslation(["dossier"]);

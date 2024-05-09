@@ -18,6 +18,7 @@ import { myContext } from "./components/MyContext";
 import { dmy_hms, prettyJson } from "./Utils";
 import { backend } from "../../declarations/backend";
 import { getBackendActor } from "./SignIn";
+import { useAuth } from "./auth/use-auth-client";
 
 import { Ed25519KeyIdentity } from "@dfinity/identity";
 import { HttpAgent } from "@dfinity/agent";
@@ -26,6 +27,7 @@ let dossier_id = "";
 
 export const DossierDetail = () => {
 
+  const { backendActor, whoami } = useAuth();
   const navigate = useNavigate();
   const [showjson, setShowjson] = useState(false);
   const [disabledButs, setDisabledButs] = useState(false);
@@ -37,8 +39,8 @@ export const DossierDetail = () => {
   const [doc_bc_sync, setDoc_bc_sync] = useState(true);
   const [application, setApplication] = useGlobalState("application");
   // const [ whoami, backendActor ] = useContext(myContext);
-  const backendActor = getBackendActor();
-  const whoami = "2vxsx-fae";
+  // const backendActor = getBackendActor();
+  // const whoami = "2vxsx-fae";
 
   const { t } = useTranslation(["translation", "documento", "dossier"]);
   const { control, register, handleSubmit, errors } = useForm();
@@ -300,7 +302,7 @@ export const DossierDetail = () => {
 
   console.log("dossierInfo: ",dossierInfo)
   console.log("application:",application)
-  // console.log("whoami:",whoami)
+  console.log("whoami:",whoami)
   return (
     <div>
       <Header />

@@ -12,10 +12,12 @@ import { DTGrow, DTFooter } from "./components/useStyles";
 import { myContext } from "./components/MyContext";
 import { DnaFile } from "./components/DnaFile";
 import { MostSubmitButton, MyAutocomplete } from "./components/MostComponents";
-import { getBackendActor } from "./SignIn";
+// import { getBackendActor } from "./SignIn";
+import { useAuth } from "./auth/use-auth-client";
 
 export const VerifyMark = (props) => {
     const navigate = useNavigate();
+  const { backendActor, logout } = useAuth();
   let react_router_location = useLocation();
   console.log("DossierDetail react_router_location: " + JSON.stringify(react_router_location));
   let params = useParams();
@@ -31,14 +33,21 @@ export const VerifyMark = (props) => {
   }
   const { t } = useTranslation(["dossier"]);
   const [disabledButs, setDisabledButs] = useState(true);
-    const [dnaText, setDnaText] = useState("");
+    const [csvText, setCsvText] = useState("");
   const mark_position_list = [ "top_left", "top_center", "top_right", "center_left", "center_center", "center_right", "bottom_left", "bottom_center", "bottom_right"]
   const [markPosition, setMarkPosition] = useState("");
   const mark_side_list = [ "front", "back", "frame"]
   const [markSide, setMarkSide] = useState("");
   // const [ whoami, setWhoami, backendActor, setBackendActor, assetPfx, setAssetPfx ] = useContext(myContext);
-  const backendActor = getBackendActor();
-  const whoami = "2vxsx-fae";
+  // const backendActor = getBackendActor();
+  // const whoami = "2vxsx-fae";
+    const newLineExpression = /\r\n|\n\r|\n|\r/g;
+
+    const removeDuplicatedLines = (text) => {
+    return text.split(newLineExpression)
+        .filter((item, index, array) => array.indexOf(item) === index)
+        .join('\n');
+};
 
   const onSubmit = () => {
       let vals = {}
@@ -59,17 +68,22 @@ export const VerifyMark = (props) => {
         if (response) {
           setDisabledButs(true);
         console.log(response.artwork_marks);
-            let oldData= JSON.parse(response.artwork_marks[0].dna_text);
+            // let oldData= JSON.parse(response.artwork_marks[0].dna_text);
+            let oldData= response.artwork_marks[0].dna_text;
             console.log("oldData: ", oldData);
-            let newData= JSON.parse(dnaText);
+            // let newData= JSON.parse(dnaText);
+            let newData= csvText;
             console.log("newData: ", newData);
             console.log("oldData post: ", oldData);
             let pos = markSide + " " + markPosition;
-            newData.mark_position = { "mark_location": pos};
+            newData = newData.concat("\n", "mark_position,", pos);
             pos =  response.artwork_marks[0].mark_position;
-            oldData.mark_position = { "mark_location": pos};
+            oldData = oldData.concat("\n", "mark_position,",pos);
             console.log("newData post: ", newData);
-            navigate("/json_compare", { state: {oldData: oldData, newData: newData}, replace: true});
+            let data = oldData.concat(newData);
+            let diffs = removeDuplicatedLines(data);
+            console.log (diffs)
+            // navigate("/json_compare", { state: {oldData: oldData, newData: newData}, replace: true});
         } else {
           console.error(response);
           appAlert(response.error);
@@ -91,7 +105,7 @@ export const VerifyMark = (props) => {
       <h1>{t("VerifyMark")}</h1>
       <Container maxWidth="sm">
         <Typography variant="body1">Insert DNA</Typography>
-        <DnaFile setDisabledButs={setDisabledButs} setDnaText={setDnaText}/>
+        <DnaFile setDisabledButs={setDisabledButs} setCsvText={setCsvText}/>
             <Grid container spacing={1} alignItems="center">
                 <Grid item xs={6}> <span className="padding10">{t("MarkSide")} </span></Grid>
                 <Grid item xs={6}> <MyAutocomplete name="mark_side" required={true} label={t("mark_side")} options={mark_side_list} onChange={(e, v) => setMarkSide(v)} /> </Grid>

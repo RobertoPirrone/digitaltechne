@@ -27,6 +27,7 @@ import { getBackendActor } from "./SignIn";
 import { MyTextField, MyCheckbox, MyAutocomplete, MostSubmitButton, MostCheckbox, MostSelect, MostTextField } from "./components/MostComponents";
 import { backend } from "../../declarations/backend";
 import { getAssetPfx } from "./utils";
+import { useAuth } from "./auth/use-auth-client";
 
 export const ArtworkMark = (props) => {
   const asset_pfx = getAssetPfx();
@@ -42,8 +43,9 @@ export const ArtworkMark = (props) => {
   let tipodocumento_list = ["immagine", "titolo_proprietà"];
   const [cartridgeUuids, setCartridgeUuids] = useState([]);
   // const [ whoami, setWhoami, backendActor, setBackendActor, assetPfx, setAssetPfx ] = useContext(myContext);
-  const backendActor = getBackendActor();
-  const whoami = "2vxsx-fae";
+  const { backendActor, principal } = useAuth();
+  // const backendActor = getBackendActor();
+  // const whoami = "2vxsx-fae";
 
   useEffect(() => {
       backendActor.cartridge_use_available()

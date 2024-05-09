@@ -19,9 +19,11 @@ import { myContext } from "./components/MyContext";
 import { MyTextField, MostSubmitButton, MyAutocomplete } from "./components/MostComponents";
 import { getBackendActor } from "./SignIn";
 import { appAlert } from "./Utils";
+import { useAuth } from "./auth/use-auth-client";
 
 export const Purchase = (props) => {
     const navigate = useNavigate();
+  const { backendActor, logout } = useAuth();
   let react_router_location = useLocation();
   console.log("DossierDetail react_router_location: " + JSON.stringify(react_router_location));
   let params = useParams();
@@ -43,8 +45,8 @@ export const Purchase = (props) => {
   const [amount, setAmount] = useState("");
   const cartridge_count_list = [ "1", "2", "3"]
   // const [ whoami, setWhoami, backendActor, setBackendActor, assetPfx, setAssetPfx ] = useContext(myContext);
-  const backendActor = getBackendActor();
-  const whoami = "2vxsx-fae";
+  // const backendActor = getBackendActor();
+  // const whoami = "2vxsx-fae";
 
   const ComputeAmount = (v) => {
       console.log("Comopute am: ", v);

@@ -14,7 +14,8 @@ import { MyTextField, MyCheckbox, MyAutocomplete, MostSubmitButton, MostCheckbox
 import { DTRoot } from "./useStyles";
 
 export const DnaFile = (props) => {
-    const setDnaText = props.setDnaText;
+    const setCsvText = props.setCsvText;
+    const setJsonText = props.setJsonText;
     const setDisabledButs = props.setDisabledButs;
   const { control, register, handleSubmit, watch, formState: { errors }, } = useForm();
   const { t } = useTranslation();
@@ -23,7 +24,6 @@ export const DnaFile = (props) => {
   const [searchele, setSearchele] = useState(false);
   const [note, setNote] = useState("");
     const [file, setFile] = useState(null);
-  const [jsonData, setJsonData] = useState("");
 
 
     const gotXls = (e) => {
@@ -37,8 +37,11 @@ export const DnaFile = (props) => {
         const worksheet = workbook.Sheets[sheetName];
         const json = XLSX.utils.sheet_to_json(worksheet);
           console.log("json: ", json);
-        setJsonData(JSON.stringify(json, null, 2));
-        setDnaText(JSON.stringify(json, null, 2));
+        const csv = XLSX.utils.sheet_to_csv(worksheet);
+          console.log("csv: ", csv);
+          if (setJsonText) 
+            setJsonText(JSON.stringify(json, null, 2));
+        setCsvText(csv);
       };
       reader.readAsBinaryString(e.target.files[0]);
         setDisabledButs(false);

@@ -117,11 +117,11 @@ export default function HelpDialog(props) {
   let iw = 800
   let ih = 600
   if(size) {
-  console.log("size: " + JSON.stringify(size));
+  // console.log("size: " + JSON.stringify(size));
     iw = size[0]
     ih = size[1]
   }
-  console.log(`iw ${iw}, ih ${ih}`);
+  // console.log(`iw ${iw}, ih ${ih}`);
 
   //log.debug("FormDialog luogo ",luogo);
 

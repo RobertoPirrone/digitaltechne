@@ -19,21 +19,24 @@ import { myContext } from "./components/MyContext";
 import { Upload } from "./Upload";
 import { getBackendActor } from "./SignIn";
 import { backend } from "../../declarations/backend";
+import { useAuth } from "./auth/use-auth-client";
 
 export const CartridgeInsert = () => {
   const { control, register, handleSubmit, watch, formState: { errors }, } = useForm();
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [pdfAsset, setPdfAsset] = useState({});
+  const [pdfAsset, setPdfAsset] = useState("");
   const [disabledButs, setDisabledButs] = useState(true);
   const [searchele, setSearchele] = useState(false);
   const [note, setNote] = useState("");
   const [dnaText, setDnaText] = useState("");
   const [file, setFile] = useState(null);
   const [jsonData, setJsonData] = useState("");
+  const [csvData, setCsvData] = useState("");
   // const [ whoami, setWhoami, backendActor, setBackendActor, assetPfx, setAssetPfx ] = useContext(myContext);
-  const backendActor = getBackendActor();
-  const whoami = "2vxsx-fae";
+  // const backendActor = getBackendActor();
+  // const whoami = "2vxsx-fae";
+  const { backendActor, logout } = useAuth();
 
 
     const gotXls = (e) => {
@@ -47,7 +50,10 @@ export const CartridgeInsert = () => {
         const worksheet = workbook.Sheets[sheetName];
         const json = XLSX.utils.sheet_to_json(worksheet);
           console.log("json: ", json);
+        const csv = XLSX.utils.sheet_to_csv(worksheet);
+          console.log("csv: ", csv);
         setJsonData(JSON.stringify(json, null, 2));
+        setCsvData(csv);
       };
       reader.readAsBinaryString(e.target.files[0]);
         setDisabledButs(false);
@@ -59,8 +65,8 @@ export const CartridgeInsert = () => {
       return;
     }
     vals.uuid = uuidv4();
-    vals.dna_text = jsonData;
-      if (pdfAsset == {} ) {
+    vals.dna_text = csvData;
+      if (pdfAsset == "" ) {
         vals.dna_file_asset = "NO file";
       } else {
         vals.dna_file_asset = pdfAsset.key;

@@ -18,6 +18,7 @@ import { DTRoot } from "./components/useStyles";
 import { myContext } from "./components/MyContext";
 import { Upload } from "./Upload";
 import { getBackendActor } from "./SignIn";
+import { DnaFile } from "./components/DnaFile";
 import { backend } from "../../declarations/backend";
 import { useAuth } from "./auth/use-auth-client";
 
@@ -33,6 +34,8 @@ export const CartridgeInsert = () => {
   const [file, setFile] = useState(null);
   const [jsonData, setJsonData] = useState("");
   const [csvData, setCsvData] = useState("");
+  const [csvText, setCsvText] = useState("");
+  const [jsonText, setJsonText] = useState("");
   // const [ whoami, setWhoami, backendActor, setBackendActor, assetPfx, setAssetPfx ] = useContext(myContext);
   // const backendActor = getBackendActor();
   // const whoami = "2vxsx-fae";
@@ -52,20 +55,16 @@ export const CartridgeInsert = () => {
           console.log("json: ", json);
         const csv = XLSX.utils.sheet_to_csv(worksheet);
           console.log("csv: ", csv);
-        setJsonData(JSON.stringify(json, null, 2));
-        setCsvData(csv);
+        setJsonText(JSON.stringify(json, null, 2));
+        setCsvText(csv);
       };
       reader.readAsBinaryString(e.target.files[0]);
         setDisabledButs(false);
     }
 
   const onSubmit = (vals) => {
-    if (! file ) {
-      alert("File Xls Analisi non scelto");
-      return;
-    }
     vals.uuid = uuidv4();
-    vals.dna_text = csvData;
+    vals.dna_text = csvText;
       if (pdfAsset == "" ) {
         vals.dna_file_asset = "NO file";
       } else {
@@ -110,9 +109,8 @@ export const CartridgeInsert = () => {
       <Container component="main" maxWidth="md">
         <div className={DTRoot}>
             <Grid container spacing={1} alignItems="center">
-                <Grid item xs={6}> <span className="padding10">{t("DnaFileXls")}</span></Grid>
-                <Grid item xs={6} > <input type="file" accept=".xls,.xlsx" onChange={gotXls} /> </Grid>
 
+        <DnaFile setDisabledButs={setDisabledButs} setCsvText={setCsvText} setJsonText={setJsonText}/>
                 <Grid item xs={6}> <span className="padding10">{t("DnaFilePdf")}</span></Grid>
                 <Grid item xs={6}> <Upload accept={"application/pdf"} asset={pdfAsset} setAsset={setPdfAsset} setDisabledButs={setDisabledButs} show={false} /> </Grid>
                 <Grid item xs={12}> {" "} &nbsp; </Grid>

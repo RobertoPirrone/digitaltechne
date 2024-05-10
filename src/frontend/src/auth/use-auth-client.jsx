@@ -38,6 +38,7 @@ export const useAuthClient = (options = defaultOptions) => {
   const [authClient, setAuthClient] = useState(null);
   const [identity, setIdentity] = useState(null);
   const [principal, setPrincipal] = useState(null);
+  const [whoami, setWhoami] = useState(null);
   const [backendActor, setBackendActor] = useState(null);
 
   useEffect(() => {
@@ -69,6 +70,7 @@ export const useAuthClient = (options = defaultOptions) => {
 
     const principal = identity.getPrincipal();
     setPrincipal(principal);
+    setWhoami(principal.toText());
 
     setAuthClient(client);
 
@@ -94,6 +96,7 @@ export const useAuthClient = (options = defaultOptions) => {
     identity,
     principal,
     backendActor,
+    whoami
   };
 };
 

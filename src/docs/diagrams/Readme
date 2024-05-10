@@ -1,0 +1,7 @@
+# https://diagrams.mingrammer.com/
+
+brew install graphviz
+pip install diagrams
+
+
+python digitaltechne.py

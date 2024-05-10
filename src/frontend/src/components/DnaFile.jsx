@@ -37,10 +37,10 @@ export const DnaFile = (props) => {
         const worksheet = workbook.Sheets[sheetName];
         const json = XLSX.utils.sheet_to_json(worksheet);
           console.log("json: ", json);
-        const csv = XLSX.utils.sheet_to_csv(worksheet);
+        const csv = XLSX.utils.sheet_to_csv(worksheet,{FS: "\t", trim: true});
           console.log("csv: ", csv);
           if (setJsonText) 
-            setJsonText(JSON.stringify(json, null, 2));
+            setJsonText(json);
         setCsvText(csv);
       };
       reader.readAsBinaryString(e.target.files[0]);

@@ -36,9 +36,9 @@ export const DnaFile = (props) => {
         const sheetName = workbook.SheetNames[1];
         const worksheet = workbook.Sheets[sheetName];
         const json = XLSX.utils.sheet_to_json(worksheet);
-          console.log("json: ", json);
-        const csv = XLSX.utils.sheet_to_csv(worksheet,{FS: "\t", trim: true});
-          console.log("csv: ", csv);
+        // console.log("json: ", json);
+        const csv = XLSX.utils.sheet_to_csv(worksheet,{FS: "\t", trim: true });
+        // console.log("csv: ", csv);
           if (setJsonText) 
             setJsonText(json);
         setCsvText(csv);

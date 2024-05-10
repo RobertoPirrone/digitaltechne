@@ -14,7 +14,7 @@ create_table() {
     fields="$2"
 
     echo "--- create table $table"
-    sql_cmd=$(printf "drop table %s" $table)
+    sql_cmd=$(printf "drop table if exists %s" $table)
     dfx canister call $network backend execute "$sql_cmd"
 
     fields=$(echo $fields)
@@ -92,8 +92,6 @@ fields='
     tipo_documento TEXT NOT NULL
     '
     create_table documents "$fields"
-
-    exit 0
 
 echo "--- create table tipoopera_codes"
 fields='

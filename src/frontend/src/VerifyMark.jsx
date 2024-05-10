@@ -34,6 +34,7 @@ export const VerifyMark = (props) => {
   const { t } = useTranslation(["dossier"]);
   const [disabledButs, setDisabledButs] = useState(true);
     const [csvText, setCsvText] = useState("");
+    const [jsonText, setJsonText] = useState("");
   const mark_position_list = [ "top_left", "top_center", "top_right", "center_left", "center_center", "center_right", "bottom_left", "bottom_center", "bottom_right"]
   const [markPosition, setMarkPosition] = useState("");
   const mark_side_list = [ "front", "back", "frame"]
@@ -41,13 +42,38 @@ export const VerifyMark = (props) => {
   // const [ whoami, setWhoami, backendActor, setBackendActor, assetPfx, setAssetPfx ] = useContext(myContext);
   // const backendActor = getBackendActor();
   // const whoami = "2vxsx-fae";
-    const newLineExpression = /\r\n|\n\r|\n|\r/g;
+    function Csv2Json(csvText){
+        //Split all the text into seperate lines on new lines and carriage return feeds
+        var allTextLines = csvText.split(/\r\n|\n/);
+        //Split per line on tabs and commas
+        var headers = allTextLines[0].split(/\t|/);
+        console.log("headers: ", headers);
+        var lines = [];
+        var locations = [];
 
-    const removeDuplicatedLines = (text) => {
-    return text.split(newLineExpression)
-        .filter((item, index, array) => array.indexOf(item) === index)
-        .join('\n');
-};
+        for (var i=1; i<allTextLines.length; i++) {
+            var data = allTextLines[i].split(/\t|,/);
+            console.log(data);
+
+            console.log(data.length, headers.length);
+            if (data.length == headers.length) {
+
+            var location = {"Locus":data[0], "Alleli":data[1], "Esempio di un profilo DNA":data[5]};
+            locations.push(location);
+
+            }
+
+        }
+        return locations;
+    }
+
+    const intersect = (first_array, second_array) => {
+        let new_array = first_array.
+            filter( (element) => 
+                !second_array.includes(element)
+        );
+        return new_array;
+    };
 
   const onSubmit = () => {
       let vals = {}
@@ -68,22 +94,27 @@ export const VerifyMark = (props) => {
         if (response) {
           setDisabledButs(true);
         console.log(response.artwork_marks);
-            // let oldData= JSON.parse(response.artwork_marks[0].dna_text);
-            let oldData= response.artwork_marks[0].dna_text;
-            console.log("oldData: ", oldData);
-            // let newData= JSON.parse(dnaText);
-            let newData= csvText;
-            console.log("newData: ", newData);
+            // su DB in formato CSV
+            let csvOldData= response.artwork_marks[0].dna_text;
+            // console.log("csvOldData: ", csvOldData);
+            let oldData = Csv2Json(csvOldData);
+            let pos =  response.artwork_marks[0].mark_position;
+            oldData.mark_position = { "mark_location": pos};
             console.log("oldData post: ", oldData);
-            let pos = markSide + " " + markPosition;
-            newData = newData.concat("\n", "mark_position,", pos);
-            pos =  response.artwork_marks[0].mark_position;
-            oldData = oldData.concat("\n", "mark_position,",pos);
+
+            // let newData= JSON.parse(dnaText);
+            let newData= jsonText;
+            console.log("newData: ", newData);
+            pos = markSide + " " + markPosition;
+            newData.mark_position = { "mark_location": pos};
+
             console.log("newData post: ", newData);
-            let data = oldData.concat(newData);
-            let diffs = removeDuplicatedLines(data);
-            console.log (diffs)
-            // navigate("/json_compare", { state: {oldData: oldData, newData: newData}, replace: true});
+            // let data = oldData.concat(newData);
+            // let diffs = removeDuplicatedLines(data);
+            // console.log (diffs)
+            let diffs = intersect(oldData, newData);
+            console.log ("intersect: ", diffs)
+            navigate("/json_compare", { state: {oldData: oldData, newData: newData}});
         } else {
           console.error(response);
           appAlert(response.error);
@@ -105,7 +136,7 @@ export const VerifyMark = (props) => {
       <h1>{t("VerifyMark")}</h1>
       <Container maxWidth="sm">
         <Typography variant="body1">Insert DNA</Typography>
-        <DnaFile setDisabledButs={setDisabledButs} setCsvText={setCsvText}/>
+        <DnaFile setDisabledButs={setDisabledButs} setCsvText={setCsvText} setJsonText={setJsonText}/>
             <Grid container spacing={1} alignItems="center">
                 <Grid item xs={6}> <span className="padding10">{t("MarkSide")} </span></Grid>
                 <Grid item xs={6}> <MyAutocomplete name="mark_side" required={true} label={t("mark_side")} options={mark_side_list} onChange={(e, v) => setMarkSide(v)} /> </Grid>

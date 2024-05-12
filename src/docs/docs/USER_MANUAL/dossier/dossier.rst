@@ -14,4 +14,3 @@ A green check icon will indicate that the DNA ink has already been placed on the
 .. image:: ./dossier.png
   :width: 400
   :alt: Dossier
-

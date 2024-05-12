@@ -53,5 +53,5 @@ latex_elements = {
      # Latex figure (float) alignment
      #
      # 'figure_align': 'htbp',
-    'extraclassoptions': 'openany',
+    'extraclassoptions': ',openany,oneside',
 }

@@ -39,7 +39,7 @@ export const CartridgeInsert = () => {
   // const [ whoami, setWhoami, backendActor, setBackendActor, assetPfx, setAssetPfx ] = useContext(myContext);
   // const backendActor = getBackendActor();
   // const whoami = "2vxsx-fae";
-  const { backendActor, logout } = useAuth();
+  const { backendActor, whoami } = useAuth();
 
 
     const gotXls = (e) => {
@@ -74,22 +74,23 @@ export const CartridgeInsert = () => {
     vals.note = note;
 
     vals.insert_time = new Date();
-    vals.username = "proprio io";
+    vals.username = whoami;
 
     setDisabledButs(true);
     console.log("onSubmit: ", JSON.stringify(vals));
     backendActor
       .cartridge_insert(JSON.stringify(vals))
-      .then((Ok_data) => {
-        console.log("cartridge_insert returns: ", JSON.stringify(Ok_data));
-        let response = JSON.parse(Ok_data.Ok);
-        console.log(response);
-        if (response) {
+      .then((Ret_data) => {
+        console.log("cartridge_insert returns: ", JSON.stringify(Ret_data));
+        if ("Ok" in Ret_data) { 
+          let response = JSON.parse(Ret_data.Ok);
+          console.log(response);
           setDisabledButs(true);
           navigate("/dossier");
         } else {
-          console.error(response);
-          appAlert(response.error);
+          let err = Ret_data.Err;
+          console.error(err);
+          appAlert(err);
           setDisabledButs(false);
         }
       })

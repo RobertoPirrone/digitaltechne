@@ -22,6 +22,18 @@ create_table() {
     # echo $sql_cmd
     dfx canister call $network backend execute "$sql_cmd"
 }
+echo "--- create table rbac"
+fields='
+    id INTEGER PRIMARY KEY,
+    principal TEXT NOT NULL,
+    friendly_name TEXT,
+    view_opera_ok BOOLEAN,
+    add_opera_ok BOOLEAN,
+    associate_dna_ok BOOLEAN,
+    add_dna_ok BOOLEAN
+    '
+    create_table rbac "$fields"
+    exit 0
 
 fields='
     id INTEGER PRIMARY KEY,                               
@@ -106,7 +118,6 @@ fields='
     dfx canister call $network backend execute 'insert into tipoopera_code (code) values ("COLOUR DIGITAL_PHOTO");'
     dfx canister call $network backend execute 'insert into tipoopera_code (code) values ("CANVASS");'
     dfx canister call $network backend execute 'insert into tipoopera_code (code) values ("PAPER");'
-
 
 exit 0 
 echo "--- insert dossier"

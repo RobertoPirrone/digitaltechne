@@ -75,9 +75,14 @@ pub fn cartridge_query(params: CartridgeQueryParams) -> JsonResult {
 pub fn cartridge_insert(jv: String) -> ExecResult {
     ic_cdk::println!("cartridge_insert input: {jv} ");
     let d: Cartridge = serde_json::from_str(&jv).unwrap();
-    let conn = ic_sqlite::CONN.lock().unwrap();
     let caller = ic_cdk::caller().to_string();
     ic_cdk::println!("caller : {caller} ");
+    let checked_caller: Rbac = check_caller()?;
+    ic_cdk::println!("checked_caller : {:?} ", checked_caller);
+    if (! checked_caller.add_dna_ok) {
+        return Err(MyError::CanisterError {message: format!("{:?}", "cartridge_insert: user not allowed") })
+    }
+    let conn = ic_sqlite::CONN.lock().unwrap();
 
     let sql = format!("insert into cartridge \
         (uuid, dna_text, dna_file_asset, inserted_by, lab_name, insert_time, note) 

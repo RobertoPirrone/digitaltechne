@@ -84,20 +84,26 @@ export const Dossier = () => {
       // autore: 'Elisabetta Villa'
     };
       backendActor.dossier_query(QP)
-        .then((Ok_data) => {
-          let data = JSON.parse(Ok_data.Ok);
-          console.log("data returns: ", JSON.stringify(data));
-          // console.log("raw data returns: ",data);
-          setDossierPersonali(data.ret_owner);
-          // setDossierPersonaliMaster( data.ret_owner.filter((riga) => riga.master_dossier_id === null),);
-          setDossierPubblici(data.ret_public);
-          // setDossierVisione(data.ret_vision);
-          setLoading(false);
-        })
-        .catch(function (error) {
-          console.error(error);
-          alert(error.message ? error.message : JSON.stringify(error));
-        });
+          .then((Ret_data) => {
+            console.log("cartridge_insert returns: ", JSON.stringify(Ret_data));
+            if ("Ok" in Ret_data) { 
+              let response = JSON.parse(Ret_data.Ok);
+              console.log(response);
+              setDossierPersonali(response.ret_owner);
+              setDossierPubblici(response.ret_public);
+              setLoading(false);
+            } else {
+              let err = Ret_data.Err;
+              console.error(err);
+              appAlert(err);
+              setDisabledButs(false);
+            }
+          })
+          .catch(function (error) {
+            console.error(error);
+            alert(error.message ? error.message : JSON.stringify(error));
+          });
+
   }, [t, backendActor]);
 
   const handleChangePubblici = () => {

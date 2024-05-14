@@ -134,6 +134,7 @@ export const Dossier = () => {
         );
       },
     },
+    { flex: 1, headerName: t("dossier:Owner"), field: "friendly_name" },
     { flex: 1, headerName: t("dossier:Autore"), field: "autore" },
     { flex: 1, headerName: t("dossier:NomeOpera"), field: "nomeopera" },
     { flex: 1, headerName: t("dossier:TipoOpera"), field: "tipoopera" },

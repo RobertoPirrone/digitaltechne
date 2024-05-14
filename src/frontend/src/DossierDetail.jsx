@@ -324,7 +324,7 @@ export const DossierDetail = () => {
                 </tr>
                 <tr>
                   <th>{t("documento:Proprietario")}</th>
-                  <td>{dossierInfo.inserted_by}</td>
+                  <td>{dossierInfo.friendly_name}</td>
                 </tr>
                 <tr>
                   <th>{t("dossier:nomeopera")}</th>

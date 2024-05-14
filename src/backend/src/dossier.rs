@@ -18,7 +18,8 @@ pub struct Dossier {
     private: bool,
     icon_uri: String,
     tipoopera: String,
-    has_artwork_mark: Option<bool>
+    has_artwork_mark: Option<bool>,
+    friendly_name: Option<String>
 }
 
 #[derive(CandidType, Debug, Serialize, Deserialize, Default)]
@@ -158,7 +159,8 @@ pub fn dossier_struct_query(sql: String ) -> Vec<Dossier> {
                                 private: row.get(7).unwrap(),
                                 icon_uri: row.get(8).unwrap(),
                                 tipoopera: row.get(9).unwrap(),
-                                has_artwork_mark: row.get(10).unwrap()
+                                has_artwork_mark: row.get(10).unwrap(), 
+                                friendly_name: row.get(11).unwrap()
                             };
 
                         dossiers.push(res_row)
@@ -176,8 +178,15 @@ pub fn dossier_struct_query(sql: String ) -> Vec<Dossier> {
 #[query]
 pub fn dossier_query(params: QueryParams) -> JsonResult {
     let caller = ic_cdk::caller().to_string();
-    let owner_sql = format!("select * from dossier where inserted_by = '{:}' and private = true limit {:?} offset {:?}", caller, params.limit, params.offset );
-    let public_sql = format!("select * from dossier where inserted_by = '{:}' and private = false limit {:?} offset {:?}", caller, params.limit, params.offset );
+    let checked_caller: Rbac = check_caller()?;
+    ic_cdk::println!("checked_caller : {:?} ", checked_caller);
+    if ! checked_caller.view_opera_ok {
+        return Err(MyError::CanisterError {message: format!("{:?}", "dossier_query: user not allowed") })
+    }
+    // let owner_sql = format!("select * from dossier where inserted_by = '{:}' and private = true limit {:?} offset {:?}", caller, params.limit, params.offset );
+    // let public_sql = format!("select * from dossier where inserted_by = '{:}' and private = false limit {:?} offset {:?}", caller, params.limit, params.offset );
+    let owner_sql = format!("select dossier.*, friendly_name from dossier left outer join rbac where inserted_by = principal and inserted_by = '{:}' and private = true limit {:?} offset {:?}", caller, params.limit, params.offset );
+    let public_sql = format!("select dossier.*, friendly_name from dossier left outer join rbac where inserted_by = principal and private = false limit {:?} offset {:?}", params.limit, params.offset );
     ic_cdk::println!("Query: {owner_sql} ");
 
     let owner_dossier_infos = dossier_struct_query(owner_sql.to_string());

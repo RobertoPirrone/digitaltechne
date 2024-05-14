@@ -79,7 +79,7 @@ pub fn cartridge_insert(jv: String) -> ExecResult {
     ic_cdk::println!("caller : {caller} ");
     let checked_caller: Rbac = check_caller()?;
     ic_cdk::println!("checked_caller : {:?} ", checked_caller);
-    if (! checked_caller.add_dna_ok) {
+    if ! checked_caller.add_dna_ok {
         return Err(MyError::CanisterError {message: format!("{:?}", "cartridge_insert: user not allowed") })
     }
     let conn = ic_sqlite::CONN.lock().unwrap();

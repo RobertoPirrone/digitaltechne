@@ -85,18 +85,19 @@ export const Dossier = () => {
     };
       backendActor.dossier_query(QP)
           .then((Ret_data) => {
-            console.log("cartridge_insert returns: ", JSON.stringify(Ret_data));
+            // console.log("dossier returns: ", JSON.stringify(Ret_data));
             if ("Ok" in Ret_data) { 
               let response = JSON.parse(Ret_data.Ok);
-              console.log(response);
+              console.log("dossier_query Ok response: ", response);
               setDossierPersonali(response.ret_owner);
               setDossierPubblici(response.ret_public);
               setLoading(false);
             } else {
               let err = Ret_data.Err;
+              console.log("dossier_query Err response: ", err);
               console.error(err);
               appAlert(err);
-              setDisabledButs(false);
+              setLoading(false);
             }
           })
           .catch(function (error) {

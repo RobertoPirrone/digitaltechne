@@ -38,13 +38,16 @@ pub struct ReturnDocumentsStruct {
 
 #[query]
 pub fn documenti_query(params: QueryDocumentsParams) -> JsonResult {
-    // devo anche restituire i dati del dossier
     let dossier_infos: Vec<Dossier> ;
     let id = params.dossieropera_id.clone();
-    let dossier_sql = format!("select * from dossier where id = {:?}",id);
-    // let dossier_sql = "select * from dossier";
-    ic_cdk::println!("Query: {dossier_sql} ");
 
+    // devo anche restituire i dati del dossier
+    let checked_caller: Rbac = check_caller()?;
+    ic_cdk::println!("checked_caller : {:?} ", checked_caller);
+    if ! checked_caller.view_opera_ok {
+        return Err(MyError::CanisterError {message: format!("{:?}", "dossier_query: user not allowed") })
+    }
+    let dossier_sql = format!("select dossier.*, friendly_name  from dossier left outer join rbac where inserted_by = principal and dossier.id = {:?}",id);
     dossier_infos = dossier_struct_query(dossier_sql.to_string());
     let dossier_info = dossier_infos[0].clone();
     ic_cdk::println!("dossier_info: {:?}", dossier_infos[0]);

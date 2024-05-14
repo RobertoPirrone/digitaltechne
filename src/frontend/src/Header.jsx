@@ -124,7 +124,6 @@ export function Header(props) {
       <Menu id="user-menu" anchorEl={anchorEl1} anchorOrigin={{ vertical: "top", horizontal: "right" }} transformOrigin={{ vertical: "top", horizontal: "right" }} 
         keepMounted open={Boolean(anchorEl1)} onClose={handleClose1} >
         <MenuItem disabled>{username}</MenuItem>
-        <MenuItem component={Link} to="/identityM" onClick={handleClose1}> {t("I tuoi dati")} </MenuItem>
         <MenuItem component={Link} to="/logout" onClick={handleClose1}> {t("Logout")} </MenuItem>
       </Menu>
 

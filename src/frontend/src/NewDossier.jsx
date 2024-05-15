@@ -14,14 +14,11 @@ import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { Upload } from "./Upload";
 import { backend } from "../../declarations/backend";
-import { myContext } from "./components/MyContext";
-import { getBackendActor } from "./SignIn";
 import { useAuth } from "./auth/use-auth-client";
 
 export const NewDossier = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useGlobalState("username");
-  // const [backendActor, setBackendActor] = useGlobalState("backendActor");
   const [application, setapplication] = useGlobalState("application");
   const { control, register, handleSubmit, watch, formState: { errors }, } = useForm();
   const [disabledButs, setDisabledButs] = useState(true);
@@ -38,7 +35,6 @@ export const NewDossier = () => {
   const [tipoOpera, setTipoOpera] = useState("");
   const [luogoOpera, setLuogoOpera] = useState("");
   const [autore, setAutore] = useState("");
-  // const [ hoami, setWhoami, backendActor, setBackendActor, assetPfx, setAssetPfx ] = useContext(myContext);
   const { backendActor, principal } = useAuth();
   // const backendActor = getBackendActor();
 

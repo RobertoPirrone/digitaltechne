@@ -1,7 +1,6 @@
 import React, { useContext, useState, useMemo, useEffect, useCallback } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import PropagateLoader from "react-spinners/PropagateLoader";
-// import { css } from "@emotion/core";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import { useForm } from "react-hook-form";
@@ -15,15 +14,11 @@ import { AssetManager } from "@dfinity/assets";
 import { useGlobalState } from "./state";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
-// import { FileUpload } from "./components/FileUpload";
 import { DocData } from "./components/DocData";
 import { DTRoot, DTSubmit } from "./components/useStyles";
-//import MyAxios, { check_response } from "./MyAxios";
 import Grid from "@mui/material/Grid";
 import { GoToHomePage } from "./components/OpusComponents";
-import { myContext } from "./components/MyContext";
 import { Upload } from "./Upload";
-import { getBackendActor } from "./SignIn";
 import { MyTextField, MyCheckbox, MyAutocomplete, MostSubmitButton, MostCheckbox, MostSelect, MostTextField } from "./components/MostComponents";
 import { backend } from "../../declarations/backend";
 import { getAssetPfx } from "./utils";
@@ -36,16 +31,12 @@ export const ArtworkMark = (props) => {
   console.log("ArtworkMark location: " + JSON.stringify(react_router_location));
   const dossierInfo = react_router_location.state.dossierInfo;
   console.log("dossierInfo: " + JSON.stringify(dossierInfo));
-  // let dossier_id = react_router_location.state.dossier_id;
   let  dossier_id = react_router_location.pathname.split("/")[2];
 
   let autore_list = ["pippo", "pluto"];
   let tipodocumento_list = ["immagine", "titolo_proprietà"];
   const [cartridgeUuids, setCartridgeUuids] = useState([]);
-  // const [ whoami, setWhoami, backendActor, setBackendActor, assetPfx, setAssetPfx ] = useContext(myContext);
   const { backendActor, principal } = useAuth();
-  // const backendActor = getBackendActor();
-  // const whoami = "2vxsx-fae";
 
   useEffect(() => {
       backendActor.cartridge_use_available()

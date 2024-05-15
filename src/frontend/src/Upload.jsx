@@ -137,7 +137,7 @@ export const Upload = (props) => {
       </button>
       {show ?(
       <div key={`${asset_pfx}${asset.key}`} className={"App-image"}>
-        <img src={`${asset_pfx}${asset.key}`} width={"100%"} loading={"lazy"} />
+        <img src={`${asset_pfx}${asset.key}`} width={"500"} loading={"lazy"} />
       </div>
     ) : null }
       {progress !== null && <div className={"App-progress"}>{Math.round(progress * 100)}%</div>}

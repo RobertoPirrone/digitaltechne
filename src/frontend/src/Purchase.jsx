@@ -15,9 +15,7 @@ import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { DTGrow, DTFooter } from "./components/useStyles";
 import { DnaFile } from "./components/DnaFile";
-import { myContext } from "./components/MyContext";
 import { MyTextField, MostSubmitButton, MyAutocomplete } from "./components/MostComponents";
-import { getBackendActor } from "./SignIn";
 import { appAlert } from "./Utils";
 import { useAuth } from "./auth/use-auth-client";
 
@@ -44,9 +42,6 @@ export const Purchase = (props) => {
   const [count, setCount] = useState("0");
   const [amount, setAmount] = useState("");
   const cartridge_count_list = [ "1", "2", "3"]
-  // const [ whoami, setWhoami, backendActor, setBackendActor, assetPfx, setAssetPfx ] = useContext(myContext);
-  // const backendActor = getBackendActor();
-  // const whoami = "2vxsx-fae";
 
   const ComputeAmount = (v) => {
       console.log("Comopute am: ", v);
@@ -99,7 +94,6 @@ export const Purchase = (props) => {
       <Header />
       <h1>{t("Purchase")}</h1>
       <Container maxWidth="sm">
-        <Typography variant="body1">Insert DNA</Typography>
             <Grid container spacing={1} alignItems="center">
                 <Grid item xs={6}> <span className="padding10">{t("CartridgeCount")} </span></Grid>
                 <Grid item xs={6}> <MyAutocomplete name="cartridge_count" required={true} label={t("cartridge_count")} options={cartridge_count_list} freeSolo={true} onChange={(e, v) => ComputeAmount(v)} /> </Grid>

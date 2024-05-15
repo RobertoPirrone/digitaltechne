@@ -9,10 +9,8 @@ import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { DTGrow, DTFooter } from "./components/useStyles";
-import { myContext } from "./components/MyContext";
 import { DnaFile } from "./components/DnaFile";
 import { MostSubmitButton, MyAutocomplete } from "./components/MostComponents";
-// import { getBackendActor } from "./SignIn";
 import { useAuth } from "./auth/use-auth-client";
 
 export const VerifyMark = (props) => {
@@ -131,7 +129,7 @@ export const VerifyMark = (props) => {
       <Header />
       <h1>{t("VerifyMark")}</h1>
       <Container maxWidth="sm">
-        <Typography variant="body1">Insert DNA</Typography>
+        <Typography variant="body1">DNA data</Typography>
         <DnaFile setDisabledButs={setDisabledButs} setCsvText={setCsvText} setJsonText={setJsonText}/>
         <Grid container spacing={1} alignItems="center">
             <Grid item xs={6}> <span className="padding10">{t("MarkSide")} </span></Grid>

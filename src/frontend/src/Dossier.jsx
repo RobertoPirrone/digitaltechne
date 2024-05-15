@@ -19,16 +19,9 @@ import { MyCheckIcon, MostCheckbox, MostSubmitButton, WarningIcon, Check } from 
 import { MostDataGrid } from "./components/MostDataGrid";
 import { Riservato } from "./components/OpusComponents";
 import InVisionDialog from "./components/InVisionDialog";
-import { myContext } from "./components/MyContext";
-import { getBackendActor } from "./SignIn";
-// import { css } from "@emotion/core";
-// import { backend } from "../../declarations/backend";
 import { canisterId } from "../../declarations/uploads";
 import { useAuth } from "./auth/use-auth-client";
 
-// import {Ed25519KeyIdentity} from '@dfinity/identity';
-// import {HttpAgent} from '@dfinity/agent';
-// import {AssetManager} from '@dfinity/assets';
 
 /**
  * Component for showing dossier rows
@@ -58,8 +51,6 @@ export const Dossier = () => {
   const [application, setApplication] = useGlobalState("application");
   const [username, setusername] = useGlobalState("username");
   const [trueidentity, setIdentity] = useGlobalState("identity");
-  // const [ whoami, setWhoami, backendActor, setBackendActor, assetPfx, setAssetPfx ] = useContext(myContext);
-  // const backendActor = getBackendActor();
 
 
   useEffect(() => {

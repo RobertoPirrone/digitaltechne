@@ -14,10 +14,8 @@ import { IconCode } from "./IconCode";
 import { Table } from "./Table";
 import { MyCheckIcon, Loading, MostSelect, MostTextField, MostButton2, MostSubmitButton, Check, WarningIcon } from "./components/MostComponents";
 import { GoToHomePage, Riservato, BexplorerLink } from "./components/OpusComponents";
-import { myContext } from "./components/MyContext";
 import { dmy_hms, prettyJson } from "./Utils";
 import { backend } from "../../declarations/backend";
-import { getBackendActor } from "./SignIn";
 import { useAuth } from "./auth/use-auth-client";
 
 import { Ed25519KeyIdentity } from "@dfinity/identity";
@@ -38,9 +36,6 @@ export const DossierDetail = () => {
   const [docs, setDocs] = useState([]); //elenco documenti relativi a dossier_id
   const [doc_bc_sync, setDoc_bc_sync] = useState(true);
   const [application, setApplication] = useGlobalState("application");
-  // const [ whoami, backendActor ] = useContext(myContext);
-  // const backendActor = getBackendActor();
-  // const whoami = "2vxsx-fae";
 
   const { t } = useTranslation(["translation", "documento", "dossier"]);
   const { control, register, handleSubmit, errors } = useForm();

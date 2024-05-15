@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback, useContext } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import PropagateLoader from "react-spinners/PropagateLoader";
-// import { css } from "@emotion/core";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
 import { useForm } from "react-hook-form";
@@ -12,20 +11,17 @@ import { Ed25519KeyIdentity } from "@dfinity/identity";
 import { HttpAgent } from "@dfinity/agent";
 import { AssetManager } from "@dfinity/assets";
 
-import { checkLoggedUser, getBackendActor } from "./SignIn";
 import { useGlobalState } from "./state";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
-// import { FileUpload } from "./components/FileUpload";
 import { DocData } from "./components/DocData";
 import { DTRoot, DTSubmit } from "./components/useStyles";
-//import MyAxios, { check_response } from "./MyAxios";
 import Grid from "@mui/material/Grid";
 import { GoToHomePage } from "./components/OpusComponents";
-import { myContext } from "./components/MyContext";
 import { Upload } from "./Upload";
 import { MyTextField, MyCheckbox, MyAutocomplete, MostSubmitButton, MostCheckbox, MostSelect, MostTextField } from "./components/MostComponents";
 import { backend } from "../../declarations/backend";
+import { useAuth } from "./auth/use-auth-client";
 
 /**
  * NewDocument: inserimento di un documento in IPFS
@@ -48,7 +44,6 @@ import { backend } from "../../declarations/backend";
  * @param {string} dossier_id id del dossier a cui appartiene il documento, arriva nella URl, non come props
  */
 export const NewDocument = (props) => {
-    // console.log("NewDocument, whoami: ", checkLoggedUser());
 
   const newDossierInfo = props.newDossierInfo;
   const navigate = useNavigate();
@@ -58,24 +53,7 @@ export const NewDocument = (props) => {
 
   const [autoreList, setAutoreList] = useState([]);
   let tipodocumento_list = ["image", "condition report", "authenticity attribution", "certificate of ownership"];
-
-
-  if (false) {
-    // Hardcoded principal: 535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe
-    // Should be replaced with authentication method e.g. Internet Identity when deployed on IC
-    const canisterId = process.env.CANISTER_ID_FRONTEND;
-    const identity = Ed25519KeyIdentity.generate(new Uint8Array(Array.from({ length: 32 }).fill(0)));
-    const isLocal = !window.location.host.endsWith("ic0.app");
-    const agent = new HttpAgent({
-      // host: isLocal ? `http://127.0.0.1:${window.location.port}` : 'https://ic0.app', identity,
-      host: isLocal ? `http://127.0.0.1:3000` : "https://ic0.app",
-      identity,
-    });
-    if (isLocal) {
-      agent.fetchRootKey();
-    }
-    const assetManager = new AssetManager({ canisterId, agent });
-  }
+  const { backendActor, principal } = useAuth();
 
   const { t } = useTranslation(["translation", "documento"]);
   const [loading, setLoading] = useState(false);
@@ -93,9 +71,6 @@ export const NewDocument = (props) => {
   const appAlert = useCallback((text) => {
     alert(text);
   }, []);
-  // const [ whoami, setWhoami, backendActor, setBackendActor, assetPfx, setAssetPfx ] = useContext(myContext);
-  const backendActor = getBackendActor();
-  const whoami = "2vxsx-fae";
           let list = [];
 
   useEffect(() => {

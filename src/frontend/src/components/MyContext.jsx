@@ -9,7 +9,7 @@ const MyContext = (props) => {
         // this state will be shared with all components 
     const [whoami, setWhoami] = useState("");
     const [backendActor, setBackendActor] = useState(null);
-    const [assetPfx, setAssetPfx] = useState();
+    const [assetPfx, setAssetPfx] = useState("");
 
     return (
                 // this is the provider providing state

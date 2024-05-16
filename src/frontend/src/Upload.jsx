@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
+import Typography from "@mui/material/Typography";
 import { Ed25519KeyIdentity } from "@dfinity/identity";
 import { HttpAgent } from "@dfinity/agent";
 import { AssetManager } from "@dfinity/assets";
@@ -29,6 +30,7 @@ export const Upload = (props) => {
     }
   const isLocal = !window.location.host.endsWith("icp0.io");
   const [progress, setProgress] = useState(null);
+  const [uploadedFileName, setUploadedFileName] = useState("");
 
   // console.log("META: ", JSON.stringify(import.meta));
   // console.log("ENV: ", JSON.stringify(import.meta.env));
@@ -76,6 +78,7 @@ export const Upload = (props) => {
         });
       }
     const name = file.name.split(".");
+    setUploadedFileName(file.name);
     const extension = name.pop();
     const fileName = [uuidv4(), extension].join(".");
     // const fileName = [name, width, height, extension].join(".");
@@ -132,14 +135,15 @@ export const Upload = (props) => {
 
   return (
     <>
-      <button className={"App-upload"} onClick={uploadPhotos}>
-        📂 Upload file
-      </button>
+      <Typography variant="body2">
+        <button className={"App-upload"} onClick={uploadPhotos}> 📂 Upload file </button> 
+        {uploadedFileName}
+      </Typography>
       {show ?(
-      <div key={`${asset_pfx}${asset.key}`} className={"App-image"}>
-        <img src={`${asset_pfx}${asset.key}`} width={"500"} loading={"lazy"} />
-      </div>
-    ) : null }
+          <div key={`${asset_pfx}${asset.key}`} className={"App-image"}>
+            <img src={`${asset_pfx}${asset.key}`} width={"500"} loading={"lazy"} />
+          </div>
+        ) : null }
       {progress !== null && <div className={"App-progress"}>{Math.round(progress * 100)}%</div>}
     </>
   );

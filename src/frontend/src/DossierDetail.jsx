@@ -136,6 +136,7 @@ export const DossierDetail = () => {
       },
     },
     { flex: 1, headerName: t("documento:author"), field: "autore" },
+    { flex: 1, headerName: t("documento:InsertTime"), field: "ora_inserimento" },
     { flex: 1, headerName: t("documento:tipodocumento"), field: "tipo_documento" },
     { flex: 1, headerName: t("documento:title"), field: "title" },
     { flex: 1, headerName: t("documento:filename"), field: "filename" },
@@ -322,8 +323,16 @@ export const DossierDetail = () => {
                   <td>{dossierInfo.friendly_name}</td>
                 </tr>
                 <tr>
+                  <th>{t("documento:Principal")}</th>
+                  <td>{dossierInfo.inserted_by}</td>
+                </tr>
+                <tr>
                   <th>{t("dossier:nomeopera")}</th>
                   <td>{dossierInfo.nomeopera}</td>
+                </tr>
+                <tr>
+                  <th>{t("dossier:InsertTime")}</th>
+                  <td>{dossierInfo.ora_inserimento}</td>
                 </tr>
 
                 {application == "elivilla" ? (

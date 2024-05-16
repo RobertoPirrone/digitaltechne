@@ -28,7 +28,7 @@ export const Home = () => {
     <Header />
     <div className="content-container">
     <Container component="main" maxWidth="md">
-        <h1>{t("Benvenuto")} {userInfo.name} {userInfo.surname}</h1>
+        <h1>{t("HomeWelcome")} {userInfo.name} {userInfo.surname}</h1>
         <Grid container spacing={1} alignItems="flex-start" className="blackColor">
         { AdminRole ?
             <React.Fragment>

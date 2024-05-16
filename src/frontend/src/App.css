@@ -200,12 +200,12 @@ th {
 .esiti {
   padding: 0 20px;
 }
-.loginokTab,
-.loginokTab :any-link {
+.homeTab,
+.homeTab :any-link {
   color: black;
 }
-.loginokTab td,
-.loginokTab th {
+.homeTab td,
+.homeTab th {
   text-align: left;
   padding: 4px 10px;
 }

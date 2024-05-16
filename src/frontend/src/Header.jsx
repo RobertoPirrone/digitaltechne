@@ -61,7 +61,7 @@ export function Header(props) {
           {props.empty === "true" ? 
           null : (
             <Tooltip title={t("Pagina principale")}> 
-                <Link to="/loginok"> <img edge="end" src={logo} alt="logo" style={{ height: "40px" }} className={DTHeaderTitle} /> </Link> 
+                <Link to="/home"> <img edge="end" src={logo} alt="logo" style={{ height: "40px" }} className={DTHeaderTitle} /> </Link> 
             </Tooltip>
           )}
           <div />
@@ -109,7 +109,7 @@ export function Header(props) {
       <Toolbar />
       <Menu id="left-menu" anchorEl={anchorEl} anchorOrigin={{ vertical: "top", horizontal: "right" }} transformOrigin={{ vertical: "top", horizontal: "right" }} 
         keepMounted open={Boolean(anchorEl)} onClose={handleClose} >
-        <MenuItem component={Link} to="/loginok" onClick={handleClose}> {t("Pagina principale")} </MenuItem>
+        <MenuItem component={Link} to="/home" onClick={handleClose}> {t("Pagina principale")} </MenuItem>
         <MenuItem component={Link} to="/dossier" onClick={handleClose}> {t("Dossier aperti")} </MenuItem>
         <MenuItem component="a" href={catalogoUrl} target="_blank" onClick={handleClose}> {t("Catalogo servizi")} </MenuItem>
         <MenuItem component={Link} to="/purchase" onClick={handleClose}> {t("Buy Cartridges")} </MenuItem>

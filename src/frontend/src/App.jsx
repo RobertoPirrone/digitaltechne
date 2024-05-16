@@ -40,7 +40,7 @@ function App() {
               <Route path="/dossier" element={<Dossier />} />
               <Route path="/dossierdetail/:dossierdetail" element={<DossierDetail />} />
               <Route path="/json_compare" element={<JsonCompare />} />
-              <Route path="/loginok" element={<Home />} />
+              <Route path="/home" element={<Home />} />
               <Route path="/manual" element={<Manual />} />
               <Route path="/newdocument" key="dossier_id" element={<NewDocument />} />
               <Route path="/newdossier" element={<NewDossier />} />

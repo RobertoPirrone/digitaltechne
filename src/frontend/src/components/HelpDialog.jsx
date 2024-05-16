@@ -22,7 +22,8 @@ function getLocation(rawlocation) {
 }
 export function getFullManualUrl(lang) {
   // const fullManualUrl = app_server_url + '/Docs/' + lang + '/USER_MANUAL/USER_MANUAL.html?'+window._env_.FE_VERSION
-  const fullManualUrl = 'UserManual.pdf'
+  // const fullManualUrl = 'UserManual.pdf'
+  const fullManualUrl = 'html/USER_MANUAL/user_manual.html'
   return fullManualUrl
 }
 function getManualUrl(lang,fullManualUrl,location) {

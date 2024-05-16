@@ -97,6 +97,7 @@ export const Purchase = (props) => {
             <Grid container spacing={1} alignItems="center">
                 <Grid item xs={6}> <span className="padding10">{t("CartridgeCount")} </span></Grid>
                 <Grid item xs={6}> <MyAutocomplete name="cartridge_count" required={true} label={t("cartridge_count")} options={cartridge_count_list} freeSolo={true} onChange={(e, v) => ComputeAmount(v)} /> </Grid>
+                  <Grid item xs={12}> {" "} &nbsp; </Grid>
 
                 <Grid item xs={6}> <span className="padding10">{t("Total Amount")}</span></Grid>
       <MyTextField name="amount" value={amount} label={t("amount")} />

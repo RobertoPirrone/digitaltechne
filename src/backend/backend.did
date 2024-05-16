@@ -15,6 +15,7 @@ type Dossier = record {
   icon_uri : text;
   private : bool;
   luogoopera : text;
+  friendly_name : opt text;
   nomeopera : text;
   tipoopera : text;
 };
@@ -24,8 +25,18 @@ type MyError = variant {
 };
 type QueryDocumentsParams = record { dossieropera_id : text };
 type QueryParams = record { offset : nat64; limit : nat64 };
+type Rbac = record {
+  id : nat64;
+  "principal" : text;
+  associate_dna_ok : bool;
+  add_dna_ok : bool;
+  friendly_name : opt text;
+  view_opera_ok : bool;
+  add_opera_ok : bool;
+};
 type Result = variant { Ok : text; Err : MyError };
-type Result_1 = variant { Ok : vec vec text; Err : MyError };
+type Result_1 = variant { Ok : Rbac; Err : MyError };
+type Result_2 = variant { Ok : vec vec text; Err : MyError };
 service : {
   artwork_mark_insert : (text) -> (Result);
   artwork_mark_query : (ArtworkMarkQueryParams) -> (Result) query;
@@ -34,6 +45,7 @@ service : {
   cartridge_use_available : () -> (Result);
   cartridge_use_insert : (CartridgeUseParams) -> (Result);
   cartridge_use_update : (text) -> (Result);
+  check_caller : () -> (Result_1) query;
   document_insert : (text) -> (Result);
   documenti_pulldowns : () -> (Result) query;
   documenti_query : (QueryDocumentsParams) -> (Result) query;
@@ -43,6 +55,6 @@ service : {
   dossier_struct_query : (text) -> (vec Dossier) query;
   execute : (text) -> (Result);
   greet : (text) -> (text) query;
-  "query" : (text) -> (Result_1) query;
+  "query" : (text) -> (Result_2) query;
   whoami : () -> (text) query;
 }

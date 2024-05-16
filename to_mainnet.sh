@@ -4,7 +4,7 @@ dfx build --ic frontend
 dfx build --ic backend
 dfx identity use NuovaIdentitaRobi
 dfx canister install --ic frontend --mode upgrade
-# dfx canister install --ic backend --mode upgrade
+dfx canister install --ic backend --mode upgrade
 exit 0
 
 dfx build backend

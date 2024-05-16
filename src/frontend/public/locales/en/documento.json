@@ -4,6 +4,7 @@
   "title": "Title",
   "Id": "Id",
   "version": "Version",
+  "InsertTime": "Insert Time",
   "dettaglio": "detail",
   "accessibilitadocumenti": "Document Accessibility",
   "tassonomiadocumenti": "Document Taxonomy",

@@ -23,7 +23,7 @@ function getLocation(rawlocation) {
 export function getFullManualUrl(lang) {
   // const fullManualUrl = app_server_url + '/Docs/' + lang + '/USER_MANUAL/USER_MANUAL.html?'+window._env_.FE_VERSION
   // const fullManualUrl = 'UserManual.pdf'
-  const fullManualUrl = 'html/USER_MANUAL/user_manual.html'
+  const fullManualUrl = 'rtd_html/USER_MANUAL/user_manual.html'
   return fullManualUrl
 }
 function getManualUrl(lang,fullManualUrl,location) {
@@ -149,7 +149,7 @@ export default function HelpDialog(props) {
         aria-labelledby="draggable-dialog-title"
       >
         <DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title">
-          {t("Manuale utente")} ( {location} )
+          {t("Manuale Utente")} ( {location} )
         </DialogTitle>
         <DialogContent>
           <div>

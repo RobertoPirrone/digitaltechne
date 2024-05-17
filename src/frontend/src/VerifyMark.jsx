@@ -11,23 +11,26 @@ import { Footer } from "./Footer";
 import { DTGrow, DTFooter } from "./components/useStyles";
 import { DnaFile } from "./components/DnaFile";
 import { MostSubmitButton, MyAutocomplete } from "./components/MostComponents";
+import { getAssetPfx } from "./utils";
 import { useAuth } from "./auth/use-auth-client";
 
 export const VerifyMark = (props) => {
   const navigate = useNavigate();
   const { backendActor, logout } = useAuth();
   let react_router_location = useLocation();
+  const dossierInfo = react_router_location.state.dossierInfo;
   console.log("DossierDetail react_router_location: " + JSON.stringify(react_router_location));
   let params = useParams();
   console.log("DossierDetail params: " + JSON.stringify(params));
   let dossier_id = "";
+  const asset_pfx = getAssetPfx();
 
   if (params.dossierid) {
     dossier_id = params.dossierid;
   } else {
     dossier_id = react_router_location.pathname.split("/")[2];
   }
-  const { t } = useTranslation(["dossier"]);
+  const { t } = useTranslation(["translation", "dossier"]);
   const [disabledButs, setDisabledButs] = useState(true);
   const [csvText, setCsvText] = useState("");
   const [jsonText, setJsonText] = useState("");
@@ -129,13 +132,16 @@ export const VerifyMark = (props) => {
       <Header />
       <h1>{t("VerifyMark")}</h1>
       <Container maxWidth="sm">
+              <Grid item xs={12} spacing={1}>
+                        <img src={`${asset_pfx}${dossierInfo.icon_uri}`} width={200} /> 
+              </Grid>
         <Typography variant="body1">DNA data</Typography>
         <DnaFile setDisabledButs={setDisabledButs} setCsvText={setCsvText} setJsonText={setJsonText}/>
         <Grid container spacing={1} alignItems="center">
             <Grid item xs={6}> <span className="padding10">{t("MarkSide")} </span></Grid>
             <Grid item xs={6}> <MyAutocomplete name="mark_side" required={true} label={t("mark_side")} options={mark_side_list} onChange={(e, v) => setMarkSide(v)} /> </Grid>
 
-            <Grid item xs={6}> <span className="padding10">{t("PosizioneDNA")}</span></Grid>
+            <Grid item xs={6}> <span className="padding10">{t("PosizioneDna")}</span></Grid>
             <Grid item xs={6}> <MyAutocomplete name="mark_position" required={true} label={t("mark_position")} options={mark_position_list} onChange={(e, v) => setMarkPosition(v)} /> </Grid>
           <MostSubmitButton onClick={onSubmit} disabled={disabledButs} label={t("dossier:Verify")} />
         </Grid>

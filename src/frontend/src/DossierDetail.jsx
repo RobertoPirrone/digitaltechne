@@ -157,7 +157,7 @@ export const DossierDetail = () => {
   const verify_mark = () => {
     console.log("verify_mark dossier_id: " + dossier_id);
     let url = "/verify_mark/" + dossier_id;
-    navigate(url, {replace: true});
+    navigate(url, { state: {dossierInfo: dossierInfo}, replace: true});
   };
 
   const sell = () => {

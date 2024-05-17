@@ -1,11 +1,12 @@
-2) Let me allow to introduce DT. Our aim is to provide an unbreakable link between physical artworks and their digital representation. We propose a Signature Kit, made of unique genomic ink, unique for each artwork and its digital representation in blockain
-4) Artwork can be forged. It'a big problem, not completely solved. Each time an opera is sold or lended there is the need for certification. The process is long and expensive, and can also be forged
-5) There are a lot of examples in the news,  M$ spent for a scam
+2) Let me allow to introduce DT. Our aim is to provide an unbreakable link between physical artworks and their digital representation. We propose a Signature Kit, made of a genomic ink (unique for each artwork) and its digital representation in blockchain
+4) Artwork can be forged. It'a big problem, not completely solved. Each time an opera is sold or lended there is the need to verify authenticity. The process is long and expensive, and can also be forged
+5) There are a lot of examples in the news of  M$ spent fo scams
 6) Estabilishing trust will greatly help the art market growth
-8) Operas can be identified in a traditional way (labelling). Most existing solutions use no genomic or BC, none of them uses both
-12) Genomic ink stability, transparency and persistence are of paramount importance. We cohoperate with the Italian National Reaserch Center CNR for every genomic aspect 
+8) Operas can be identified in a traditional way (labelling). No existing solutions is using both genomic and BC technology
+12) Genomic ink stability, transparency and persistence are of paramount importance. We cooperate with the Italian National Research Center CNR for every genomic aspect 
 14) 1) Selling SW, Services an licenses (fully operated services, white label, ad hoc devel for third parties, 2) Use the BC to offer Value added Services related to artwork (tokenization), 3) Selling the Signature Kit
+15) WW Market is 40 M transactions, we'd like to get the 3% of the European market in 3 years, with a turnover of 16M$ and EBIT of 50%
 16) Lot of advantages compared to our competitors
 17) Our Key figures are fit for the task
-18) We have a plan, the first step is done, we successfully demonstrated the feasability of the project
+18) We have a plan, the first step is done, we successfully demonstrated the feasibility of the project
 19) We need financing rounds, the first one of about 1M$ is needed for estabilishing a production ready service

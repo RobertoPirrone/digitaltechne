@@ -9,7 +9,7 @@ import { Dossier } from "./Dossier";
 import { DossierDetail } from "./DossierDetail";
 import { Home } from "./Home";
 import { LandingPage } from "./LandingPage";
-import LoggedOut from "./auth/LoggedOut";
+import Login from "./auth/Login";
 import {Logout} from "./auth/Logout";
 import { JsonCompare } from "./JsonCompare";
 import { Manual } from "./Manual";
@@ -24,6 +24,10 @@ import "./App.css";
 import { useAuth, AuthProvider } from "./auth/use-auth-client";
 
 import { backend } from "declarations/backend";
+
+function Loading() {
+  return <h2>🌀 Loading...</h2>;
+}
 
 function App() {
   const { isAuthenticated, identity } = useAuth();
@@ -47,19 +51,21 @@ function App() {
               <Route path="/purchase" element={<Purchase />} />
               <Route path="/user_roles" element={<UserRoles />} />
               <Route path="/verify_mark/:dossierdetail" element={<VerifyMark />} />
-            <Route path="/login" element={<LoggedOut />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/logout" element={<Logout />} />
             <Route path="/" element={<LandingPage />} />
           </Routes>
         </Router>
 
-          : <LoggedOut />}
+          : <Login />}
       </div>
     </ThemeProvider>
   );
 }
 export default () => (
+    <Suspense fallback={Loading() }>
     <AuthProvider>
     <App />
     </AuthProvider>
+    </Suspense>
 );

@@ -55,8 +55,8 @@ export const useAuthClient = (options = defaultOptions) => {
         updateClient(authClient);
           console.log("pre Navigate, principal ", principal.toText());
           console.log("pre Navigate, isAuthenticated ", isAuthenticated);
-        // Navigate("/home");
-          console.log("post Navigate");
+          // Navigate("/home");
+          // console.log("post Navigate");
       },
     });
   };

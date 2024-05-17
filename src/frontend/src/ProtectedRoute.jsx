@@ -4,16 +4,13 @@ import { useAuth, AuthProvider } from "./auth/use-auth-client";
 
 export const ProtectedRoute = () => {
     const { isAuthenticated, identity , principal} = useAuth();
-    if (isAuthenticated) {
-        console.log(`ProtectedRoute isAuthenticated ${isAuthenticated}, principal ${principal.toText()}`);
-    } else {
-        console.log(`ProtectedRoute isAuthenticated ${isAuthenticated}`);
+    if (! isAuthenticated) {
+        console.log("ProtectedRoute isAuthenticated FALSE ");
+        Navigate("/login");
     }
+    console.log(`ProtectedRoute isAuthenticated ${isAuthenticated}, principal ${principal.toText()}`);
 
-    return 
-        isAuthenticated ? 
-            <Outlet /> : 
-            <LoggedOut /> 
+    return  <Outlet /> 
 };
 
 // auth.token ? <Outlet/> : <Navigate to='/login'/>

@@ -1,19 +1,25 @@
 import React from "react";
 import { useTranslation, Trans } from 'react-i18next';
+import { useNavigate } from "react-router-dom";
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import { useAuth } from "./use-auth-client";
+import { Home } from "../Home";
 import { DTPaper } from '../components/useStyles';
 import { MostSubmitButton } from '../components/MostComponents';
 import logo from '/DT-noalpha.png';
 
-function LoggedOut() {
-  const { login } = useAuth();
+function Login() {
+  const { isAuthenticated, login } = useAuth();
   const { t, i18n } = useTranslation();
   const infoUrl = "/html/MISC/first_info.html";
+  console.log("Login, isAuthenticated: ", isAuthenticated );
 
   return (
+      <>
+      { isAuthenticated  ? (
+          <Home /> ) : (
     <Container component="main" maxWidth="xs">
       <div className={DTPaper}>
         <img src={logo} width={400} className="XXXApp-logo" alt="logo" />
@@ -32,7 +38,9 @@ function LoggedOut() {
           </Grid>
       </div>
     </Container>
+          )}
+      </>
   );
 }
 
-export default LoggedOut;
+export default Login;

@@ -33,7 +33,6 @@ fields='
     add_dna_ok BOOLEAN
     '
     create_table rbac "$fields"
-    exit 0
 
 fields='
     id INTEGER PRIMARY KEY,                               

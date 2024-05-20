@@ -1,0 +1,45 @@
+# MVP DEMO SLIDES
+
+1.  Hi everybody! In the previous speech, Giorgio explained the company mission and the concept of the signature kit.  In the next few minutes, I will show you some practical examples.
+
+2.  In this application the user can have different roles:
+    * There is a laboratory role that creates the cartridge containing the DNA ink and will insert DNA analysis in a blockchain.
+    * There is the artwork owner role: 
+        he will create the folder containing all the information about the Opera in the blockchain.
+        will purchase the cartridge of ink, placing the DNA ink on the artwork and will insert the DNA data in the blockchain.
+    * Verifier role (owner, tentative buyer, authority):
+        that could perform a DNA verify, comparing the analysis of the DNA material on the opera with DNA information stored in the blockchain.
+
+3.  the laboratory will create the ink cartridges, will analyze the genomic material and load the results in BC
+
+4.  The owner will create an archive  with basic info about the opera, and will add documents, images etc. with a flexible privacy policy
+
+5.  Here the owner is using the signature kit: he will drop an ink drop on the opera and will register in blockchain the cartridge code and the position of ink on the opera
+
+6.  At any time, the authenticity of the artwork can be verified.  It is necessary to pick some small amount of DNA material using a swab, and bring it to a laboratory, analyzing the content.
+
+7.  And then it's very easy to compare the content stored in blockchain with the analysis that has been done in the previous slide.  You simply load this file and the mark position and see the differences
+
+8.  The MVP architecture is quite standard. Everything resides in the Mainnet:
+    * We have a React front-end, 
+    * the internet identity, 
+    * an asset canister that holds documents and images,
+    * a Rust backend that holds all the application informations 
+
+# LIVE DEMO
+
+So, as a practical example, we start  logging in using the digital identity.
+
+The home page contains links to the actions available to your role
+
+Please note that on each page it is available a context dependent help pop up, with access to the whole manual
+
+Here you can find the already inserted operas (yours and the public artworks) You can add a new artwork here.
+
+You add base information like an image of the opera, its name, the author, the place where opera is located, the type of support, and the fact that it is private or not.
+
+Then you can add some documents regarding the opera. For instance, we add a certificate of authenticity
+
+And then you register the signature kit. You select the identifier of the cartridge that has been used and specify the position of the ink on the opera.
+
+And then you can verify. You already have the DNA in blockchain. you pick the genomic material from the opera, analyze it, and then compare the analysis against the BC copy.

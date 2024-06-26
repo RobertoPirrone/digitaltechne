@@ -23,3 +23,7 @@ dist/
 
 # environment variables
 .env
+
+# private stuff
+README.robi
+STOIC_SEED

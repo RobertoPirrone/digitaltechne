@@ -1,0 +1,18 @@
+{
+  "document_taxonomy_array": {
+    "ScroogeMcDuck": "Paperon de Paperoni",
+    "DonaldDuck": "Paperino",
+    "DaisyDuck": "Paperina",
+    "Nipoti di Paperino": {
+        "DonaldDuckSublevel_Huey": "Qui",
+        "DonaldDuckSublevel_Dewey": "Quo",
+        "DonaldDuckSublevel_Louie": "Qua"
+    },
+    "Nipoti di Paperina": {
+        "DaisyDuckSublevel_April": "Ely",
+        "DaisyDuckSublevel_May": "Emy",
+        "DaisyDuckSublevel_June": "Evy"
+    },
+    "Aiuto": "Aiuto"
+ }
+}

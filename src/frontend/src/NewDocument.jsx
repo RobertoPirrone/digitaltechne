@@ -20,6 +20,7 @@ import Grid from "@mui/material/Grid";
 import { GoToHomePage } from "./components/OpusComponents";
 import { Upload } from "./Upload";
 import { MyTextField, MyCheckbox, MyAutocomplete, MostSubmitButton, MostCheckbox, MostSelect, MostTextField } from "./components/MostComponents";
+import { DoubleLevelSelect} from "./components/DoubleLevelSelect";
 import { backend } from "../../declarations/backend";
 import { useAuth } from "./auth/use-auth-client";
 
@@ -166,11 +167,11 @@ export const NewDocument = (props) => {
                 <MyAutocomplete name="autore" label={t("dossier:autore")} options={autoreList} onInputChange={(e, v) => setAutore(v)} />
               </Grid>
               <Grid item xs={12}>
-                <MyAutocomplete name="tipodocumento" label={t("dossier:tipodocumento")} options={tipodocumento_list} onChange={(e, v) => setTipoDocumento(v)} />
+                <DoubleLevelSelect name="tipodocumento" label={t("dossier:tipodocumento")} options={tipodocumento_list} onChange={(e) => setTipoDocumento(e.target.value)} />
               </Grid>
 
               <Grid item xs={3}>
-                <text>Private</text>
+                Private
                 <MyCheckbox defaultChecked={false} onChange={(e, v) => setPrivateDossier(v.label)} />
               </Grid>
 

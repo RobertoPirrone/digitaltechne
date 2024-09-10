@@ -3,6 +3,8 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import PropagateLoader from "react-spinners/PropagateLoader";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
+import { FormControl } from '@mui/base/FormControl';
+import FormControlLabel from "@mui/material/FormControlLabel";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { v4 as uuidv4 } from 'uuid';
@@ -159,6 +161,7 @@ export const NewDocument = (props) => {
           <Upload asset={asset} show={true} accept={"*/*"} setAsset={setAsset} setDisabledButs={setDisabledButs} />
 
           <form onSubmit={handleSubmit(onSubmit)}>
+                <FormControl required sx={{ m: 1, minWidth: 120 }}>
             <Grid container spacing={1} alignItems="center">
               <Grid item xs={12}>
                 <MyTextField name="title" required={true} label={t("documento:title")} onChange={(e) => setTitolo(e.target.value)} />
@@ -182,6 +185,7 @@ export const NewDocument = (props) => {
 
               <MostSubmitButton disabled={disabledButs} label={t("dossier:Inserisci")} />
             </Grid>
+      </FormControl>
           </form>
         </div>
       </Container>

@@ -14,27 +14,31 @@ function MyListSubheader(props) {
 MyListSubheader.muiSkipListHighlight = true;
 
 
-const ComputeItems = ({
+const ComputeSelectRows = ({
     onChange
 }) => {
 
 var rows = [];
 const [tipo, setTipo] = React.useState('');
 const handleChange = (event) => { setTipo(event.target.value); };
-
 const { t, i18n, ready } = useTranslation(["translations", "document_taxonomy"]);
     if (!ready) return "loading translations...";
     const tipodoc = t("document_taxonomy:document_taxonomy_array", { returnObjects: true });
     // console.log(JSON.stringify(tipodoc));
-    rows.push(<MenuItem key={"None"} value=""> <em>None</em> </MenuItem>);
+    //rows.push(<MenuItem key={"None"} value=""> <em>None</em> </MenuItem>);
+    var k = "";
+    var lev2Name = "";
     for (const ele of Object.entries(tipodoc)) {
         // console.log("ele: ", JSON.stringify(ele));
         const [key, value] = ele;
         if (value.constructor === Object) {
-            rows.push( <MyListSubheader value={key} key={key} >{key}</MyListSubheader>);
+            lev2Name = value.Name;
+            delete value.Name;
+            rows.push( <MyListSubheader value={lev2Name} key={lev2Name} >{lev2Name}</MyListSubheader>);
             for (const innerEle of Object.entries(value)) {
                 const [ikey, ivalue] = innerEle;
-                rows.push( <MenuItem value={ikey} key={ikey} >{ivalue}</MenuItem>);
+                k=`${key}.${ikey}`
+                rows.push( <MenuItem value={k} key={k} >{ivalue}</MenuItem>);
             }
             continue;
         }
@@ -42,7 +46,7 @@ const { t, i18n, ready } = useTranslation(["translations", "document_taxonomy"])
     }
       console.log(rows);
             return (
-                <FormControl required sx={{ m: 1, minWidth: 120 }}>
+                <>
         <InputLabel id="demo-simple-select-required-label">{t("TipoDocumento")}</InputLabel>
         <Select
           labelId="demo-simple-select-required-label"
@@ -52,7 +56,7 @@ const { t, i18n, ready } = useTranslation(["translations", "document_taxonomy"])
         >
                 {rows}
         </Select>
-      </FormControl>
+                </>
             );
 };
 
@@ -65,6 +69,6 @@ export const DoubleLevelSelect = ({
 }) => {
 
 return (
-        <ComputeItems onChange={onChange}/>
+        <ComputeSelectRows onChange={onChange}/>
 )
 };

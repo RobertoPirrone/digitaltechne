@@ -27,7 +27,7 @@ export const IconCode = (r) => {
     };
 
     let row = r.row;
-    console.log("IconCode: ", JSON.stringify(row));
+    // console.log("IconCode: ", JSON.stringify(row));
     let image = row.icon_uri;
     let width = "400";
     // usata per i documenti occorre aggiustare due cose

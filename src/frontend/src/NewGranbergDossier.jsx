@@ -36,7 +36,7 @@ export const NewDossier = () => {
   const [luogoOpera, setLuogoOpera] = useState("");
   const [autore, setAutore] = useState("");
   const [tipotecnica, setTipotecnica] = useState("");
-  const [annoopera, setAnnoopera] = useState("");
+  const [annoopera, setAnnoopera] = useState(1900);
   const [numero_totale_copie, setNumero_totale_copie] = useState(0);
   const [dimensions, setDimensions] = useState("");
   const [tipofirma, setTipofirma] = useState("");
@@ -97,14 +97,14 @@ export const NewDossier = () => {
     vals.uuid = uuidv4();
     vals.ora_inserimento = new Date();
     vals.username = username;
-    vals.autore = autore;
-    vals.annoopera = 1970;
+    vals.autore = "Liliana Granberg";
+    vals.annoopera = parseInt(annoopera);
     vals.nomeopera = nomeOpera;
-    vals.tipotecnica = "Etching";
-    vals.tipofirma = "SIGNED";
-    vals.dimensions = "30x40";
-    vals.numero_totale_copie = 5;
-    vals.tiposupporto = 'PAPER';
+    vals.tipotecnica = tipotecnica;
+    vals.tipofirma = tipofirma;
+    vals.dimensions = dimensions;
+    vals.numero_totale_copie = parseInt(numero_totale_copie);
+    vals.tiposupporto = tiposupporto;
     if (privateDossier === null || privateDossier == false) {
       vals.private = false;
     } else {
@@ -158,28 +158,17 @@ export const NewDossier = () => {
 
           <form onSubmit={handleSubmit(onSubmit)}>
             <Grid container spacing={1} alignItems="center">
-              <Grid item xs={12}>
-                <MyTextField name="nomeopera" required={true} label={t("dossier:nomeopera")} onChange={(e) => setNomeOpera(e.target.value)} />
-              </Grid>
-              <Grid item xs={12}>
-                <MyAutocomplete
-                  name="autore"
-                  label={t("dossier:autore")}
-                  options={newDossierInfo.autori}
-                  value={autore}
-                  onInputChange={(e, v) => setAutore(v)}
-                />
-              </Grid>
+              <Grid item xs={12}> <MyTextField name="nomeopera" required={true} label={t("dossier:nomeopera")} onChange={(e) => setNomeOpera(e.target.value)} /> </Grid>
+              <Grid item xs={12}> <MyAutocomplete name="tipotecnica" label={t("dossier:tipotecnica")} options={newDossierInfo.autori} value={tipotecnica} onInputChange={(e, v) => setTipotecnica(v)} /> </Grid>
+              <Grid item xs={12}> <MyTextField name="annoopera" required={true} label={t("dossier:annoopera")} onChange={(e) => setAnnoopera(e.target.value)} /> </Grid>
+              <Grid item xs={12}> <MyTextField name="numero_totale_copie" required={true} label={t("dossier:numero_totale_copie")} onChange={(e) => setNumero_totale_copie(e.target.value)} /> </Grid>
+              <Grid item xs={12}> <MyTextField name="dimensions" required={true} label={t("dossier:dimensions")} onChange={(e) => setDimensions(e.target.value)} /> </Grid>
+              <Grid item xs={12}> <MyAutocomplete name="tipofirma" label={t("dossier:tipofirma")} options={newDossierInfo.autori} value={tipofirma} onInputChange={(e, v) => setTipofirma(v)} /> </Grid>
+              <Grid item xs={12}> <MyAutocomplete name="tiposupporto" label={t("dossier:tiposupporto")} options={newDossierInfo.autori} value={tiposupporto} onInputChange={(e, v) => setTiposupporto(v)} /> </Grid>
 
-              <Grid item xs={3}>
-                <text>Private</text>
-                <MyCheckbox defaultChecked={false} onChange={(e, v) => setPrivateDossier(v.label)} />
-              </Grid>
+              <Grid item xs={3}> <text>Private</text> <MyCheckbox defaultChecked={false} onChange={(e, v) => setPrivateDossier(v.label)} /> </Grid>
 
-              <Grid item xs={12}>
-                {" "}
-                &nbsp;
-              </Grid>
+              <Grid item xs={12}> {" "} &nbsp; </Grid>
 
               <MostSubmitButton disabled={disabledButs} label={t("dossier:Inserisci")} />
             </Grid>

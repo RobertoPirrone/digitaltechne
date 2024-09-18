@@ -31,18 +31,21 @@ nomeopera TEXT NOT NULL,
 ora_inserimento TEXT NOT NULL,                     
 inserted_by TEXT NOT NULL,                           
 tipotecnica TEXT NOT NULL,
-dataopera TEXT NOT NULL,
+annoopera u64 CHECK (annoopera between 1960 and 1990) NOT NULL,
 numero_totale_copie INTEGER NOT NULL,
 dimensions TEXT NOT NULL,
-private BOOLEAN,
+private BOOL default false,
 icon_uri TEXT NOT NULL,
 tipofirma TEXT CHECK( tipofirma IN ('SIGNED', 'NOT_SIGNED', 'ARTIST_PROOF' ) ),
+tiposupporto TEXT CHECK( tiposupporto IN ('PAPER', 'CANVAS', 'ACRYLIC' ) ),
 has_artwork_mark BOOLEAN
 EOF
 )
 
     create_table dossier "$fields"
     dfx canister call $network backend execute 'create index id on dossier(id)'
+
+exit 0
 
 # RBAC
 fields='

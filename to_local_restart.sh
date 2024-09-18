@@ -1,5 +1,6 @@
 # npm install -D typescript (per tsc)
 # dfx start --background --clean
+# dfx canister call uploads authorize '(principal "uybjb-x2bz4-k5mwy-4h4fk-7ca6d-evlpb-trrht-7wzsu-bkjxr-53jik-jqe")'
 
 unset DFX_NETWORK
 

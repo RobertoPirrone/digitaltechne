@@ -14,7 +14,7 @@ import {Logout} from "./auth/Logout";
 import { JsonCompare } from "./JsonCompare";
 import { Manual } from "./Manual";
 import { NewDocument } from "./NewDocument";
-import { NewDossier } from "./NewDossier";
+import { NewDossier } from "./NewGranbergDossier";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { Purchase } from "./Purchase";
 import { UserRoles } from "./UserRoles";

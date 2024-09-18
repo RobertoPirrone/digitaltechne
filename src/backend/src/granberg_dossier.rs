@@ -15,12 +15,13 @@ pub struct Dossier {
     ora_inserimento: String,
     inserted_by: Option<String>,
     tipotecnica: String,
-    dataopera: String,
+    annoopera: u64,
     numero_totale_copie: u64,
     dimensions: String,
     private: bool,
     icon_uri: String,
     tipofirma: String,
+    tiposupporto: String,
     has_artwork_mark: Option<bool>,
     friendly_name: Option<String>
 }
@@ -51,7 +52,7 @@ struct DistinctResult {
 #[query]
 pub fn dossier_pulldowns() -> JsonResult {
     // autore
-    let mut dossier_sql = "select distinct autore from dossier";
+    let dossier_sql = "select distinct autore from dossier";
     let conn = ic_sqlite::CONN.lock().unwrap();
     let mut stmt = match conn.prepare(&dossier_sql) {
         Ok(e) => e,
@@ -106,14 +107,15 @@ pub fn dossier_struct_query(sql: String ) -> Vec<Dossier> {
                                 ora_inserimento: row.get(4).unwrap(),
                                 inserted_by: row.get(5).unwrap(),
                                 tipotecnica: row.get(6).unwrap(),
-                                dataopera: row.get(6).unwrap(),
-                                numero_totale_copie: row.get(7).unwrap(),
-                                dimensions: row.get(8).unwrap(),
-                                private: row.get(9).unwrap(),
-                                icon_uri: row.get(10).unwrap(),
-                                tipofirma: row.get(11).unwrap(),
-                                has_artwork_mark: row.get(12).unwrap(), 
-                                friendly_name: row.get(13).unwrap()
+                                annoopera: row.get(7).unwrap(),
+                                numero_totale_copie: row.get(8).unwrap(),
+                                dimensions: row.get(9).unwrap(),
+                                private: row.get(10).unwrap(),
+                                icon_uri: row.get(11).unwrap(),
+                                tipofirma: row.get(12).unwrap(),
+                                tiposupporto: row.get(13).unwrap(),
+                                has_artwork_mark: row.get(14).unwrap(), 
+                                friendly_name: row.get(15).unwrap()
                             };
 
                         dossiers.push(res_row)
@@ -143,7 +145,9 @@ pub fn dossier_query(params: QueryParams) -> JsonResult {
     ic_cdk::println!("Query: {owner_sql} ");
 
     let owner_dossier_infos = dossier_struct_query(owner_sql.to_string());
+    ic_cdk::println!("dossier_query owner_sql : {:?} ", owner_dossier_infos);
     let public_dossier_infos = dossier_struct_query(public_sql.to_string());
+    ic_cdk::println!("dossier_query public_sql : {:?} ", public_sql);
 
     let rs = DossierReturnStruct {
         success: true,
@@ -162,9 +166,9 @@ pub fn dossier_insert(jv: String) -> ExecResult {
     let conn = ic_sqlite::CONN.lock().unwrap();
 
     let sql = format!("insert into dossier \
-        (uuid, autore, nomeopera, ora_inserimento, inserted_by, icon_uri, tipotecnica, dataopera, numero_totale_copie, dimensions, private, tipofirma) 
-        values ('{}', '{}', '{}', '{}', '{}', '{}', '{}', {}, '{}', '{}', '{}', '{}' )",
-        d.uuid, d.autore, d.nomeopera, d.ora_inserimento, caller, d.icon_uri , d.tipotecnica, d.dataopera, d.numero_totale_copie,  d.dimensions, d.private, d.tipofirma
+        (uuid, autore, nomeopera, ora_inserimento, inserted_by, icon_uri, tipotecnica, annoopera, numero_totale_copie, dimensions, private, tipofirma, tiposupporto) 
+        values ('{}', '{}', '{}', '{}', '{}', '{}', '{}', {}, {}, '{}', {}, '{}', '{}')",
+        d.uuid, d.autore, d.nomeopera, d.ora_inserimento, caller, d.icon_uri , d.tipotecnica, d.annoopera, d.numero_totale_copie,  d.dimensions, d.private, d.tipofirma, d.tiposupporto
         );
     return match conn.execute(
         &sql,

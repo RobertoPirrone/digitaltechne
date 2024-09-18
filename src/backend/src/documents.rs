@@ -5,7 +5,7 @@ use candid::CandidType;
 use serde::{Deserialize, Serialize};
 
 use crate::my_utils::*;
-use crate::dossier::{Dossier, dossier_struct_query};
+use crate::granberg_dossier::{Dossier, dossier_struct_query};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Documento {

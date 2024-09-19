@@ -6,7 +6,7 @@ import { createMuiTheme, ThemeProvider } from "@mui/material/styles";
 import { ArtworkMark } from "./ArtworkMark";
 import { CartridgeInsert } from "./CartridgeInsert";
 import { Dossier } from "./Dossier";
-import { DossierDetail } from "./DossierDetail";
+import { DossierDetail } from "./DossierDetailGranberg";
 import { Home } from "./Home";
 import { LandingPage } from "./LandingPage";
 import Login from "./auth/Login";

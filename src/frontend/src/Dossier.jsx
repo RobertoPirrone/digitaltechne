@@ -40,7 +40,7 @@ export const Dossier = () => {
   const { backendActor, principal } = useAuth();
   const navigate = useNavigate();
   const { handleSubmit } = useForm();
-  const { t } = useTranslation(["dossier"]);
+  const { t } = useTranslation(["dossier", "tipofirma", "tiposupporto", "tipotecnica" ]);
   const [loading, setLoading] = useState(true);
   const [dossierPersonali, setDossierPersonali] = useState([]); //elenco dossier
   const [dossierPersonaliMaster, setDossierPersonaliMaster] = useState([]); //elenco dossier
@@ -80,6 +80,7 @@ export const Dossier = () => {
             if ("Ok" in Ret_data) { 
               let response = JSON.parse(Ret_data.Ok);
               console.log("dossier_query Ok response: ", response);
+              // TBD: Nazionalizzare i valori di tipofirma, supporto e tecnica
               setDossierPersonali(response.ret_owner);
               setDossierPubblici(response.ret_public);
               setLoading(false);
@@ -128,8 +129,6 @@ export const Dossier = () => {
     { flex: 1, headerName: t("dossier:Owner"), field: "friendly_name" },
     { flex: 1, headerName: t("dossier:Autore"), field: "autore" },
     { flex: 1, headerName: t("dossier:NomeOpera"), field: "nomeopera" },
-    { flex: 1, headerName: t("dossier:TipoOpera"), field: "tipoopera" },
-    { flex: 1, headerName: t("dossier:LuogoOpera"), field: "luogoopera" },
     { flex: 1, headerName: t("dossier:Private"), field: "private" },
   ];
 
@@ -140,7 +139,13 @@ export const Dossier = () => {
     columns.push({ flex: 1, headerName: t("dossier:year"), field: "year" });
   }
 
-  columns.push({ flex: 1, headerName: t("dossier:NFTid"), field: "token_id" });
+    columns.push({ flex: 1, headerName: t("tipofirma:Label"), field: "tipofirma" });
+    columns.push({ flex: 1, headerName: t("tipotecnica:Label"), field: "tipotecnica" });
+    columns.push({ flex: 1, headerName: t("tiposupporto:Label"), field: "tiposupporto" });
+    columns.push({ flex: 1, headerName: t("numero_totale_copie"), field: "numero_totale_copie" });
+    columns.push({ flex: 1, headerName: t("dimensions"), field: "dimensions" });
+    columns.push({ flex: 1, headerName: t("annoopera"), field: "annoopera" });
+
   columns.push({
     flex: 1,
     headerName: t("dossier:InBC"),

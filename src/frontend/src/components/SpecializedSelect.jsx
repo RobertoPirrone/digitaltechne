@@ -1,3 +1,6 @@
+// Select multilingua specifica per un campo
+// gestisce anche pulldown a 2 livelli (prima si chiamava Double    LevelSelect)
+
 //https://mui.com/material-ui/react-select/#grouping
 // https://stackoverflow.com/questions/62455161/loop-through-array-and-create-a-listitem-for-each-item
 
@@ -67,7 +70,7 @@ const { t, i18n, ready } = useTranslation([`${what}`]);
             );
 };
 
-export const DoubleLevelSelect = ({
+export const SpecializedSelect = ({
   name,
   onChange,
   label,

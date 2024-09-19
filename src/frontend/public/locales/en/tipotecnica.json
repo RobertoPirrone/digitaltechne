@@ -1,0 +1,9 @@
+{
+  "tipotecnica_array": {
+    "EMBOSSING": "Embossing",
+    "ETCHING": "Etching",
+    "LITOGRAPHY": "Litography",
+    "MIXED": "Mixed Technique",
+    "WOODCUT": "Woodcut"
+  }
+}

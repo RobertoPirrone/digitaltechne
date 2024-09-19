@@ -8,6 +8,8 @@ import Autocomplete from "@mui/material/Autocomplete";
 import { v4 as uuidv4 } from 'uuid';
 
 import { MyTextField, MyCheckbox, MyAutocomplete, MostSubmitButton, MostCheckbox, MostSelect, MostTextField } from "./components/MostComponents";
+import { DoubleLevelSelect} from "./components/DoubleLevelSelect";
+
 import { useGlobalState } from "./state";
 import { DTRoot } from "./components/useStyles";
 import { Header } from "./Header";
@@ -116,6 +118,7 @@ export const NewDossier = () => {
     backendActor
       .dossier_insert(JSON.stringify(vals))
       .then((Ok_data) => {
+        console.log("dossier_insert no json returns: ", Ok_data);
         console.log("dossier_insert returns: ", JSON.stringify(Ok_data));
         let response = JSON.parse(Ok_data.Ok);
         console.log(response);
@@ -159,17 +162,15 @@ export const NewDossier = () => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <Grid container spacing={1} alignItems="center">
               <Grid item xs={12}> <MyTextField name="nomeopera" required={true} label={t("dossier:nomeopera")} onChange={(e) => setNomeOpera(e.target.value)} /> </Grid>
-              <Grid item xs={12}> <MyAutocomplete name="tipotecnica" label={t("dossier:tipotecnica")} options={newDossierInfo.autori} value={tipotecnica} onInputChange={(e, v) => setTipotecnica(v)} /> </Grid>
+              <Grid item xs={12}> <DoubleLevelSelect defaultValue={""} name="tipotecnica" label={t("dossier:tipotecnica")} what={"tipotecnica"} onChange={(e, v) => setTipotecnica(e.target.value)} /> </Grid>
               <Grid item xs={12}> <MyTextField name="annoopera" required={true} label={t("dossier:annoopera")} onChange={(e) => setAnnoopera(e.target.value)} /> </Grid>
               <Grid item xs={12}> <MyTextField name="numero_totale_copie" required={true} label={t("dossier:numero_totale_copie")} onChange={(e) => setNumero_totale_copie(e.target.value)} /> </Grid>
               <Grid item xs={12}> <MyTextField name="dimensions" required={true} label={t("dossier:dimensions")} onChange={(e) => setDimensions(e.target.value)} /> </Grid>
-              <Grid item xs={12}> <MyAutocomplete name="tipofirma" label={t("dossier:tipofirma")} options={newDossierInfo.autori} value={tipofirma} onInputChange={(e, v) => setTipofirma(v)} /> </Grid>
-              <Grid item xs={12}> <MyAutocomplete name="tiposupporto" label={t("dossier:tiposupporto")} options={newDossierInfo.autori} value={tiposupporto} onInputChange={(e, v) => setTiposupporto(v)} /> </Grid>
+              <Grid item xs={12}> <DoubleLevelSelect defaultValue={""} name="tipofirma" label={t("dossier:tipofirma")} what={"tipofirma"} onChange={(e, v) => setTipofirma(e.target.value)} /> </Grid>
+              <Grid item xs={12}> <DoubleLevelSelect defaultValue={""} name="tiposupporto" label={t("dossier:tiposupporto")} what={"tiposupporto"} onChange={(e, v) => setTiposupporto(e.target.value)} /> </Grid>
 
               <Grid item xs={3}> <text>Private</text> <MyCheckbox defaultChecked={false} onChange={(e, v) => setPrivateDossier(v.label)} /> </Grid>
-
               <Grid item xs={12}> {" "} &nbsp; </Grid>
-
               <MostSubmitButton disabled={disabledButs} label={t("dossier:Inserisci")} />
             </Grid>
           </form>

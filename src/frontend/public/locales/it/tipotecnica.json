@@ -1,0 +1,9 @@
+{
+  "tipotecnica_array": {
+    "EMBOSSING": "In Rilievo",
+    "ETCHING": "Acquaforte",
+    "LITOGRAPHY": "Litografia",
+    "MIXED": "Tecnica Mista",
+    "WOODCUT": "Xilografia"
+  }
+}

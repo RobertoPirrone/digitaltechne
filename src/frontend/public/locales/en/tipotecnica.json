@@ -5,5 +5,6 @@
     "LITOGRAPHY": "Litography",
     "MIXED": "Mixed Technique",
     "WOODCUT": "Woodcut"
-  }
+  },
+  "Label": "Tecnique Type"
 }

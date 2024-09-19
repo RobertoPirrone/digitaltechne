@@ -3,5 +3,6 @@
     "PAPER": "Carta",
     "CANVAS": "Tela",
     "ACRYLIC": "Acrilico"
-  }
+  },
+  "Label": "Tipo Supporto"
 }

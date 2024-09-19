@@ -22,6 +22,7 @@ MyListSubheader.muiSkipListHighlight = true;
 
 const ComputeSelectRows = ({
     what,
+    label,
     defaultValue,
     onChange
 }) => {
@@ -56,12 +57,12 @@ const { t, i18n, ready } = useTranslation([`${what}`]);
       console.log(rows);
             return (
                 <>
-        <InputLabel id="demo-simple-select-required-label">{t(`${what}`)}</InputLabel>
+        <InputLabel id="demo-simple-select-required-label">{label}</InputLabel>
         <Select
           labelId="demo-simple-select-required-label"
           id="demo-simple-select-required"
           defaultValue={defaultValue}
-          label="Age *"
+          label={label}
           onChange={onChange}
         >
                 {rows}
@@ -80,6 +81,6 @@ export const SpecializedSelect = ({
 }) => {
 
 return (
-        <ComputeSelectRows what={what} defaultValue={defaultValue} onChange={onChange}/>
+        <ComputeSelectRows what={what} label={label} defaultValue={defaultValue} onChange={onChange}/>
 )
 };

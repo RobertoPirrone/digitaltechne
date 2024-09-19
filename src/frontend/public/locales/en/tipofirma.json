@@ -3,5 +3,6 @@
     "SIGNED": "Signed",
     "NOT_SIGNED": "Not Signed",
     "AUTHOR_PROOF": "Author Proof"
-  }
+  },
+  "Label": "Signature Type"
 }

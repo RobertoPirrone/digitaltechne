@@ -37,7 +37,7 @@ export const DossierDetail = () => {
   const [doc_bc_sync, setDoc_bc_sync] = useState(true);
   const [application, setApplication] = useGlobalState("application");
 
-  const { t } = useTranslation(["translation", "documento", "dossier"]);
+  const { t } = useTranslation(["translation", "documento", "dossier", "tipofirma", "tipotecnica", "tiposupporto"]);
   const { control, register, handleSubmit, errors } = useForm();
   const [uploads, setUploads] = useState([]);
 
@@ -161,10 +161,11 @@ export const DossierDetail = () => {
                 <tr> <th>{t("dossier:InsertTime")}</th> <td>{dossierInfo.ora_inserimento}</td> </tr>
 
                 <tr> <th>{t("dossier:autore")}</th> <td>{dossierInfo.autore} </td> </tr>
-                <tr> <th>{t("dossier:TipoOpera")}</th> <td>{dossierInfo.tipoopera}</td> </tr>
-                    <tr> <th>{t("dossier:TipoSupporto")}</th> <td>{dossierInfo.tiposupporto_id}</td> </tr>
-                    <tr> <th>{t("dossier:TipoFirma")}</th> <td> {dossierInfo.luogoopera} </td> </tr>
-                    <tr> <th>{t("dossier:TipoTecnica")}</th> <td> {dossierInfo.luogoopera} </td> </tr>
+                    <tr> <th>{t("tiposupporto:Label")}</th> <td> {t(`tiposupporto:tiposupporto_array.${dossierInfo.tiposupporto}`)}</td> </tr>
+                    <tr> <th>{t("tipofirma:Label")}</th> <td> {t(`tipofirma:tipofirma_array.${dossierInfo.tipofirma}`)} </td> </tr>
+                    <tr> <th>{t("tipotecnica:Label")}</th> <td> {t(`tipotecnica:tipotecnica_array.${dossierInfo.tipotecnica}`)} </td> </tr>
+                    <tr> <th>{t("dossier:AnnoOpera")}</th> <td> {dossierInfo.annoopera} </td> </tr>
+                    <tr> <th>{t("dossier:NumeroTotaleCopie")}</th> <td> {dossierInfo.numero_totale_copie} </td> </tr>
                     <tr> <th>{t("dossier:riservato")}</th> <td>{dossierInfo.private}</td> </tr>
                 <tr>
                   <th className="vertalignTop">{t("dossier:InBC")}</th>

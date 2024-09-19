@@ -3,5 +3,6 @@
     "SIGNED": "Firmato",
     "NOT_SIGNED": "Non Firmato",
     "AUTHOR_PROOF": "Prova d'autore"
-  }
+  },
+  "Label": "Tipo di Firma"
 }

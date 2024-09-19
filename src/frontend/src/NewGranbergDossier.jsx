@@ -27,7 +27,7 @@ export const NewDossier = () => {
   const [newDossierInfo, setNewDossierInfo] = useState({}); //pull down & C.
   const [searchele, setSearchele] = useState(false);
   const [lastInsert, setLastInsert] = useState(null);
-  const { t } = useTranslation(["translation", "dossier"]);
+  const { t } = useTranslation(["translation", "dossier", "tipotecnica", "tiposupporto", "tipofirma"]);
   const [uploadInfo, setUploadInfo] = useState(null);
   const [uploadInfoSignatures, setUploadInfoSignatures] = useState(null);
   const [action, setAction] = useState("");
@@ -162,12 +162,12 @@ export const NewDossier = () => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <Grid container spacing={1} alignItems="center">
               <Grid item xs={12}> <MyTextField name="nomeopera" required={true} label={t("dossier:nomeopera")} onChange={(e) => setNomeOpera(e.target.value)} /> </Grid>
-              <Grid item xs={12}> <SpecializedSelect defaultValue={""} name="tipotecnica" label={t("dossier:tipotecnica")} what={"tipotecnica"} onChange={(e, v) => setTipotecnica(e.target.value)} /> </Grid>
+              <Grid item xs={12}> <SpecializedSelect defaultValue={""} name="tipotecnica" label={t("tipotecnica:Label")} what={"tipotecnica"} onChange={(e, v) => setTipotecnica(e.target.value)} /> </Grid>
               <Grid item xs={12}> <MyTextField name="annoopera" required={true} label={t("dossier:annoopera")} onChange={(e) => setAnnoopera(e.target.value)} /> </Grid>
               <Grid item xs={12}> <MyTextField name="numero_totale_copie" required={true} label={t("dossier:numero_totale_copie")} onChange={(e) => setNumero_totale_copie(e.target.value)} /> </Grid>
               <Grid item xs={12}> <MyTextField name="dimensions" required={true} label={t("dossier:dimensions")} onChange={(e) => setDimensions(e.target.value)} /> </Grid>
-              <Grid item xs={12}> <SpecializedSelect defaultValue={""} name="tipofirma" label={t("dossier:tipofirma")} what={"tipofirma"} onChange={(e, v) => setTipofirma(e.target.value)} /> </Grid>
-              <Grid item xs={12}> <SpecializedSelect defaultValue={""} name="tiposupporto" label={t("dossier:tiposupporto")} what={"tiposupporto"} onChange={(e, v) => setTiposupporto(e.target.value)} /> </Grid>
+              <Grid item xs={12}> <SpecializedSelect defaultValue={""} name="tipofirma" label={t("tipofirma:Label")} what={"tipofirma"} onChange={(e, v) => setTipofirma(e.target.value)} /> </Grid>
+              <Grid item xs={12}> <SpecializedSelect defaultValue={""} name="tiposupporto" label={t("tiposupporto:Label")} what={"tiposupporto"} onChange={(e, v) => setTiposupporto(e.target.value)} /> </Grid>
 
               <Grid item xs={3}> <text>Private</text> <MyCheckbox defaultChecked={false} onChange={(e, v) => setPrivateDossier(v.label)} /> </Grid>
               <Grid item xs={12}> {" "} &nbsp; </Grid>

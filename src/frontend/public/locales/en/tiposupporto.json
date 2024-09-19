@@ -3,5 +3,6 @@
     "PAPER": "Paper",
     "CANVAS": "Canvas",
     "ACRYLIC": "Acrylic"
-  }
+  },
+  "Label": " Support Type"
 }

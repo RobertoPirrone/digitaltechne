@@ -4,7 +4,8 @@
     "ETCHING": "Etching",
     "LITOGRAPHY": "Litography",
     "MIXED": "Mixed Technique",
-    "WOODCUT": "Woodcut"
+    "WOODCUT": "Woodcut",
+    "PLASTER": "Plaster"
   },
   "Label": "Tecnique Type"
 }

@@ -14,7 +14,7 @@ import {Logout} from "./auth/Logout";
 import { JsonCompare } from "./JsonCompare";
 import { Manual } from "./Manual";
 import { NewDocument } from "./NewDocument";
-import { NewDossier } from "./NewGranbergDossier";
+import { NewDossier, BatchInsert } from "./NewGranbergDossier";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { Purchase } from "./Purchase";
 import { UserRoles } from "./UserRoles";
@@ -48,6 +48,7 @@ function App() {
               <Route path="/manual" element={<Manual />} />
               <Route path="/newdocument" key="dossier_id" element={<NewDocument />} />
               <Route path="/newdossier" element={<NewDossier />} />
+              <Route path="/batchinsert" element={<BatchInsert />} />
               <Route path="/purchase" element={<Purchase />} />
               <Route path="/user_roles" element={<UserRoles />} />
               <Route path="/verify_mark/:dossierdetail" element={<VerifyMark />} />

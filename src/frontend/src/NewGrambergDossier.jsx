@@ -102,7 +102,7 @@ export const NewDossier = () => {
     vals.uuid = uuidv4();
     vals.ora_inserimento = new Date();
     vals.username = username;
-    vals.autore = "Liliana Granberg";
+    vals.autore = "Liliana Gramberg";
     vals.annoopera = parseInt(annoopera);
     vals.nomeopera = nomeOpera;
     vals.tipotecnica = tipotecnica;
@@ -243,7 +243,7 @@ export const BatchInsert = () => {
         vals.uuid = uuidv4();
         vals.ora_inserimento = new Date();
         vals.username = username;
-        vals.autore = "Liliana Granberg";
+        vals.autore = "Liliana Gramberg";
         vals.annoopera = r.Date != null ? parseInt(r.Date) : 1970;
         vals.nomeopera = r.Title;
         if ((r.Technique == null) || (r.Technique == "")) {

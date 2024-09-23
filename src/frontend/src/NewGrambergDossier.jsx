@@ -267,7 +267,7 @@ export const BatchInsert = () => {
         }
         vals.tipotecnica = tech;
         vals.tipofirma = "SIGNED";
-        vals.dimensions = r.Dimensions != null ? r.Dimensions : "UNKNOWN";
+        vals.dimensions = r.Dimensions === null ? "UNK" : r.Dimensions ;
         vals.numero_totale_copie = r.EditionNumber != null ? parseInt(r.EditionNumber) : 0;
         vals.tiposupporto = "PAPER";
           vals.private = false;

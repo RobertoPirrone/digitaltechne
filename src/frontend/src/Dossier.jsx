@@ -126,10 +126,7 @@ export const Dossier = () => {
         );
       },
     },
-    { flex: 1, headerName: t("dossier:Owner"), field: "friendly_name" },
-    { flex: 1, headerName: t("dossier:Autore"), field: "autore" },
     { flex: 1, headerName: t("dossier:NomeOpera"), field: "nomeopera" },
-    { flex: 1, headerName: t("dossier:Private"), field: "private" },
   ];
 
   if (application == "elivilla") {
@@ -139,12 +136,13 @@ export const Dossier = () => {
     columns.push({ flex: 1, headerName: t("dossier:year"), field: "year" });
   }
 
-    columns.push({ flex: 1, headerName: t("tipofirma:Label"), field: "tipofirma" });
-    columns.push({ flex: 1, headerName: t("tipotecnica:Label"), field: "tipotecnica" });
+    columns.push({ flex: 1, headerName: t("tipofirma:Label"), field: "tipofirma", renderCell: (params) => { return t(params.row.tipofirma) } });
+    columns.push({ flex: 1, headerName: t("tipotecnica:Label"), field: "tipotecnica", renderCell: (params) => { return t(params.row.tipotecnica, { ns: 'tipotecnica' })  } });
     columns.push({ flex: 1, headerName: t("tiposupporto:Label"), field: "tiposupporto" });
-    columns.push({ flex: 1, headerName: t("numero_totale_copie"), field: "numero_totale_copie" });
-    columns.push({ flex: 1, headerName: t("dimensions"), field: "dimensions" });
-    columns.push({ flex: 1, headerName: t("annoopera"), field: "annoopera" });
+    columns.push({ flex: 1, headerName: t("dossier:NumeroTotaleCopie"), field: "numero_totale_copie" });
+    columns.push({ flex: 1, headerName: t("dossier:Dimensions"), field: "dimensions" });
+    columns.push({ flex: 1, headerName: t("dossier:Annoopera"), field: "annoopera" });
+    columns.push({ flex: 1, headerName: t("dossier:Owner"), field: "friendly_name" });
 
   columns.push({
     flex: 1,

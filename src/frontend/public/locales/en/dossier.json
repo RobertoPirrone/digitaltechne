@@ -120,5 +120,8 @@
   "Hash transazione": "Transaction Hash",
   "Immagine": "Image",
   "NFTid": "Nft Id",
-  "NumeroCopie": "Number of Copies"
+  "NumeroCopie": "Number of Copies",
+  "Dimensions": "Dimensions",
+  "Annoopera": "Creation Year",
+  "NumeroTotaleCopie": "Total Number of Copies"
 }

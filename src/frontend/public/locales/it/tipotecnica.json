@@ -4,7 +4,8 @@
     "ETCHING": "Acquaforte",
     "LITOGRAPHY": "Litografia",
     "MIXED": "Tecnica Mista",
-    "WOODCUT": "Xilografia"
+    "WOODCUT": "Xilografia",
+    "PLASTER": "Gesso"
   },
   "Label": "Tipo di Tecnica"
 }

@@ -6,6 +6,7 @@ import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
 import Autocomplete from "@mui/material/Autocomplete";
 import { v4 as uuidv4 } from 'uuid';
+import { DnaFile } from "./components/DnaFile";
 
 import { MyTextField, MyCheckbox, MyAutocomplete, MostSubmitButton, MostCheckbox, MostSelect, MostTextField } from "./components/MostComponents";
 import { SpecializedSelect} from "./components/SpecializedSelect";
@@ -15,6 +16,7 @@ import { DTRoot } from "./components/useStyles";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { Upload } from "./Upload";
+import { UploadNew } from "./UploadNew";
 import { backend } from "../../declarations/backend";
 import { useAuth } from "./auth/use-auth-client";
 
@@ -32,6 +34,7 @@ export const NewDossier = () => {
   const [uploadInfoSignatures, setUploadInfoSignatures] = useState(null);
   const [action, setAction] = useState("");
   const [asset, setAsset] = useState({});
+  const [assets, setAssets] = useState([{}]);
   const [privateDossier, setPrivateDossier] = useState(false);
   const [nomeOpera, setNomeOpera] = useState("");
   const [tipoOpera, setTipoOpera] = useState("");
@@ -159,7 +162,7 @@ export const NewDossier = () => {
         <div className={DTRoot}>
           <Upload asset={asset} show={true} setAsset={setAsset} setDisabledButs={setDisabledButs} />
 
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={onSubmit}>
             <Grid container spacing={1} alignItems="center">
               <Grid item xs={12}> <MyTextField name="nomeopera" required={true} label={t("dossier:nomeopera")} onChange={(e) => setNomeOpera(e.target.value)} /> </Grid>
               <Grid item xs={12}> <SpecializedSelect defaultValue={""} name="tipotecnica" label={t("tipotecnica:Label")} what={"tipotecnica"} onChange={(e, v) => setTipotecnica(e.target.value)} /> </Grid>
@@ -179,4 +182,148 @@ export const NewDossier = () => {
       <Footer />
     </div>
   );
+};
+
+export const BatchInsert = () => {
+  const navigate = useNavigate();
+  const [username, setUsername] = useGlobalState("username");
+  const { control, register, handleSubmit, watch, formState: { errors }, } = useForm();
+  const { t } = useTranslation(["translation", "dossier", "tipotecnica", "tiposupporto", "tipofirma"]);
+  const [disabledButs, setDisabledButs] = useState(true);
+  const [csvText, setCsvText] = useState("");
+  const [jsonText, setJsonText] = useState("");
+  const [files, setFiles] = useState([]);
+  const [assets, setAssets] = useState({});
+  const { backendActor, principal } = useAuth();
+
+  const onBatchSubmit = (submit_vals) => {
+    let vals = {};
+    let file_found = false;
+    vals.uuid = uuidv4();
+    vals.insert_time = new Date();
+    vals.username = "pippo";
+
+    setDisabledButs(true);
+    console.log("onBatchSubmit vals: ", JSON.stringify(vals));
+    console.log("onBatchSubmit json: ", jsonText);
+    let r = {};
+    let ass = {};
+    let tech = "";
+
+      outerloop: for (r of jsonText) {
+        console.log("jsonText element: ", r)
+
+        var photos = r.Photos;
+        if ((photos == null) || (photos == "")) {
+            console.error("Missing Photo: ", JSON.stringify(r));
+            alert("Missing Photo: ", JSON.stringify(r));
+            continue;
+        }
+        var fname = photos.toString().split("/")[0];
+        var filename = `DSC_0${fname}.JPG`;
+        file_found = false;
+        innerloop: for (ass of assets) {
+            // console.log("ASS: ", ass);
+            if (ass.original_filename == filename) {
+                console.error("FOUND FILENAME: ", filename);
+                vals.icon_uri = ass.key;
+                file_found=true;
+                console.error("FOUND FILENAME2: ", filename, ", key: ", vals.icon_uri);
+                break innerloop;
+            }
+        };
+        console.log("EXIT INNERLOOP");
+        if (!file_found) {
+          console.log("file not found: ", filename);
+          continue;
+        }
+            
+
+        console.log("file found, riempimento valori: ", filename);
+        vals.uuid = uuidv4();
+        vals.ora_inserimento = new Date();
+        vals.username = username;
+        vals.autore = "Liliana Granberg";
+        vals.annoopera = r.Date != null ? parseInt(r.Date) : 1970;
+        vals.nomeopera = r.Title;
+        if ((r.Technique == null) || (r.Technique == "")) {
+            alert("Missing Technique: ", JSON.stringify(r));
+            continue;
+        }
+        tech = (r.Technique).toUpperCase();
+        switch (tech) {
+            case 'ACQUAFORTE': 
+                tech = "ETCHING";
+                break;
+            case 'LITOGRAFIA': 
+                tech = "LITOGRAPHY";
+                break;
+            case 'TECNICA MISTA': 
+                tech = "MIXED";
+                break;
+            case 'XILOGRAFIA': 
+                tech = "WOODCUT";
+                break;
+        }
+        vals.tipotecnica = tech;
+        vals.tipofirma = "SIGNED";
+        vals.dimensions = r.Dimensions != null ? r.Dimensions : "UNKNOWN";
+        vals.numero_totale_copie = r.EditionNumber != null ? parseInt(r.EditionNumber) : 0;
+        vals.tiposupporto = "PAPER";
+          vals.private = false;
+
+        setDisabledButs(true);
+        console.log("onBatchSubmit dossier_insert: ", JSON.stringify(vals));
+        backendActor
+          .dossier_insert(JSON.stringify(vals))
+          .then((Ok_data) => {
+            console.log("dossier_insert no json returns: ", Ok_data);
+            console.log("dossier_insert returns: ", JSON.stringify(Ok_data));
+            let response = JSON.parse(Ok_data.Ok);
+            console.log(response);
+            if (response) {
+              setDisabledButs(true);
+              navigate("/dossier");
+            } else {
+              console.error(response);
+              alert(response.error);
+              setDisabledButs(false);
+            }
+          })
+          .catch(function (error) {
+            console.error(error);
+            alert(error.message ? error.message : JSON.stringify(error));
+            setDisabledButs(false);
+          });
+      };
+        setDisabledButs(false);
+
+  }
+
+    return(
+    <>
+      <Header />
+      <h1>{t("BatchInsert")}</h1>
+      <Container component="main" maxWidth="md">
+        <div className={DTRoot}>
+            <Grid container spacing={1} alignItems="center">
+
+        <DnaFile setDisabledButs={setDisabledButs} sheetIndex={0} setJsonText={setJsonText} label={"Metadata file (XLSX)"}/>
+          <UploadNew assets={assets} show={true} setAssets={setAssets} setDisabledButs={setDisabledButs} label={"Carica i file JPG"} />
+                <Grid item xs={12}> {" "} &nbsp; </Grid>
+      </Grid>
+
+          <form onSubmit={onBatchSubmit}>
+            <Grid container spacing={1} alignItems="center">
+
+              <Grid item xs={12}> {" "} &nbsp; </Grid>
+
+              <MostSubmitButton disabled={disabledButs} label={t("dossier:Inserisci")} />
+            </Grid>
+          </form>
+        </div>
+      </Container>
+      <Footer />
+    </>
+  )
 };

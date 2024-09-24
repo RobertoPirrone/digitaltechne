@@ -1,5 +1,6 @@
 // lettura di file XLSX, ritorna json o csv
 // TBD: implementarlo come Uplad, quindi con document.createElement("input")
+// cfr.: https://medium.com/web-dev-survey-from-kyoto/how-to-customize-the-file-upload-button-in-react-b3866a5973d8
 import React, { useState, useEffect, useCallback } from "react";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";

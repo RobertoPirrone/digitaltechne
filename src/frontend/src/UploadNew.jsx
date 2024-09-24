@@ -138,7 +138,7 @@ export const UploadNew = ({
     <>
       <Typography variant="body2">
         {label}
-        <button className={"App-upload"} onClick={uploadPhotos}> 📂 Upload file </button> 
+        <button className={"App-upload"} onClick={uploadPhotos}> 📂 t("Upload file") </button> 
         {uploadedFileName}
       </Typography>
       {progress !== null && <div className={"App-progress"}>{Math.round(progress * 100)}%</div>}

@@ -28,7 +28,8 @@ th {
 
 .App {
   text-align: center;
-  color: #aaaa00;
+  xx-color: #aaaa00;
+  color: #00e5ff;
 }
 
 .App-logo {
@@ -43,7 +44,8 @@ th {
 }
 
 .Home-header {
-  background-color: #282c34;
+  xx-background-color: #282c34;
+  xx-background-color: #00b8d4;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -51,7 +53,7 @@ th {
   justify-content: center;
   font-size: calc(10px + 2vmin);
   /* color: #DBDB00; */
-  color: white;
+  xx-color: white;
 }
 .Home-header :any-link {
   color: #dbdb00;
@@ -107,7 +109,8 @@ th {
   /* font-weight: bold; */
 }
 .gold {
-  color: #aaaa00;
+  xx-color: #aaaa00;
+  color: #00b8d4;
 }
 #languageDiv {
   width: 100%;
@@ -175,7 +178,7 @@ th {
 .Header :any-link,
 .Header .MuiIconButton-root {
   background-color: #282c34 !important;
-  color: #dbdb00 !important;
+  xx-color: #dbdb00 !important;
 }
 .blackColor,
 .blackColor :any-link {

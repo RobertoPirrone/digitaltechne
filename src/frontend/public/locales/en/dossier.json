@@ -122,6 +122,7 @@
   "NFTid": "Nft Id",
   "NumeroCopie": "Number of Copies",
   "Dimensions": "Dimensions",
-  "Annoopera": "Creation Year",
-  "NumeroTotaleCopie": "Total Number of Copies"
+  "AnnoOpera": "Creation Year",
+  "NumeroTotaleCopie": "Total Number of Copies",
+  "LoadJpgs": "Upload JPG files"
 }

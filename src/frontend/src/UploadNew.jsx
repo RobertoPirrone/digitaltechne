@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Typography from "@mui/material/Typography";
+import Grid from "@mui/material/Grid";
+import { useTranslation } from "react-i18next";
 import { Ed25519KeyIdentity } from "@dfinity/identity";
 import { HttpAgent } from "@dfinity/agent";
 import { AssetManager } from "@dfinity/assets";
@@ -19,6 +21,7 @@ export const UploadNew = ({
     show=false,
     accept="image/*"
 }) => {
+  const { t } = useTranslation(["translation", "dossier", "tipotecnica", "tiposupporto", "tipofirma"]);
   const {principal, identity} = useAuth();
     if (false) {
   // Hardcoded principal: 535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe
@@ -35,8 +38,8 @@ export const UploadNew = ({
   if (isLocal) {
     asset_pfx = `http://${canisterId}.localhost:4943`;
   }
-  console.log("asset_pfx: ", asset_pfx);
-  console.log("asset_pfx principal: ", principal.toText());
+  // console.log("asset_pfx: ", asset_pfx);
+  // console.log("asset_pfx principal: ", principal.toText());
 
   // Create asset manager instance for above asset canister
   // const assetManager = new AssetManager({canisterId, agent});
@@ -136,12 +139,14 @@ export const UploadNew = ({
 
   return (
     <>
-      <Typography variant="body2">
-        {label}
-        <button className={"App-upload"} onClick={uploadPhotos}> 📂 t("Upload file") </button> 
-        {uploadedFileName}
-      </Typography>
-      {progress !== null && <div className={"App-progress"}>{Math.round(progress * 100)}%</div>}
+            <Grid container spacing={1} alignItems="center">
+                <Grid item xs={6}> <span className="padding10">{label}</span></Grid>
+                <Grid item xs={6} > <button className={"App-upload"} onClick={uploadPhotos}> 📂 {t("UploadFiles")} </button> 
+                {(uploadedFileName) ? uploadedFileName : "No file"}
+      </Grid>
+                {progress !== null && <div className={"App-progress"}>{Math.round(progress * 100)}%</div>}
+            </Grid>
+
     </>
   );
 };

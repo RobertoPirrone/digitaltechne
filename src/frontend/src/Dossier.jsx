@@ -136,9 +136,9 @@ export const Dossier = () => {
     columns.push({ flex: 1, headerName: t("dossier:year"), field: "year" });
   }
 
-    columns.push({ flex: 1, headerName: t("tipofirma:Label"), field: "tipofirma", renderCell: (params) => { return t(params.row.tipofirma) } });
-    columns.push({ flex: 1, headerName: t("tipotecnica:Label"), field: "tipotecnica", renderCell: (params) => { return t(params.row.tipotecnica, { ns: 'tipotecnica' })  } });
-    columns.push({ flex: 1, headerName: t("tiposupporto:Label"), field: "tiposupporto" });
+    columns.push({ flex: 1, headerName: t("tipofirma:Label"), field: "tipofirma", renderCell: (params) => { return ( t(`tipofirma:tipofirma_array.${params.row.tipofirma}`)); } });
+    columns.push({ flex: 1, headerName: t("tipotecnica:Label"), field: "tipotecnica", renderCell: (params) => { return ( t(`tipotecnica:tipotecnica_array.${params.row.tipotecnica}`)); } });
+    columns.push({ flex: 1, headerName: t("tiposupporto:Label"), field: "tiposupporto", renderCell: (params) => { return ( t(`tiposupporto:tiposupporto_array.${params.row.tiposupporto}`)); } });
     columns.push({ flex: 1, headerName: t("dossier:NumeroTotaleCopie"), field: "numero_totale_copie" });
     columns.push({ flex: 1, headerName: t("dossier:Dimensions"), field: "dimensions" });
     columns.push({ flex: 1, headerName: t("dossier:Annoopera"), field: "annoopera" });

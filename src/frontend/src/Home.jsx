@@ -50,7 +50,7 @@ export const Home = () => {
             <Grid item xs={6}>
                     <MostSubmitButton className="b_loginok" onClick={() => navigate("/dossier", {replace: true})} label={t("Mostra Opere")} id="dossier" />
                     <MostSubmitButton className="b_loginok" onClick={() => navigate("/newdossier", {replace: true})} label={t("Inserisci una nuova opera")} id="newdossier" />
-                    <MostSubmitButton className="b_loginok" onClick={() => navigate("/batchinsert", {replace: true})} label={t("Inserisci un gruppo di opere")} id="batchinsert" />
+                    <MostSubmitButton className="b_loginok" onClick={() => navigate("/batchinsert", {replace: true})} label={t("BatchInsert")} id="batchinsert" />
                     <MostSubmitButton className="b_loginok" onClick={() => navigate("/purchase", {replace: true})} label={t("Acquista Cartucce DNA")} id="purchase" />
             </Grid>
             </React.Fragment>

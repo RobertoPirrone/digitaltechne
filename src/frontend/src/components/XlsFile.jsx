@@ -1,3 +1,5 @@
+// lettura di file XLSX, ritorna json o csv
+// TBD: implementarlo come Uplad, quindi con document.createElement("input")
 import React, { useState, useEffect, useCallback } from "react";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
@@ -13,12 +15,12 @@ import { DTGrow, DTFooter } from "./useStyles";
 import { MyTextField, MyCheckbox, MyAutocomplete, MostSubmitButton, MostCheckbox, MostSelect, MostTextField } from "./MostComponents";
 import { DTRoot } from "./useStyles";
 
-export const DnaFile = ({
+export const XlsFile = ({
     setCsvText,
     setJsonText,
     setDisabledButs,
     accept=".xls,.xlsx" ,
-    label="DnaFileXls *",
+    label="XlsFileXls *",
     multiple=false,
     sheetIndex = 1
     }) => {
@@ -53,7 +55,8 @@ export const DnaFile = ({
             setCsvText(csv);
             //console.log("csv: ", csv);
           };
-        setDisabledButs(false);
+        if (setDisabledButs)
+            setDisabledButs(false);
         console.log("gotXls post post: ");
       };
       reader.readAsBinaryString(e.target.files[0]);

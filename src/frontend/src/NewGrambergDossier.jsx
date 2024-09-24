@@ -6,7 +6,7 @@ import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
 import Autocomplete from "@mui/material/Autocomplete";
 import { v4 as uuidv4 } from 'uuid';
-import { DnaFile } from "./components/DnaFile";
+import { XlsFile } from "./components/XlsFile";
 
 import { MyTextField, MyCheckbox, MyAutocomplete, MostSubmitButton, MostCheckbox, MostSelect, MostTextField } from "./components/MostComponents";
 import { SpecializedSelect} from "./components/SpecializedSelect";
@@ -308,8 +308,8 @@ export const BatchInsert = () => {
         <div className={DTRoot}>
             <Grid container spacing={1} alignItems="center">
 
-        <DnaFile setDisabledButs={setDisabledButs} sheetIndex={0} setJsonText={setJsonText} label={"Metadata file (XLSX)"}/>
-          <UploadNew assets={assets} show={true} setAssets={setAssets} setDisabledButs={setDisabledButs} label={"Carica i file JPG"} />
+        <XlsFile sheetIndex={0} setJsonText={setJsonText} label={"Metadata file (.xlsx format)"}/>
+          <UploadNew assets={assets} show={true} setAssets={setAssets} setDisabledButs={setDisabledButs} label={t("dossier:LoadJpgs")} />
                 <Grid item xs={12}> {" "} &nbsp; </Grid>
       </Grid>
 

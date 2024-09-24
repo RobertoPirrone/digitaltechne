@@ -9,7 +9,7 @@ import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { DTGrow, DTFooter } from "./components/useStyles";
-import { DnaFile } from "./components/DnaFile";
+import { XlsFile } from "./components/XlsFile";
 import { MostSubmitButton, MyAutocomplete } from "./components/MostComponents";
 import { getAssetPfx } from "./utils";
 import { useAuth } from "./auth/use-auth-client";
@@ -136,7 +136,7 @@ export const VerifyMark = (props) => {
                         <img src={`${asset_pfx}${dossierInfo.icon_uri}`} width={200} /> 
               </Grid>
         <Typography variant="body1">DNA data</Typography>
-        <DnaFile setDisabledButs={setDisabledButs} setCsvText={setCsvText} setJsonText={setJsonText}/>
+        <XlsFile setDisabledButs={setDisabledButs} setCsvText={setCsvText} setJsonText={setJsonText}/>
         <Grid container spacing={1} alignItems="center">
             <Grid item xs={6}> <span className="padding10">{t("MarkSide")} </span></Grid>
             <Grid item xs={6}> <MyAutocomplete name="mark_side" required={true} label={t("mark_side")} options={mark_side_list} onChange={(e, v) => setMarkSide(v)} /> </Grid>

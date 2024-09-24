@@ -16,7 +16,7 @@ import { MyTextField, MyCheckbox, MyAutocomplete, MostSubmitButton, MostCheckbox
 import { useGlobalState } from "./state";
 import { DTRoot } from "./components/useStyles";
 import { Upload } from "./Upload";
-import { DnaFile } from "./components/DnaFile";
+import { XlsFile } from "./components/XlsFile";
 import { backend } from "../../declarations/backend";
 import { useAuth } from "./auth/use-auth-client";
 
@@ -109,7 +109,7 @@ export const CartridgeInsert = () => {
         <div className={DTRoot}>
             <Grid container spacing={1} alignItems="center">
 
-        <DnaFile setDisabledButs={setDisabledButs} setCsvText={setCsvText} setJsonText={setJsonText}/>
+        <XlsFile setDisabledButs={setDisabledButs} setCsvText={setCsvText} setJsonText={setJsonText}/>
                 <Grid item xs={6}> <span className="padding10">{t("DnaFilePdf")}</span></Grid>
                 <Grid item xs={6}> <Upload accept={"application/pdf"} asset={pdfAsset} setAsset={setPdfAsset} setDisabledButs={setDisabledButs} show={false} /> </Grid>
                 <Grid item xs={12}> {" "} &nbsp; </Grid>

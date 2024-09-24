@@ -14,7 +14,6 @@ import { v4 as uuidv4 } from 'uuid';
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { DTGrow, DTFooter } from "./components/useStyles";
-import { DnaFile } from "./components/DnaFile";
 import { MyTextField, MostSubmitButton, MyAutocomplete } from "./components/MostComponents";
 import { appAlert } from "./Utils";
 import { useAuth } from "./auth/use-auth-client";

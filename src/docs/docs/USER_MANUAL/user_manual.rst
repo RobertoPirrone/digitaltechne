@@ -6,6 +6,7 @@
    home/home
    dossier/dossier
    newdossier/newdossier
+   batchinsert/batchinsert
    dossierdetail/dossierdetail
    newdocument/newdocument
    artwork_mark/artwork_mark

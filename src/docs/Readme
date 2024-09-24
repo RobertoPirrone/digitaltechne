@@ -2,7 +2,7 @@
 # apt-get install -y sphinx-intl python3-stemmer
 python -m venv .venv
 source .venv/bin/activate
-pip3 install Sphinx sphinx_rtd_theme sphinx-theme rinohtype
+pip3 install Sphinx sphinx_rtd_theme sphinx-theme rinohtype sphinx_new_tab_link
 deactivate
 
 # Run

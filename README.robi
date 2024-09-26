@@ -50,3 +50,42 @@ Balance:
 # questo funziona
 https://internetcomputer.org/docs/current/developer-docs/smart-contracts/topping-up/topping-up-canister#:~:text=If%20you%20have%20a%20cycles%20wallet%20you%20control%20via%20dfx,.
     dfx wallet send  --network ic way7l-iqaaa-aaaan-qmfoa-cai 40000000000
+
+
+        2024-09-26
+# https://internetcomputer.org/docs/current/developer-docs/defi/cycles/cycles-ledger
+
+dfx identity new --ic MainnetRobi
+Your seed phrase for identity 'MainnetRobi': thunder husband demise source miracle throw change husband image wild bronze autumn dumb salmon cat coil rigid slender master infant burger truth timber birth
+This can be used to reconstruct your key in case of emergency, so write it down in a safe place.
+Created identity: "MainnetRobi".
+
+principal: oco3l-vbes2-ieeha-6blei-bpnch-ew7r6-lwacs-w4klw-bw6n6-qrubk-xqe
+address:  94dd1b7f4ceda70c68b5722cd21472b77c81cb6e218d02d9b0ef1ec75a3461a6
+cycles ledger canister id: hzmmu-wyaaa-aaaah-qdsaa-cai
+
+
+dfx ledger balance --ic
+0.00000000 ICP
+
+dfx ledger account-id --ic
+94dd1b7f4ceda70c68b5722cd21472b77c81cb6e218d02d9b0ef1ec75a3461a6
+
+con la anchor ufficiale su Brave (2340035) vado su https://nns.ic0.app/, dove ho dei soldi
+
+per aggiungere soldi a NNS, andare su CoiBase e trasferire verso l'address 85f5c6c683465bc9af3625a1320a43ad68e52a05460c8e944b5fb98795745bc0  (2340035) oppure 94dd1b7f4ceda70c68b5722cd21472b77c81cb6e218d02d9b0ef1ec75a3461a6 (MainnetRobi) 
+
+creazione cycles ledger:
+dfx ledger --network ic create-canister oco3l-vbes2-ieeha-6blei-bpnch-ew7r6-lwacs-w4klw-bw6n6-qrubk-xqe --amount 1
+Transfer sent at block height 14511458
+Using transfer at block height 14511458
+Canister created with id: "hzmmu-wyaaa-aaaah-qdsaa-cai"
+
+dfx identity --network ic deploy-wallet hzmmu-wyaaa-aaaah-qdsaa-cai
+Creating a wallet canister on the ic network.
+The wallet canister on the "ic" network for user "MainnetRobi" is "hzmmu-wyaaa-aaaah-qdsaa-cai"
+Air-M1:gramberg robi$ dfx identity --network ic get-wallet
+hzmmu-wyaaa-aaaah-qdsaa-cai
+Air-M1:gramberg robi$ dfx ledger balance --ic
+0.09990000 ICP
+

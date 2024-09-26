@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# serve per generare il .did di backend. E basta
 
 function generate_did() {
   local canister=$1
@@ -18,4 +19,4 @@ do
     generate_did "$canister"
 done
 
-dfx generate
+# dfx generate

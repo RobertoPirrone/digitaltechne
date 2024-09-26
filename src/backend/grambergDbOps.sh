@@ -1,7 +1,7 @@
 #!bin/bash
 if [ $# -eq 1 -a x$1 = "x--ic" ] ; then
     network="--ic"
-    dfx identity use NuovaIdentitaRobi
+    dfx identity use MainnetRobi
     export DFX_NETWORK=ic
 else
     network=""
@@ -45,7 +45,6 @@ EOF
     create_table dossier "$fields"
     dfx canister call $network backend execute 'create index id on dossier(id)'
 
-exit 0
 
 # RBAC
 fields='

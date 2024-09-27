@@ -12,7 +12,7 @@ pub use crate::artwork_mark::{ArtworkMarkQueryParams, artwork_mark_insert, artwo
 pub use crate::cartridge::{CartridgeQueryParams, CartridgeUseParams, cartridge_insert, cartridge_query, cartridge_use_insert};
 pub use crate::documents::{Documento, QueryDocumentsParams, document_insert, documenti_query, documenti_pulldowns};
 pub use crate::granberg_dossier::{Dossier, QueryParams, dossier_insert, dossier_query, dossier_struct_query, dossier_pulldowns};
-use crate::my_utils::*;
+pub use crate::my_utils::*;
 
 #[update]
 fn execute(sql: String) -> ExecResult {

@@ -1,7 +1,7 @@
 extern crate ic_cdk_macros;
 extern crate serde;
 use ic_cdk::api::call::RejectionCode;
-use ic_cdk::{query};
+use ic_cdk::{query, update};
 use candid::{CandidType, Principal};
 use serde::{Deserialize};
 
@@ -49,6 +49,7 @@ pub fn check_caller() -> CheckResult {
         let conn = ic_sqlite::CONN.lock().unwrap();
         let mut stmt = conn.prepare(&rbac_sql).unwrap();
         let mut rows = stmt.query([]).unwrap();
+        ic_cdk::println!("Inner Query: pre match {rbac_sql} ");
         match rows.next() {
             Ok(row) => {
                 match row {
@@ -71,6 +72,28 @@ pub fn check_caller() -> CheckResult {
         };
 
     }
+}
+
+
+#[update]
+pub fn insert_caller() -> ExecResult {
+    let caller = ic_cdk::caller();
+    let principal = caller.to_string();
+            let conn = ic_sqlite::CONN.lock().unwrap();
+            ic_cdk::println!("insert_caller");
+            let rbac_insert_sql = format!("insert into rbac \
+                (principal, friendly_name, view_opera_ok, add_opera_ok, associate_dna_ok, add_dna_ok) 
+                values ('{}', '{}', {}, {}, {}, {})",
+                principal, principal, true, false, false,  false
+                );
+            ic_cdk::println!("insert_caller: {rbac_insert_sql} ");
+            return match conn.execute(
+                &rbac_insert_sql,
+                []
+            ) {
+                Ok(ok) => return Ok(format!("insert_caller: inserted {principal}, with return {ok}")),
+                Err(err) => Err(MyError::CanisterError {message: format!("{:?}", err) })
+            }
 }
 
 

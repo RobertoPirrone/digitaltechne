@@ -17,6 +17,7 @@ import { NewDocument } from "./NewDocument";
 import { NewDossier, BatchInsert } from "./NewGrambergDossier";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { Purchase } from "./Purchase";
+import { SelfDefineUser } from "./SelfDefineUser";
 import { UserRoles } from "./UserRoles";
 import { VerifyMark } from "./VerifyMark";
 import { theme } from "./components/theme";
@@ -50,6 +51,7 @@ function App() {
               <Route path="/newdossier" element={<NewDossier />} />
               <Route path="/batchinsert" element={<BatchInsert />} />
               <Route path="/purchase" element={<Purchase />} />
+              <Route path="/selfdefineuser" element={<SelfDefineUser />} />
               <Route path="/user_roles" element={<UserRoles />} />
               <Route path="/verify_mark/:dossierdetail" element={<VerifyMark />} />
             <Route path="/login" element={<Login />} />

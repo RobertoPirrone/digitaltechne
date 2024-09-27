@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useState, useMemo, useEffect, useCallback } from "react";
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from "react-router-dom";
 
@@ -7,13 +7,16 @@ import Container from "@mui/material/Container";
 
 import { Footer } from './Footer';
 import { Header } from './Header';
+import { appAlert } from "./Utils";
 import { MostSubmitButton, } from "./components/MostComponents";
+import { useAuth } from "./auth/use-auth-client";
 
 const hasRole = () => {
     return true
 }
 
 export const Home = () => {
+    const { backendActor, principal } = useAuth();
     const userInfo = "pippo";
     const { t } = useTranslation();
     const navigate = useNavigate();
@@ -22,6 +25,40 @@ export const Home = () => {
     const OwnerRole = hasRole("Owner",userInfo)
     const UserRole = hasRole("User",userInfo)
     console.log("AAAA");
+
+  useEffect(() => {
+    if (backendActor === null) { 
+        console.log("Home, backendActor null");
+        return; 
+    }
+    if (backendActor === "") { 
+        console.log("Home, backendActor empty");
+        return; 
+    }
+    if (backendActor == "2vxsx-fae") { 
+        console.log("Home, backendActor 2vxsx-fae");
+        return; 
+    }
+    console.log("Home, backendActor: ", backendActor);
+      backendActor.check_caller()
+          .then((Ret_data) => {
+            // console.log("dossier returns: ", JSON.stringify(Ret_data));
+            if ("Ok" in Ret_data) { 
+              console.log("Home check_caller Ok response: ", Ret_data);
+            } else {
+              let err = Ret_data.Err;
+              console.log("Home check_caller Err response: ", err);
+              console.error(err);
+              // appAlert(err.CanisterError.message);
+              navigate("/selfdefineuser");
+            }
+          })
+          .catch(function (error) {
+            console.error(error);
+            alert(error.message ? error.message : JSON.stringify(error));
+          });
+
+  }, [t]);
 
     return (
   <div className="app-container">

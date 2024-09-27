@@ -223,7 +223,7 @@ export const ArtworkMark = (props) => {
 
                 <Grid item xs={6}> <span className="padding10">{t("Mark Position")}</span></Grid>
                 <Grid item xs={6}> <MyAutocomplete name="mark_position" required={true} label={t("mark_position")} options={mark_position_list} onChange={(e, v) => setMarkPosition(v)} /> </Grid>
-                <Grid item xs={6}> <UploadNew assets={assets} show={true} setAssets={setAssets} setDisabledButs={setDisabledButs} label={t("dossier:LoadJpgs")} /> </Grid>
+                <Grid item xs={6}> <UploadNew assets={assets} show={false} setAssets={setAssets} setDisabledButs={setDisabledButs} label={t("dossier:LoadJpgs")} /> </Grid>
 
               <Grid item xs={6}> {" "} &nbsp; </Grid>
 

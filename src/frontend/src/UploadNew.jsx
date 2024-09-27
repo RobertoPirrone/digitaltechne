@@ -10,6 +10,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { canisterId } from "../../declarations/uploads";
 import { useAuth } from "./auth/use-auth-client";
+import { isLocalHost, getAssetPfx } from "./Utils";
 
 export const UploadNew = ({
     asset,
@@ -23,32 +24,23 @@ export const UploadNew = ({
 }) => {
   const { t } = useTranslation(["translation", "dossier", "tipotecnica", "tiposupporto", "tipofirma"]);
   const {principal, identity} = useAuth();
-    if (false) {
-  // Hardcoded principal: 535yc-uxytb-gfk7h-tny7p-vjkoe-i4krp-3qmcl-uqfgr-cpgej-yqtjq-rqe
-  // Should be replaced with authentication method e.g. Internet Identity when deployed on IC
-  const identity = Ed25519KeyIdentity.generate(new Uint8Array(Array.from({ length: 32 }).fill(0)));
-    }
-  const isLocal = !window.location.host.endsWith("icp0.io");
+  let asset_pfx = getAssetPfx();
   const [progress, setProgress] = useState(null);
   const [uploadedFileName, setUploadedFileName] = useState("");
 
   // console.log("META: ", JSON.stringify(import.meta));
   // console.log("ENV: ", JSON.stringify(import.meta.env));
-  let asset_pfx = `https://${canisterId}.icp0.io`;
-  if (isLocal) {
-    asset_pfx = `http://${canisterId}.localhost:4943`;
-  }
   // console.log("asset_pfx: ", asset_pfx);
   // console.log("asset_pfx principal: ", principal.toText());
 
   // Create asset manager instance for above asset canister
   // const assetManager = new AssetManager({canisterId, agent});
   const agent = new HttpAgent({
-    host: isLocal ? `http://127.0.0.1:4943` : "https://ic0.app",
+    host: isLocalHost() ? `http://127.0.0.1:4943` : "https://ic0.app",
     identity,
   });
   const assetManager = new AssetManager({ canisterId, agent });
-  if (isLocal) {
+  if (isLocalHost()) {
     agent.fetchRootKey();
   }
 
@@ -143,6 +135,11 @@ export const UploadNew = ({
                 <Grid item xs={6}> <span className="padding10">{label}</span></Grid>
                 <Grid item xs={6} > <button className={"App-upload"} onClick={uploadPhotos}> 📂 {t("UploadFiles")} </button> 
                 {(uploadedFileName) ? uploadedFileName : "No file"}
+      {show ?(
+          <div key={`${asset_pfx}${asset.key}`} className={"App-image"}>
+            <img src={`${asset_pfx}${asset.key}`} width={"500"} loading={"lazy"} />
+          </div>
+        ) : null }
       </Grid>
                 {progress !== null && <div className={"App-progress"}>{Math.round(progress * 100)}%</div>}
             </Grid>

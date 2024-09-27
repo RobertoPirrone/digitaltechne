@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
 import Autocomplete from "@mui/material/Autocomplete";
+import Typography from "@mui/material/Typography";
 import { v4 as uuidv4 } from 'uuid';
 
 import { MyTextField, MyCheckbox, MyAutocomplete, MostSubmitButton, MostCheckbox, MostSelect, MostTextField } from "./components/MostComponents";
@@ -191,7 +192,7 @@ export const NewDossier = () => {
               </Grid>
 
               <Grid item xs={3}>
-                <text>Private</text>
+                <Typography>Private</Typography>
                 <MyCheckbox defaultChecked={false} onChange={(e, v) => setPrivateDossier(v.label)} />
               </Grid>
 

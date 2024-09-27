@@ -1,6 +1,7 @@
 import React from 'react';
 import * as Icons from '@mui/icons-material';
 import Link from "@mui/material/Link";
+import { getAssetPfx } from "./Utils";
 import { canisterId } from "../../declarations/uploads";
 
 // routine generica di visualizzazione icona/immagine. Quindi gestisce sia campi di Dossier che di Documents
@@ -9,11 +10,7 @@ import { canisterId } from "../../declarations/uploads";
 export const IconCode = (r) => {
 
     let mui_icon = false;
-    const isLocal = !window.location.host.endsWith("icp0.io");
-    let asset_pfx = `https://${canisterId}.icp0.io`;
-    if (isLocal) {
-      asset_pfx = `http://${canisterId}.localhost:4943`;
-    }
+    let asset_pfx = getAssetPfx();
 
     const IconResolver = ({ iconName, ...props }) => {
       const IconComponent = Icons[iconName];

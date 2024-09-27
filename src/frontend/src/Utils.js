@@ -31,13 +31,20 @@ export const prettyJson = (obj, preformatted, nl2br) => {
   return pretty;
 };
 
+export const isLocalHost = () => {
+  let isLocal = true;
+  let host = window.location.host;
+  if ( host.endsWith("icp0.io") || host.endsWith("mostapps.it") || host.endsWith("mostapps.ch") )
+    isLocal=false;
+  return isLocal
+}
+
 export const getAssetPfx = () => {
-  const isLocal = !window.location.host.endsWith("icp0.io");
+  // const isLocal = !window.location.host.endsWith("icp0.io");
   let asset_pfx = `https://${canisterId}.icp0.io`;
-  if (isLocal) {
+  if (isLocalHost()) {
     asset_pfx = `http://${canisterId}.localhost:4943`;
   }
-
   console.log("asset_pfx :", asset_pfx);
   return asset_pfx;
 };

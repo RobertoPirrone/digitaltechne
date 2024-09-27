@@ -15,6 +15,7 @@ import { useGlobalState } from "./state";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { Table } from "./Table";
+import { getAssetPfx, appAlert } from "./Utils";
 import { MyCheckIcon, MostCheckbox, MostSubmitButton, WarningIcon, Check } from "./components/MostComponents";
 import { MostDataGrid } from "./components/MostDataGrid";
 import { Riservato } from "./components/OpusComponents";
@@ -29,13 +30,7 @@ import { useAuth } from "./auth/use-auth-client";
  * @component
  */
 export const Dossier = () => {
-  const isLocal = !window.location.host.endsWith("icp0.io");
-  let asset_pfx = `https://${canisterId}.icp0.io`;
-  if (isLocal) {
-    asset_pfx = `http://${canisterId}.localhost:4943`;
-  }
-
-  console.log("Dossier asset_pfx :", asset_pfx);
+    let asset_pfx = getAssetPfx();
 
   const { backendActor, principal } = useAuth();
   const navigate = useNavigate();
@@ -88,8 +83,9 @@ export const Dossier = () => {
               let err = Ret_data.Err;
               console.log("dossier_query Err response: ", err);
               console.error(err);
-              appAlert(err);
+              // appAlert(err.CanisterError.message);
               setLoading(false);
+                navigate("/selfdefineuser");
             }
           })
           .catch(function (error) {
@@ -97,7 +93,7 @@ export const Dossier = () => {
             alert(error.message ? error.message : JSON.stringify(error));
           });
 
-  }, [t, backendActor]);
+  }, [t]);
 
   const handleChangePubblici = () => {
     setCheckedPubblici((prev) => !prev);

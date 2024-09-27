@@ -3,6 +3,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import PropagateLoader from "react-spinners/PropagateLoader";
 import Container from "@mui/material/Container";
 import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { v4 as uuidv4 } from 'uuid';
@@ -170,7 +171,7 @@ export const NewDocument = (props) => {
               </Grid>
 
               <Grid item xs={3}>
-                <text>Private</text>
+                <Typography>Private</Typography>
                 <MyCheckbox defaultChecked={false} onChange={(e, v) => setPrivateDossier(v.label)} />
               </Grid>
 

@@ -44,6 +44,14 @@ export const BexplorerLink = (props) => {
   );
 };
 
+export const GoTo = ({location}) => {
+  console.error(`GoTo ${location}`);
+  const navigate = useNavigate();
+  setTimeout(() => {
+    navigate(location);
+  }, 100);
+  return <div />;
+};
 export const GoToHomePage = () => {
   console.error("GoToHomePage");
   const navigate = useNavigate();

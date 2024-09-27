@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { Link, Outlet, Navigate } from "react-router-dom";
 import { AuthClient } from "@dfinity/auth-client";
 import { canisterId, createActor } from "../../../declarations/backend";
+import { isLocalHost} from "../Utils";
 
 const AuthContext = createContext();
 
@@ -20,9 +21,9 @@ const defaultOptions = {
    */
   loginOptions: {
     identityProvider:
-      process.env.DFX_NETWORK === "ic"
-        ? "https://identity.ic0.app/#authorize"
-        : `http://${process.env.CANISTER_ID_INTERNET_IDENTITY}.localhost:4943/#authorize`
+      isLocalHost() 
+        ? `http://${process.env.CANISTER_ID_INTERNET_IDENTITY}.localhost:4943/#authorize`
+        : "https://identity.ic0.app/#authorize"
   },
 };
 // `http://localhost:4943?canisterId=rdmx6-jaaaa-aaaaa-aaadq-cai#authorize`

@@ -29,7 +29,7 @@ let dossier_uuid = null;
 let want_detail = false;
 /**
  * Component for showing dossier rows
- *
+ * se nel path c'è un uuid, significa che vogliamo vedere tutti i fogli relativi a quel master_uuid
  * @component
  */
 export const Dossier = () => {

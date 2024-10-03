@@ -14,7 +14,7 @@ export const MostDataGrid = ({ columns, rows }) => {
         disableSelectionOnClick
         pageSize={pageSize}
         onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
-        rowsPerPageOptions={[5, 10, 100]}
+        pageSizeOptions={[5, 10, 100]}
         pagination
       />
     </div>

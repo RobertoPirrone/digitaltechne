@@ -46,6 +46,7 @@ export const Dossier = () => {
   const [dossierPersonaliMaster, setDossierPersonaliMaster] = useState([]); //elenco dossier
   const [dossierPubblici, setDossierPubblici] = useState([]); //elenco dossier
   const [dossierPubbliciMaster, setDossierPubbliciMaster] = useState([]); //elenco dossier
+  const [singleTitle, setSingleTitle] = useState(""); //per la visione singola opera
   const [dossierVisione, setDossierVisione] = useState([]); //elenco dossier
   const [masterOnly, setMasterOnly] = useState(false); //elenco dossier
   const [checkedPubblici, setCheckedPubblici] = React.useState(false);
@@ -90,6 +91,9 @@ export const Dossier = () => {
               // setDossierPubblici(response.ret_public);
               if (want_detail) {
                   const singleArtwork = response.ret_public.filter((ele) => ele.master_uuid == dossier_uuid);
+                  const singleTitle = singleArtwork[0].nomeopera;
+                  setSingleTitle(singleTitle);
+              console.log("dossier_query singleTitle: ", singleTitle);
               console.log("dossier_query singleArtwork: ", singleArtwork);
                   setDossierPubblici(singleArtwork);
               } else {
@@ -156,6 +160,7 @@ export const Dossier = () => {
     columns.push({ flex: 1, headerName: t("tipotecnica:Label"), field: "tipotecnica", renderCell: (params) => { return ( t(`tipotecnica:tipotecnica_array.${params.row.tipotecnica}`)); } });
     columns.push({ flex: 1, headerName: t("tiposupporto:Label"), field: "tiposupporto", renderCell: (params) => { return ( t(`tiposupporto:tiposupporto_array.${params.row.tiposupporto}`)); } });
     columns.push({ flex: 1, headerName: t("dossier:NumeroTotaleCopie"), field: "numero_totale_copie" });
+    columns.push({ flex: 1, headerName: t("dossier:SheetIdentifier"), field: "sheet_identifier" });
     columns.push({ flex: 1, headerName: t("dossier:Dimensions"), field: "dimensions" });
     columns.push({ flex: 1, headerName: t("dossier:Annoopera"), field: "annoopera" });
     columns.push({ flex: 1, headerName: t("dossier:Owner"), field: "friendly_name" });
@@ -182,45 +187,14 @@ export const Dossier = () => {
   return (
     <div>
       <Header />
-      {application == "techne" ? (
-        <h1>{t("dossier:DossierHeader")}</h1>
+        <h1>{t("dossier:ArchivioGramberg")}</h1>
+      {want_detail ? (
+          <h1>{t("dossier:SingleArtworkList")} : {singleTitle}</h1>
       ) : (
-        <>
-          <h1>{t("dossier:PictureHeader")}</h1>
-          <MostCheckbox name="masterOnly" defaultChecked={false} onChange={masterChange} label={t("dossier:MasterOnly")} />
-        </>
+          <h1>{t("dossier:CompleteArtworkList")}</h1>
       )}
 
-      <h2>{t("dossier:DossierPersonali")}</h2>
-      <div className="blackColor margin20 gray">
-        {loading ? null : (
-          <React.Fragment>
-            {dossierPersonali.length ? (
-              masterOnly ? (
-                <MostDataGrid columns={columns} rows={dossierPersonaliMaster} />
-              ) : (
-                <MostDataGrid columns={columns} rows={dossierPersonali} />
-              )
-            ) : (
-              t("dossier:NoDossier")
-            )}
-            <div>
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="MuiContainer-root MuiContainer-maxWidthXs">
-                  {application == "techne" ? <MostSubmitButton label={t("dossier:NuovoDossier")} /> : <MostSubmitButton label={t("dossier:NuovaFoto")} />}
-                </div>
-              </form>
-            </div>
-          </React.Fragment>
-        )}
-      </div>
-
-      {application == "techne" ? (
-          <>
-            <h2>{t("dossier:DossierPubblici")}</h2>
                 <MostDataGrid columns={columns} rows={dossierPubblici} />
-          </>
-      ) : null}
 
       <Footer />
     </div>

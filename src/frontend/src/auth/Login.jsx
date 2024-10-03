@@ -8,7 +8,8 @@ import { useAuth } from "./use-auth-client";
 import { Home } from "../Home";
 import { DTPaper } from '../components/useStyles';
 import { MostSubmitButton } from '../components/MostComponents';
-import logo from '/DT-noalpha.png';
+import logo from '/Liliana Gramberg.jpg';
+// import logo from '/DT-noalpha.png';
 
 function Login() {
   const { isAuthenticated, login } = useAuth();
@@ -22,8 +23,8 @@ function Login() {
           <Home /> ) : (
     <Container component="main" maxWidth="xs">
       <div className={DTPaper}>
-        <img src={logo} width={400} className="XXXApp-logo" alt="logo" />
-        <Typography component="h1" variant="h5"> <Trans i18nKey="techneTitle" /> </Typography>
+        <img src={logo} xwidth={400} className="XXXApp-logo" alt="logo" />
+        <Typography component="h1" variant="h5"> {t("Liliana Gramberg's Artwork Archive")} </Typography>
         <div className="w-1/2 mb-4"> 
           <MostSubmitButton onClick={login} className="makeStyles-submit-4" label={t('SignIn.Sign In')}/>
         </div>

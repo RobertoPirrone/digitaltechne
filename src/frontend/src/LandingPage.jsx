@@ -4,7 +4,8 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 import { Footer } from "./Footer";
-import logo from "/DT-noalpha.png";
+// import logo from "/DT-noalpha.png";
+import logo from "/Liliana Gramberg.jpg";
 //import logosa from './Smartars.png';
 
 export function LandingPage() {
@@ -30,7 +31,7 @@ export function LandingPage() {
             <img src="https://flagcdn.com/h24/it.png" height="24" width="48" alt="Italiano" title="Italiano" />
           </button>
         </div>
-        <img src={logo} width={400} className="xxxxApp-logo" alt="logo digitaltechne" />
+        <img src={logo} className="xxxxApp-logo" alt="logo digitaltechne" />
         <div className="margintop30">
           <p>
             {t("Benvenuto")} <big>DigitalTechne {app_instance}</big>

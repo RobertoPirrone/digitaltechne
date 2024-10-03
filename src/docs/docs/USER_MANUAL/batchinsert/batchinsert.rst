@@ -6,7 +6,7 @@ This operation is intended for bulk loading of artworks and metadata
     * Base artwork infos are contained in a Excel file
     * Artworks shall be in jpg format
 
-The Excel file will contain the basic information of an opera, one row per artwork. Header names are meaningful, please use exaclty these names:
+The Excel file will contain the basic information of an opera, one row per artwork. Header names are meaningful, please use exactly these names:
 
     * Photos
     * Date

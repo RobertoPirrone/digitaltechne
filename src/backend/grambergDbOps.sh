@@ -38,7 +38,9 @@ private BOOL default false,
 icon_uri TEXT NOT NULL,
 tipofirma TEXT CHECK( tipofirma IN ('SIGNED', 'NOT_SIGNED', 'ARTIST_PROOF' ) ),
 tiposupporto TEXT CHECK( tiposupporto IN ('PAPER', 'CANVAS', 'ACRYLIC' ) ),
-has_artwork_mark BOOLEAN
+has_artwork_mark BOOLEAN,
+master_uuid TEXT NOT NULL,
+sheet_identifier TEXT NOT NULL
 EOF
 )
 
@@ -49,7 +51,7 @@ EOF
 # RBAC
 fields='
     id INTEGER PRIMARY KEY,
-    principal TEXT NOT NULL,
+    principal TEXT NOT NULL UNIQUE,
     friendly_name TEXT,
     view_opera_ok BOOLEAN,
     add_opera_ok BOOLEAN,
@@ -57,6 +59,8 @@ fields='
     add_dna_ok BOOLEAN
     '
     create_table rbac "$fields"
+    # per rendere unique un campo su db esistente:
+    #   dfx canister call backend  execute "CREATE UNIQUE INDEX ux_rbac_principal ON rbac(principal);"
 
 
 # CARTRIDGE_USE

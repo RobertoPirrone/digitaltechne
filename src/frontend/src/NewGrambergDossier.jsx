@@ -182,6 +182,8 @@ export const BatchInsert = () => {
     let r = {};
     let ass = {};
     let tech = "";
+    let seq = "";
+    let master_uuid = "";
 
       outerloop: for (r of jsonText) {
         console.log("jsonText element: ", r)
@@ -214,6 +216,7 @@ export const BatchInsert = () => {
 
         console.log("file found, riempimento valori: ", filename);
         vals.uuid = uuidv4();
+        master_uuid = vals.uuid;
         vals.ora_inserimento = new Date();
         vals.username = username;
         vals.autore = "Liliana Gramberg";
@@ -241,39 +244,46 @@ export const BatchInsert = () => {
         vals.tipotecnica = tech;
         vals.tipofirma = "SIGNED";
         vals.dimensions = r.Dimensions === null ? "UNK" : r.Dimensions ;
-        vals.numero_totale_copie = r.EditionNumber != null ? parseInt(r.EditionNumber) : 0;
+        vals.numero_totale_copie = r.EditionNumber != null ? parseInt(r.EditionNumber) : 1;
         vals.tiposupporto = "PAPER";
           vals.private = false;
 
         setDisabledButs(true);
-        console.log("onBatchSubmit dossier_insert: ");
-        console.log( vals);
-        console.log("onBatchSubmit dossier_insert: ", vals);
+        // console.log("onBatchSubmit dossier_insert: ");
+        // console.log( vals);
+        // console.log("onBatchSubmit dossier_insert: ", vals);
 
-        backendActor
-          .dossier_insert(JSON.stringify(vals))
-          .then((Ok_data) => {
-            console.error( "OKKKK");
-            console.log( Ok_data);
-            console.log("dossier_insert no json returns: ", Ok_data);
-            console.log("dossier_insert returns: ", JSON.stringify(Ok_data));
-            let response = JSON.parse(Ok_data.Ok);
-            console.log(response);
-            if (response) {
-              setDisabledButs(true);
-              navigate("/dossier");
-            } else {
-              console.error(response);
-              alert(response.error);
-              setDisabledButs(false);
-            }
-          })
-          .catch(function (error) {
-            console.error( "CATCH");
-            console.error(error);
-            alert(error.message ? error.message : JSON.stringify(error));
-            setDisabledButs(false);
-          });
+        copiesloop: for (seq = 1; seq <=  vals.numero_totale_copie; seq++) {
+            if (seq != 1) 
+                vals.uuid = uuidv4();
+            vals.master_uuid = master_uuid;
+            vals.sheet_identifier = seq.toString();
+            console.log("onBatchSubmit dossier_insert: ", vals);
+            backendActor
+              .dossier_insert(JSON.stringify(vals))
+              .then((Ok_data) => {
+                console.error( "OKKKK");
+                console.log( Ok_data);
+                console.log("dossier_insert no json returns: ", Ok_data);
+                console.log("dossier_insert returns: ", JSON.stringify(Ok_data));
+                let response = JSON.parse(Ok_data.Ok);
+                console.log(response);
+                if (response) {
+                  setDisabledButs(true);
+                  navigate("/dossier");
+                } else {
+                  console.error(response);
+                  alert(response.error);
+                  setDisabledButs(false);
+                }
+              })
+              .catch(function (error) {
+                console.error( "CATCH");
+                console.error(error);
+                alert(error.message ? error.message : JSON.stringify(error));
+                setDisabledButs(false);
+              });
+        };
       };
         setDisabledButs(false);
 

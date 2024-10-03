@@ -17,6 +17,7 @@ import { Footer } from "./Footer";
 import { Table } from "./Table";
 import { getAssetPfx, appAlert } from "./Utils";
 import { MyCheckIcon, MostCheckbox, MostSubmitButton, WarningIcon, Check } from "./components/MostComponents";
+import { useParams, useLocation } from "react-router-dom";
 import { MostDataGrid } from "./components/MostDataGrid";
 import { Riservato } from "./components/OpusComponents";
 import InVisionDialog from "./components/InVisionDialog";
@@ -24,6 +25,8 @@ import { canisterId } from "../../declarations/uploads";
 import { useAuth } from "./auth/use-auth-client";
 
 
+let dossier_uuid = null;
+let want_detail = false;
 /**
  * Component for showing dossier rows
  *
@@ -31,7 +34,9 @@ import { useAuth } from "./auth/use-auth-client";
  */
 export const Dossier = () => {
     let asset_pfx = getAssetPfx();
-
+    
+  let react_router_location = useLocation();
+  console.log("Dossier react_router_location: " + JSON.stringify(react_router_location));
   const { backendActor, principal } = useAuth();
   const navigate = useNavigate();
   const { handleSubmit } = useForm();
@@ -40,6 +45,7 @@ export const Dossier = () => {
   const [dossierPersonali, setDossierPersonali] = useState([]); //elenco dossier
   const [dossierPersonaliMaster, setDossierPersonaliMaster] = useState([]); //elenco dossier
   const [dossierPubblici, setDossierPubblici] = useState([]); //elenco dossier
+  const [dossierPubbliciMaster, setDossierPubbliciMaster] = useState([]); //elenco dossier
   const [dossierVisione, setDossierVisione] = useState([]); //elenco dossier
   const [masterOnly, setMasterOnly] = useState(false); //elenco dossier
   const [checkedPubblici, setCheckedPubblici] = React.useState(false);
@@ -47,6 +53,11 @@ export const Dossier = () => {
   const [username, setusername] = useGlobalState("username");
   const [trueidentity, setIdentity] = useGlobalState("identity");
 
+    dossier_uuid = react_router_location.pathname.split("/")[2];
+    if (dossier_uuid != null) {
+      console.log("dossier_uuid : ", dossier_uuid);
+        want_detail = true; 
+    }
 
   useEffect(() => {
       console.log("useEffect entro: ");
@@ -75,9 +86,18 @@ export const Dossier = () => {
             if ("Ok" in Ret_data) { 
               let response = JSON.parse(Ret_data.Ok);
               console.log("dossier_query Ok response: ", response);
-              // TBD: Nazionalizzare i valori di tipofirma, supporto e tecnica
               setDossierPersonali(response.ret_owner);
-              setDossierPubblici(response.ret_public);
+              // setDossierPubblici(response.ret_public);
+              if (want_detail) {
+                  const singleArtwork = response.ret_public.filter((ele) => ele.master_uuid == dossier_uuid);
+              console.log("dossier_query singleArtwork: ", singleArtwork);
+                  setDossierPubblici(singleArtwork);
+              } else {
+                  const master_only = response.ret_public.filter((ele) => ele.uuid == ele.master_uuid);
+              console.log("dossier_query master_only: ", master_only);
+                  setDossierPubblici(master_only);
+              }
+
               setLoading(false);
             } else {
               let err = Ret_data.Err;
@@ -109,7 +129,7 @@ export const Dossier = () => {
         return (
           <Link
             to={{
-              pathname: "/dossierdetail/" + params.row.id,
+                pathname: (want_detail) ? ("/dossierdetail/" + params.row.id)  : ("/dossier/" + params.row.master_uuid),
               state: { dossier_id: params.row.id },
             }}
             target="_blank"

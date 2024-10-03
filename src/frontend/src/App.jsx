@@ -43,6 +43,7 @@ function App() {
               <Route path="/cartridge_insert" element={<CartridgeInsert />} />
               <Route path="/home" element={<Home />} />
               <Route path="/dossier" element={<Dossier />} />
+              <Route path="/dossier/:dossierdetail" element={<Dossier />} />
               <Route path="/dossierdetail/:dossierdetail" element={<DossierDetail />} />
               <Route path="/json_compare" element={<JsonCompare />} />
               <Route path="/home" element={<Home />} />

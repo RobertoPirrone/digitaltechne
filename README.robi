@@ -89,3 +89,7 @@ hzmmu-wyaaa-aaaah-qdsaa-cai
 Air-M1:gramberg robi$ dfx ledger balance --ic
 0.09990000 ICP
 
+# bruciare ICP per avere cycles:
+dfx cycles convert --amount AMOUNT --network ic
+
+

@@ -124,5 +124,8 @@
   "Dimensions": "Dimensions",
   "AnnoOpera": "Creation Year",
   "NumeroTotaleCopie": "Total Number of Copies",
+  "ArchivioGramberg": "Gramberg Archive",
+  "CompleteArtworkList": "Complete Artwork List",
+  "SingleArtworkList": "Single Artwork List",
   "LoadJpgs": "Upload JPG files"
 }

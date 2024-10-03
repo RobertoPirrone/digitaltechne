@@ -166,6 +166,7 @@ export const DossierDetail = () => {
                     <tr> <th>{t("tipotecnica:Label")}</th> <td> {t(`tipotecnica:tipotecnica_array.${dossierInfo.tipotecnica}`)} </td> </tr>
                     <tr> <th>{t("dossier:AnnoOpera")}</th> <td> {dossierInfo.annoopera} </td> </tr>
                     <tr> <th>{t("dossier:NumeroTotaleCopie")}</th> <td> {dossierInfo.numero_totale_copie} </td> </tr>
+                    <tr> <th>{t("dossier:SheetIdentifier")}</th> <td> {dossierInfo.sheet_identifier} </td> </tr>
                     <tr> <th>{t("dossier:Dimensions")}</th> <td> {dossierInfo.dimensions} </td> </tr>
                     <tr> <th>{t("dossier:riservato")}</th> <td>{dossierInfo.private}</td> </tr>
                 <tr>

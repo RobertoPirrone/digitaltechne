@@ -25,7 +25,7 @@ export const SelfDefineUser = () => {
 
   const onSubmit = (vals) => {
       console.log(friendlyName);
-      backendActor.insert_caller()
+      backendActor.insert_caller(friendlyName)
           .then((Ret_data) => {
             // console.log("dossier returns: ", JSON.stringify(Ret_data));
             if ("Ok" in Ret_data) { 

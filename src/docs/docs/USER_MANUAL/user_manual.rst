@@ -4,6 +4,7 @@
    :caption: Contents:
 
    home/home
+   selfdefineuser/selfdefineuser
    dossier/dossier
    newdossier/newdossier
    batchinsert/batchinsert

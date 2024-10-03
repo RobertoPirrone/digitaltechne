@@ -23,6 +23,8 @@ pub struct Dossier {
     tipofirma: String,
     tiposupporto: String,
     has_artwork_mark: Option<bool>,
+    master_uuid: String,
+    sheet_identifier: String,
     friendly_name: Option<String>
 }
 
@@ -114,8 +116,10 @@ pub fn dossier_struct_query(sql: String ) -> Vec<Dossier> {
                                 icon_uri: row.get(11).unwrap(),
                                 tipofirma: row.get(12).unwrap(),
                                 tiposupporto: row.get(13).unwrap(),
-                                has_artwork_mark: row.get(14).unwrap(), 
-                                friendly_name: row.get(15).unwrap()
+                                has_artwork_mark: row.get(14).unwrap(),
+                                master_uuid: row.get(15).unwrap(), 
+                                sheet_identifier: row.get(16).unwrap(), 
+                                friendly_name: row.get(17).unwrap()
                             };
 
                         dossiers.push(res_row)
@@ -140,8 +144,8 @@ pub fn dossier_query(params: QueryParams) -> JsonResult {
     }
     // let owner_sql = format!("select * from dossier where inserted_by = '{:}' and private = true limit {:?} offset {:?}", caller, params.limit, params.offset );
     // let public_sql = format!("select * from dossier where inserted_by = '{:}' and private = false limit {:?} offset {:?}", caller, params.limit, params.offset );
-    let owner_sql = format!("select dossier.*, friendly_name from dossier left outer join rbac where inserted_by = principal and inserted_by = '{:}' and private = true limit {:?} offset {:?}", caller, params.limit, params.offset );
-    let public_sql = format!("select dossier.*, friendly_name from dossier left outer join rbac where inserted_by = principal and private = false limit {:?} offset {:?}", params.limit, params.offset );
+    let owner_sql = format!("select dossier.*, friendly_name from dossier left outer join rbac where inserted_by = '{:}' and inserted_by = principal and inserted_by = '{:}' and private = true order by annoopera limit {:?} offset {:?}", caller, caller, params.limit, params.offset );
+    let public_sql = format!("select dossier.*, friendly_name from dossier left outer join rbac where inserted_by = principal and private = false order by annoopera limit {:?} offset {:?}", params.limit, params.offset );
     ic_cdk::println!("Query: {owner_sql} ");
 
     let owner_dossier_infos = dossier_struct_query(owner_sql.to_string());
@@ -166,9 +170,9 @@ pub fn dossier_insert(jv: String) -> ExecResult {
     let conn = ic_sqlite::CONN.lock().unwrap();
 
     let sql = format!("insert into dossier \
-        (uuid, autore, nomeopera, ora_inserimento, inserted_by, icon_uri, tipotecnica, annoopera, numero_totale_copie, dimensions, private, tipofirma, tiposupporto) 
-        values ('{}', '{}', '{}', '{}', '{}', '{}', '{}', {}, {}, '{}', {}, '{}', '{}')",
-        d.uuid, d.autore, d.nomeopera, d.ora_inserimento, caller, d.icon_uri , d.tipotecnica, d.annoopera, d.numero_totale_copie,  d.dimensions, d.private, d.tipofirma, d.tiposupporto
+        (uuid, autore, nomeopera, ora_inserimento, inserted_by, icon_uri, tipotecnica, annoopera, numero_totale_copie, dimensions, private, tipofirma, tiposupporto, master_uuid, sheet_identifier) 
+        values ('{}', '{}', '{}', '{}', '{}', '{}', '{}', {}, {}, '{}', {}, '{}', '{}', '{}', '{}')",
+        d.uuid, d.autore, d.nomeopera, d.ora_inserimento, caller, d.icon_uri , d.tipotecnica, d.annoopera, d.numero_totale_copie,  d.dimensions, d.private, d.tipofirma, d.tiposupporto, d.master_uuid, d.sheet_identifier
         );
     return match conn.execute(
         &sql,

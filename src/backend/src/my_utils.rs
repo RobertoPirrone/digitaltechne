@@ -76,7 +76,7 @@ pub fn check_caller() -> CheckResult {
 
 
 #[update]
-pub fn insert_caller() -> ExecResult {
+pub fn insert_caller(friendly_name: String) -> ExecResult {
     let caller = ic_cdk::caller();
     let principal = caller.to_string();
             let conn = ic_sqlite::CONN.lock().unwrap();
@@ -84,7 +84,7 @@ pub fn insert_caller() -> ExecResult {
             let rbac_insert_sql = format!("insert into rbac \
                 (principal, friendly_name, view_opera_ok, add_opera_ok, associate_dna_ok, add_dna_ok) 
                 values ('{}', '{}', {}, {}, {}, {})",
-                principal, principal, true, false, false,  false
+                principal, friendly_name, true, false, false,  false
                 );
             ic_cdk::println!("insert_caller: {rbac_insert_sql} ");
             return match conn.execute(

@@ -2,7 +2,7 @@
   "tipofirma_array": {
     "SIGNED": "Firmato",
     "NOT_SIGNED": "Non Firmato",
-    "AUTHOR_PROOF": "Prova d'autore"
+    "ARTIST_PROOF": "Prova d'artista"
   },
   "Label": "Tipo di Firma"
 }

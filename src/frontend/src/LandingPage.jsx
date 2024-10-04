@@ -7,8 +7,11 @@ import { Footer } from "./Footer";
 // import logo from "/DT-noalpha.png";
 import logo from "/Liliana Gramberg.jpg";
 //import logosa from './Smartars.png';
+import { useAuth} from "./auth/use-auth-client";
+
 
 export function LandingPage() {
+  const { isAuthenticated, identity } = useAuth();
   const { t, i18n } = useTranslation();
   const changeLanguage = (lng) => {
     i18n.changeLanguage(lng);
@@ -34,26 +37,34 @@ export function LandingPage() {
         <img src={logo} className="xxxxApp-logo" alt="logo digitaltechne" />
         <div className="margintop30">
           <p>
-            {t("Benvenuto")} <big>DigitalTechne {app_instance}</big>
-          </p>
-            {t("Benvenuto2")}
-          <br />
+            {t("Benvenuto")} <big> {t("WelcomeTarget")}, </big>
+            {t("Benvenuto2")} 
+            </p>
         </div>
-        <div className="asinistra margintop30">
+
           <p>
-            <br />
-            {t("ToKnowMore2")}
-            <a href="/digitaltechne_site/index.html" target="_blank" rel="noreferrer"> <b>{t("SiteName")}</b> </a>
-            {t("ToKnowMore3")}
-          </p>
-          <p>
+            {isAuthenticated ? (
+            <Link to="/home">{t("GoHome")}</Link>
+            ) : (
             <Link to="/login">{t("Accedi")}</Link>
+            )}
           </p>
+
+        <div xxclassName="asinistra margintop30">
+          <p>
+            {t("ToKnowMoreLiliana")} 
+                  <a href="https://lilianagramberg.com" target="_blank" rel="noreferrer"> <b>{t("SiteName")}</b> </a>
+          </p>
+
+          <p>
+            {t("ToKnowMore2")}
+            <a href="https://digitaltechne.ch" hhhref="/digitaltechne_site/index.html" target="_blank" rel="noreferrer"> <b>{t("SiteName")}</b> </a>
+            {t("ToKnowMore3")}
             {t("ReadFirstInfo")}
           <a href={infoUrl} target="_blank" rel="noreferrer">
             {t("ReadFirstInfo2")}
           </a>
-            <p></p>
+          </p>
         </div>
       </div>
       </Container>

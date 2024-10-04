@@ -2,7 +2,7 @@
   "tipofirma_array": {
     "SIGNED": "Signed",
     "NOT_SIGNED": "Not Signed",
-    "AUTHOR_PROOF": "Author Proof"
+    "ARTIST_PROOF": "Artist Proof"
   },
   "Label": "Signature Type"
 }

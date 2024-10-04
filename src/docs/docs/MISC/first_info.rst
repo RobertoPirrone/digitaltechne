@@ -4,15 +4,16 @@
 
 
 #####################################
-Digital Techne Minimum Viable Product
+Digital Techne Archive Infrastructure
 #####################################
-DigitalTechne on the Internet Computer is a Work in Progress, base functionalities are already in place, while some features will be available in the near future
+DigitalTechne on the Internet Computer is a Work in Progress, most functionalities are already in place, while some features will be available in the near future.
+It can be tailored to address many different Use Cases, so this is just a generic introduction.
 
 Authentication
 ================
 Authentication is done using the Internet Identity, that is available on modern computers (some hardware support is required). Please refer to this `information <https://internetcomputer.org/internet-identity>`_ about Internet Identity .
 
-While being really easy to use, it is also very secure.
+While being really easy to use, it is also very secure, and basically it provides a trusted account, that does not have user identification built in.
 
 What this platform is for
 =========================

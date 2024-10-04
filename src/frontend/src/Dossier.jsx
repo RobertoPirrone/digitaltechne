@@ -1,8 +1,9 @@
 import React, { useContext, useState, useMemo, useEffect, useCallback } from "react";
+import Container from "@mui/material/Container";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import SettingsIcon from "@mui/icons-material/Settings";
 import SearchIcon from "@mui/icons-material/Search";
 import Tooltip from "@mui/material/Tooltip";
@@ -58,6 +59,8 @@ export const Dossier = () => {
     if (dossier_uuid != null) {
       console.log("dossier_uuid : ", dossier_uuid);
         want_detail = true; 
+    } else {
+        want_detail = false; 
     }
 
   useEffect(() => {
@@ -91,10 +94,10 @@ export const Dossier = () => {
               // setDossierPubblici(response.ret_public);
               if (want_detail) {
                   const singleArtwork = response.ret_public.filter((ele) => ele.master_uuid == dossier_uuid);
+              console.log("dossier_query singleArtwork: ", singleArtwork);
                   const singleTitle = singleArtwork[0].nomeopera;
                   setSingleTitle(singleTitle);
               console.log("dossier_query singleTitle: ", singleTitle);
-              console.log("dossier_query singleArtwork: ", singleArtwork);
                   setDossierPubblici(singleArtwork);
               } else {
                   const master_only = response.ret_public.filter((ele) => ele.uuid == ele.master_uuid);
@@ -136,7 +139,6 @@ export const Dossier = () => {
                 pathname: (want_detail) ? ("/dossierdetail/" + params.row.id)  : ("/dossier/" + params.row.master_uuid),
               state: { dossier_id: params.row.id },
             }}
-            target="_blank"
             className="nodecoration allCellLink"
           >
             <div key={`${asset_pfx}${params.row.icon_uri}`} className={"App-image"}>
@@ -162,7 +164,7 @@ export const Dossier = () => {
     columns.push({ flex: 1, headerName: t("dossier:NumeroTotaleCopie"), field: "numero_totale_copie" });
     columns.push({ flex: 1, headerName: t("dossier:SheetIdentifier"), field: "sheet_identifier" });
     columns.push({ flex: 1, headerName: t("dossier:Dimensions"), field: "dimensions" });
-    columns.push({ flex: 1, headerName: t("dossier:Annoopera"), field: "annoopera" });
+    columns.push({ flex: 1, headerName: t("dossier:AnnoOpera"), field: "annoopera" });
     columns.push({ flex: 1, headerName: t("dossier:Owner"), field: "friendly_name" });
 
   columns.push({
@@ -189,12 +191,23 @@ export const Dossier = () => {
       <Header />
         <h1>{t("dossier:ArchivioGramberg")}</h1>
       {want_detail ? (
-          <h1>{t("dossier:SingleArtworkList")} : {singleTitle}</h1>
+          <h1>{t("dossier:SingleArtworkList")}: {singleTitle}</h1>
       ) : (
           <h1>{t("dossier:CompleteArtworkList")}</h1>
       )}
 
                 <MostDataGrid columns={columns} rows={dossierPubblici} />
+
+      {want_detail ? (
+        <Container component="main" maxWidth="md">
+            <h2>{t("dossier:GoToArtworkList")} </h2>
+            <div className="MuiContainer-root MuiContainer-maxWidthXs">
+                <MostSubmitButton type="button" onClick={() => navigate("/dossier")} label={t("dossier:Go")} />
+            </div>
+        </Container>
+      ) : (
+          <></>
+      )}
 
       <Footer />
     </div>

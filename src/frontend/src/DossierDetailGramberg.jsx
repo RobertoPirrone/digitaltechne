@@ -201,7 +201,7 @@ export const DossierDetail = () => {
               ) : null}
           </Container>
 
-            <div>
+            <Container component="main" maxWidth="md">
               <h2>{t("Documenti")} </h2>
               <div className="blackColor margin20 gray">{docs.length ? <MostDataGrid columns={doc_columns} rows={docs} /> : t("dossier:NoDocument")}</div>
               {dossierInfo.inserted_by === whoami ? (
@@ -215,7 +215,15 @@ export const DossierDetail = () => {
                   </div>
                 </div>
               ) : null}
-            </div>
+            </Container>
+
+            <Container component="main" maxWidth="md">
+                <h2>{t("dossier:GoToArtworkList")} </h2>
+                    <div className="MuiContainer-root MuiContainer-maxWidthXs">
+                        <MostSubmitButton type="button" disabled={disabledButs} onClick={() => navigate("/dossier")} label={t("dossier:Go")} />
+                    </div>
+            </Container>
+
           </div>
       ) : (
         <></>

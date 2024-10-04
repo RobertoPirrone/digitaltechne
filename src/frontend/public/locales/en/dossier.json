@@ -1,12 +1,11 @@
 {
-  "DossierHeader": "Dossier",
   "PictureHeader": "Images",
   "fruibilitaopera": "artwork accessibility",
   "NuovoDocumento": "New document",
   "Apri dettaglio": "Open detail",
   "Mostra": "Show",
   "Dossier": "Dossier",
-  "DossierDetail": "Dossier Detail",
+  "DossierDetail": "Artwork Detail",
   "Opera": "Opera",
   "Autore": "Author",
   "Cognome": "Surname",
@@ -19,8 +18,8 @@
   "LuogoOpera": "Opera Location",
   "StatoOpera": "Artwork Conditions",
   "TipoSupporto": "Support Type",
-    "NoDossier": "No Folder Available",
-    "NoDocument": "No Document Available",
+  "NoDossier": "No Folder Available",
+  "NoDocument": "No Document Available",
   "mimetype": {
     "image/jpeg": "jpeg image",
     "application/pdf": "PDF document",
@@ -33,6 +32,8 @@
     "SUP_DIGITAL": "Digital image",
     "SUP_OTHER": "Other media"
   },
+  "Altro": "Other",
+  "FruibilitaDossier": "Dossier  accessibility",
   "statusopera_id": {
     "STATUS_AVAILABLE": "Available",
     "STATUS_RESTORATION": "Under restoration",
@@ -40,8 +41,7 @@
     "STATUS_DESTROYED": "Destroyed",
     "STATUS_STOLEN": "Stolen"
   },
-  "Altro": "Other",
-  "FruibilitaDossier": "Dossier  accessibility",
+  "FruibilitaOpera": "Artwork Accessibility",
   "fruibilitadossier_id": {
     "DOSSIER_FRUIBILITY_COMPLETELY_PRIVATE": "Completely private",
     "DOSSIER_FRUIBILITY_COMPLETELY_RESERVED": "Completely confidential",
@@ -50,18 +50,10 @@
     "DOSSIER_FRUIBILITY_TASSONOMICALLY_PUBLIC": "Public by taxonomy",
     "DOSSIER_FRUIBILITY_COMPLETELY_PUBLIC": "Completely public"
   },
-  "FruibilitaOpera": "Artwork Accessibility",
   "fruibilitaopera_id": {
     "OPERA_FRUIBILITY_PRIVATE": "Private",
     "OPERA_FRUIBILITY_PUBLIC": "Exhibited to the public",
     "OPERA_FRUIBILITY_ON_REQUEST": "Visible by appointment"
-  },
-  "tipoluogo_id": {
-    "LUOGO_MUSEO": "Museum",
-    "LUOGO_COLLEZIONE": "Collection",
-    "LUOGO_GALLERIA": "Gallery",
-    "LUOGO_PROPRIETARIO": "Owner",
-    "LUOGO_SCONOSCIUTO": "Unknown"
   },
   "Proprietario": "Owner",
   "Documenti": "Documents",
@@ -127,5 +119,16 @@
   "ArchivioGramberg": "Gramberg Archive",
   "CompleteArtworkList": "Complete Artwork List",
   "SingleArtworkList": "Single Artwork List",
-  "LoadJpgs": "Upload JPG files"
+  "LoadJpgs": "Upload JPG files",
+  "ImageDetail": "Image Detail",
+  "SheetIdentifier": "Sheet Identifier",
+  "GoToArtworkList": "Go to the Complete Artwork List",
+  "Go": "Go",
+  "tipoluogo_id": {
+    "LUOGO_MUSEO": "Museum",
+    "LUOGO_COLLEZIONE": "Collection",
+    "LUOGO_GALLERIA": "Gallery",
+    "LUOGO_PROPRIETARIO": "Owner",
+    "LUOGO_SCONOSCIUTO": "Unknown"
+  }
 }

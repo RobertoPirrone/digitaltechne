@@ -17,6 +17,7 @@ import { DTRoot } from "./components/useStyles";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { Upload } from "./Upload";
+import { appAlert } from "./Utils";
 import { UploadNew } from "./UploadNew";
 import { backend } from "../../declarations/backend";
 import { useAuth } from "./auth/use-auth-client";
@@ -45,14 +46,11 @@ export const NewDossier = () => {
   const [annoopera, setAnnoopera] = useState(1900);
   const [numero_totale_copie, setNumero_totale_copie] = useState(0);
   const [dimensions, setDimensions] = useState("");
-  const [tipofirma, setTipofirma] = useState("");
   const [tiposupporto, setTiposupporto] = useState("");
   const { backendActor, principal } = useAuth();
-  // const backendActor = getBackendActor();
-
-  const appAlert = useCallback((text) => {
-    alert(text);
-  }, []);
+    const [copieFirmate, setCopieFirmate] = useState(0); 
+    const [copieNonFirmate, setCopieNonFirmate] = useState(0); 
+    const [copiePdA, setCopiePdA] = useState(0); 
 
   useEffect(() => {
     setSearchele(false);
@@ -72,15 +70,20 @@ export const NewDossier = () => {
       appAlert("File immagine non scelto");
       return;
     }
+    let tech = "";
+    let seq = "";
+    let master_uuid = "";
+    let tipofirma = "";
+    let max_cnt = 0;
 
     vals.uuid = uuidv4();
+    master_uuid = vals.uuid;
     vals.ora_inserimento = new Date();
     vals.username = username;
     vals.autore = "Liliana Gramberg";
     vals.annoopera = parseInt(annoopera);
     vals.nomeopera = nomeOpera;
     vals.tipotecnica = tipotecnica;
-    vals.tipofirma = tipofirma;
     vals.dimensions = dimensions;
     vals.numero_totale_copie = parseInt(numero_totale_copie);
     vals.tiposupporto = tiposupporto;
@@ -92,6 +95,47 @@ export const NewDossier = () => {
     vals.icon_uri = assets[0].key;
     setDisabledButs(true);
     console.log("onSubmit: ", JSON.stringify(vals));
+  tipofirmaloop: for (tipofirma of ["SIGNED", "NOT_SIGNED", "ARTIST_PROOF"]) {
+      if (tipofirma == "SIGNED") {
+        max_cnt = copieFirmate;
+      } else if (tipofirma == "SIGNED") {
+        max_cnt = copieNonFirmate;
+      } else {
+        max_cnt = copiePdA;
+      }
+    copiesloop: for (seq = 1; seq <=  max_cnt ; seq++) {
+        if (seq != 1) 
+            vals.uuid = uuidv4();
+        vals.master_uuid = master_uuid;
+        vals.tipofirma = tipofirma;
+        vals.sheet_identifier = `${tipofirma} ${seq.toString()} / ${max_cnt}`;
+        console.log("onBatchSubmit dossier_insert: ", vals);
+        backendActor
+          .dossier_insert(JSON.stringify(vals))
+          .then((Ok_data) => {
+            console.error( "OKKKK");
+            console.log( Ok_data);
+            console.log("dossier_insert no json returns: ", Ok_data);
+            console.log("dossier_insert returns: ", JSON.stringify(Ok_data));
+            let response = JSON.parse(Ok_data.Ok);
+            console.log(response);
+            if (response) {
+              setDisabledButs(true);
+              navigate("/dossier");
+            } else {
+              console.error(response);
+              alert(response.error);
+              setDisabledButs(false);
+            }
+          })
+          .catch(function (error) {
+            console.error( "CATCH");
+            console.error(error);
+            alert(error.message ? error.message : JSON.stringify(error));
+            setDisabledButs(false);
+          });
+    };
+};
     backendActor
       .dossier_insert(JSON.stringify(vals))
       .then((Ok_data) => {
@@ -140,10 +184,12 @@ export const NewDossier = () => {
             <Grid container spacing={1} alignItems="center">
               <Grid item xs={12}> <MyTextField name="nomeopera" required={true} label={t("dossier:nomeopera")} onChange={(e) => setNomeOpera(e.target.value)} /> </Grid>
               <Grid item xs={12}> <SpecializedSelect defaultValue={""} name="tipotecnica" label={t("tipotecnica:Label")} what={"tipotecnica"} onChange={(e, v) => setTipotecnica(e.target.value)} /> </Grid>
-              <Grid item xs={12}> <MyTextField name="annoopera" required={true} label={t("dossier:annoopera")} onChange={(e) => setAnnoopera(e.target.value)} /> </Grid>
-              <Grid item xs={12}> <MyTextField name="numero_totale_copie" required={true} label={t("dossier:numero_totale_copie")} onChange={(e) => setNumero_totale_copie(e.target.value)} /> </Grid>
+              <Grid item xs={12}> <MyTextField name="annoopera" required={true} label={t("dossier:AnnoOpera")} onChange={(e) => setAnnoopera(e.target.value)} /> </Grid>
+              <Grid item xs={12}> <MyTextField name="numero_totale_copie" required={true} label={t("dossier:NumeroTotaleCopie")} onChange={(e) => setNumero_totale_copie(e.target.value)} /> </Grid>
+              <Grid item xs={12}> <MyTextField name="copie_firmate" required={true} label={t("dossier:CopieFirmate")} onChange={(e) => setCopieFirmate(e.target.value)} /> </Grid>
+              <Grid item xs={12}> <MyTextField name="copie_non_firmate" required={true} label={t("dossier:CopieNonFirmate")} onChange={(e) => setCopieNonFirmate(e.target.value)} /> </Grid>
+              <Grid item xs={12}> <MyTextField name="copie_PdA" required={true} label={t("dossier:CopiePdA")} onChange={(e) => setCopiePdA(e.target.value)} /> </Grid>
               <Grid item xs={12}> <MyTextField name="dimensions" required={true} label={t("dossier:dimensions")} onChange={(e) => setDimensions(e.target.value)} /> </Grid>
-              <Grid item xs={12}> <SpecializedSelect defaultValue={""} name="tipofirma" label={t("tipofirma:Label")} what={"tipofirma"} onChange={(e, v) => setTipofirma(e.target.value)} /> </Grid>
               <Grid item xs={12}> <SpecializedSelect defaultValue={""} name="tiposupporto" label={t("tiposupporto:Label")} what={"tiposupporto"} onChange={(e, v) => setTiposupporto(e.target.value)} /> </Grid>
 
               <Grid item xs={3}> <Typography>Private</Typography> <MyCheckbox defaultChecked={false} onChange={(e, v) => setPrivateDossier(v.label)} /> </Grid>

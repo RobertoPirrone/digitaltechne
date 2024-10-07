@@ -120,7 +120,7 @@ export const Dossier = () => {
             alert(error.message ? error.message : JSON.stringify(error));
           });
 
-  }, [t]);
+  }, [want_detail, t]);
 
   const handleChangePubblici = () => {
     setCheckedPubblici((prev) => !prev);

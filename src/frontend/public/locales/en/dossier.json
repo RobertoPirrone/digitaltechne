@@ -124,6 +124,9 @@
   "SheetIdentifier": "Sheet Identifier",
   "GoToArtworkList": "Go to the Complete Artwork List",
   "Go": "Go",
+  "CopieFirmate": "Signed Copies",
+  "CopieNonFirmate": "Unsigned Copies",
+  "CopiePdA": "Artist’s Proof",
   "tipoluogo_id": {
     "LUOGO_MUSEO": "Museum",
     "LUOGO_COLLEZIONE": "Collection",

@@ -124,6 +124,9 @@
   "SheetIdentifier": "Numero progressivo della copia",
   "GoToArtworkList": "Vai alla lista completa delle Opere",
   "Go": "Vai",
+  "CopieFirmate": "Copie firmate",
+  "CopieNonFirmate": "Copie non fimate",
+  "CopiePdA": "Prova d’ Artista",
   "tipoluogo_id": {
     "LUOGO_MUSEO": "Museo",
     "LUOGO_COLLEZIONE": "Collezione",

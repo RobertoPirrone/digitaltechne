@@ -6,6 +6,7 @@ import { AssetManager } from "@dfinity/assets";
 import mime from "mime";
 import { v4 as uuidv4 } from 'uuid';
 
+import { appAlert } from "./Utils";
 import { canisterId } from "../../declarations/uploads";
 import { useAuth } from "./auth/use-auth-client";
 
@@ -122,8 +123,8 @@ export const Upload = (props) => {
         });
         setDisabledButs(false);
       } catch (e) {
-        if (e.message.includes("Caller is not authorized")) {
-          alert("Caller is not authorized, follow Authorization instructions in README");
+        if (e.message.includes("Caller does not have Prepare permission")) {
+          appAlert("You do not have the permission to add pictures, please ask the Admins");
         } else {
           throw e;
         }

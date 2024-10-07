@@ -16,6 +16,7 @@ import { MyTextField, MyCheckbox, MyAutocomplete, MostSubmitButton, MostCheckbox
 import { useGlobalState } from "./state";
 import { DTRoot } from "./components/useStyles";
 import { Upload } from "./Upload";
+import { appAlert } from "./Utils";
 import { XlsFile } from "./components/XlsFile";
 import { backend } from "../../declarations/backend";
 import { useAuth } from "./auth/use-auth-client";

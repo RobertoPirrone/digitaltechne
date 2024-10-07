@@ -50,6 +50,7 @@ export const getAssetPfx = () => {
 };
 
 export const appAlert = (text) => {
+    console.error(text);
     alert(text);
   };
 

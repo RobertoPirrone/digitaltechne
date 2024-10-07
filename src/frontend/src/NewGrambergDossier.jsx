@@ -136,27 +136,6 @@ export const NewDossier = () => {
           });
     };
 };
-    backendActor
-      .dossier_insert(JSON.stringify(vals))
-      .then((Ok_data) => {
-        console.log("dossier_insert no json returns: ", Ok_data);
-        console.log("dossier_insert returns: ", JSON.stringify(Ok_data));
-        let response = JSON.parse(Ok_data.Ok);
-        console.log(response);
-        if (response) {
-          setDisabledButs(true);
-          navigate("/dossier");
-        } else {
-          console.error(response);
-          appAlert(response.error);
-          setDisabledButs(false);
-        }
-      })
-      .catch(function (error) {
-        console.error(error);
-        appAlert(error.message ? error.message : JSON.stringify(error));
-        setDisabledButs(false);
-      });
   };
 
   console.log("newDossierInfo: ", JSON.stringify(newDossierInfo));

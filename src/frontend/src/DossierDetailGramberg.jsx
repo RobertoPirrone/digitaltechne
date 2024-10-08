@@ -144,7 +144,7 @@ export const DossierDetail = () => {
   console.log("application:",application)
   console.log("whoami:",whoami)
     if (dossierInfo !== null) {
-        dataora = prettyDate (ora, i18n.resolvedLanguage);
+        dataora = prettyDate (dossierInfo.ora_inserimento, i18n.resolvedLanguage);
     }
   return (
     <div>

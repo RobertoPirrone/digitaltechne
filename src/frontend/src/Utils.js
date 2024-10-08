@@ -55,7 +55,7 @@ export const appAlert = (text) => {
   };
 
 // ritorna data nazinalizzata. isoStamp è is08601
-export const prettyDate = (isoStamp: String, lang: String) => {
+export const prettyDate = (isoStamp, lang) => {
         const ora = new Date(isoStamp);
         const options = {
           year: "numeric",
@@ -65,6 +65,7 @@ export const prettyDate = (isoStamp: String, lang: String) => {
           minute: "numeric",
         };
 
-        dataora = ora.toLocaleString(i18n.resolvedLanguage, options);
+        const dataora = ora.toLocaleString(lang, options);
         console.log(dataora);
         return (dataora)
+};

@@ -54,3 +54,17 @@ export const appAlert = (text) => {
     alert(text);
   };
 
+// ritorna data nazinalizzata. isoStamp è is08601
+export const prettyDate = (isoStamp: String, lang: String) => {
+        const ora = new Date(isoStamp);
+        const options = {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+          hour: "numeric",
+          minute: "numeric",
+        };
+
+        dataora = ora.toLocaleString(i18n.resolvedLanguage, options);
+        console.log(dataora);
+        return (dataora)

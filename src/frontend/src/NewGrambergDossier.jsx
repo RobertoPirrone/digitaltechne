@@ -109,7 +109,7 @@ export const NewDossier = () => {
         vals.master_uuid = master_uuid;
         vals.tipofirma = tipofirma;
         vals.sheet_identifier = `${tipofirma} ${seq.toString()} / ${max_cnt}`;
-        console.log("onBatchSubmit dossier_insert: ", vals);
+        console.log("onSubmit dossier_insert: ", vals);
         backendActor
           .dossier_insert(JSON.stringify(vals))
           .then((Ok_data) => {
@@ -197,6 +197,9 @@ export const BatchInsert = () => {
 
   const onBatchSubmit = (vals) => {
     let file_found = false;
+    var fname = "";
+    var filename = "";
+    var photo = "";
     vals.uuid = uuidv4();
     vals.insert_time = new Date();
     vals.username = "pippo";
@@ -211,37 +214,37 @@ export const BatchInsert = () => {
     let master_uuid = "";
     let tipofirma = "";
     let max_cnt = 0;
+    let switch_row = false;
 
       outerloop: for (r of jsonText) {
         console.log("jsonText element: ", r)
 
-        var photos = r.Photos;
-        if ((photos == null) || (photos == "")) {
-            console.error("Missing Photo: ", JSON.stringify(r));
-            alert("Missing Photo: ", JSON.stringify(r));
+        photo = r.Photos;
+        if ((photo == null) || (photo == "")) {
+            appAlert(`Missing Photo in XLS row: ${JSON.stringify(r)}`);
             continue;
         }
-        var fname = photos.toString().split("/")[0];
-        var filename = `DSC_0${fname}.JPG`;
+        fname = photo.toString().split("/")[0];
+        filename = `DSC_0${fname}.JPG`;
         file_found = false;
         innerloop: for (ass of assets) {
             // console.log("ASS: ", ass);
             if (ass.original_filename == filename) {
-                console.error("FOUND FILENAME: ", filename);
+                // console.log("FOUND FILENAME: ", filename);
                 vals.icon_uri = ass.key;
                 file_found=true;
-                console.error("FOUND FILENAME2: ", filename, ", key: ", vals.icon_uri);
+                console.log("FOUND FILENAME: ", filename, ", key: ", vals.icon_uri);
                 break innerloop;
             }
         };
-        console.log("EXIT INNERLOOP");
+        // console.log("EXIT INNERLOOP");
         if (!file_found) {
-          console.log("file not found: ", filename);
+          appAlert(`file not found: ${filename}`);
           continue;
         }
             
 
-        console.log("file found, riempimento valori: ", filename);
+        // console.log("file found, riempimento valori: ", filename);
         vals.uuid = uuidv4();
         master_uuid = vals.uuid;
         vals.ora_inserimento = new Date();
@@ -279,11 +282,15 @@ export const BatchInsert = () => {
         // console.log("onBatchSubmit dossier_insert: ");
         // console.log("onBatchSubmit dossier_insert: ", vals);
 
+          switch_row = true;
           tipofirmaloop: for (tipofirma of ["SIGNED", "NOT_SIGNED", "ARTIST_PROOF"]) {
             max_cnt = r[tipofirma];
             copiesloop: for (seq = 1; seq <=  max_cnt ; seq++) {
-                if (seq != 1) 
-                    vals.uuid = uuidv4();
+                if (switch_row) {
+                    switch_row=false;
+                } else {
+                    vals.uuid = uuidv4();//ho resettato  uuid a ogni cambio di tipofirma
+                }
                 vals.master_uuid = master_uuid;
                 vals.tipofirma = tipofirma;
                 vals.sheet_identifier = `${tipofirma} ${seq.toString()} / ${max_cnt}`;

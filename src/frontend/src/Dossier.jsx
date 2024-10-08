@@ -81,7 +81,7 @@ export const Dossier = () => {
     console.log("Dossier, backendActor: ", backendActor);
     let QP = {
       offset: 0,
-      limit: 50,
+      limit: 2000,
       // autore: 'Elisabetta Villa'
     };
       backendActor.dossier_query(QP)

@@ -10,7 +10,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { canisterId } from "../../declarations/uploads";
 import { useAuth } from "./auth/use-auth-client";
-import { isLocalHost, getAssetPfx } from "./Utils";
+import { appAlert, isLocalHost, getAssetPfx } from "./Utils";
 
 export const UploadNew = ({
     asset,

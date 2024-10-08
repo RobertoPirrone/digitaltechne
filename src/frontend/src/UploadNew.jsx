@@ -118,8 +118,8 @@ export const UploadNew = ({
         setAssets(asset_ar);
         setDisabledButs(false);
       } catch (e) {
-        if (e.message.includes("Caller is not authorized")) {
-          alert("Caller is not authorized, follow Authorization instructions in README");
+        if (e.message.includes("Caller does not have Prepare permission")) {
+          appAlert("You do not have the permission to add pictures, please ask the Admins");
         } else {
           throw e;
         }

@@ -14,7 +14,7 @@ import { IconCode } from "./IconCode";
 import { Table } from "./Table";
 import { MyCheckIcon, Loading, MostSelect, MostTextField, MostButton2, MostSubmitButton, Check, WarningIcon } from "./components/MostComponents";
 import { GoToHomePage, Riservato, BexplorerLink } from "./components/OpusComponents";
-import { dmy_hms, prettyJson } from "./Utils";
+import { dmy_hms, prettyJson, prettyDate } from "./Utils";
 import { backend } from "../../declarations/backend";
 import { useAuth } from "./auth/use-auth-client";
 
@@ -22,6 +22,7 @@ import { Ed25519KeyIdentity } from "@dfinity/identity";
 import { HttpAgent } from "@dfinity/agent";
 
 let dossier_id = "";
+let dataora = "";
 
 export const DossierDetail = () => {
 
@@ -37,7 +38,7 @@ export const DossierDetail = () => {
   const [doc_bc_sync, setDoc_bc_sync] = useState(true);
   const [application, setApplication] = useGlobalState("application");
 
-  const { t } = useTranslation(["translation", "documento", "dossier", "tipofirma", "tipotecnica", "tiposupporto"]);
+  const { i18n, t } = useTranslation(["translation", "documento", "dossier", "tipofirma", "tipotecnica", "tiposupporto"]);
   const { control, register, handleSubmit, errors } = useForm();
   const [uploads, setUploads] = useState([]);
 
@@ -142,6 +143,9 @@ export const DossierDetail = () => {
   console.log("dossierInfo: ",dossierInfo)
   console.log("application:",application)
   console.log("whoami:",whoami)
+    if (dossierInfo !== null) {
+        dataora = prettyDate (ora, i18n.resolvedLanguage);
+    }
   return (
     <div>
       <Header />
@@ -158,7 +162,7 @@ export const DossierDetail = () => {
                   <td>{dossierInfo.inserted_by}</td>
                 </tr>
                 <tr> <th>{t("dossier:nomeopera")}</th> <td>{dossierInfo.nomeopera}</td> </tr>
-                <tr> <th>{t("dossier:InsertTime")}</th> <td>{dossierInfo.ora_inserimento}</td> </tr>
+                <tr> <th>{t("documento:InsertTime")}</th> <td>{dataora}</td> </tr>
 
                 <tr> <th>{t("dossier:autore")}</th> <td>{dossierInfo.autore} </td> </tr>
                     <tr> <th>{t("tiposupporto:Label")}</th> <td> {t(`tiposupporto:tiposupporto_array.${dossierInfo.tiposupporto}`)}</td> </tr>
@@ -202,10 +206,10 @@ export const DossierDetail = () => {
           </Container>
 
             <Container component="main" maxWidth="md">
+              <div className="blackColor">
               <h2>{t("Documenti")} </h2>
               <div className="blackColor margin20 gray">{docs.length ? <MostDataGrid columns={doc_columns} rows={docs} /> : t("dossier:NoDocument")}</div>
               {dossierInfo.inserted_by === whoami ? (
-                <div>
                   <div className="MuiContainer-root MuiContainer-maxWidthXs">
                     <MostSubmitButton type="button" disabled={disabledButs} onClick={nuovoDoc} label={t("dossier:NuovoDocumento")} />
                     {/* se dossier gia' in BC e se almeno 1 doc non gia' in BC */}
@@ -213,8 +217,8 @@ export const DossierDetail = () => {
                       <MostSubmitButton type="button" disabled={disabledButs} onClick={documents2BC} label={t("dossier:Registra i documenti in BlockChain")} />
                     ) : null}
                   </div>
-                </div>
               ) : null}
+                </div>
             </Container>
 
             <Container component="main" maxWidth="md">

@@ -183,6 +183,7 @@ th {
 .blackColor,
 .blackColor :any-link {
   color: black;
+  background-color: #eee;
 }
 .top-margin-10 {
   margin-top: 10px;

@@ -8,7 +8,7 @@
     "start": "vite --port 3000",
     "prebuild": "dfx generate",
     "build": "tsc && vite build && cp src/.ic-assets.json dist/.ic-assets.json5",
-    "XXXbuild": "tsc && vite build",
+    "doc": "jsdoc -c jsdoc.conf.json",
     "format": "../../node_modules/.bin/prettier --print-width 160 --write \"src/**/*.{json,js,jsx,ts,tsx,css,scss}\""
   },
   "dependencies": {
@@ -24,6 +24,7 @@
     "@mui/x-data-grid": "^7.1.0",
     "@tanstack/react-table": "^8.15.3",
     "i18next-http-backend": "^2.5.0",
+    "jsdoc": "^4.0.3",
     "mime": "^4.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

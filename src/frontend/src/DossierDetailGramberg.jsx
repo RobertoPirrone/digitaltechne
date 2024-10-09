@@ -14,7 +14,7 @@ import { IconCode } from "./IconCode";
 import { Table } from "./Table";
 import { MyCheckIcon, Loading, MostSelect, MostTextField, MostButton2, MostSubmitButton, Check, WarningIcon } from "./components/MostComponents";
 import { GoToHomePage, Riservato, BexplorerLink } from "./components/OpusComponents";
-import { dmy_hms, prettyJson, prettyDate } from "./Utils";
+import { prettyJson, prettyDate } from "./Utils";
 import { backend } from "../../declarations/backend";
 import { useAuth } from "./auth/use-auth-client";
 
@@ -49,10 +49,10 @@ export const DossierDetail = () => {
         { label: "30 giorni", value: 30 },
     ];
 
-    let react_router_location = useLocation();
-    console.log("DossierDetail react_router_location: " + JSON.stringify(react_router_location));
-    let params = useParams();
-    console.log("DossierDetail params: " + JSON.stringify(params));
+    const react_router_location = useLocation();
+    console.log(`DossierDetail react_router_location: ${JSON.stringify(react_router_location)}`);
+    const params = useParams();
+    console.log(`DossierDetail params: ${JSON.stringify(params)}`);
 
     if (params.dossierid) {
         dossier_id = params.dossierid;
@@ -73,11 +73,11 @@ export const DossierDetail = () => {
             // navigate("/login");
         }
 
-        let jdata = { dossier_id: dossier_id };
-        let QP = {
+        const jdata = { dossier_id: dossier_id };
+        const QP = {
             dossieropera_id: dossier_id,
         };
-        console.log("QP  is " + JSON.stringify(QP));
+        console.log(`QP  is ${JSON.stringify(QP)}`);
         if (backend === null) {
             console.log("navigo su /login");
             navigate("/login");
@@ -86,20 +86,20 @@ export const DossierDetail = () => {
                 .documenti_query(QP)
                 .then((Ok_data) => {
                     console.log("DossierDetail documenti_query returns: ", JSON.stringify(Ok_data));
-                    let data = JSON.parse(Ok_data.Ok);
+                    const data = JSON.parse(Ok_data.Ok);
                     const dossierInfo = data.dossier_info;
                     setDossierInfo(dossierInfo);
                     console.error(dossierInfo);
                     setDocs(data.rows);
                 })
-                .catch(function (error) {
+                .catch((error) => {
                     console.error(error);
                     appAlert(error.message ? error.message : JSON.stringify(error));
                 });
         }
-    }, [appAlert, t]);
+    }, [appAlert, backendActor, navigate]);
 
-    let doc_columns = [
+    const doc_columns = [
         {
             field: "image_uri",
             headerName: t("Opera Image"),
@@ -116,19 +116,19 @@ export const DossierDetail = () => {
     ];
 
     const nuovoDoc = () => {
-        console.log("DossierDetail nuovoDoc dossier_id: " + dossier_id);
+        console.log(`DossierDetail nuovoDoc dossier_id: ${dossier_id}`);
         navigate("/newdocument", { replace: true, state: { dossier_id: dossier_id } });
     };
 
     const artwork_mark = () => {
-        console.log("artwork_mark dossier_id: " + dossier_id);
-        let url = "/artwork_mark/" + dossier_id;
+        console.log(`artwork_mark dossier_id: ${dossier_id}`);
+        const url = `/artwork_mark/${dossier_id}`;
         navigate(url, { state: { dossierInfo: dossierInfo }, replace: true });
     };
 
     const verify_mark = () => {
-        console.log("verify_mark dossier_id: " + dossier_id);
-        let url = "/verify_mark/" + dossier_id;
+        console.log(`verify_mark dossier_id: ${dossier_id}`);
+        const url = `/verify_mark/${dossier_id}`;
         navigate(url, { state: { dossierInfo: dossierInfo }, replace: true });
     };
 
@@ -146,7 +146,7 @@ export const DossierDetail = () => {
     return (
         <div>
             <Header />
-            {application == "techne" ? <h1>{t("dossier:DossierDetail")}</h1> : <h1>{t("dossier:ImageDetail")}</h1>}
+            {application === "techne" ? <h1>{t("dossier:DossierDetail")}</h1> : <h1>{t("dossier:ImageDetail")}</h1>}
             {dossierInfo ? (
                 <div>
                     <Container component="main" maxWidth="md">

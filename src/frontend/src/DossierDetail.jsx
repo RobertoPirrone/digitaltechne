@@ -14,7 +14,7 @@ import { IconCode } from "./IconCode";
 import { Table } from "./Table";
 import { MyCheckIcon, Loading, MostSelect, MostTextField, MostButton2, MostSubmitButton, Check, WarningIcon } from "./components/MostComponents";
 import { GoToHomePage, Riservato, BexplorerLink } from "./components/OpusComponents";
-import { dmy_hms, prettyJson } from "./Utils";
+import { prettyJson } from "./Utils";
 import { backend } from "../../declarations/backend";
 import { useAuth } from "./auth/use-auth-client";
 

@@ -1,12 +1,6 @@
 import { canisterId } from "../../declarations/uploads";
 import React, { useCallback } from "react";
 
-export const dmy_hms = (d, full) => {
-    var ret = "";
-    if (full) ret = ("0" + d.getDate()).slice(-2) + "/" + ("0" + (d.getMonth() + 1)).slice(-2) + "/" + d.getFullYear() + " ";
-    return ret + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2) + ":" + ("0" + d.getSeconds()).slice(-2);
-};
-
 // yyyy-mm-dd
 export const dmy = (s) => {
     return s.substring(8) + "/" + s.substring(5, 7) + "/" + s.substring(0, 4);
@@ -17,8 +11,8 @@ export const now = (full) => {
 };
 
 export const downloadArrayBuffer = (ab, fileName, fileType) => {
-    var blob = new Blob([ab], { type: fileType });
-    var link = document.createElement("a");
+    const blob = new Blob([ab], { type: fileType });
+    const link = document.createElement("a");
     link.href = window.URL.createObjectURL(blob);
     link.download = fileName;
     link.click();
@@ -27,13 +21,14 @@ export const downloadArrayBuffer = (ab, fileName, fileType) => {
 export const prettyJson = (obj, preformatted, nl2br) => {
     let pretty = JSON.stringify(obj, null, 2);
     if (nl2br) pretty = pretty.replace(/[\n]/g, "<br>");
-    if (preformatted) pretty = "<pre>" + pretty + "</pre>";
+    if (preformatted)
+        pretty = `<pre>${pretty}</pre>`;
     return pretty;
 };
 
 export const isLocalHost = () => {
     let isLocal = true;
-    let host = window.location.host;
+    const host = window.location.host;
     if (host.endsWith("icp0.io") || host.endsWith("mostapps.it") || host.endsWith("mostapps.ch")) isLocal = false;
     return isLocal;
 };

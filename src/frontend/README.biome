@@ -1,0 +1,10 @@
+npm install --save-dev --save-exact @biomejs/biome
+npx @biomejs/biome init
+vi biome.json 
+npx @biomejs/biome check src/LandingPage.jsx
+
+
+modifiche a biome.json:
+    "indentStyle": "space",
+    "indentWidth": 4,
+    "lineWidth": 200

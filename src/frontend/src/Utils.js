@@ -1,32 +1,31 @@
+import React, { useCallback } from "react";
 /** @module Utils */
 import { canisterId } from "../../declarations/uploads";
-import React, { useCallback } from "react";
 
 /**
  * yyyy-mm-dd -> dd/mm/yyyy
  *
  * @function
- * @param   {string} s 
- * @return  {string}            
+ * @param   {string} s
+ * @return  {string}
  */
 export const dmy = (s) => {
-    return s.substring(8) + "/" + s.substring(5, 7) + "/" + s.substring(0, 4);
+    return `${s.substring(8)}/${s.substring(5, 7)}/${s.substring(0, 4)}`;
 };
 
 /**
- * conversione in json 
+ * conversione in json
  *
  * @function
- * @param   {object} obj 
+ * @param   {object} obj
  * @param   {bool} nl2br return newline HTML friendly  (e.g. <br>)
  * @param   {bool} preformatted return is inclosed in <pre> tag
- * @return  {string}            
+ * @return  {string}
  */
 export const prettyJson = (obj, preformatted, nl2br) => {
     let pretty = JSON.stringify(obj, null, 2);
     if (nl2br) pretty = pretty.replace(/[\n]/g, "<br>");
-    if (preformatted)
-        pretty = `<pre>${pretty}</pre>`;
+    if (preformatted) pretty = `<pre>${pretty}</pre>`;
     return pretty;
 };
 

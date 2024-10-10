@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Route, redirect } from "react-router-dom";
-import { now } from "./Utils";
 import { useGlobalState } from "./state";
 
 const GuardedRoute = ({ component: Component, ...rest }) => {
@@ -26,7 +25,7 @@ const GuardedRoute = ({ component: Component, ...rest }) => {
   const isonow = () => new Date().toISOString();
 
   React.useEffect(() => {
-    console.log("--- " + now() + " GuardedRoute", mode);
+    console.log("--- " + isonow() + " GuardedRoute", mode);
     //console.log("call get_userinfo");
     let url = "get_userinfo";
   }, [setUserInfo, mode]);

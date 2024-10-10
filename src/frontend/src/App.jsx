@@ -13,7 +13,6 @@ import { LandingPage } from "./LandingPage";
 import { Manual } from "./Manual";
 import { NewDocument } from "./NewDocument";
 import { BatchInsert, NewDossier } from "./NewGrambergDossier";
-import { ProtectedRoute } from "./ProtectedRoute";
 import { Purchase } from "./Purchase";
 import { SelfDefineUser } from "./SelfDefineUser";
 import { UserRoles } from "./UserRoles";

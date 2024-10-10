@@ -1,5 +1,5 @@
-import React, { useCallback } from "react";
 /** @module Utils */
+import React, { useCallback } from "react";
 import { canisterId } from "../../declarations/uploads";
 
 /**

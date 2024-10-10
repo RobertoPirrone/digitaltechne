@@ -1,23 +1,27 @@
+/** @module Utils */
 import { canisterId } from "../../declarations/uploads";
 import React, { useCallback } from "react";
 
-// yyyy-mm-dd
+/**
+ * yyyy-mm-dd -> dd/mm/yyyy
+ *
+ * @function
+ * @param   {string} s 
+ * @return  {string}            
+ */
 export const dmy = (s) => {
     return s.substring(8) + "/" + s.substring(5, 7) + "/" + s.substring(0, 4);
 };
 
-export const now = (full) => {
-    return dmy_hms(new Date(), full);
-};
-
-export const downloadArrayBuffer = (ab, fileName, fileType) => {
-    const blob = new Blob([ab], { type: fileType });
-    const link = document.createElement("a");
-    link.href = window.URL.createObjectURL(blob);
-    link.download = fileName;
-    link.click();
-};
-
+/**
+ * conversione in json 
+ *
+ * @function
+ * @param   {object} obj 
+ * @param   {bool} nl2br return newline HTML friendly  (e.g. <br>)
+ * @param   {bool} preformatted return is inclosed in <pre> tag
+ * @return  {string}            
+ */
 export const prettyJson = (obj, preformatted, nl2br) => {
     let pretty = JSON.stringify(obj, null, 2);
     if (nl2br) pretty = pretty.replace(/[\n]/g, "<br>");
@@ -26,6 +30,12 @@ export const prettyJson = (obj, preformatted, nl2br) => {
     return pretty;
 };
 
+/**
+ * ritorna false per tutte le app in mainnet
+ *
+ * @function
+ * @return  {bool}            isLocal
+ */
 export const isLocalHost = () => {
     let isLocal = true;
     const host = window.location.host;
@@ -33,6 +43,12 @@ export const isLocalHost = () => {
     return isLocal;
 };
 
+/**
+ * prefisso URL delle immagini, a seconda che sia in locale o mainnet
+ *
+ * @function
+ * @return  {string}            asset_prefix
+ */
 export const getAssetPfx = () => {
     // const isLocal = !window.location.host.endsWith("icp0.io");
     let asset_pfx = `https://${canisterId}.icp0.io`;
@@ -48,7 +64,14 @@ export const appAlert = (text) => {
     alert(text);
 };
 
-// ritorna data nazinalizzata. isoStamp è is08601
+/**
+ * ritorna data nazionalizzata. isoStamp è iso8601
+ *
+ * @function
+ * @param   {string} isoStamp  timestamp
+ * @param   {string} lang   language, f.i. "en-US"
+ * @return  {string}            localized date + time, f.i. "Oct 8, 2024, 4:36 PM"
+ */
 export const prettyDate = (isoStamp, lang) => {
     const ora = new Date(isoStamp);
     const options = {

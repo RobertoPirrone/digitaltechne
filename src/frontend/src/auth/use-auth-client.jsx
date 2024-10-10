@@ -8,7 +8,6 @@ const AuthContext = createContext();
 
 const defaultOptions = {
   /**
-   *  @type {import("@dfinity/auth-client").AuthClientCreateOptions}
    */
   createOptions: {
     idleOptions: {
@@ -17,7 +16,6 @@ const defaultOptions = {
     },
   },
   /**
-   * @type {import("@dfinity/auth-client").AuthClientLoginOptions}
    */
   loginOptions: {
     identityProvider:
@@ -34,7 +32,6 @@ const defaultOptions = {
  * @param options - Options for the AuthClient
  * @param {AuthClientCreateOptions} options.createOptions - Options for the AuthClient.create() method
  * @param {AuthClientLoginOptions} options.loginOptions - Options for the AuthClient.login() method
- * @returns
  */
 export const useAuthClient = (options = defaultOptions) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);

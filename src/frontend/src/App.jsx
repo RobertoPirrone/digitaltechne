@@ -1,75 +1,76 @@
+import { ThemeProvider, createMuiTheme } from "@mui/material/styles";
 import React, { useState, Suspense } from "react";
 import { Route, Routes } from "react-router";
 import { BrowserRouter as Router } from "react-router-dom";
-import { createMuiTheme, ThemeProvider } from "@mui/material/styles";
 
 import { ArtworkMark } from "./ArtworkMark";
 import { CartridgeInsert } from "./CartridgeInsert";
 import { Dossier } from "./Dossier";
 import { DossierDetail } from "./DossierDetailGramberg";
 import { Home } from "./Home";
-import { LandingPage } from "./LandingPage";
-import Login from "./auth/Login";
-import {Logout} from "./auth/Logout";
 import { JsonCompare } from "./JsonCompare";
+import { LandingPage } from "./LandingPage";
 import { Manual } from "./Manual";
 import { NewDocument } from "./NewDocument";
-import { NewDossier, BatchInsert } from "./NewGrambergDossier";
+import { BatchInsert, NewDossier } from "./NewGrambergDossier";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { Purchase } from "./Purchase";
 import { SelfDefineUser } from "./SelfDefineUser";
 import { UserRoles } from "./UserRoles";
 import { VerifyMark } from "./VerifyMark";
+import Login from "./auth/Login";
+import { Logout } from "./auth/Logout";
 import { theme } from "./components/theme";
 import "./App.css";
-import { useAuth, AuthProvider } from "./auth/use-auth-client";
+import { AuthProvider, useAuth } from "./auth/use-auth-client";
 
 import { backend } from "declarations/backend";
 
 function Loading() {
-  return <h2>🌀 Loading...</h2>;
+    return <h2>🌀 Loading...</h2>;
 }
 
 function App() {
-  const { isAuthenticated, identity } = useAuth();
+    const { isAuthenticated, identity } = useAuth();
 
-  return (
-    <ThemeProvider theme={theme}>
-      <div className="App">
-      {isAuthenticated ? 
-        <Router>
-          <Routes>
-              <Route path="/artwork_mark/:dossierdetail" element={<ArtworkMark />} />
-              <Route path="/cartridge_insert" element={<CartridgeInsert />} />
-              <Route path="/home" element={<Home />} />
-              <Route path="/dossier" element={<Dossier />} />
-              <Route path="/dossier/:dossierdetail" element={<Dossier />} />
-              <Route path="/dossierdetail/:dossierdetail" element={<DossierDetail />} />
-              <Route path="/json_compare" element={<JsonCompare />} />
-              <Route path="/home" element={<Home />} />
-              <Route path="/manual" element={<Manual />} />
-              <Route path="/newdocument" key="dossier_id" element={<NewDocument />} />
-              <Route path="/newdossier" element={<NewDossier />} />
-              <Route path="/batchinsert" element={<BatchInsert />} />
-              <Route path="/purchase" element={<Purchase />} />
-              <Route path="/selfdefineuser" element={<SelfDefineUser />} />
-              <Route path="/user_roles" element={<UserRoles />} />
-              <Route path="/verify_mark/:dossierdetail" element={<VerifyMark />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/logout" element={<Logout />} />
-            <Route path="/" element={<LandingPage />} />
-          </Routes>
-        </Router>
-
-          : <Login />}
-      </div>
-    </ThemeProvider>
-  );
+    return (
+        <ThemeProvider theme={theme}>
+            <div className="App">
+                {isAuthenticated ? (
+                    <Router>
+                        <Routes>
+                            <Route path="/artwork_mark/:dossierdetail" element={<ArtworkMark />} />
+                            <Route path="/cartridge_insert" element={<CartridgeInsert />} />
+                            <Route path="/home" element={<Home />} />
+                            <Route path="/dossier" element={<Dossier />} />
+                            <Route path="/dossier/:dossierdetail" element={<Dossier />} />
+                            <Route path="/dossierdetail/:dossierdetail" element={<DossierDetail />} />
+                            <Route path="/json_compare" element={<JsonCompare />} />
+                            <Route path="/home" element={<Home />} />
+                            <Route path="/manual" element={<Manual />} />
+                            <Route path="/newdocument" key="dossier_id" element={<NewDocument />} />
+                            <Route path="/newdossier" element={<NewDossier />} />
+                            <Route path="/batchinsert" element={<BatchInsert />} />
+                            <Route path="/purchase" element={<Purchase />} />
+                            <Route path="/selfdefineuser" element={<SelfDefineUser />} />
+                            <Route path="/user_roles" element={<UserRoles />} />
+                            <Route path="/verify_mark/:dossierdetail" element={<VerifyMark />} />
+                            <Route path="/login" element={<Login />} />
+                            <Route path="/logout" element={<Logout />} />
+                            <Route path="/" element={<LandingPage />} />
+                        </Routes>
+                    </Router>
+                ) : (
+                    <Login />
+                )}
+            </div>
+        </ThemeProvider>
+    );
 }
 export default () => (
-    <Suspense fallback={Loading() }>
-    <AuthProvider>
-    <App />
-    </AuthProvider>
+    <Suspense fallback={Loading()}>
+        <AuthProvider>
+            <App />
+        </AuthProvider>
     </Suspense>
 );

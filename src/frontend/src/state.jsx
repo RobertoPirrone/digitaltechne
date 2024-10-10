@@ -1,7 +1,7 @@
 import { createGlobalState } from "react-hooks-global-state";
 
 const initialState = {
-  application: "techne",
+  application: "gramberg",
   identity: null,
   authClient: null,
   backend: null,

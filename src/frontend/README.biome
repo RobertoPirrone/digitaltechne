@@ -8,3 +8,7 @@ modifiche a biome.json:
     "indentStyle": "space",
     "indentWidth": 4,
     "lineWidth": 200
+
+# limitare gli errori da controllare:
+biome lint  --only=style/useTemplate --only=style/useConst src/VerifyMark.jsx
+biome lint --write  --unsafe --only=style/useTemplate --only=style/useConst src/VerifyMark.jsx

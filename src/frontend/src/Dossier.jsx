@@ -1,3 +1,4 @@
+/** @module MainPages */
 import SearchIcon from "@mui/icons-material/Search";
 import SettingsIcon from "@mui/icons-material/Settings";
 import Collapse from "@mui/material/Collapse";
@@ -19,10 +20,8 @@ import { Header } from "./Header";
 import { Table } from "./Table";
 import { appAlert, getAssetPfx } from "./Utils";
 import { useAuth } from "./auth/use-auth-client";
-import InVisionDialog from "./components/InVisionDialog";
 import { Check, MostCheckbox, MostSubmitButton, MyCheckIcon, WarningIcon } from "./components/MostComponents";
 import { MostDataGrid } from "./components/MostDataGrid";
-import { Riservato } from "./components/OpusComponents";
 import { useGlobalState } from "./state";
 
 let dossier_uuid = null;

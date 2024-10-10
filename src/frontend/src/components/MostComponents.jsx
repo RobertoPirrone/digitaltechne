@@ -3,6 +3,8 @@
  * @module MostComponents
  * @todo eliminare le routines Most* non più usate, e documentare le rimanenti
  */
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
 import WarningIcon from "@mui/icons-material/Warning";
@@ -17,8 +19,6 @@ import { Controller } from "react-hook-form";
 import Select from "react-select";
 import { DTSubmit } from "./useStyles";
 export { WarningIcon } from "@mui/icons-material/Warning";
-
-import { useTranslation } from "react-i18next";
 
 export const MostTextField = ({
     name,
@@ -415,4 +415,21 @@ export const MyCheckIcon = ({ value }) => {
         return <Check good={true} />;
     }
     return <Check good={false} />;
+};
+
+export const GoTo = ({ location }) => {
+    console.error(`GoTo ${location}`);
+    const navigate = useNavigate();
+    setTimeout(() => {
+        navigate(location);
+    }, 100);
+    return <div />;
+};
+export const GoToHomePage = () => {
+    console.error("GoToHomePage");
+    const navigate = useNavigate();
+    setTimeout(() => {
+        navigate("/home");
+    }, 100);
+    return <div />;
 };

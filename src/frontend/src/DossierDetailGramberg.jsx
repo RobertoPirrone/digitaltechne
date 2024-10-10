@@ -1,7 +1,7 @@
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
-/** @module DossierDetail */
+/** @module MainPages */
 import React, { useContext, useState, useMemo, useEffect, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -14,9 +14,8 @@ import { IconCode } from "./IconCode";
 import { Table } from "./Table";
 import { prettyDate, prettyJson } from "./Utils";
 import { useAuth } from "./auth/use-auth-client";
-import { Check, Loading, MostButton2, MostSelect, MostSubmitButton, MostTextField, MyCheckIcon, WarningIcon } from "./components/MostComponents";
+import { Check, GoToHomePage, Loading, MostButton2, MostSelect, MostSubmitButton, MostTextField, MyCheckIcon, WarningIcon } from "./components/MostComponents";
 import { MostDataGrid } from "./components/MostDataGrid";
-import { BexplorerLink, GoToHomePage, Riservato } from "./components/OpusComponents";
 import { useGlobalState } from "./state";
 
 import { HttpAgent } from "@dfinity/agent";

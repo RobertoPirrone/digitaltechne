@@ -1,29 +1,35 @@
-import React, { useContext, useState, useMemo, useEffect, useCallback } from "react";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
-import { MostDataGrid } from "./components/MostDataGrid";
-import { useNavigate } from "react-router-dom";
+/** @module DossierDetail */
+import React, { useContext, useState, useMemo, useEffect, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { useParams, useLocation } from "react-router-dom";
-import { useGlobalState } from "./state";
+import { useNavigate } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
+import { backend } from "../../declarations/backend";
 import { Footer } from "./Footer";
 import { Header } from "./Header";
 import { IconCode } from "./IconCode";
 import { Table } from "./Table";
-import { MyCheckIcon, Loading, MostSelect, MostTextField, MostButton2, MostSubmitButton, Check, WarningIcon } from "./components/MostComponents";
-import { GoToHomePage, Riservato, BexplorerLink } from "./components/OpusComponents";
-import { prettyJson, prettyDate } from "./Utils";
-import { backend } from "../../declarations/backend";
+import { prettyDate, prettyJson } from "./Utils";
 import { useAuth } from "./auth/use-auth-client";
+import { Check, Loading, MostButton2, MostSelect, MostSubmitButton, MostTextField, MyCheckIcon, WarningIcon } from "./components/MostComponents";
+import { MostDataGrid } from "./components/MostDataGrid";
+import { BexplorerLink, GoToHomePage, Riservato } from "./components/OpusComponents";
+import { useGlobalState } from "./state";
 
-import { Ed25519KeyIdentity } from "@dfinity/identity";
 import { HttpAgent } from "@dfinity/agent";
+import { Ed25519KeyIdentity } from "@dfinity/identity";
 
 let dossier_id = "";
 let dataora = "";
 
+/**
+ * Pagina dettaglio singolo foglio. dossier_id come foglia della Url
+ *
+ * Versione specializzata per Archivio Gramberg (singoli fogli di una tiratura)
+ */
 export const DossierDetail = () => {
     const { backendActor, whoami } = useAuth();
     const navigate = useNavigate();
@@ -44,10 +50,6 @@ export const DossierDetail = () => {
     const appAlert = useCallback((text) => {
         alert(text);
     }, []);
-    const giorniOptions = [
-        { label: "15 giorni", value: 15 },
-        { label: "30 giorni", value: 30 },
-    ];
 
     const react_router_location = useLocation();
     console.log(`DossierDetail react_router_location: ${JSON.stringify(react_router_location)}`);

@@ -23,7 +23,7 @@ pub struct Dossier {
     tipofirma: String,
     tiposupporto: String,
     has_artwork_mark: Option<bool>,
-    master_uuid: String,
+    pub master_uuid: String,
     sheet_identifier: String,
     friendly_name: Option<String>
 }

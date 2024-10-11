@@ -111,13 +111,14 @@ fields='
     ora_inserimento TEXT NOT NULL,                     
     title TEXT NOT NULL,                     
     versione INTEGER,
-    dossieropera_id INTEGER NULL,                           
+    dossieropera_id INTEGER NOT NULL,                           
     filename TEXT NOT NULL,                           
     filesize INTEGER,
     mimetype TEXT NOT NULL,                           
     image_uri TEXT NOT NULL,
     inserted_by TEXT NOT NULL,
-    tipo_documento TEXT NOT NULL
+    tipo_documento TEXT NOT NULL,
+    master_uuid TEXT NOT NULL
     '
     create_table documents "$fields"
 

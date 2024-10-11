@@ -138,8 +138,8 @@ export const Dossier = () => {
                     <Link
                         to={{
                             pathname: want_detail ? `/dossierdetail/${params.row.id}` : `/dossier/${params.row.master_uuid}`,
-                            state: { dossier_id: params.row.id },
                         }}
+                        state = {{ dossier_id: `${params.row.id}` , master_uuid: `${params.row.master_uuid}`}}
                         className="nodecoration allCellLink">
                         <div key={`${asset_pfx}${params.row.icon_uri}`} className={"App-image"}>
                             <img src={`${asset_pfx}${params.row.icon_uri}`} width={"100%"} loading={"lazy"} />

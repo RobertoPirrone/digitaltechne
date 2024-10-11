@@ -12,7 +12,7 @@ import { Footer } from "./Footer";
 import { Header } from "./Header";
 import { IconCode } from "./IconCode";
 import { Table } from "./Table";
-import { prettyDate, prettyJson } from "./Utils";
+import { appAlert, prettyDate, prettyJson } from "./Utils";
 import { useAuth } from "./auth/use-auth-client";
 import { Check, GoToHomePage, Loading, MostButton2, MostSelect, MostSubmitButton, MostTextField, MyCheckIcon, WarningIcon } from "./components/MostComponents";
 import { MostDataGrid } from "./components/MostDataGrid";
@@ -45,10 +45,6 @@ export const DossierDetail = () => {
     const { i18n, t } = useTranslation(["translation", "documento", "dossier", "tipofirma", "tipotecnica", "tiposupporto"]);
     const { control, register, handleSubmit, errors } = useForm();
     const [uploads, setUploads] = useState([]);
-
-    const appAlert = useCallback((text) => {
-        alert(text);
-    }, []);
 
     const react_router_location = useLocation();
     console.log(`DossierDetail react_router_location: ${JSON.stringify(react_router_location)}`);
@@ -117,8 +113,13 @@ export const DossierDetail = () => {
     ];
 
     const nuovoDoc = () => {
-        console.log(`DossierDetail nuovoDoc dossier_id: ${dossier_id}`);
-        navigate("/newdocument", { replace: true, state: { dossier_id: dossier_id } });
+        if (dossierInfo.uuid === dossierInfo.master_uuid) {
+            console.log(`DossierDetail nuovoDoc dossier_id: ${dossier_id}`);
+            navigate("/newdocument", { replace: true, state: { dossier_id: dossier_id , master_uuid: `${dossierInfo.master_uuid}` } });
+        } else {
+            appAlert(t("dossier:DocsOnlyOnMaster"));
+            navigate(`/dossier/${dossierInfo.master_uuid}`, {state: { dossier_id: `${dossierInfo.id}` , master_uuid: `${dossierInfo.master_uuid}`} });
+        }
     };
 
     const artwork_mark = () => {
@@ -256,7 +257,6 @@ export const DossierDetail = () => {
                             {dossierInfo.inserted_by === whoami ? (
                                 <div className="MuiContainer-root MuiContainer-maxWidthXs">
                                     <MostSubmitButton type="button" disabled={disabledButs} onClick={nuovoDoc} label={t("dossier:NuovoDocumento")} />
-                                    {/* se dossier gia' in BC e se almeno 1 doc non gia' in BC */}
                                     {dossierInfo.contract_initialized && !doc_bc_sync ? <MostSubmitButton type="button" disabled={disabledButs} onClick={documents2BC} label={t("dossier:Registra i documenti in BlockChain")} /> : null}
                                 </div>
                             ) : null}

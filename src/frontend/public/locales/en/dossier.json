@@ -127,6 +127,7 @@
   "CopieFirmate": "Signed Copies",
   "CopieNonFirmate": "Unsigned Copies",
   "CopiePdA": "Artist’s Proof",
+  "DocsOnlyOnMaster": "Documents must be linked to the main copy",
   "tipoluogo_id": {
     "LUOGO_MUSEO": "Museum",
     "LUOGO_COLLEZIONE": "Collection",

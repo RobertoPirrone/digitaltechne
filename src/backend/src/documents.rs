@@ -15,7 +15,7 @@ pub struct Documento {
     ora_inserimento: String,
     title: String,
     versione: u64,
-    dossieropera_id: u64,
+    master_uuid: String,
     filename: String,
     filesize: u64,
     mimetype: String,
@@ -50,11 +50,12 @@ pub fn documenti_query(params: QueryDocumentsParams) -> JsonResult {
     let dossier_sql = format!("select dossier.*, friendly_name  from dossier left outer join rbac where inserted_by = principal and dossier.id = {:?}",id);
     dossier_infos = dossier_struct_query(dossier_sql.to_string());
     let dossier_info = dossier_infos[0].clone();
+    let master_uuid  = dossier_info.master_uuid.clone();
     ic_cdk::println!("dossier_info: {:?}", dossier_infos[0]);
 
     // ora i  documenti
-    let documenti_sql = "select * from documents where dossieropera_id = ?1";
-    // let dossier_sql = "select * from dossier";
+    // let documenti_sql = "select * from documents where master_uuid = ?1";
+    let documenti_sql = "select id, uuid, autore, ora_inserimento, title, versione, master_uuid, filename, filesize, mimetype, image_uri, inserted_by, tipo_documento from documents where master_uuid = ?1";
     ic_cdk::println!("Query: {documenti_sql} ");
     let conn = ic_sqlite::CONN.lock().unwrap();
     let mut stmt = match conn.prepare(&documenti_sql) {
@@ -63,7 +64,7 @@ pub fn documenti_query(params: QueryDocumentsParams) -> JsonResult {
     };
     // i parametri della query_map devono essere in una tuple, anche se c'è un solo paraemtro, in ?: -> https://docs.rs/rusqlite/latest/rusqlite/trait.Params.html#positional-parameters
 
-    let documenti_iter = match stmt.query_map((params.dossieropera_id,), |row| {
+    let documenti_iter = match stmt.query_map((master_uuid,), |row| {
         Ok(
             Documento {
             id: row.get(0).unwrap(),
@@ -72,7 +73,7 @@ pub fn documenti_query(params: QueryDocumentsParams) -> JsonResult {
             ora_inserimento: row.get(3).unwrap(),
             title: row.get(4).unwrap(),
             versione: row.get(5).unwrap(),
-            dossieropera_id: row.get(6).unwrap(),
+            master_uuid: row.get(6).unwrap(),
             filename: row.get(7).unwrap(),
             filesize: row.get(8).unwrap(),
             mimetype: row.get(9).unwrap(),
@@ -108,9 +109,9 @@ pub fn document_insert(jv: String) -> ExecResult {
     // let wrap = sql_ret.unwrap();
 
     let sql = format!("insert into documents 
-        (uuid, autore, ora_inserimento, title, versione, dossieropera_id, filename, filesize, mimetype, image_uri, inserted_by, tipo_documento) 
-        values ('{}', '{}', '{}', '{}', {}, {}, '{}', {}, '{}', '{}', '{}', '{}' )", 
-        d.uuid, d.autore, d.ora_inserimento, d.title, d.versione, d.dossieropera_id, d.filename, d.filesize, d.mimetype, image_uri, caller, d.tipo_documento );
+        (uuid, autore, ora_inserimento, title, versione, master_uuid, filename, filesize, mimetype, image_uri, inserted_by, tipo_documento) 
+        values ('{}', '{}', '{}', '{}', {}, '{}', '{}', {}, '{}', '{}', '{}', '{}' )", 
+        d.uuid, d.autore, d.ora_inserimento, d.title, d.versione, d.master_uuid, d.filename, d.filesize, d.mimetype, image_uri, caller, d.tipo_documento );
     ic_cdk::println!("document_insert sql: {:?}", sql);
 
     return match conn.execute(

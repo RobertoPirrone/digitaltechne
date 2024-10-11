@@ -35,6 +35,7 @@ export const NewDocument = (props) => {
     const react_router_location = useLocation();
     console.log(`NewDocument location: ${JSON.stringify(react_router_location)}`);
     const dossier_id = react_router_location.state.dossier_id;
+    const master_uuid = react_router_location.state.master_uuid;
 
     const [autoreList, setAutoreList] = useState([]);
     const tipodocumento_list = ["image", "condition report", "authenticity attribution", "certificate of ownership"];
@@ -97,6 +98,7 @@ export const NewDocument = (props) => {
         vals.filesize = asset.file_size;
         vals.versione = 1;
         vals.ora_inserimento = new Date();
+        vals.master_uuid = master_uuid;
 
         console.log(`onSubmit: ${JSON.stringify(vals)}`);
         setDisabledButs(true);
@@ -115,7 +117,7 @@ export const NewDocument = (props) => {
                     navigate(url, { replace: true });
                 } else {
                     console.error(response);
-                    appAlert(response.error);
+                    appAlert(response.Err);
                     setDisabledButs(false);
                 }
             })

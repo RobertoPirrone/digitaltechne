@@ -1,0 +1,41 @@
+# translation files handling
+The main building block is a XLS file with these columns:
+L1: key
+L2: inner key for nested structs (just one level of nesting)
+EN: english strings
+IT: italian strings
+
+Example at the end of this README
+
+# TBD:  Mui React Select with grouping
+
+usually run inside venv
+need openpyxl
+
+
+Scripts:
+xls2i18n:  from a  xls file will produce the it/en files corresponding to the  xls rows, under a local directory public/locales/
+    python xls2i18n.py xlsx_file
+
+i18n2xls: extracts from the it/en translation files, building the xlsx file. Handles missing keys in either files
+    python i18n2xls.py translations_dir  basename_of_json_file
+    e.g. python i18n2xls.py ../InternetComputer/digitaltechne/src/frontend/public/locales documento
+
+translate: creates missing rows, using google translate (TBD)
+
+
+XLSX File example:
+
+L1      L2      EN      IT
+pippo           Goofy   Pippo
+DonaldDuck              Donald Duck     Paperino
+DaisyDuck               Daisy Duck      Paperina
+"Donald Duck Nephews"   
+        Huey    Huey    Qui
+        Dewey   Dewey   Quo
+        Louie   Louie   Qua
+"Daisy Duck Nephews"    
+        April   April   Ely
+        May     May     Emy
+        June    June    Evy
+

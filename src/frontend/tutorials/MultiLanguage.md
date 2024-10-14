@@ -9,25 +9,22 @@ La gestione delle stringhe nazionalizzate ha sempre avuto problemi:
 - E' necessario tradurre le stringhe anche in lingue non conosciute
 
 In questo progetto ci sono 3 funzionalità principali:
-- Recupero dei prompt dai file json esistenti (quelli che normalmente sono in .../public/locales/??/\*), che vengono inseriti in un file Excel, un prompt per riga, con colonne: nome del prompt, valore inglese e italiano
+- Recupero dei prompt dai file json esistenti (quelli che normalmente sono in .../public/locales/??/\*). I prompt vengono inseriti in un file Excel, un prompt per riga, con colonne: nome del prompt, valore inglese e italiano
 - Eventuale traduzione in una nuova lingua
-- Estrazione dal file xls dei prompt nazionalizzaati
+- Estrazione dal file xls dei prompt nazionalizzati:
+    - file di traduzione standard
+    - file specializzati per i pull down menu
 
 La directory di lavoro è .../src/frontend/prepare\_18n, sono script python in un virtual environment 
 
 ## Recupero
-Con questa operazione vengon recuoerati  i file dossier.json dalle directory en, it, ecc dei sorgenti attuali, e vengono inseriti in un file dossier.xlsx
+Con questa operazione vengono recuperati  i file dossier.json dalle directory en, it, ecc dei sorgenti attuali, e vengono inseriti in un file dossier.xlsx
 
-<div style="background-color:WhiteSmoke ;">
-
-> . .my-venv/bin/activate
->
-> python i18n2xls.py ../public/locales dossier
->
-> deactivate
-
-</div>
-
+```
+. .my-venv/bin/activate
+python i18n2xls.py ../public/locales dossier
+deactivate
+```
 
 ## Traduzione
 
@@ -37,16 +34,58 @@ Con questa operazione, partendo dal file dossier.xlsx vengono creati i file doss
 
 Sarà poi necessario verificare i file prodotti e copiarli in ../public/locales
 
-<div style="background-color:WhiteSmoke ;">
-
-> . .my-venv/bin/activate
->
-> python xls2i18n.py ./dossier.xlsx 
->
-> deactivate
-
-</div>
+```
+. .my-venv/bin/activate
+python xls2i18n.py ./dossier.xlsx 
+deactivate
+```
 
 ## Pull Down Menu nazionalizzati
 
+I pulldown menu nazionalizzati vengono costruiti a partire da un file ad hoc e richiamando xsl2i18n con l'opzione da linea di comando **--pulldown** . In questo modo vengono creati dei file json utilizzati da useTranslate con queste caratteristiche:
+- campo **Label**, nome del pulldown
+-array **menuname_array** (p.es. tipofirma\_array), con gli elementi del pulldown
 
+E quindi possono essere richiamati tramite il componente *SpecializedSelect*
+
+<div style="background-color:WhiteSmoke ;">
+
+    <SpecializedSelect defaultValue={""} name="tipotecnica" label={t("tipotecnica:Label")} what={"tipotecnica"} onChange={(e, v) => setTipotecnica(e.target.value)} />
+
+</div>
+
+# Struttura del file Excel
+Il file xlsx (o anche .csv) ha 4 colonne:
+- L1 chiave principale
+- L2 eventuale chiave di secondo livello usata solo per i pulldown
+- it prompt in italiano
+- en prompt in inglese
+
+Per  esempio partendo da un file tipotecnica.csv fatto in questo modo:
+
+```
+L1,L2,IT,EN
+LABEL,,Tipo di Tecnica,Tecnique Type
+EMBOSSING,,In Rilievo,Embossing
+ETCHING,,Acquaforte,Etching
+LITOGRAPHY,,Litografia,Litography
+MIXED,,Tecnica Mista,Mixed Technique
+WOODCUT,,Xilografia,Woodcut
+PLASTER,,Gesso,Plaster
+```
+
+Si ottengono file come questo public/locales/en/tipotecnica.json 
+
+```
+{
+  "tipotecnica_array": {
+    "EMBOSSING": "Embossing",
+    "ETCHING": "Etching",
+    "LITOGRAPHY": "Litography",
+    "MIXED": "Mixed Technique",
+    "WOODCUT": "Woodcut",
+    "PLASTER": "Plaster"
+  },
+  "Label": "Tecnique Type"
+}
+```

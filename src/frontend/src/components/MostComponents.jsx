@@ -1,5 +1,5 @@
 /**
- * Componenti JSX con richiamo semplificato.
+ * JSX Components with sane defaults
  * @module MostComponents
  * @todo eliminare le routines Most* non più usate, e documentare le rimanenti
  */

@@ -14,12 +14,12 @@ export const dmy = (s) => {
 };
 
 /**
- * conversione in json
+ * Json pretty print 
  *
  * @function
  * @param   {object} obj
- * @param   {bool} nl2br return newline HTML friendly  (e.g. <br>)
- * @param   {bool} preformatted return is inclosed in <pre> tag
+ * @param   {bool} nl2br convert newline to HTML friendly  (e.g. <br>)
+ * @param   {bool} preformatted return is enclosed in <pre> tag
  * @return  {string}
  */
 export const prettyJson = (obj, preformatted, nl2br) => {
@@ -30,7 +30,7 @@ export const prettyJson = (obj, preformatted, nl2br) => {
 };
 
 /**
- * ritorna false per tutte le app in mainnet
+ * true if local, false for Mainnet
  *
  * @function
  * @return  {bool}            isLocal
@@ -43,7 +43,7 @@ export const isLocalHost = () => {
 };
 
 /**
- * prefisso URL delle immagini, a seconda che sia in locale o mainnet
+ * URL prefix for the assrt images, handling local/mainnet 
  *
  * @function
  * @return  {string}            asset_prefix
@@ -64,7 +64,7 @@ export const appAlert = (text) => {
 };
 
 /**
- * ritorna data nazionalizzata. isoStamp è iso8601
+ * from iso8601 string to localized date
  *
  * @function
  * @param   {string} isoStamp  timestamp

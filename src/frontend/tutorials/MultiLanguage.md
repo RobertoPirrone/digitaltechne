@@ -42,7 +42,9 @@ deactivate
 
 ## Nationalized Pull Down Menus
 
-Nationalized pulldown menus are built starting from an ad hoc file and calling xsl2i18n with the command line option **--pulldown** . This creates json files used by useTranslate with these characteristics:
+Pull down menus should appear in the current language, uat the keys associated with the prompts must be the same in any language
+
+Json files are built starting from an ad hoc file (i..e. a file for each menu) and calling xsl2i18n with the command line option **--pulldown** . This creates json files used by useTranslate with these characteristics:
 - field **Label**, name of the pulldown
 - array **menuname_array** (e.g. tipofirma\_array), with the elements of the pulldown
 

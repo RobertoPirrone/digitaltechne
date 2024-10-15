@@ -1,13 +1,15 @@
 /**
- * Select multilingua specifica per un campo
+ * Language aware Select 
  *
- * Per dettagli leggere il tutorial sulla nostra gestine Multilingua {@tutorial MultiLanguage}
+ * Rationale and details here: {@tutorial MultiLanguage}
  *
- * gestisce anche pulldown a 2 livelli (prima si chiamava DoubleLevelSelect)
+ * Pulldowns can have also sublevels (legacy name was DoubleLevelSelect)
  *
  * Ideas from: https://mui.com/material-ui/react-select/#grouping, https://stackoverflow.com/questions/62455161/loop-through-array-and-create-a-listitem-for-each-item
  *
  * @module SpecializedSelect
+ *
+ * @example: <SpecializedSelect defaultValue={""} name="tipotecnica" label={t("tipotecnica:Label")} what={"tipotecnica"} onChange={(e, v) => setTipotecnica(e.target.value)} />
  */
 
 import { FormControl } from "@mui/base/FormControl";

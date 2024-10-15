@@ -1,4 +1,4 @@
-# Project Name
+# Liliana Gramberg's Archive
 > Source code for the digitaltechne software
 > Live demo [_here_](https://gramberg.digitaltechne.ch)
 
@@ -15,10 +15,9 @@
 
 
 ## General Information
-- Provide general information about your project here.
-- What problem does it (intend to) solve?
-- What is the purpose of your project?
-- Why did you undertake it?
+- On line archive of the Liliana Gramberg's artwork
+- DNA mark affixed on the operas
+- DNA analisys stored on chain
 <!-- You don't have to answer all the questions - just the ones relevant to your project. -->
 
 
@@ -26,6 +25,7 @@
 - Internet Computer
 - React 18 Frontend
 - Rust backend
+- Human Genome
 
 
 ## Features
@@ -43,6 +43,15 @@
 git clone ssh://git.private/home/git/digitaltechne.git gramberg
 cd gramberg
 ```
+
+## Development
+
+Tools used in this project are (working directory .../src/frontend/):
+
+- code formatting and linting: biome
+- JS documentation (these pages): jsdoc
+- JS hot reload: *npm start*
+- Project documentation, manual pages: sphinx (working directory .../docs/) 
 
 ## Deploy
 

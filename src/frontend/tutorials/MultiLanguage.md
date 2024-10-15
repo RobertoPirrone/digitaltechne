@@ -71,10 +71,12 @@ ETCHING,,Acquaforte,Etching
 LITOGRAPHY,,Litografia,Litography
 MIXED,,Tecnica Mista,Mixed Technique
 WOODCUT,,Xilografia,Woodcut
-PLASTER,,Gesso,Plaster
+PLASTER,L2,Gesso Italiano,English Plaster
+,P2,Gesso 2, Plaster2
+,P3,Gesso 3, Plaster3
 ```
 
-Si ottengono file come questo public/locales/en/tipotecnica.json 
+Si ottengono file come questo: public/locales/en/tipotecnica.json 
 
 ```
 {
@@ -84,8 +86,16 @@ Si ottengono file come questo public/locales/en/tipotecnica.json
     "LITOGRAPHY": "Litography",
     "MIXED": "Mixed Technique",
     "WOODCUT": "Woodcut",
-    "PLASTER": "Plaster"
+    "PLASTER": {
+      "Label": "English Plaster",
+      "P2": " Plaster2",
+      "P3": " Plaster3"
+    }
   },
   "Label": "Tecnique Type"
 }
 ```
+
+Quindi il secondo livello richiede:
+- una riga con chiave, costante "L2" e i prompt nazionalizzati
+- n righe in cui manca la prima colonna, nella seconda c'è la chiave di secondo livello e poi i prompt nazionalizzati

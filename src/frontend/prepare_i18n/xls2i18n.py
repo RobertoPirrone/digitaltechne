@@ -63,18 +63,16 @@ def xls2i18n():
                     cur_value=s[idx].value
                     # Log.error(f"For s: {L1=} {L2=}, {main_value=} {cur_value=}")
 
-                    if L1 is not None and main_value is None:
+                    if L1 is not None and L2 is not None and L2 == "L2":
                         # inizia un livello 2
                         print ("Inizio L2, ", L1)
                         if new_L2_key is not None:
                             # sputo fuori l'attuale L2  e reinizializzo
                             trans_dict[new_L2_key] = L2_dict
                         # Per i pull down bilivello posso nazionalizzare anche il nome del gruppo
-                        if cur_value is not None:
-                            new_L2_key = cur_value
-                        else:
-                            new_L2_key = L1
                         L2_dict={}
+                        new_L2_key = L1
+                        L2_dict["Label"]=cur_value
                         
                     elif  L1 is None and L2 is None:
                         break
@@ -89,7 +87,7 @@ def xls2i18n():
                         L2_dict[L2] = cur_value
 
                     else:
-                        Log.error(f"ELSE")
+                        Log.error(f"ELSE {L1}, {L2}, main value {main_value}, cur_value {cur_value}" )
 
                 if new_L2_key is not None:
                     # ho ancora un dict in canna

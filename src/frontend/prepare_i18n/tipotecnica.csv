@@ -1,0 +1,10 @@
+L1,L2,IT,EN
+LABEL,,Tipo di Tecnica,Tecnique Type
+EMBOSSING,,In Rilievo,Embossing
+ETCHING,,Acquaforte,Etching
+LITOGRAPHY,,Litografia,Litography
+MIXED,,Tecnica Mista,Mixed Technique
+WOODCUT,,Xilografia,Woodcut
+PLASTER,L2,Pla_it,Pla_en
+,P2,Gesso 2, Plaster2
+,P3,Gesso 3, Plaster3

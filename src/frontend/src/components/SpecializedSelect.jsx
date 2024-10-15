@@ -36,44 +36,36 @@ const ComputeSelectRows = ({ what, label, defaultValue, onChange }) => {
     const obj2translate = `${what}:${what}_array`;
     const objs = t(obj2translate, { returnObjects: true });
     console.log(JSON.stringify(objs));
-    //rows.push(<MenuItem key={"None"} value=""> <em>None</em> </MenuItem>);
     let k = "";
-    let lev2Name = "";
+    let lev2Label = "";
     for (const ele of Object.entries(objs)) {
         console.log("ele: ", JSON.stringify(ele));
         const [key, value] = ele;
         if (value.constructor === Object) {
-            lev2Name = value.Name;
-            value.Name = undefined;
-            rows.push(
-                <MyListSubheader value={lev2Name} key={lev2Name}>
-                    {lev2Name}
-                </MyListSubheader>,
-            );
+            lev2Label = value.Label;
+            value.Label = undefined;
+            rows.push( <MyListSubheader value={lev2Label} key={lev2Label}> {lev2Label} </MyListSubheader>,);
             for (const innerEle of Object.entries(value)) {
                 const [ikey, ivalue] = innerEle;
                 k = `${key}.${ikey}`;
-                rows.push(
-                    <MenuItem value={k} key={k}>
-                        {ivalue}
-                    </MenuItem>,
-                );
+                rows.push( <MenuItem value={k} key={k}> {ivalue} </MenuItem>,);
             }
             continue;
         }
-        rows.push(
-            <MenuItem key={key} value={key}>
-                {value}
-            </MenuItem>,
-        );
+        rows.push( <MenuItem key={key} value={key}> {value} </MenuItem>,);
     }
+    console.log(`ROWS ${what}:  `);
     console.log(rows);
+
     return (
         <>
-            <InputLabel id="demo-simple-select-required-label">{label}</InputLabel>
-            <Select labelId="demo-simple-select-required-label" id="demo-simple-select-required" defaultValue={defaultValue} label={label} onChange={onChange}>
-                {rows}
-            </Select>
+            <FormControl sx={{ m: 1, minWidth: 120 }}>
+                <InputLabel htmlFor="grouped-select"> {label} </InputLabel>
+                <Select defaultValue={defaultValue} label={label} onChange={onChange}>
+                    <option aria-label="None" value="" />
+                    {rows}
+                </Select>
+            </FormControl>
         </>
     );
 };

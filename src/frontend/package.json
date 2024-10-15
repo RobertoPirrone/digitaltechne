@@ -8,7 +8,7 @@
         "start": "vite --port 3000",
         "prebuild": "dfx generate",
         "build": "tsc && vite build && cp src/.ic-assets.json dist/.ic-assets.json5",
-        "doc": "jsdoc -c jsdoc.conf.json",
+        "jsdoc": "jsdoc -R ./README.md -c jsdoc.conf.json",
         "format": "../../node_modules/.bin/prettier --print-width 160 --write \"src/**/*.{json,js,jsx,ts,tsx,css,scss}\""
     },
     "dependencies": {

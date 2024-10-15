@@ -1,24 +1,24 @@
-# Gestione multilingua
+# Languages Handling
 
-La gestione delle stringhe nazionalizzate ha sempre avuto problemi: 
+The management of nationalized strings has always had problems:
 
-- in fase di sviluppo vengono aggiunte righe nei file json, ma spesso vengono messe su file di lingue diverse, o vengono inserite le stringhe in posizione diversa
-- Il confronto tra file json è  complicato
-- Il problema non rigurda solo i prompt nazionalizzati (le label de campi), ma anche le etichette associate ai valori dei pull down menu.
-- Nel mondo Internet Computer conviene lavorare su Front End, senza creare tabelle di appoggio su backend
-- E' necessario tradurre le stringhe anche in lingue non conosciute
+- during development, lines are added to the json files, but they are often put on files of different languages, or the strings are inserted in different positions
+- Comparison between json files is complicated
+- The problem does not only concern the nationalized prompts (the field labels), but also the labels associated with the values of the pull down menus.
+- In the Internet Computer world it is better to work on the Front End, without creating support tables on the backend
+- It is necessary to translate the strings even in unknown languages
 
-In questo progetto ci sono 3 funzionalità principali:
-- Recupero dei prompt dai file json esistenti (quelli che normalmente sono in .../public/locales/??/\*). I prompt vengono inseriti in un file Excel, un prompt per riga, con colonne: nome del prompt, valore inglese e italiano
-- Eventuale traduzione in una nuova lingua
-- Estrazione dal file xls dei prompt nazionalizzati:
-    - file di traduzione standard
-    - file specializzati per i pull down menu
+In this project there are 3 main features:
+- Retrieval of prompts from existing json files (those that are normally in .../public/locales/??/\*). The prompts are inserted into an Excel file, one prompt per line, with columns: prompt name, English and Italian value
+- Possible translation into a new language
+- Extraction from the xls file of the nationalized prompts:
+    - standard translation file
+    - specialized files for pull down menus
 
-La directory di lavoro è .../src/frontend/prepare\_18n, sono script python in un virtual environment 
+The working directory is .../src/frontend/prepare\_18n, they are python scripts in a virtual environment
 
-## Recupero
-Con questa operazione vengono recuperati  i file dossier.json dalle directory en, it, ecc dei sorgenti attuali, e vengono inseriti in un file dossier.xlsx
+## Recovery
+With this operation, the dossier.json files are recovered from the en, it, etc. directories of the current sources, and are inserted into a dossier.xlsx file
 
 ```
 . .my-venv/bin/activate
@@ -26,46 +26,46 @@ python i18n2xls.py ../public/locales dossier
 deactivate
 ```
 
-## Traduzione
+## Translation
 
-## Estrazione
+## Extraction
 
-Con questa operazione, partendo dal file dossier.xlsx vengono creati i file dossier.json nelle directory en, it, ecc sotto ./locales.
+With this operation, starting from the dossier.xlsx file, the dossier.json files are created in the en, it, etc. directories under ./locales.
 
-Sarà poi necessario verificare i file prodotti e copiarli in ../public/locales
+It will then be necessary to verify the produced files and copy them to ../public/locales
 
 ```
 . .my-venv/bin/activate
-python xls2i18n.py ./dossier.xlsx 
+python xls2i18n.py ./dossier.xlsx
 deactivate
 ```
 
-## Pull Down Menu nazionalizzati
+## Nationalized Pull Down Menus
 
-I pulldown menu nazionalizzati vengono costruiti a partire da un file ad hoc e richiamando xsl2i18n con l'opzione da linea di comando **--pulldown** . In questo modo vengono creati dei file json utilizzati da useTranslate con queste caratteristiche:
-- campo **Label**, nome del pulldown
--array **menuname_array** (p.es. tipofirma\_array), con gli elementi del pulldown
+Nationalized pulldown menus are built starting from an ad hoc file and calling xsl2i18n with the command line option **--pulldown** . This creates json files used by useTranslate with these characteristics:
+- field **Label**, name of the pulldown
+- array **menuname_array** (e.g. tipofirma\_array), with the elements of the pulldown
 
-E quindi possono essere richiamati tramite il componente *SpecializedSelect*
+And then they can be called via the *SpecializedSelect* component
 
 <div style="background-color:WhiteSmoke ;">
 
-    <SpecializedSelect defaultValue={""} name="tipotecnica" label={t("tipotecnica:Label")} what={"tipotecnica"} onChange={(e, v) => setTipotecnica(e.target.value)} />
+<SpecializedSelect defaultValue={""} name="tipotecnica" label={t("tipotecnica:Label")} what={"tipotecnica"} onChange={(e, v) => setTipotecnica(e.target.value)} />
 
 </div>
 
-# Struttura del file Excel
-Il file xlsx (o anche .csv) ha 4 colonne:
-- L1 chiave principale
-- L2 eventuale chiave di secondo livello usata solo per i pulldown
-- it prompt in italiano
-- en prompt in inglese
+# Excel file structure
+The xlsx file (or also .csv) has 4 columns:
+- L1 main key
+- L2 possible second level key used only for pulldowns
+- it prompt in Italian
+- en prompt in English
 
-Per  esempio partendo da un file tipotecnica.csv fatto in questo modo:
+For example starting from a file tipotecnica.csv made like this:
 
 ```
 L1,L2,IT,EN
-LABEL,,Tipo di Tecnica,Tecnique Type
+LABEL,,Tecnique Type,Tecnique Type
 EMBOSSING,,In Rilievo,Embossing
 ETCHING,,Acquaforte,Etching
 LITOGRAPHY,,Litografia,Litography
@@ -76,7 +76,7 @@ PLASTER,L2,Gesso Italiano,English Plaster
 ,P3,Gesso 3, Plaster3
 ```
 
-Si ottengono file come questo: public/locales/en/tipotecnica.json 
+You get files like this: public/locales/en/tipotecnica.json
 
 ```
 {
@@ -96,6 +96,6 @@ Si ottengono file come questo: public/locales/en/tipotecnica.json
 }
 ```
 
-Quindi il secondo livello richiede:
-- una riga con chiave, costante "L2" e i prompt nazionalizzati
-- n righe in cui manca la prima colonna, nella seconda c'è la chiave di secondo livello e poi i prompt nazionalizzati
+So the second level requires:
+- a row with key, constant "L2" and the nationalized prompts
+- n rows where the first column is missing, in the second there is the second level key and then the nationalized prompts

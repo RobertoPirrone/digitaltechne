@@ -1,3 +1,5 @@
+#![doc = include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/README.md"))]
+
 extern crate ic_cdk_macros;
 extern crate serde;
 use ic_cdk::{export_candid, query, update};

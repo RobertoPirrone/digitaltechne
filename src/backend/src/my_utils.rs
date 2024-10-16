@@ -43,10 +43,7 @@ pub struct Rbac {
 pub fn check_caller() -> CheckResult {
     let caller = ic_cdk::caller();
     // The anonymous principal is not allowed to interact with canister.
-    ic_cdk::println!(
-        "caller: {caller}, anon {:?} ",
-        Principal::anonymous().to_string()
-    );
+    ic_cdk::println!("caller: {caller}, anon {:?} ", Principal::anonymous().to_string());
     if caller == Principal::anonymous() {
         Err(MyError::CanisterError {
             message: format!("{:?}", "Anonymous principal not allowed to make calls."),
@@ -95,18 +92,15 @@ pub fn insert_caller(friendly_name: String) -> ExecResult {
     let principal = caller.to_string();
     let conn = ic_sqlite::CONN.lock().unwrap();
     ic_cdk::println!("insert_caller");
-    let rbac_insert_sql = format!("insert into rbac \
+    let rbac_insert_sql = format!(
+        "insert into rbac \
                 (principal, friendly_name, view_opera_ok, add_opera_ok, associate_dna_ok, add_dna_ok, admin_ok) 
                 values ('{}', '{}', {}, {}, {}, {}, {})",
-                principal, friendly_name, true, false, false,  false, false
-                );
+        principal, friendly_name, true, false, false, false, false
+    );
     ic_cdk::println!("insert_caller: {rbac_insert_sql} ");
     return match conn.execute(&rbac_insert_sql, []) {
-        Ok(ok) => {
-            return Ok(format!(
-                "insert_caller: inserted {principal}, with return {ok}"
-            ))
-        }
+        Ok(ok) => return Ok(format!("insert_caller: inserted {principal}, with return {ok}")),
         Err(err) => Err(MyError::CanisterError {
             message: format!("{:?}", err),
         }),

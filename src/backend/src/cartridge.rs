@@ -194,7 +194,7 @@ pub fn cartridge_use_insert(params: CartridgeUseParams) -> ExecResult {
     };
 }
 
-/// The owner of the cartridge finlly uses it. 
+/// The owner of the cartridge finlly uses it.
 #[update]
 #[no_mangle]
 pub fn cartridge_use_update(jv: String) -> ExecResult {

@@ -12,12 +12,9 @@ pub mod granberg_dossier;
 pub mod my_utils;
 pub use crate::artwork_mark::{artwork_mark_insert, artwork_mark_query, ArtworkMarkQueryParams};
 pub use crate::cartridge::{
-    cartridge_insert, cartridge_query, cartridge_use_insert, CartridgeQueryParams,
-    CartridgeUseParams,
+    cartridge_insert, cartridge_query, cartridge_use_insert, CartridgeQueryParams, CartridgeUseParams,
 };
-pub use crate::documents::{
-    document_insert, documenti_pulldowns, documenti_query, Documento, QueryDocumentsParams,
-};
+pub use crate::documents::{document_insert, documenti_pulldowns, documenti_query, Documento, QueryDocumentsParams};
 pub use crate::granberg_dossier::{
     dossier_insert, dossier_pulldowns, dossier_query, dossier_struct_query, Dossier, QueryParams,
 };

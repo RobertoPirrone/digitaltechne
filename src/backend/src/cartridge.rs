@@ -1,7 +1,7 @@
 extern crate ic_cdk_macros;
 extern crate serde;
-use ic_cdk::{query, update};
 use candid::CandidType;
+use ic_cdk::{query, update};
 use serde::{Deserialize, Serialize};
 
 use crate::my_utils::*;
@@ -9,14 +9,14 @@ use crate::my_utils::*;
 #[derive(Debug, Serialize, Deserialize)]
 struct Cartridge {
     id: Option<u64>,
-    uuid: String, 
+    uuid: String,
     dna_text: String,
     dna_file_asset: String,
     inserted_by: Option<String>,
     lab_name: String,
     insert_time: String,
     purchase_time: Option<String>,
-    note: String
+    note: String,
 }
 
 #[derive(CandidType, Debug, Serialize, Deserialize, Default)]
@@ -27,8 +27,8 @@ pub struct CartridgeQueryParams {
 #[derive(Serialize, Deserialize)]
 struct CartridgeReturnStruct {
     success: bool,
-    cartridges: Vec<Cartridge>
-    }
+    cartridges: Vec<Cartridge>,
+}
 
 #[query]
 #[no_mangle]
@@ -39,11 +39,14 @@ pub fn cartridge_query(params: CartridgeQueryParams) -> JsonResult {
     let conn = ic_sqlite::CONN.lock().unwrap();
     let mut stmt = match conn.prepare(&cartridge_sql) {
         Ok(e) => e,
-        Err(err) => return Err(MyError::CanisterError {message: format!("{:?}", err) })
+        Err(err) => {
+            return Err(MyError::CanisterError {
+                message: format!("{:?}", err),
+            })
+        }
     };
     let cartridge_iter = match stmt.query_map((params.uuid,), |row| {
-        Ok(
-            Cartridge {
+        Ok(Cartridge {
             id: row.get(0).unwrap(),
             uuid: row.get(1).unwrap(),
             dna_text: row.get(2).unwrap(),
@@ -52,11 +55,15 @@ pub fn cartridge_query(params: CartridgeQueryParams) -> JsonResult {
             lab_name: row.get(5).unwrap(),
             insert_time: row.get(6).unwrap(),
             purchase_time: row.get(6).unwrap(),
-            note: row.get(8).unwrap()
+            note: row.get(8).unwrap(),
         })
     }) {
         Ok(e) => e,
-        Err(err) => return Err(MyError::CanisterError {message: format!("{:?}", err) })
+        Err(err) => {
+            return Err(MyError::CanisterError {
+                message: format!("{:?}", err),
+            })
+        }
     };
     let mut cartridges = Vec::new();
     for cartridge in cartridge_iter {
@@ -64,7 +71,7 @@ pub fn cartridge_query(params: CartridgeQueryParams) -> JsonResult {
     }
     let rs = CartridgeReturnStruct {
         success: true,
-        cartridges: cartridges
+        cartridges: cartridges,
     };
     let res = serde_json::to_string(&rs).unwrap();
     Ok(res)
@@ -79,26 +86,28 @@ pub fn cartridge_insert(jv: String) -> ExecResult {
     ic_cdk::println!("caller : {caller} ");
     let checked_caller: Rbac = check_caller()?;
     ic_cdk::println!("checked_caller : {:?} ", checked_caller);
-    if ! checked_caller.add_dna_ok {
-        return Err(MyError::CanisterError {message: format!("{:?}", "cartridge_insert: user not allowed") })
+    if !checked_caller.add_dna_ok {
+        return Err(MyError::CanisterError {
+            message: format!("{:?}", "cartridge_insert: user not allowed"),
+        });
     }
     let conn = ic_sqlite::CONN.lock().unwrap();
 
-    let sql = format!("insert into cartridge \
+    let sql = format!(
+        "insert into cartridge \
         (uuid, dna_text, dna_file_asset, inserted_by, lab_name, insert_time, note) 
         values ('{}', '{}', '{}', '{}', '{}', '{}', '{}' )",
-        d.uuid, d.dna_text, d.dna_file_asset, caller, d.lab_name , d.insert_time, d.note
-        );
-    return match conn.execute(
-        &sql,
-        []
-    ) {
+        d.uuid, d.dna_text, d.dna_file_asset, caller, d.lab_name, d.insert_time, d.note
+    );
+    return match conn.execute(&sql, []) {
         Ok(e) => Ok(format!("{:?}", e)),
-        Err(err) => Err(MyError::CanisterError {message: format!("{:?}", err) })
-    }
+        Err(err) => Err(MyError::CanisterError {
+            message: format!("{:?}", err),
+        }),
+    };
 }
 
-// CartridgeUse 
+// CartridgeUse
 
 #[derive(CandidType, Debug, Serialize, Deserialize, Default)]
 pub struct CartridgeUseParams {
@@ -109,20 +118,19 @@ pub struct CartridgeUseParams {
 #[derive(Debug, Serialize, Deserialize)]
 struct CartridgeUse {
     id: Option<u64>,
-    uuid: String, 
-    cartridge_uuid: String, 
+    uuid: String,
+    cartridge_uuid: String,
     purchase_time: String,
     owned_by: String,
     usage_time: Option<String>,
-    dossier_id: Option<String>
+    dossier_id: Option<String>,
 }
 
 #[derive(Serialize, Deserialize)]
 struct CartridgeUseReturnStruct {
     success: bool,
-    cartridge_uses: Vec<CartridgeUse>
-    }
-
+    cartridge_uses: Vec<CartridgeUse>,
+}
 
 // il caller acquista una cartuccia (in futuro n)
 #[update]
@@ -135,43 +143,51 @@ pub fn cartridge_use_insert(params: CartridgeUseParams) -> ExecResult {
     let sql_q = format!("select uuid from  cartridge where purchase_time is null limit 1");
     let mut stmt = conn.prepare(&sql_q).unwrap();
     let mut rows = stmt.query([]).unwrap();
-    let cartridge_uuid ;
-        match rows.next() {
-            Ok(row) => {
-                match row {
-                    Some(row) => {
-                        cartridge_uuid =  row.get_ref_unwrap(0).as_str().unwrap();
-                        ic_cdk::println!("some : {cartridge_uuid} ");
-                    },
-                    None => return Err(MyError::CanisterError {message: format!("{:?}", "No matching cartridge") })
-                }
-            },
-            Err(err) => return Err(MyError::CanisterError {message: format!("{:?}", err) })
-        };
+    let cartridge_uuid;
+    match rows.next() {
+        Ok(row) => match row {
+            Some(row) => {
+                cartridge_uuid = row.get_ref_unwrap(0).as_str().unwrap();
+                ic_cdk::println!("some : {cartridge_uuid} ");
+            }
+            None => {
+                return Err(MyError::CanisterError {
+                    message: format!("{:?}", "No matching cartridge"),
+                })
+            }
+        },
+        Err(err) => {
+            return Err(MyError::CanisterError {
+                message: format!("{:?}", err),
+            })
+        }
+    };
 
     ic_cdk::println!("cartridge_uuid : {cartridge_uuid:?} ");
 
-    let sql_u = format!("update cartridge set purchase_time = '{}' where uuid = '{}' ", params.purchase_time, cartridge_uuid);
-    let _unused  =  match conn.execute(
-        &sql_u,
-        []
-    ) {
+    let sql_u = format!(
+        "update cartridge set purchase_time = '{}' where uuid = '{}' ",
+        params.purchase_time, cartridge_uuid
+    );
+    let _unused = match conn.execute(&sql_u, []) {
         Ok(e) => Ok(format!("{:?}", e)),
-        Err(err) => Err(MyError::CanisterError {message: format!("{:?}", err) })
+        Err(err) => Err(MyError::CanisterError {
+            message: format!("{:?}", err),
+        }),
     };
 
-    let sql = format!("insert into cartridge_use \
+    let sql = format!(
+        "insert into cartridge_use \
         (uuid, cartridge_uuid, purchase_time, owned_by) 
         values ('{}', '{}', '{}', '{}')",
         params.uuid, cartridge_uuid, params.purchase_time, caller
-        );
-    return match conn.execute(
-        &sql,
-        []
-    ) {
+    );
+    return match conn.execute(&sql, []) {
         Ok(e) => Ok(format!("{:?}", e)),
-        Err(err) => Err(MyError::CanisterError {message: format!("cartridge_use_insert {:?}", err) })
-    }
+        Err(err) => Err(MyError::CanisterError {
+            message: format!("cartridge_use_insert {:?}", err),
+        }),
+    };
 }
 
 #[update]
@@ -181,24 +197,24 @@ pub fn cartridge_use_update(jv: String) -> ExecResult {
     let d: CartridgeUse = serde_json::from_str(&jv).unwrap();
     let conn = ic_sqlite::CONN.lock().unwrap();
     let caller = ic_cdk::caller().to_string();
-    let dossier_id = format!("{:?}",d.dossier_id);
-    let usage_time = format!("{:?}",d.usage_time);
+    let dossier_id = format!("{:?}", d.dossier_id);
+    let usage_time = format!("{:?}", d.usage_time);
     ic_cdk::println!("caller : {caller} ");
 
-    let sql = format!("update cartridge_use \
+    let sql = format!(
+        "update cartridge_use \
         (usage_time, dossier_id) 
         values ('{}', '{}')
         where uuid = '{}'
         ",
         usage_time, dossier_id, d.uuid
-        );
-    return match conn.execute(
-        &sql,
-        []
-    ) {
+    );
+    return match conn.execute(&sql, []) {
         Ok(e) => Ok(format!("{:?}", e)),
-        Err(err) => Err(MyError::CanisterError {message: format!("cartridge_use_update {:?}", err) })
-    }
+        Err(err) => Err(MyError::CanisterError {
+            message: format!("cartridge_use_update {:?}", err),
+        }),
+    };
 }
 
 // restituisce gli id delle cartucce utilizzabili dall'utente
@@ -207,39 +223,42 @@ pub fn cartridge_use_update(jv: String) -> ExecResult {
 pub fn cartridge_use_available() -> JsonResult {
     let mut res = Vec::new();
     let caller = ic_cdk::caller().to_string();
-    let sql = format!("select * from cartridge_use where usage_time is null and owned_by = '{}'", caller);
+    let sql = format!(
+        "select * from cartridge_use where usage_time is null and owned_by = '{}'",
+        caller
+    );
     let conn = ic_sqlite::CONN.lock().unwrap();
     let mut stmt = conn.prepare(&sql).unwrap();
     let mut rows = stmt.query([]).unwrap();
     loop {
-        match rows.next()   {
-            Ok(row) => {
-                match row {
-                    Some(row) => {
-                        let res_row = 
-                            CartridgeUse {
-                                id: row.get(0).unwrap(),
-                                uuid: row.get(1).unwrap(),
-                                cartridge_uuid: row.get(2).unwrap(), 
-                                purchase_time: row.get(3).unwrap(),
-                                owned_by: row.get(4).unwrap(),
-                                usage_time: row.get(5).unwrap(),
-                                dossier_id: row.get(6).unwrap()
-                            };
+        match rows.next() {
+            Ok(row) => match row {
+                Some(row) => {
+                    let res_row = CartridgeUse {
+                        id: row.get(0).unwrap(),
+                        uuid: row.get(1).unwrap(),
+                        cartridge_uuid: row.get(2).unwrap(),
+                        purchase_time: row.get(3).unwrap(),
+                        owned_by: row.get(4).unwrap(),
+                        usage_time: row.get(5).unwrap(),
+                        dossier_id: row.get(6).unwrap(),
+                    };
 
-                        res.push(res_row)
-                    },
-                    None => break
+                    res.push(res_row)
                 }
+                None => break,
             },
-            Err(err) => return Err(MyError::CanisterError {message: format!("{:?}", err) })
+            Err(err) => {
+                return Err(MyError::CanisterError {
+                    message: format!("{:?}", err),
+                })
             }
+        }
     }
     let rs = CartridgeUseReturnStruct {
         success: true,
-        cartridge_uses: res
+        cartridge_uses: res,
     };
     let res = serde_json::to_string(&rs).unwrap();
     Ok(res)
 }
-

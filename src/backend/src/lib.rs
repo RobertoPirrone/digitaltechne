@@ -8,23 +8,29 @@ pub mod cartridge;
 pub mod documents;
 pub mod granberg_dossier;
 pub mod my_utils;
-pub use crate::artwork_mark::{ArtworkMarkQueryParams, artwork_mark_insert, artwork_mark_query};
-pub use crate::cartridge::{CartridgeQueryParams, CartridgeUseParams, cartridge_insert, cartridge_query, cartridge_use_insert};
-pub use crate::documents::{Documento, QueryDocumentsParams, document_insert, documenti_query, documenti_pulldowns};
-pub use crate::granberg_dossier::{Dossier, QueryParams, dossier_insert, dossier_query, dossier_struct_query, dossier_pulldowns};
+pub use crate::artwork_mark::{artwork_mark_insert, artwork_mark_query, ArtworkMarkQueryParams};
+pub use crate::cartridge::{
+    cartridge_insert, cartridge_query, cartridge_use_insert, CartridgeQueryParams,
+    CartridgeUseParams,
+};
+pub use crate::documents::{
+    document_insert, documenti_pulldowns, documenti_query, Documento, QueryDocumentsParams,
+};
+pub use crate::granberg_dossier::{
+    dossier_insert, dossier_pulldowns, dossier_query, dossier_struct_query, Dossier, QueryParams,
+};
 pub use crate::my_utils::*;
 
 #[update]
 fn execute(sql: String) -> ExecResult {
     ic_cdk::println!("Execute {sql}");
     let conn = ic_sqlite::CONN.lock().unwrap();
-    return match conn.execute(
-        &sql,
-        []
-    ) {
+    return match conn.execute(&sql, []) {
         Ok(e) => Ok(format!("{:?}", e)),
-        Err(err) => Err(MyError::CanisterError {message: format!("{:?}", err) })
-    }
+        Err(err) => Err(MyError::CanisterError {
+            message: format!("{:?}", err),
+        }),
+    };
 }
 
 #[query]
@@ -37,26 +43,28 @@ fn query(sql: String) -> QueryResult {
     let mut res: Vec<Vec<String>> = Vec::new();
     loop {
         match rows.next() {
-            Ok(row) => {
-                match row {
-                    Some(row) => {
-                        let mut vec: Vec<String> = Vec::new();
-                        for idx in 0..cnt {
-                            let v = row.get_ref_unwrap(idx);
-                            match v.data_type() {
-                                Type::Null => {  vec.push(String::from("")) }
-                                Type::Integer => { vec.push(v.as_i64().unwrap().to_string()) }
-                                Type::Real => { vec.push(v.as_f64().unwrap().to_string()) }
-                                Type::Text => { vec.push(v.as_str().unwrap().parse().unwrap()) }
-                                Type::Blob => { vec.push(hex::encode(v.as_blob().unwrap())) }
-                            }
+            Ok(row) => match row {
+                Some(row) => {
+                    let mut vec: Vec<String> = Vec::new();
+                    for idx in 0..cnt {
+                        let v = row.get_ref_unwrap(idx);
+                        match v.data_type() {
+                            Type::Null => vec.push(String::from("")),
+                            Type::Integer => vec.push(v.as_i64().unwrap().to_string()),
+                            Type::Real => vec.push(v.as_f64().unwrap().to_string()),
+                            Type::Text => vec.push(v.as_str().unwrap().parse().unwrap()),
+                            Type::Blob => vec.push(hex::encode(v.as_blob().unwrap())),
                         }
-                        res.push(vec)
-                    },
-                    None => break
+                    }
+                    res.push(vec)
                 }
+                None => break,
             },
-            Err(err) => return Err(MyError::CanisterError {message: format!("{:?}", err) })
+            Err(err) => {
+                return Err(MyError::CanisterError {
+                    message: format!("{:?}", err),
+                })
+            }
         }
     }
     Ok(res)
@@ -74,4 +82,3 @@ fn greet(name: String) -> String {
 }
 
 export_candid!();
-

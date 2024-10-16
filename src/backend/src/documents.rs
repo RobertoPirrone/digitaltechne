@@ -1,12 +1,12 @@
 //! Documents handling
 extern crate ic_cdk_macros;
 extern crate serde;
-use ic_cdk::{query, update};
 use candid::CandidType;
+use ic_cdk::{query, update};
 use serde::{Deserialize, Serialize};
 
+use crate::granberg_dossier::{dossier_struct_query, Dossier};
 use crate::my_utils::*;
-use crate::granberg_dossier::{Dossier, dossier_struct_query};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Documento {
@@ -22,42 +22,44 @@ pub struct Documento {
     mimetype: String,
     image_uri: String,
     inserted_by: Option<String>,
-    tipo_documento: String
+    tipo_documento: String,
 }
 
 #[derive(CandidType, Debug, Serialize, Deserialize, Default)]
 pub struct QueryDocumentsParams {
-    dossieropera_id: String
+    dossieropera_id: String,
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct ReturnDocumentsStruct {
     success: bool,
-    dossier_info: Dossier, 
-    rows: Vec<Documento>
-    }
+    dossier_info: Dossier,
+    rows: Vec<Documento>,
+}
 
 /// extract from the db the documents related to an opera (identified by a dossieropera_id)
 ///
 /// returns:
 ///
-/// - documents (rows of [`Documento`] structs) 
+/// - documents (rows of [`Documento`] structs)
 ///
 /// - dossier data plus friendly_name (struct [`Dossier`])
 #[query]
 pub fn documenti_query(params: QueryDocumentsParams) -> JsonResult {
-    let dossier_infos: Vec<Dossier> ;
+    let dossier_infos: Vec<Dossier>;
     let id = params.dossieropera_id.clone();
 
     let checked_caller: Rbac = check_caller()?;
-    if ! checked_caller.view_opera_ok {
-        return Err(MyError::CanisterError {message: format!("{:?}", "documenti_query: user not allowed") })
+    if !checked_caller.view_opera_ok {
+        return Err(MyError::CanisterError {
+            message: format!("{:?}", "documenti_query: user not allowed"),
+        });
     }
     // devo anche restituire i dati del dossier
     let dossier_sql = format!("select dossier.*, friendly_name  from dossier left outer join rbac where inserted_by = principal and dossier.id = {:?}",id);
     dossier_infos = dossier_struct_query(dossier_sql.to_string());
     let dossier_info = dossier_infos[0].clone();
-    let master_uuid  = dossier_info.master_uuid.clone();
+    let master_uuid = dossier_info.master_uuid.clone();
     ic_cdk::println!("dossier_info: {:?}", dossier_infos[0]);
 
     // ora i  documenti
@@ -67,13 +69,16 @@ pub fn documenti_query(params: QueryDocumentsParams) -> JsonResult {
     let conn = ic_sqlite::CONN.lock().unwrap();
     let mut stmt = match conn.prepare(&documenti_sql) {
         Ok(e) => e,
-        Err(err) => return Err(MyError::CanisterError {message: format!("{:?}", err) })
+        Err(err) => {
+            return Err(MyError::CanisterError {
+                message: format!("{:?}", err),
+            })
+        }
     };
     // i parametri della query_map devono essere in una tuple, anche se c'è un solo paraemtro, in ?: -> https://docs.rs/rusqlite/latest/rusqlite/trait.Params.html#positional-parameters
 
     let documenti_iter = match stmt.query_map((master_uuid,), |row| {
-        Ok(
-            Documento {
+        Ok(Documento {
             id: row.get(0).unwrap(),
             uuid: row.get(1).unwrap(),
             autore: row.get(2).unwrap(),
@@ -86,11 +91,15 @@ pub fn documenti_query(params: QueryDocumentsParams) -> JsonResult {
             mimetype: row.get(9).unwrap(),
             image_uri: row.get(10).unwrap(),
             inserted_by: row.get(11).unwrap(),
-            tipo_documento: row.get(12).unwrap()
+            tipo_documento: row.get(12).unwrap(),
         })
     }) {
         Ok(e) => e,
-        Err(err) => return Err(MyError::CanisterError {message: format!("{:?}", err) })
+        Err(err) => {
+            return Err(MyError::CanisterError {
+                message: format!("{:?}", err),
+            })
+        }
     };
     let mut documenti = Vec::new();
     for documento in documenti_iter {
@@ -99,7 +108,7 @@ pub fn documenti_query(params: QueryDocumentsParams) -> JsonResult {
     let rs = ReturnDocumentsStruct {
         success: true,
         dossier_info: dossier_info,
-        rows: documenti
+        rows: documenti,
     };
     let res = serde_json::to_string(&rs).unwrap();
     Ok(res)
@@ -122,41 +131,43 @@ pub fn document_insert(jv: String) -> ExecResult {
         d.uuid, d.autore, d.ora_inserimento, d.title, d.versione, d.master_uuid, d.filename, d.filesize, d.mimetype, image_uri, caller, d.tipo_documento );
     ic_cdk::println!("document_insert sql: {:?}", sql);
 
-    return match conn.execute(
-        &sql,
-        []
-    ) {
+    return match conn.execute(&sql, []) {
         Ok(e) => Ok(format!("document_insert OK: {:?}", e)),
-        Err(err) => Err(MyError::CanisterError {message: format!("document_insert KO: {:?}", err) })
-    }
+        Err(err) => Err(MyError::CanisterError {
+            message: format!("document_insert KO: {:?}", err),
+        }),
+    };
 }
 #[derive(Serialize, Deserialize)]
 pub struct DocumentsInfoReturnStruct {
     success: bool,
-    autori: Vec<String>
-    }
+    autori: Vec<String>,
+}
 
 /// Returns every autore inserted by the caller
 #[query]
 pub fn documenti_pulldowns() -> JsonResult {
     let mut res: Vec<String> = Vec::new();
     let caller = ic_cdk::caller().to_string();
-    let sql = format!("select distinct autore from documents where inserted_by = '{}'", caller);
+    let sql = format!(
+        "select distinct autore from documents where inserted_by = '{}'",
+        caller
+    );
     let conn = ic_sqlite::CONN.lock().unwrap();
     let mut stmt = conn.prepare(&sql).unwrap();
     let mut rows = stmt.query([]).unwrap();
     loop {
-        match rows.next()   {
-            Ok(row) => {
-                match row {
-                    Some(row) => {
-                        res.push(row.get(0).unwrap())
-                    },
-                    None => break
-                }
+        match rows.next() {
+            Ok(row) => match row {
+                Some(row) => res.push(row.get(0).unwrap()),
+                None => break,
             },
-            Err(err) => return Err(MyError::CanisterError {message: format!("{:?}", err) })
+            Err(err) => {
+                return Err(MyError::CanisterError {
+                    message: format!("{:?}", err),
+                })
             }
+        }
     }
     let res = serde_json::to_string(&res).unwrap();
     Ok(res)

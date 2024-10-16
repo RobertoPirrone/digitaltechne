@@ -1,3 +1,4 @@
+//! Cartridge and Cartridge_use related stuff
 extern crate ic_cdk_macros;
 extern crate serde;
 use candid::CandidType;
@@ -6,8 +7,9 @@ use serde::{Deserialize, Serialize};
 
 use crate::my_utils::*;
 
+/// Cartrdige holds only info about a DNA sample
 #[derive(Debug, Serialize, Deserialize)]
-struct Cartridge {
+pub struct Cartridge {
     id: Option<u64>,
     uuid: String,
     dna_text: String,
@@ -30,11 +32,11 @@ struct CartridgeReturnStruct {
     cartridges: Vec<Cartridge>,
 }
 
+/// return info about a [`Cartridge`] identified by a uuid
 #[query]
 #[no_mangle]
 pub fn cartridge_query(params: CartridgeQueryParams) -> JsonResult {
     let cartridge_sql = "select * from cartridge where uuid = ?1";
-    //let dossier_sql = "select * from dossier where autore = ?3 limit ?1 offset ?2";
     ic_cdk::println!("Query: {cartridge_sql} ");
     let conn = ic_sqlite::CONN.lock().unwrap();
     let mut stmt = match conn.prepare(&cartridge_sql) {
@@ -77,6 +79,7 @@ pub fn cartridge_query(params: CartridgeQueryParams) -> JsonResult {
     Ok(res)
 }
 
+/// Add a [`Cartridge`]
 #[update]
 #[no_mangle]
 pub fn cartridge_insert(jv: String) -> ExecResult {
@@ -85,7 +88,6 @@ pub fn cartridge_insert(jv: String) -> ExecResult {
     let caller = ic_cdk::caller().to_string();
     ic_cdk::println!("caller : {caller} ");
     let checked_caller: Rbac = check_caller()?;
-    ic_cdk::println!("checked_caller : {:?} ", checked_caller);
     if !checked_caller.add_dna_ok {
         return Err(MyError::CanisterError {
             message: format!("{:?}", "cartridge_insert: user not allowed"),
@@ -107,7 +109,7 @@ pub fn cartridge_insert(jv: String) -> ExecResult {
     };
 }
 
-// CartridgeUse
+/// CartrdigeUse holds owner and purchase info of a [`Cartridge`]
 
 #[derive(CandidType, Debug, Serialize, Deserialize, Default)]
 pub struct CartridgeUseParams {
@@ -132,7 +134,9 @@ struct CartridgeUseReturnStruct {
     cartridge_uses: Vec<CartridgeUse>,
 }
 
-// il caller acquista una cartuccia (in futuro n)
+/// Caller buys a cartrdige
+///
+/// cartridge table is updated (cartridge is not available anymore, and a row is inserted in cartrdigetable)
 #[update]
 #[no_mangle]
 pub fn cartridge_use_insert(params: CartridgeUseParams) -> ExecResult {
@@ -190,6 +194,7 @@ pub fn cartridge_use_insert(params: CartridgeUseParams) -> ExecResult {
     };
 }
 
+/// The owner of the cartridge finlly uses it. 
 #[update]
 #[no_mangle]
 pub fn cartridge_use_update(jv: String) -> ExecResult {
@@ -217,7 +222,7 @@ pub fn cartridge_use_update(jv: String) -> ExecResult {
     };
 }
 
-// restituisce gli id delle cartucce utilizzabili dall'utente
+/// returns the cartridge list available to the caller
 #[update]
 #[no_mangle]
 pub fn cartridge_use_available() -> JsonResult {

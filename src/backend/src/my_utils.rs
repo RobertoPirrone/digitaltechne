@@ -1,3 +1,4 @@
+//! RBAC (Role based access control) utils and return types
 extern crate ic_cdk_macros;
 extern crate serde;
 use candid::{CandidType, Principal};

@@ -1,3 +1,4 @@
+//! Dossier/ Opera handling, modifed for Liliana Gramberg's Archive
 extern crate ic_cdk_macros;
 extern crate serde;
 use candid::CandidType;
@@ -51,6 +52,7 @@ struct DistinctResult {
     ele: String,
 }
 
+/// pull down menus for opera insert. only autore is currently used
 #[query]
 pub fn dossier_pulldowns() -> JsonResult {
     // autore
@@ -92,7 +94,7 @@ pub fn dossier_pulldowns() -> JsonResult {
     Ok(res)
 }
 
-// query generica a dossier.
+/// internal dossier query. returns an array of [`Dossier`] 
 #[query]
 pub fn dossier_struct_query(sql: String) -> Vec<Dossier> {
     ic_cdk::println!("dossier_struct_query: {sql} ");
@@ -136,6 +138,9 @@ pub fn dossier_struct_query(sql: String) -> Vec<Dossier> {
     return dossiers;
 }
 
+/// returns public and private dossier
+///
+/// offset and limit parameters are honored, although pagination is usually done in the forntend code
 #[query]
 pub fn dossier_query(params: QueryParams) -> JsonResult {
     let caller = ic_cdk::caller().to_string();
@@ -166,9 +171,16 @@ pub fn dossier_query(params: QueryParams) -> JsonResult {
     Ok(res)
 }
 
+/// insert a new opera
 #[update]
 pub fn dossier_insert(jv: String) -> ExecResult {
     ic_cdk::println!("dossier_insert input: {jv} ");
+    let checked_caller: Rbac = check_caller()?;
+    if !checked_caller.add_opera_ok {
+        return Err(MyError::CanisterError {
+            message: format!("{:?}", "dossier_insert: user not allowed"),
+        });
+    }
     let d: Dossier = serde_json::from_str(&jv).unwrap();
     let caller = ic_cdk::caller().to_string();
     let conn = ic_sqlite::CONN.lock().unwrap();

@@ -1,3 +1,4 @@
+//! Artwork mark related structs and functions
 extern crate ic_cdk_macros;
 extern crate serde;
 use candid::CandidType;
@@ -25,7 +26,7 @@ struct ArtworkMark {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-struct Mark {
+pub struct Mark {
     mark_position: String,
     dna_text: String,
 }
@@ -41,7 +42,9 @@ struct ArtworkMarkReturnStruct {
     artwork_marks: Vec<Mark>,
 }
 
-// richiamato da Verify
+/// Frontend need to verify a DNA sample against what is stored in the blockchain
+///
+/// We return an array of [`Mark`] structures, holding info from different tables 
 #[query]
 #[no_mangle]
 pub fn artwork_mark_query(params: ArtworkMarkQueryParams) -> JsonResult {
@@ -81,7 +84,9 @@ pub fn artwork_mark_query(params: ArtworkMarkQueryParams) -> JsonResult {
     Ok(res)
 }
 
-// aggiunta di un mark. necessario invalidare la riga di cartridge_use, e aggiornare boold di dossier
+/// add a [`Mark`]
+/// 
+/// side effect: update tables dossier and cartridge_use
 #[update]
 #[no_mangle]
 pub fn artwork_mark_insert(jv: String) -> ExecResult {

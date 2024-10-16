@@ -56,7 +56,8 @@ fields='
     view_opera_ok BOOLEAN,
     add_opera_ok BOOLEAN,
     associate_dna_ok BOOLEAN,
-    add_dna_ok BOOLEAN
+    add_dna_ok BOOLEAN,
+    admin_ok BOOLEAN
     '
     create_table rbac "$fields"
     # per rendere unique un campo su db esistente:

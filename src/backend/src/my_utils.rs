@@ -37,7 +37,7 @@ pub struct Rbac {
     pub add_dna_ok: bool
 }
 
-/// Returns the [`rbac`] struct associated with the authenticated caller
+/// Returns the [`Rbac`] struct associated with the authenticated caller
 #[query]
 pub fn check_caller() -> CheckResult {
     let caller = ic_cdk::caller();

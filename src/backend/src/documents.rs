@@ -1,4 +1,4 @@
-/// Documents handling
+//! Documents handling
 extern crate ic_cdk_macros;
 extern crate serde;
 use ic_cdk::{query, update};
@@ -105,6 +105,7 @@ pub fn documenti_query(params: QueryDocumentsParams) -> JsonResult {
     Ok(res)
 }
 
+/// Inserts a single document in the DB
 #[update]
 pub fn document_insert(jv: String) -> ExecResult {
     ic_cdk::println!("document_insert input: {jv} ");
@@ -135,6 +136,7 @@ pub struct DocumentsInfoReturnStruct {
     autori: Vec<String>
     }
 
+/// Returns every autore inserted by the caller
 #[query]
 pub fn documenti_pulldowns() -> JsonResult {
     let mut res: Vec<String> = Vec::new();

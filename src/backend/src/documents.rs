@@ -56,7 +56,10 @@ pub fn documenti_query(params: QueryDocumentsParams) -> JsonResult {
         });
     }
     // devo anche restituire i dati del dossier
-    let dossier_sql = format!("select dossier.*, friendly_name  from dossier left outer join rbac where inserted_by = principal and dossier.id = {:?}",id);
+    let dossier_sql = format!(
+        "select dossier.*, friendly_name  from dossier left outer join rbac where inserted_by = principal and dossier.id = {:?}",
+        id
+    );
     dossier_infos = dossier_struct_query(dossier_sql.to_string());
     let dossier_info = dossier_infos[0].clone();
     let master_uuid = dossier_info.master_uuid.clone();
@@ -125,10 +128,12 @@ pub fn document_insert(jv: String) -> ExecResult {
     let caller = ic_cdk::caller().to_string();
     // let wrap = sql_ret.unwrap();
 
-    let sql = format!("insert into documents 
+    let sql = format!(
+        "insert into documents 
         (uuid, autore, ora_inserimento, title, versione, master_uuid, filename, filesize, mimetype, image_uri, inserted_by, tipo_documento) 
-        values ('{}', '{}', '{}', '{}', {}, '{}', '{}', {}, '{}', '{}', '{}', '{}' )", 
-        d.uuid, d.autore, d.ora_inserimento, d.title, d.versione, d.master_uuid, d.filename, d.filesize, d.mimetype, image_uri, caller, d.tipo_documento );
+        values ('{}', '{}', '{}', '{}', {}, '{}', '{}', {}, '{}', '{}', '{}', '{}' )",
+        d.uuid, d.autore, d.ora_inserimento, d.title, d.versione, d.master_uuid, d.filename, d.filesize, d.mimetype, image_uri, caller, d.tipo_documento
+    );
     ic_cdk::println!("document_insert sql: {:?}", sql);
 
     return match conn.execute(&sql, []) {
@@ -149,10 +154,7 @@ pub struct DocumentsInfoReturnStruct {
 pub fn documenti_pulldowns() -> JsonResult {
     let mut res: Vec<String> = Vec::new();
     let caller = ic_cdk::caller().to_string();
-    let sql = format!(
-        "select distinct autore from documents where inserted_by = '{}'",
-        caller
-    );
+    let sql = format!("select distinct autore from documents where inserted_by = '{}'", caller);
     let conn = ic_sqlite::CONN.lock().unwrap();
     let mut stmt = conn.prepare(&sql).unwrap();
     let mut rows = stmt.query([]).unwrap();

@@ -44,7 +44,7 @@ struct ArtworkMarkReturnStruct {
 
 /// Frontend need to verify a DNA sample against what is stored in the blockchain
 ///
-/// We return an array of [`Mark`] structures, holding info from different tables 
+/// We return an array of [`Mark`] structures, holding info from different tables
 #[query]
 #[no_mangle]
 pub fn artwork_mark_query(params: ArtworkMarkQueryParams) -> JsonResult {
@@ -85,7 +85,7 @@ pub fn artwork_mark_query(params: ArtworkMarkQueryParams) -> JsonResult {
 }
 
 /// add a [`Mark`]
-/// 
+///
 /// side effect: update tables dossier and cartridge_use
 #[update]
 #[no_mangle]

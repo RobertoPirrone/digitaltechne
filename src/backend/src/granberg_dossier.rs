@@ -94,7 +94,7 @@ pub fn dossier_pulldowns() -> JsonResult {
     Ok(res)
 }
 
-/// internal dossier query. returns an array of [`Dossier`] 
+/// internal dossier query. returns an array of [`Dossier`]
 #[query]
 pub fn dossier_struct_query(sql: String) -> Vec<Dossier> {
     ic_cdk::println!("dossier_struct_query: {sql} ");

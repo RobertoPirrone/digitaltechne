@@ -30,12 +30,14 @@ pub struct Rbac {
     id: u64,
     principal: String,
     pub friendly_name: Option<String>,
+    pub admin_ok: bool,
     pub view_opera_ok: bool,
     pub add_opera_ok: bool,
     pub associate_dna_ok: bool,
     pub add_dna_ok: bool
 }
 
+/// Returns the [`rbac`] struct associated with the authenticated caller
 #[query]
 pub fn check_caller() -> CheckResult {
     let caller = ic_cdk::caller();
@@ -44,7 +46,7 @@ pub fn check_caller() -> CheckResult {
     if caller == Principal::anonymous() {
         Err(MyError::CanisterError {message: format!("{:?}", "Anonymous principal not allowed to make calls.") })
     } else {
-        let rbac_sql = format!("select * from rbac where principal = {:?}", caller.to_string());
+        let rbac_sql = format!("select id, principal, friendly_name, view_opera_ok, add_opera_ok, associate_dna_ok, add_dna_ok, admin_ok from rbac where principal = {:?}", caller.to_string());
         ic_cdk::println!("Query: {rbac_sql} ");
         let conn = ic_sqlite::CONN.lock().unwrap();
         let mut stmt = conn.prepare(&rbac_sql).unwrap();
@@ -61,7 +63,8 @@ pub fn check_caller() -> CheckResult {
                             view_opera_ok: row.get(3).unwrap(),
                             add_opera_ok: row.get(4).unwrap(),
                             associate_dna_ok: row.get(5).unwrap(),
-                            add_dna_ok: row.get(6).unwrap()
+                            add_dna_ok: row.get(6).unwrap(),
+                            admin_ok: row.get(7).unwrap()
                         };
                         return Ok(rbac);
                     },
@@ -75,6 +78,7 @@ pub fn check_caller() -> CheckResult {
 }
 
 
+/// insert  in rbac the data  for a new user, with sane defaults (only view)
 #[update]
 pub fn insert_caller(friendly_name: String) -> ExecResult {
     let caller = ic_cdk::caller();
@@ -82,9 +86,9 @@ pub fn insert_caller(friendly_name: String) -> ExecResult {
             let conn = ic_sqlite::CONN.lock().unwrap();
             ic_cdk::println!("insert_caller");
             let rbac_insert_sql = format!("insert into rbac \
-                (principal, friendly_name, view_opera_ok, add_opera_ok, associate_dna_ok, add_dna_ok) 
-                values ('{}', '{}', {}, {}, {}, {})",
-                principal, friendly_name, true, false, false,  false
+                (principal, friendly_name, view_opera_ok, add_opera_ok, associate_dna_ok, add_dna_ok, admin_ok) 
+                values ('{}', '{}', {}, {}, {}, {}, {})",
+                principal, friendly_name, true, false, false,  false, false
                 );
             ic_cdk::println!("insert_caller: {rbac_insert_sql} ");
             return match conn.execute(

@@ -1,3 +1,4 @@
+/// Documents handling
 extern crate ic_cdk_macros;
 extern crate serde;
 use ic_cdk::{query, update};
@@ -36,17 +37,23 @@ pub struct ReturnDocumentsStruct {
     rows: Vec<Documento>
     }
 
+/// extract from the db the documents related to an opera (identified by a dossieropera_id)
+///
+/// returns:
+///
+/// - documents (rows of [`Documento`] structs) 
+///
+/// - dossier data plus friendly_name (struct [`Dossier`])
 #[query]
 pub fn documenti_query(params: QueryDocumentsParams) -> JsonResult {
     let dossier_infos: Vec<Dossier> ;
     let id = params.dossieropera_id.clone();
 
-    // devo anche restituire i dati del dossier
     let checked_caller: Rbac = check_caller()?;
-    ic_cdk::println!("checked_caller : {:?} ", checked_caller);
     if ! checked_caller.view_opera_ok {
-        return Err(MyError::CanisterError {message: format!("{:?}", "dossier_query: user not allowed") })
+        return Err(MyError::CanisterError {message: format!("{:?}", "documenti_query: user not allowed") })
     }
+    // devo anche restituire i dati del dossier
     let dossier_sql = format!("select dossier.*, friendly_name  from dossier left outer join rbac where inserted_by = principal and dossier.id = {:?}",id);
     dossier_infos = dossier_struct_query(dossier_sql.to_string());
     let dossier_info = dossier_infos[0].clone();

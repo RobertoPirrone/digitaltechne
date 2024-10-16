@@ -44,45 +44,39 @@ pub fn check_caller() -> CheckResult {
     let caller = ic_cdk::caller();
     // The anonymous principal is not allowed to interact with canister.
     ic_cdk::println!("caller: {caller}, anon {:?} ", Principal::anonymous().to_string());
-    if caller == Principal::anonymous() {
-        Err(MyError::CanisterError {
-            message: format!("{:?}", "Anonymous principal not allowed to make calls."),
-        })
-    } else {
-        let rbac_sql = format!("select id, principal, friendly_name, view_opera_ok, add_opera_ok, associate_dna_ok, add_dna_ok, admin_ok from rbac where principal = {:?}", caller.to_string());
-        ic_cdk::println!("Query: {rbac_sql} ");
-        let conn = ic_sqlite::CONN.lock().unwrap();
-        let mut stmt = conn.prepare(&rbac_sql).unwrap();
-        let mut rows = stmt.query([]).unwrap();
-        ic_cdk::println!("Inner Query: pre match {rbac_sql} ");
-        match rows.next() {
-            Ok(row) => match row {
-                Some(row) => {
-                    let rbac = Rbac {
-                        id: row.get(0).unwrap(),
-                        principal: row.get(1).unwrap(),
-                        friendly_name: row.get(2).unwrap(),
-                        view_opera_ok: row.get(3).unwrap(),
-                        add_opera_ok: row.get(4).unwrap(),
-                        associate_dna_ok: row.get(5).unwrap(),
-                        add_dna_ok: row.get(6).unwrap(),
-                        admin_ok: row.get(7).unwrap(),
-                    };
-                    return Ok(rbac);
-                }
-                None => {
-                    return Err(MyError::CanisterError {
-                        message: format!("{:?}", "Not existent principal."),
-                    })
-                }
-            },
-            Err(err) => {
+    let rbac_sql = format!("select id, principal, friendly_name, view_opera_ok, add_opera_ok, associate_dna_ok, add_dna_ok, admin_ok from rbac where principal = {:?}", caller.to_string());
+    ic_cdk::println!("Query: {rbac_sql} ");
+    let conn = ic_sqlite::CONN.lock().unwrap();
+    let mut stmt = conn.prepare(&rbac_sql).unwrap();
+    let mut rows = stmt.query([]).unwrap();
+    ic_cdk::println!("Inner Query: pre match {rbac_sql} ");
+    match rows.next() {
+        Ok(row) => match row {
+            Some(row) => {
+                let rbac = Rbac {
+                    id: row.get(0).unwrap(),
+                    principal: row.get(1).unwrap(),
+                    friendly_name: row.get(2).unwrap(),
+                    view_opera_ok: row.get(3).unwrap(),
+                    add_opera_ok: row.get(4).unwrap(),
+                    associate_dna_ok: row.get(5).unwrap(),
+                    add_dna_ok: row.get(6).unwrap(),
+                    admin_ok: row.get(7).unwrap(),
+                };
+                return Ok(rbac);
+            }
+            None => {
                 return Err(MyError::CanisterError {
-                    message: format!("{:?}: {:?}", "Rbac query error.", err),
+                    message: format!("{:?}", "Not existent principal."),
                 })
             }
-        };
-    }
+        },
+        Err(err) => {
+            return Err(MyError::CanisterError {
+                message: format!("{:?}: {:?}", "Rbac query error.", err),
+            })
+        }
+    };
 }
 
 /// insert  in rbac the data  for a new user, with sane defaults (only view)

@@ -7,6 +7,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::granberg_dossier::{dossier_struct_query, Dossier};
 use crate::my_utils::*;
+use crate::rbac::{check_caller, Rbac};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Documento {

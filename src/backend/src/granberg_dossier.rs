@@ -6,6 +6,7 @@ use ic_cdk::{query, update};
 use serde::{Deserialize, Serialize};
 
 use crate::my_utils::*;
+use crate::rbac::{check_caller, Rbac};
 
 #[derive(CandidType, Debug, Serialize, Deserialize, Clone)]
 pub struct Dossier {

@@ -1,83 +1,23 @@
 #![doc = include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/README.md"))]
 
+//! Keep clean the main file, using ad hoc crates
 extern crate ic_cdk_macros;
 extern crate serde;
-use ic_cdk::{export_candid, query, update};
-use rusqlite::types::Type;
+use ic_cdk::{export_candid};
 
 pub mod artwork_mark;
 pub mod cartridge;
 pub mod documents;
 pub mod granberg_dossier;
 pub mod my_utils;
+pub mod rbac;
+pub mod sqlite;
 pub use crate::artwork_mark::{artwork_mark_insert, artwork_mark_query, ArtworkMarkQueryParams};
-pub use crate::cartridge::{
-    cartridge_insert, cartridge_query, cartridge_use_insert, CartridgeQueryParams, CartridgeUseParams,
-};
+pub use crate::cartridge::{ cartridge_insert, cartridge_query, cartridge_use_insert, CartridgeQueryParams, CartridgeUseParams, };
 pub use crate::documents::{document_insert, documenti_pulldowns, documenti_query, Documento, QueryDocumentsParams};
-pub use crate::granberg_dossier::{
-    dossier_insert, dossier_pulldowns, dossier_query, dossier_struct_query, Dossier, QueryParams,
-};
+pub use crate::granberg_dossier::{ dossier_insert, dossier_pulldowns, dossier_query, dossier_struct_query, Dossier, QueryParams, };
 pub use crate::my_utils::*;
-
-#[update]
-fn execute(sql: String) -> ExecResult {
-    ic_cdk::println!("Execute {sql}");
-    let conn = ic_sqlite::CONN.lock().unwrap();
-    return match conn.execute(&sql, []) {
-        Ok(e) => Ok(format!("{:?}", e)),
-        Err(err) => Err(MyError::CanisterError {
-            message: format!("{:?}", err),
-        }),
-    };
-}
-
-#[query]
-fn query(sql: String) -> QueryResult {
-    let conn = ic_sqlite::CONN.lock().unwrap();
-    let mut stmt = conn.prepare(&sql).unwrap();
-    let cnt = stmt.column_count();
-    ic_cdk::println!("Query returns {cnt} rows");
-    let mut rows = stmt.query([]).unwrap();
-    let mut res: Vec<Vec<String>> = Vec::new();
-    loop {
-        match rows.next() {
-            Ok(row) => match row {
-                Some(row) => {
-                    let mut vec: Vec<String> = Vec::new();
-                    for idx in 0..cnt {
-                        let v = row.get_ref_unwrap(idx);
-                        match v.data_type() {
-                            Type::Null => vec.push(String::from("")),
-                            Type::Integer => vec.push(v.as_i64().unwrap().to_string()),
-                            Type::Real => vec.push(v.as_f64().unwrap().to_string()),
-                            Type::Text => vec.push(v.as_str().unwrap().parse().unwrap()),
-                            Type::Blob => vec.push(hex::encode(v.as_blob().unwrap())),
-                        }
-                    }
-                    res.push(vec)
-                }
-                None => break,
-            },
-            Err(err) => {
-                return Err(MyError::CanisterError {
-                    message: format!("{:?}", err),
-                })
-            }
-        }
-    }
-    Ok(res)
-}
-
-#[query]
-fn whoami() -> String {
-    let caller = ic_cdk::caller();
-    caller.to_string()
-}
-
-#[ic_cdk::query]
-fn greet(name: String) -> String {
-    format!("Hello, {}!", name)
-}
+pub use crate::rbac::*;
+pub use crate::sqlite::{execute, query};
 
 export_candid!();

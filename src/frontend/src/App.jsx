@@ -3,6 +3,7 @@ import React, { useState, Suspense } from "react";
 import { Route, Routes } from "react-router";
 import { BrowserRouter as Router } from "react-router-dom";
 
+import { Admin } from "./Admin";
 import { ArtworkMark } from "./ArtworkMark";
 import { CartridgeInsert } from "./CartridgeInsert";
 import { Dossier } from "./Dossier";
@@ -15,7 +16,7 @@ import { NewDocument } from "./NewDocument";
 import { BatchInsert, NewDossier } from "./NewGrambergDossier";
 import { Purchase } from "./Purchase";
 import { SelfDefineUser } from "./SelfDefineUser";
-import { UserRoles } from "./UserRoles";
+// import { UserRoles } from "./UserRoles";
 import { VerifyMark } from "./VerifyMark";
 import Login from "./auth/Login";
 import { Logout } from "./auth/Logout";
@@ -52,7 +53,7 @@ function App() {
                             <Route path="/batchinsert" element={<BatchInsert />} />
                             <Route path="/purchase" element={<Purchase />} />
                             <Route path="/selfdefineuser" element={<SelfDefineUser />} />
-                            <Route path="/user_roles" element={<UserRoles />} />
+                            <Route path="/admin" element={<Admin />} />
                             <Route path="/verify_mark/:dossierdetail" element={<VerifyMark />} />
                             <Route path="/login" element={<Login />} />
                             <Route path="/logout" element={<Logout />} />

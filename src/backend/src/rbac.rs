@@ -3,11 +3,11 @@ extern crate ic_cdk_macros;
 extern crate serde;
 use candid::{CandidType, Principal};
 use ic_cdk::{query, update};
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 use crate::my_utils::*;
 
-#[derive(CandidType, Debug, Deserialize)]
+#[derive(CandidType, Debug, Serialize, Deserialize)]
 pub struct Rbac {
     id: u64,
     principal: String,
@@ -18,6 +18,13 @@ pub struct Rbac {
     pub associate_dna_ok: bool,
     pub add_dna_ok: bool,
 }
+
+#[derive(CandidType, Serialize, Deserialize)]
+pub struct RbacReturnStruct {
+    success: bool,
+    rbacs: Vec<Rbac>,
+}
+
 
 /// Returns the [`Rbac`] struct associated with the authenticated caller
 #[query]
@@ -81,6 +88,7 @@ pub fn insert_caller(friendly_name: String) -> ExecResult {
         }),
     };
 }
+
 /// change rbac flags
 #[update]
 pub fn change_rbac(jstring: String) -> ExecResult {
@@ -105,3 +113,48 @@ pub fn change_rbac(jstring: String) -> ExecResult {
         }),
     };
 }
+
+/// Returns the [`Rbac`] struct for every user
+#[query]
+pub fn rbac_query() -> JsonResult {
+    let mut res: Vec<Rbac> = Vec::new();
+    let rbac_sql = format!("select id, principal, friendly_name, view_opera_ok, add_opera_ok, associate_dna_ok, add_dna_ok, admin_ok from rbac");
+    ic_cdk::println!("Query: {rbac_sql} ");
+    let conn = ic_sqlite::CONN.lock().unwrap();
+    let mut stmt = conn.prepare(&rbac_sql).unwrap();
+    let mut rows = stmt.query([]).unwrap();
+
+    loop {
+        match rows.next() {
+            Ok(row) => match row {
+                Some(row) => {
+                    let rbac = Rbac {
+                        id: row.get(0).unwrap(),
+                        principal: row.get(1).unwrap(),
+                        friendly_name: row.get(2).unwrap(),
+                        view_opera_ok: row.get(3).unwrap(),
+                        add_opera_ok: row.get(4).unwrap(),
+                        associate_dna_ok: row.get(5).unwrap(),
+                        add_dna_ok: row.get(6).unwrap(),
+                        admin_ok: row.get(7).unwrap(),
+                    };
+                    res.push(rbac);
+                },
+                None => break,
+            },
+            Err(err) => {
+                return Err(MyError::CanisterError {
+                    message: format!("{:?}", err),
+                })
+            }
+        }
+    }
+    let ret_payload = RbacReturnStruct {
+        success: true,
+        rbacs: res
+    };
+    let jres = serde_json::to_string(&ret_payload).unwrap();
+    ic_cdk::println!("JRES: {jres} ");
+    Ok(jres)
+}
+

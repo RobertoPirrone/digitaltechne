@@ -2,6 +2,8 @@
 import React, { useCallback } from "react";
 import { canisterId } from "../../declarations/uploads";
 
+import { MyCheckIcon} from "./components/MostComponents";
+
 /**
  * yyyy-mm-dd -> dd/mm/yyyy
  *
@@ -85,3 +87,16 @@ export const prettyDate = (isoStamp, lang) => {
     console.log(dataora);
     return dataora;
 };
+
+export const fillIconField = (field, headerName) => {
+    return  ({
+        flex: 1,
+        headerName: headerName,
+        field: field,
+        renderCell: (params) => {
+            let field_value = eval(`params.row.${field}`);
+            return (<MyCheckIcon value={field_value} />)
+        }
+    });
+};
+

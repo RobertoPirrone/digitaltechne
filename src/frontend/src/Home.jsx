@@ -78,7 +78,7 @@ export const Home = () => {
                                     {t("Administrator")}
                                 </Grid>
                                 <Grid item xs={6}>
-                                    <MostSubmitButton className="b_loginok" onClick={() => navigate("/user_roles")} label={t("Gestione Utenti")} id="user_roles" />
+                                    <MostSubmitButton className="b_loginok" onClick={() => navigate("/admin")} label={t("Gestione Utenti")} id="user_roles" />
                                 </Grid>
                             </React.Fragment>
                         ) : null}

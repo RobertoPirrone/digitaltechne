@@ -18,7 +18,7 @@ const hasRole = () => {
 };
 
 /**
- * Pagina con bottoni per le possibili azioni, in base ai ruoli che ha l'utente
+ * Show User Capabilities
  */
 export const Admin = () => {
     const { backendActor, principal } = useAuth();
@@ -44,7 +44,7 @@ export const Admin = () => {
             return (
                <Button
                 onClick={() => {
-                    navigate("/selfdefineuser");
+                    navigate("/change_rbac", { state: { row: params.row }, replace: true });
                 }}
                 color="primary"
                 autoFocus>
@@ -83,7 +83,7 @@ export const Admin = () => {
                     console.log("Admin check_caller Err response: ", err);
                     console.error(err);
                     // appAlert(err.CanisterError.message);
-                    navigate("/selfdefineuser");
+
                 }
             })
             .catch((error) => {

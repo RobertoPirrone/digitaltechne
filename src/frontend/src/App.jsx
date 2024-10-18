@@ -6,6 +6,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { Admin } from "./Admin";
 import { ArtworkMark } from "./ArtworkMark";
 import { CartridgeInsert } from "./CartridgeInsert";
+import { ChangeRbac } from "./ChangeRbac";
 import { Dossier } from "./Dossier";
 import { DossierDetail } from "./DossierDetailGramberg";
 import { Home } from "./Home";
@@ -54,6 +55,7 @@ function App() {
                             <Route path="/purchase" element={<Purchase />} />
                             <Route path="/selfdefineuser" element={<SelfDefineUser />} />
                             <Route path="/admin" element={<Admin />} />
+                            <Route path="/change_rbac" element={<ChangeRbac />} />
                             <Route path="/verify_mark/:dossierdetail" element={<VerifyMark />} />
                             <Route path="/login" element={<Login />} />
                             <Route path="/logout" element={<Logout />} />

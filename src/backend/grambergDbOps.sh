@@ -55,7 +55,7 @@ fields='
     friendly_name TEXT,
     view_opera_ok BOOLEAN,
     add_opera_ok BOOLEAN,
-    associate_dna_ok BOOLEAN,
+    dna_mark_ok BOOLEAN,
     add_dna_ok BOOLEAN,
     admin_ok BOOLEAN
     '
@@ -136,4 +136,4 @@ echo "--- insert dossier"
 # dfx canister call backend  query "select max(id) from dossier"
 # insert via JSON
 # dfx canister call backend  dossier_insert '{ "autore": "Pinco Pallino", "nomeopera": "pippo paappo", "ora_inserimento": "2024-03-25", "username": "pluto", "icon_uri":"https://techne-test.mostapps.it/ipfs/QmeAV99r5LckFBAJxu5FUwhpMWjQ9XCSRd5cSC2w3k5vWJ" }'
-dfx canister call $network backend execute 'insert into rbac (id, principal, friendly_name, view_opera_ok, add_opera_ok , associate_dna_ok, add_dna_ok) values (1, "uybjb-x2bz4-k5mwy-4h4fk-7ca6d-evlpb-trrht-7wzsu-bkjxr-53jik-jqe", "Roberto Pirrone 1", true,true, true, true)'
+dfx canister call $network backend execute 'insert into rbac (id, principal, friendly_name, view_opera_ok, add_opera_ok , dna_mark_ok, add_dna_ok) values (1, "uybjb-x2bz4-k5mwy-4h4fk-7ca6d-evlpb-trrht-7wzsu-bkjxr-53jik-jqe", "Roberto Pirrone 1", true,true, true, true)'

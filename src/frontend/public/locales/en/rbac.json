@@ -1,0 +1,11 @@
+{
+  "ChangeRbac": "User Capabilities Change",
+  "ChangingRbac": "Changing permssions for the user:",
+  "admin_ok": "Admin operations enabled",
+  "view_opera_ok": " Ok to view Operas",
+  "add_opera_ok": "Ok to add Operas",
+  "add_dna_ok": "Ok to add DNA",
+  "dna_mark_ok": " Ok to DNA Mark",
+  "Modify": "Modify",
+  "AdminWelcome": "Welcome Administrator"
+}

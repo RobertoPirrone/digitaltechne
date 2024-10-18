@@ -1,0 +1,11 @@
+{
+  "ChangeRbac": "Cambio Permessi Utente",
+  "ChangingRbac": "Sto cambiando i permessi per utente:",
+  "admin_ok": "Permesse operazioni di Amministrazione",
+  "view_opera_ok": "Ok per consultare Opere",
+  "add_opera_ok": "Ok per aggiungere Opere",
+  "add_dna_ok": "Ok per aggiungere DNA",
+  "dna_mark_ok": "Ok per marchiare con il DNA",
+  "Modify": "Modifica",
+  "AdminWelcome": "Benvenuto Amminstratore"
+}

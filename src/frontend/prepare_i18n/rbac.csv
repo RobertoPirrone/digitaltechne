@@ -1,0 +1,11 @@
+L1,L2,IT,EN
+UpdatedPermissions,,Permessi utente modificati,Changed User Capabilites
+ChangeRbac,,Cambio Permessi Utente,User Capabilities Change
+ChangingRbac,,Sto cambiando i permessi per utente:,Changing permssions for the user:
+admin_ok,,Permesse operazioni di Amministrazione,Admin operations enabled
+view_opera_ok,,Ok per consultare Opere, Ok to view Operas
+add_opera_ok,,Ok per aggiungere Opere,Ok to add Operas
+add_dna_ok,,Ok per aggiungere DNA,Ok to add DNA
+dna_mark_ok,Ok per marchiare con il DNA, Ok to DNA Mark
+Modify,,Modifica,Modify
+

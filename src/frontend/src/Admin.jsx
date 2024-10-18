@@ -23,7 +23,7 @@ const hasRole = () => {
 export const Admin = () => {
     const { backendActor, principal } = useAuth();
     const userInfo = "pippo";
-    const { t } = useTranslation();
+    const { t } = useTranslation(['translation', 'rbac']);
     const navigate = useNavigate();
     const AdminRole = hasRole("Admin", userInfo);
     const LaboratoryRole = hasRole("Laboratory", userInfo);
@@ -32,12 +32,12 @@ export const Admin = () => {
     const [rbacs, setRbacs] = useState({});
     let columns = [];
 
-    columns.push({ flex: 1, field: "friendly_name", headerName: t("friendly_name") });
-    columns.push(fillIconField("add_dna_ok", t("add_dna_ok")));
-    columns.push(fillIconField("associate_dna_ok", t("associate_dna_ok")));
-    columns.push(fillIconField("add_opera_ok", t("add_opera_ok")));
-    columns.push(fillIconField("view_opera_ok", t("view_opera_ok")));
-    columns.push(fillIconField("admin_ok", t("admin_ok")));
+    columns.push({ flex: 1, field: "friendly_name", headerName: t("rbac:friendly_name") });
+    columns.push(fillIconField("add_dna_ok", t("rbac:add_dna_ok")));
+    columns.push(fillIconField("dna_mark_ok", t("rbac:dna_mark_ok")));
+    columns.push(fillIconField("add_opera_ok", t("rbac:add_opera_ok")));
+    columns.push(fillIconField("view_opera_ok", t("rbac:view_opera_ok")));
+    columns.push(fillIconField("admin_ok", t("rbac:admin_ok")));
     columns.push({ flex: 1, field: "id", 
         headerName: t("button"),
         renderCell: (params) => {
@@ -96,8 +96,8 @@ export const Admin = () => {
         <div className="app-container">
             <Header />
             <div className="content-container">
-                <Container component="main" maxWidth="md">
-                    <h1> {t("AdminWelcome")} {userInfo.name} {userInfo.surname} </h1>
+                <Container component="main" maxWidth="xl">
+                    <h1> {t("rbac:AdminWelcome")} </h1>
                     <MostDataGrid columns={columns} rows={rbacs} />
                 </Container>
             </div>

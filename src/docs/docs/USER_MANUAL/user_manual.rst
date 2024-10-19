@@ -14,4 +14,5 @@
    purchase/purchase
    cartridge_insert/cartridge_insert
    verify_mark/verify_mark
+   admin/admin
 

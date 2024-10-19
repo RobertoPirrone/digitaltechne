@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-# from a xlsx file extract the translations in locales/<language>/<tablename>.json
+# from a csv/ xlsx file extract the translations in locales/<language>/<tablename>.json
+
 import os, sys, re, logging, tempfile, datetime, json
 import csv
 from openpyxl import Workbook, load_workbook
@@ -20,11 +21,13 @@ def xls2i18n():
 
     dirname, tail = os.path.split(fname)
     basename = tail.split(".")[0]
+    suffix = tail.split(".")[1]
     xlsx_name = f"{dirname}/{basename}.xlsx"
     Log.error(f"dirname: {dirname}, basename {basename}")
     try:
 
-        if pulldown:
+        # openpyxl non lavora sui csv
+        if suffix == "csv":
             wb = Workbook()
             ws = wb.active
             ws.title = "Sheet"

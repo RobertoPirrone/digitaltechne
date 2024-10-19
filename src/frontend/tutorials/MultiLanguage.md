@@ -8,12 +8,22 @@ The management of nationalized strings has always had problems:
 - In the Internet Computer world it is better to work on the Front End, without creating support tables on the backend
 - It is necessary to translate the strings even in unknown languages
 
-In this project there are 3 main features:
+In this project there are 4 main features:
 - Retrieval of prompts from existing json files (those that are normally in .../public/locales/??/\*). The prompts are inserted into an Excel file, one prompt per line, with columns: prompt name, English and Italian value
+- Look for missing translation strings
 - Possible translation into a new language
 - Extraction from the xls file of the nationalized prompts:
     - standard translation file
     - specialized files for pull down menus
+
+Please note that the python script must be run in a venv environment, for instance:
+
+```
+. .my-venv/bin/activate
+python i18n2xls.py ../public/locales dossier
+deactivate
+```
+
 
 The working directory is .../src/frontend/prepare\_18n, they are python scripts in a virtual environment
 
@@ -21,9 +31,25 @@ The working directory is .../src/frontend/prepare\_18n, they are python scripts 
 With this operation, the dossier.json files are recovered from the en, it, etc. directories of the current sources, and are inserted into a dossier.xlsx file
 
 ```
-. .my-venv/bin/activate
 python i18n2xls.py ../public/locales dossier
-deactivate
+```
+
+## Missing translations
+
+Sometimes it can be useful to check if there is a mismatch between the JSX source files in .../src and the translation files of .../public/locales/
+
+So there is a small script that checks exactly that.
+
+It can be run either on a single file, i.e.:
+
+```
+    python missing_translations.py ../SRC/Admin.jsx
+```
+
+or recursively:
+
+```
+    find ../src/ -name \*.jsx -exec python missing_translations.py '{}' \;
 ```
 
 ## Translation

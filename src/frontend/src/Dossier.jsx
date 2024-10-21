@@ -111,8 +111,11 @@ export const Dossier = () => {
                 } else {
                     const err = Ret_data.Err;
                     console.log("dossier_query Err response: ", err);
-                    console.error(err);
-                    // appAlert(err.CanisterError.message);
+                    let inner_err = err.CanisterError.message;
+                    if (inner_err.includes("not allowed")) {
+                        appAlert(err.CanisterError.message);
+                        navigate("/home");
+                    }
                     setLoading(false);
                     navigate("/selfdefineuser");
                 }

@@ -5,7 +5,7 @@ use candid::CandidType;
 use ic_cdk::{query, update};
 use serde::{Deserialize, Serialize};
 
-use crate::granberg_dossier::{dossier_struct_query, Dossier};
+use crate::gramberg_dossier::{dossier_struct_query, Dossier};
 use crate::my_utils::*;
 use crate::rbac::{check_caller, Rbac};
 

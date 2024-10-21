@@ -6,7 +6,7 @@ use ic_cdk::{query, update};
 use serde::{Deserialize, Serialize};
 
 use crate::my_utils::*;
-use crate::rbac::{check_caller, Rbac};
+use crate::rbac::{rbac_verify};
 
 #[derive(CandidType, Debug, Serialize, Deserialize, Clone)]
 pub struct Dossier {
@@ -52,6 +52,7 @@ pub struct DossierReturnStruct {
 struct DistinctResult {
     ele: String,
 }
+
 
 /// pull down menus for opera insert. only autore is currently used
 #[query]
@@ -139,19 +140,14 @@ pub fn dossier_struct_query(sql: String) -> Vec<Dossier> {
     return dossiers;
 }
 
+
 /// returns public and private dossier
 ///
 /// offset and limit parameters are honored, although pagination is usually done in the forntend code
 #[query]
 pub fn dossier_query(params: QueryParams) -> JsonResult {
     let caller = ic_cdk::caller().to_string();
-    let checked_caller: Rbac = check_caller()?;
-    ic_cdk::println!("checked_caller : {:?} ", checked_caller);
-    if !checked_caller.view_opera_ok {
-        return Err(MyError::CanisterError {
-            message: format!("{:?}", "dossier_query: user not allowed"),
-        });
-    }
+    rbac_verify("dossier_query".to_string(), "view_opera_ok".to_string())?;
     // let owner_sql = format!("select * from dossier where inserted_by = '{:}' and private = true limit {:?} offset {:?}", caller, params.limit, params.offset );
     // let public_sql = format!("select * from dossier where inserted_by = '{:}' and private = false limit {:?} offset {:?}", caller, params.limit, params.offset );
     let owner_sql = format!("select dossier.*, friendly_name from dossier left outer join rbac where inserted_by = '{:}' and inserted_by = principal and inserted_by = '{:}' and private = true order by annoopera limit {:?} offset {:?}", caller, caller, params.limit, params.offset );
@@ -176,12 +172,7 @@ pub fn dossier_query(params: QueryParams) -> JsonResult {
 #[update]
 pub fn dossier_insert(jv: String) -> ExecResult {
     ic_cdk::println!("dossier_insert input: {jv} ");
-    let checked_caller: Rbac = check_caller()?;
-    if !checked_caller.add_opera_ok {
-        return Err(MyError::CanisterError {
-            message: format!("{:?}", "dossier_insert: user not allowed"),
-        });
-    }
+    rbac_verify("dossier_query".to_string(), "add_opera_ok".to_string())?;
     let d: Dossier = serde_json::from_str(&jv).unwrap();
     let caller = ic_cdk::caller().to_string();
     let conn = ic_sqlite::CONN.lock().unwrap();

@@ -12,7 +12,7 @@ import * as XLSX from "xlsx";
 import { backend } from "../../declarations/backend";
 import { Footer } from "./Footer";
 import { Header } from "./Header";
-import { Upload } from "./Upload";
+import { UploadNew } from "./UploadNew";
 import { appAlert } from "./Utils";
 import { useAuth } from "./auth/use-auth-client";
 import { MostCheckbox, MostSelect, MostSubmitButton, MostTextField, MyAutocomplete, MyCheckbox, MyTextField } from "./components/MostComponents";
@@ -36,7 +36,10 @@ export const CartridgeInsert = () => {
     } = useForm();
     const { t } = useTranslation();
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
     const [pdfAsset, setPdfAsset] = useState("");
+    const [asset, setAsset] = useState({ key: "" });
+    const [assets, setAssets] = useState({});
     const [disabledButs, setDisabledButs] = useState(true);
     const [searchele, setSearchele] = useState(false);
     const [note, setNote] = useState("");
@@ -47,6 +50,32 @@ export const CartridgeInsert = () => {
     const [csvText, setCsvText] = useState("");
     const [jsonText, setJsonText] = useState("");
     const { backendActor, whoami } = useAuth();
+
+    useEffect(() => {
+        if (isLoading) return;
+        setIsLoading(true);
+        console.log("chiamo backendActor.check_caller: ");
+        backendActor
+            .check_caller()
+            .then((Ret_data) => {
+                // console.log("dossier returns: ", JSON.stringify(Ret_data));
+                if ("Ok" in Ret_data) {
+                    if (!Ret_data.Ok.add_dna_ok) {
+                        appAlert(t("add_dna_nak"));
+                        navigate("/home");
+                    }
+                    setIsLoading(false);
+                } else {
+                    const err = Ret_data.Err;
+                    appAlert(err.CanisterError.message);
+                    navigate("/dossier");
+                }
+            })
+            .catch((error) => {
+                appAlert(error.message ? error.message : JSON.stringify(error));
+                navigate("/dossier");
+            });
+    }, [backendActor, navigate]);
 
     const gotXls = (e) => {
         console.log("gotXls: ");
@@ -71,10 +100,10 @@ export const CartridgeInsert = () => {
     const onSubmit = (vals) => {
         vals.uuid = uuidv4();
         vals.dna_text = csvText;
-        if (pdfAsset === "") {
+        if (assets[0] === "") {
             vals.dna_file_asset = "NO file";
         } else {
-            vals.dna_file_asset = pdfAsset.key;
+            vals.dna_file_asset = assets[0].key;
         }
         vals.lab_name = "Laboratorio CNR Catania";
         vals.note = note;
@@ -90,12 +119,11 @@ export const CartridgeInsert = () => {
                 console.log("cartridge_insert returns: ", JSON.stringify(Ret_data));
                 if ("Ok" in Ret_data) {
                     const response = JSON.parse(Ret_data.Ok);
-                    console.log(response);
+                    appAlert(t("InsertedDNA"));
                     setDisabledButs(true);
-                    navigate("/dossier");
+                    navigate("/home");
                 } else {
                     const err = Ret_data.Err;
-                    console.error(err);
                     appAlert(err);
                     setDisabledButs(false);
                 }
@@ -121,7 +149,7 @@ export const CartridgeInsert = () => {
                         </Grid>
                         <Grid item xs={6}>
                             {" "}
-                            <Upload accept={"application/pdf"} asset={pdfAsset} setAsset={setPdfAsset} setDisabledButs={setDisabledButs} show={false} />{" "}
+                            <UploadNew asset={assets[0]} assets={assets} show={true} accept={"application/pdf"} setAsset={setAsset} setAssets={setAssets} setDisabledButs={setDisabledButs} show={false} />
                         </Grid>
                         <Grid item xs={12}>
                             {" "}

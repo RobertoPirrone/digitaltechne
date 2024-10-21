@@ -127,7 +127,16 @@
   "UploadFiles": "Carica uno o più File",
   "BatchInsert": "Inserisci un gruppo di opere",
   "Funzioni per tutti gli utenti": "Funzioni per tutti gli utenti",
+  "BCAddressKO": "Indirizzo BlockChain non ancora associato",
+  "Dossier": "Opera",
+  "view_opera_nak": "Non hai i diritti per visualizzare le opere",
+  "add_opera_nak": "Non hai i diritti per aggiungere opere",
+  "dna_mark_nak": "Non puoi marchiare le opere con l’inchiostro DNA",
+  "add_dna_nak": "Non puoi inserire i dati delle cartucce DNA",
+  "admin_nak": "Non puoi svolgere attività di Amministratore",
+  "InsertedDNA": "Le informazioni DNA sono state aggiunte regolarmente",
   "SignIn": {
+    "Label": null,
     "passwords differ": "Le password non coincidono",
     "Username": "Username",
     "Register": "REGISTRATI",
@@ -137,7 +146,5 @@
     "Forgot password?": "Password dimenticata?",
     "Don't have an account? Sign Up": "Prima volta che entri? Registrati",
     "Already have an account? Sign in": "Sei già registrato? Entra"
-  },
-  "Dossier": "Opera",
-  "Indirizzo BlockChain non ancora associato": {}
+  }
 }

@@ -17,6 +17,7 @@ import { backend } from "../../declarations/backend";
 import { Footer } from "./Footer";
 import { Header } from "./Header";
 import { Upload } from "./Upload";
+import { UploadNew } from "./UploadNew";
 import { useAuth } from "./auth/use-auth-client";
 import { DocData } from "./components/DocData";
 import { GoToHomePage, MostCheckbox, MostSelect, MostSubmitButton, MostTextField, MyAutocomplete, MyCheckbox, MyTextField } from "./components/MostComponents";
@@ -52,6 +53,7 @@ export const NewDocument = (props) => {
     const [autore, setAutore] = useState("");
     const [titolo, setTitolo] = useState("");
     const [asset, setAsset] = useState({ key: "" });
+    const [assets, setAssets] = useState({});
     const [uploads, setUploads] = useState([]);
     const [progress, setProgress] = useState(null);
     const appAlert = useCallback((text) => {
@@ -92,10 +94,10 @@ export const NewDocument = (props) => {
         vals.autore = autore;
         // vals["tipo_documento"] = tipo_documento;
         vals.tipo_documento = tipoDocumento;
-        vals.image_uri = asset.key;
-        vals.filename = asset.original_filename;
-        vals.mimetype = asset.mimetype;
-        vals.filesize = asset.file_size;
+        vals.image_uri = assets[0].key;
+        vals.filename = assets[0].original_filename;
+        vals.mimetype = assets[0].mimetype;
+        vals.filesize = assets[0].file_size;
         vals.versione = 1;
         vals.ora_inserimento = new Date();
         vals.master_uuid = master_uuid;
@@ -143,7 +145,7 @@ export const NewDocument = (props) => {
             <h1> {t("documento:NewDocument")} </h1>
             <Container component="main" maxWidth="md">
                 <div className={DTRoot}>
-                    <Upload asset={asset} show={true} accept={"*/*"} setAsset={setAsset} setDisabledButs={setDisabledButs} />
+                    <UploadNew asset={assets[0]} assets={assets} show={true} accept={"*/*"} setAsset={setAsset} setAssets={setAssets} setDisabledButs={setDisabledButs} />
 
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <Grid container spacing={1} alignItems="center">

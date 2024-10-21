@@ -83,7 +83,7 @@ export const NewDossier = () => {
                 appAlert(error.message ? error.message : JSON.stringify(error));
                 navigate("/dossier");
             });
-    }, [backendActor, navigate]);
+    }, [backendActor, navigate, t, isLoading]);
 
     const actionChange = (e, el) => {
         console.error(JSON.stringify(el));
@@ -95,10 +95,6 @@ export const NewDossier = () => {
     };
 
     const onSubmit = async (vals) => {
-        if (asset == {}) {
-            appAlert("File immagine non scelto");
-            return;
-        }
         const tech = "";
         let seq = "";
         let master_uuid = "";
@@ -293,7 +289,7 @@ export const BatchInsert = () => {
                 appAlert(error.message ? error.message : JSON.stringify(error));
                 navigate("/dossier");
             });
-    }, [backendActor, navigate]);
+    }, [backendActor, navigate, t, isLoading]);
 
     const onBatchSubmit = (vals) => {
         let file_found = false;
@@ -398,25 +394,25 @@ export const BatchInsert = () => {
                     backendActor
                         .dossier_insert(JSON.stringify(vals))
                         .then((Ret_data) => {
-                        if ("Ok" in Ret_data) {
-                            console.log("Batch dossier_insert returns: ", Ret_data);
-                            const response = JSON.parse(Ret_data.Ok);
-                            console.log(response);
-                            if (response) {
-                                navigate("/dossier");
+                            if ("Ok" in Ret_data) {
+                                console.log("Batch dossier_insert returns: ", Ret_data);
+                                const response = JSON.parse(Ret_data.Ok);
+                                console.log(response);
+                                if (response) {
+                                    navigate("/dossier");
+                                } else {
+                                    appAlert(response.error);
+                                    setDisabledButs(false);
+                                }
                             } else {
-                                appAlert(response.error);
-                                setDisabledButs(false);
+                                const err = Ret_data.Err;
+                                console.log("dossier_insert batch submit Err response: ", err);
+                                const inner_err = err.CanisterError.message;
+                                if (inner_err.includes("not allowed")) {
+                                    appAlert(err.CanisterError.message);
+                                    navigate("/dossier");
+                                } else navigate("/selfdefineuser");
                             }
-                        } else {
-                            const err = Ret_data.Err;
-                            console.log("dossier_insert batch submit Err response: ", err);
-                            const inner_err = err.CanisterError.message;
-                            if (inner_err.includes("not allowed")) {
-                                appAlert(err.CanisterError.message);
-                                navigate("/dossier");
-                            } else navigate("/selfdefineuser");
-                        }
                         })
                         .catch((error) => {
                             console.error("CATCH");

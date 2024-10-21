@@ -21,7 +21,7 @@ import { MostCheckbox, MostSelect, MostSubmitButton, MostTextField, MyAutocomple
 
 export const ChangeRbac = () => {
     const navigate = useNavigate();
-    const { t } = useTranslation(['translation', 'rbac']);
+    const { t } = useTranslation(["translation", "rbac"]);
     const { handleSubmit } = useForm();
     const { backendActor, principal } = useAuth();
     const react_router_location = useLocation();
@@ -34,7 +34,7 @@ export const ChangeRbac = () => {
     const [dna_mark_ok, setDna_mark_ok] = useState(user_row.dna_mark_ok);
 
     useEffect(() => {
-        console.log("ChangeRbac useEffect");
+        console.log(t("ChangeRbac useEffect"));
     }, [t]);
 
     const onSubmit = (vals) => {

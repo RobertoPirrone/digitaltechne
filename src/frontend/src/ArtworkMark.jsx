@@ -47,6 +47,24 @@ export const ArtworkMark = (props) => {
 
     useEffect(() => {
         backendActor
+            .check_caller()
+            .then((Ret_data) => {
+                if ("Ok" in Ret_data) {
+                    if (!Ret_data.Ok.add_dna_ok) {
+                        appAlert(t("dna_mark_nak"));
+                        navigate("/home");
+                    }
+                } else {
+                    const err = Ret_data.Err;
+                    appAlert(err.CanisterError.message);
+                    navigate("/dossier");
+                }
+            })
+            .catch((error) => {
+                appAlert(error.message ? error.message : JSON.stringify(error));
+                navigate("/dossier");
+            });
+        backendActor
             .cartridge_use_available()
             .then((Ok_data) => {
                 console.log("useEffect returns: ", JSON.stringify(Ok_data));
@@ -113,6 +131,7 @@ export const ArtworkMark = (props) => {
             vals.filesize = asset.file_size;
             vals.versione = 1;
             vals.ora_inserimento = new Date();
+            vals.master_uuid = dossierInfo.master_uuid;
 
             console.log(`onSubmitDocument: ${JSON.stringify(vals)}`);
             setDisabledButs(true);
@@ -123,15 +142,6 @@ export const ArtworkMark = (props) => {
                 .then((Ok_data) => {
                     console.log("document_insert returns: ", JSON.stringify(Ok_data));
                     const response = Ok_data.Ok;
-                    // alert(JSON.stringify(response));
-                    console.log(response);
-                    if (response) {
-                        console.error(response);
-                    } else {
-                        console.error("response vuota");
-                        appAlert(response.error);
-                        setDisabledButs(false);
-                    }
                 })
                 .catch((error) => {
                     // handle error
@@ -164,7 +174,7 @@ export const ArtworkMark = (props) => {
                     setDisabledButs(true);
                     // let url = "/dossierdetail/" + dossier_id;
                     // navigate(url, { state: {dossierInfo: dossierInfo}, replace: true });
-                    appAlert("RESPONSE");
+                    appAlert(t("InsertedMark"));
                     navigate("/dossier", { replace: true });
                 } else {
                     console.error(response);

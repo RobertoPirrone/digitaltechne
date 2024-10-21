@@ -34,6 +34,7 @@ export const NewDossier = () => {
         formState: { errors },
     } = useForm();
     const [disabledButs, setDisabledButs] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const [newDossierInfo, setNewDossierInfo] = useState({}); //pull down & C.
     const [searchele, setSearchele] = useState(false);
     const [lastInsert, setLastInsert] = useState(null);
@@ -59,8 +60,30 @@ export const NewDossier = () => {
     const [copiePdA, setCopiePdA] = useState(0);
 
     useEffect(() => {
-        setSearchele(false);
-    }, []);
+        if (isLoading) return;
+        setIsLoading(true);
+        console.log("chiamo backendActor.check_caller: ");
+        backendActor
+            .check_caller()
+            .then((Ret_data) => {
+                // console.log("dossier returns: ", JSON.stringify(Ret_data));
+                if ("Ok" in Ret_data) {
+                    if (!Ret_data.Ok.add_opera_ok) {
+                        appAlert(t("dossier:add_opera_nak"));
+                        navigate("/dossier");
+                    }
+                    setIsLoading(false);
+                } else {
+                    const err = Ret_data.Err;
+                    appAlert(err.CanisterError.message);
+                    navigate("/dossier");
+                }
+            })
+            .catch((error) => {
+                appAlert(error.message ? error.message : JSON.stringify(error));
+                navigate("/dossier");
+            });
+    }, [backendActor, navigate]);
 
     const actionChange = (e, el) => {
         console.error(JSON.stringify(el));
@@ -71,7 +94,7 @@ export const NewDossier = () => {
         setLastInsert({ what: what, id: id });
     };
 
-    const onSubmit = (vals) => {
+    const onSubmit = async (vals) => {
         if (asset == {}) {
             appAlert("File immagine non scelto");
             return;
@@ -131,7 +154,7 @@ export const NewDossier = () => {
                             }
                         } else {
                             const err = Ret_data.Err;
-                            console.log("dossier_query Err response: ", err);
+                            console.log("dossier_insert submit Err response: ", err);
                             const inner_err = err.CanisterError.message;
                             if (inner_err.includes("not allowed")) {
                                 appAlert(err.CanisterError.message);
@@ -149,9 +172,11 @@ export const NewDossier = () => {
         }
     };
 
-    console.log("newDossierInfo: ", JSON.stringify(newDossierInfo));
-    console.log("newDossierInfo: ", JSON.stringify(newDossierInfo.autori));
+    // console.log("newDossierInfo: ", JSON.stringify(newDossierInfo));
+    // console.log("newDossierInfo: ", JSON.stringify(newDossierInfo.autori));
     console.log("princiapl: ", principal.toText());
+    if (isLoading) return;
+
     return (
         <div>
             <Header />
@@ -238,12 +263,37 @@ export const BatchInsert = () => {
         formState: { errors },
     } = useForm();
     const { t } = useTranslation(["translation", "dossier", "tipotecnica", "tiposupporto", "tipofirma"]);
+    const [isLoading, setIsLoading] = useState(false);
     const [disabledButs, setDisabledButs] = useState(true);
     const [csvText, setCsvText] = useState("");
     const [jsonText, setJsonText] = useState("");
     const [files, setFiles] = useState([]);
     const [assets, setAssets] = useState({});
     const { backendActor, principal } = useAuth();
+
+    useEffect(() => {
+        if (isLoading) return;
+        setIsLoading(true);
+        backendActor
+            .check_caller()
+            .then((Ret_data) => {
+                // console.log("dossier returns: ", JSON.stringify(Ret_data));
+                if ("Ok" in Ret_data) {
+                    if (!Ret_data.Ok.add_opera_ok) {
+                        appAlert(t("dossier:add_opera_nak"));
+                        navigate("/dossier");
+                    }
+                } else {
+                    const err = Ret_data.Err;
+                    appAlert(err.CanisterError.message);
+                    navigate("/dossier");
+                }
+            })
+            .catch((error) => {
+                appAlert(error.message ? error.message : JSON.stringify(error));
+                navigate("/dossier");
+            });
+    }, [backendActor, navigate]);
 
     const onBatchSubmit = (vals) => {
         let file_found = false;
@@ -254,6 +304,7 @@ export const BatchInsert = () => {
         vals.insert_time = new Date();
         vals.username = "pippo";
 
+        if (disabledButs) return;
         setDisabledButs(true);
         console.log("onBatchSubmit vals: ", vals);
         console.log("onBatchSubmit json: ", jsonText);
@@ -352,7 +403,6 @@ export const BatchInsert = () => {
                             const response = JSON.parse(Ret_data.Ok);
                             console.log(response);
                             if (response) {
-                                setDisabledButs(true);
                                 navigate("/dossier");
                             } else {
                                 appAlert(response.error);
@@ -360,7 +410,7 @@ export const BatchInsert = () => {
                             }
                         } else {
                             const err = Ret_data.Err;
-                            console.log("dossier_query Err response: ", err);
+                            console.log("dossier_insert batch submit Err response: ", err);
                             const inner_err = err.CanisterError.message;
                             if (inner_err.includes("not allowed")) {
                                 appAlert(err.CanisterError.message);
@@ -370,8 +420,7 @@ export const BatchInsert = () => {
                         })
                         .catch((error) => {
                             console.error("CATCH");
-                            console.error(error);
-                            alert(error.message ? error.message : JSON.stringify(error));
+                            appAlert(error.message ? error.message : JSON.stringify(error));
                             setDisabledButs(false);
                         });
                 }

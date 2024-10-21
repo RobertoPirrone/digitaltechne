@@ -20,41 +20,9 @@
   "TipoSupporto": "Tipo Supporto",
   "NoDossier": "Nessun Dossier Presente",
   "NoDocument": "Nessun Documento Presente",
-  "mimetype": {
-    "image/jpeg": "Immagine jpeg",
-    "application/pdf": "Documento PDF",
-    "application/vndopenxmlformats-officedocumentwordprocessingmldocument": "Documento word"
-  },
-  "tiposupporto_id": {
-    "SUP_TELA": "Tela, carta, legno, stoffa",
-    "SUP_PLASTICA": "Plastica",
-    "SUP_METALLO": "Metallo",
-    "SUP_DIGITAL": "Immagine digitale",
-    "SUP_OTHER": "Altri supporti"
-  },
   "Altro": "Altro",
   "FruibilitaDossier": "Fruibilita Dossier",
-  "statusopera_id": {
-    "STATUS_AVAILABLE": "Disponibile",
-    "STATUS_RESTORATION": "In Restauro",
-    "STATUS_ON_LOAN": "In Prestito",
-    "STATUS_DESTROYED": "Distrutta",
-    "STATUS_STOLEN": "Rubata"
-  },
   "FruibilitaOpera": "Fruibilita Opera",
-  "fruibilitadossier_id": {
-    "DOSSIER_FRUIBILITY_COMPLETELY_PRIVATE": "Completamente privato",
-    "DOSSIER_FRUIBILITY_COMPLETELY_RESERVED": "Completamente riservato",
-    "DOSSIER_FRUIBILITY_TASSONOMICALLY_RESERVED": "Riservato per Tassonomia",
-    "DOSSIER_FRUIBILITY_SINGLE_DOCUMENT_RESERVED": "Riservato per singolo documento",
-    "DOSSIER_FRUIBILITY_TASSONOMICALLY_PUBLIC": "Pubblico per tassonomia",
-    "DOSSIER_FRUIBILITY_COMPLETELY_PUBLIC": "Completamente pubblico"
-  },
-  "fruibilitaopera_id": {
-    "OPERA_FRUIBILITY_PRIVATE": "Privata",
-    "OPERA_FRUIBILITY_PUBLIC": "Esposta al Pubblico",
-    "OPERA_FRUIBILITY_ON_REQUEST": "Visibile su Appuntamento"
-  },
   "Proprietario": "Proprietario",
   "Documenti": "Documenti",
   "MasterOnly": "Visualizza solo immagini principali",
@@ -76,7 +44,7 @@
   "Aggiungi": "Aggiungi",
   "Inserisci": "Inserisci",
   "NuovaFoto": "Aggiungi Immagine",
-  "NuovoDossier": "Aggiungi un' Opera",
+  "NuovoDossier": "Aggiungi un Dossier Opera",
   "citta": "Città",
   "indirizzo": "Indirizzo",
   "nazione": "Nazione",
@@ -128,11 +96,6 @@
   "CopieNonFirmate": "Copie non fimate",
   "CopiePdA": "Prova d’ Artista",
   "DocsOnlyOnMaster": "I documenti possono essere associati solo alla copia principale",
-  "tipoluogo_id": {
-    "LUOGO_MUSEO": "Museo",
-    "LUOGO_COLLEZIONE": "Collezione",
-    "LUOGO_GALLERIA": "Galleria",
-    "LUOGO_PROPRIETARIO": "Proprietario",
-    "LUOGO_SCONOSCIUTO": "Sconosciuto"
-  }
+  "view_opera_nak": "Non hai i diritti per visualizzare le opere",
+  "add_opera_nak": "Non hai i diritti per aggiungere opere"
 }

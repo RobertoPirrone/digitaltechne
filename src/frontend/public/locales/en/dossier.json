@@ -20,45 +20,13 @@
   "TipoSupporto": "Support Type",
   "NoDossier": "No Folder Available",
   "NoDocument": "No Document Available",
-  "mimetype": {
-    "image/jpeg": "jpeg image",
-    "application/pdf": "PDF document",
-    "application/vndopenxmlformats-officedocumentwordprocessingmldocument": "Word document"
-  },
-  "tiposupporto_id": {
-    "SUP_TELA": "Canvas, paper, wood, fabric",
-    "SUP_PLASTICA": "Plastic",
-    "SUP_METALLO": "Metal",
-    "SUP_DIGITAL": "Digital image",
-    "SUP_OTHER": "Other media"
-  },
   "Altro": "Other",
   "FruibilitaDossier": "Dossier  accessibility",
-  "statusopera_id": {
-    "STATUS_AVAILABLE": "Available",
-    "STATUS_RESTORATION": "Under restoration",
-    "STATUS_ON_LOAN": "Borrowed",
-    "STATUS_DESTROYED": "Destroyed",
-    "STATUS_STOLEN": "Stolen"
-  },
   "FruibilitaOpera": "Artwork Accessibility",
-  "fruibilitadossier_id": {
-    "DOSSIER_FRUIBILITY_COMPLETELY_PRIVATE": "Completely private",
-    "DOSSIER_FRUIBILITY_COMPLETELY_RESERVED": "Completely confidential",
-    "DOSSIER_FRUIBILITY_TASSONOMICALLY_RESERVED": "Reserved for Taxonomy",
-    "DOSSIER_FRUIBILITY_SINGLE_DOCUMENT_RESERVED": "Reserved for single document",
-    "DOSSIER_FRUIBILITY_TASSONOMICALLY_PUBLIC": "Public by taxonomy",
-    "DOSSIER_FRUIBILITY_COMPLETELY_PUBLIC": "Completely public"
-  },
-  "fruibilitaopera_id": {
-    "OPERA_FRUIBILITY_PRIVATE": "Private",
-    "OPERA_FRUIBILITY_PUBLIC": "Exhibited to the public",
-    "OPERA_FRUIBILITY_ON_REQUEST": "Visible by appointment"
-  },
   "Proprietario": "Owner",
   "Documenti": "Documents",
   "MasterOnly": "Display only main images",
-  "NewDossier": "New Opera",
+  "NewDossier": "New Opera Dossier",
   "NewDrawing": "New Child Drawing",
   "NewCelebrity": "New Celebrity Picture",
   "NewArtwork": "New Artwork",
@@ -128,11 +96,6 @@
   "CopieNonFirmate": "Unsigned Copies",
   "CopiePdA": "Artist’s Proof",
   "DocsOnlyOnMaster": "Documents must be linked to the main copy",
-  "tipoluogo_id": {
-    "LUOGO_MUSEO": "Museum",
-    "LUOGO_COLLEZIONE": "Collection",
-    "LUOGO_GALLERIA": "Gallery",
-    "LUOGO_PROPRIETARIO": "Owner",
-    "LUOGO_SCONOSCIUTO": "Unknown"
-  }
+  "view_opera_nak": "You are not entitled to view operas",
+  "add_opera_nak": "You are not entitled to add operas"
 }

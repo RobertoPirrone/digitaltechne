@@ -1,7 +1,7 @@
 //! RBAC (Role based access control) utils and return types
 extern crate ic_cdk_macros;
 extern crate serde;
-use candid::{CandidType, Principal};
+use candid::{CandidType};
 use ic_cdk::{query, update};
 use serde::{Deserialize, Serialize};
 
@@ -31,13 +31,13 @@ pub struct RbacReturnStruct {
 pub fn check_caller() -> CheckResult {
     let caller = ic_cdk::caller();
     // The anonymous principal is not allowed to interact with canister.
-    ic_cdk::println!("caller: {caller}, anon {:?} ", Principal::anonymous().to_string());
+    // ic_cdk::println!("caller: {caller}, anon {:?} ", Principal::anonymous().to_string());
     let rbac_sql = format!("select id, principal, friendly_name, view_opera_ok, add_opera_ok, dna_mark_ok, add_dna_ok, admin_ok from rbac where principal = {:?}", caller.to_string());
     ic_cdk::println!("Query: {rbac_sql} ");
     let conn = ic_sqlite::CONN.lock().unwrap();
     let mut stmt = conn.prepare(&rbac_sql).unwrap();
     let mut rows = stmt.query([]).unwrap();
-    ic_cdk::println!("Inner Query: pre match {rbac_sql} ");
+    // ic_cdk::println!("Inner Query: pre match {rbac_sql} ");
     match rows.next() {
         Ok(row) => match row {
             Some(row) => {
@@ -158,3 +158,25 @@ pub fn rbac_query() -> JsonResult {
     Ok(jres)
 }
 
+/// check if user is allowed to perform the operation
+#[query]
+pub fn rbac_verify(calling_function: String, capability: String) -> ExecResult {
+    let checked_caller: Rbac = check_caller()?;
+    let caller = ic_cdk::caller().to_string();
+    let flag: bool;
+    match  capability.as_str() {
+        "view_opera_ok" => flag = checked_caller.view_opera_ok,
+        "add_opera_ok" => flag = checked_caller.add_opera_ok,
+        "dna_mark_ok" => flag = checked_caller.dna_mark_ok,
+        "add_dna_ok" => flag = checked_caller.add_dna_ok,
+        "admin_ok" => flag = checked_caller.admin_ok,
+        _ => flag = false,
+    }
+    ic_cdk::println!("rbac_verify: calling_function {:?}, capability {:?}, caller {:?}, result {:?}", calling_function, capability, caller, flag);
+    if !flag {
+        return Err(MyError::CanisterError {
+            message: format!("{:?}: capability {:?} not allowed for user {:?}", calling_function, capability, caller ),
+        });
+    }
+    return Ok("OK".to_string()) ;
+}

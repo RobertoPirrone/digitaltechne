@@ -1,6 +1,10 @@
 # Liliana Gramberg's Archive
-> Source code for the digitaltechne software
-> Live demo [_here_](https://gramberg.digitaltechne.ch)
+
+> Source code for the Frontend software
+
+> RustDoc pages describing the backend are available elsewhere
+
+> Archive Live [_here_](https://gramberg.digitaltechne.ch)
 
 ## Table of Contents
 * [General Info](#general-information)
@@ -42,6 +46,7 @@
 ```
 git clone ssh://git.private/home/git/digitaltechne.git gramberg
 cd gramberg
+less README.md
 ```
 
 ## Development

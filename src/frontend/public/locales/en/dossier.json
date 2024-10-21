@@ -95,7 +95,5 @@
   "CopieFirmate": "Signed Copies",
   "CopieNonFirmate": "Unsigned Copies",
   "CopiePdA": "Artist’s Proof",
-  "DocsOnlyOnMaster": "Documents must be linked to the main copy",
-  "view_opera_nak": "You are not entitled to view operas",
-  "add_opera_nak": "You are not entitled to add operas"
+  "DocsOnlyOnMaster": "Documents must be linked to the main copy"
 }

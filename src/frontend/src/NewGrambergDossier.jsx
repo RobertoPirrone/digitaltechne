@@ -69,7 +69,7 @@ export const NewDossier = () => {
                 // console.log("dossier returns: ", JSON.stringify(Ret_data));
                 if ("Ok" in Ret_data) {
                     if (!Ret_data.Ok.add_opera_ok) {
-                        appAlert(t("dossier:add_opera_nak"));
+                        appAlert(t("add_opera_nak"));
                         navigate("/dossier");
                     }
                     setIsLoading(false);
@@ -234,7 +234,7 @@ export const NewDossier = () => {
                                 <SpecializedSelect defaultValue={""} name="tiposupporto" label={t("tiposupporto:Label")} what={"tiposupporto"} onChange={(e, v) => setTiposupporto(e.target.value)} />{" "}
                             </Grid>
 
-                            <Grid item xs={3}>
+                            <Grid item xs={12}>
                                 {" "}
                                 <Typography>Private</Typography> <MyCheckbox defaultChecked={false} onChange={(e, v) => setPrivateDossier(v.label)} />{" "}
                             </Grid>
@@ -280,8 +280,8 @@ export const BatchInsert = () => {
                 // console.log("dossier returns: ", JSON.stringify(Ret_data));
                 if ("Ok" in Ret_data) {
                     if (!Ret_data.Ok.add_opera_ok) {
-                        appAlert(t("dossier:add_opera_nak"));
-                        navigate("/dossier");
+                        appAlert(t("add_opera_nak"));
+                        navigate("/home");
                     }
                 } else {
                     const err = Ret_data.Err;

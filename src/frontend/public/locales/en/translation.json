@@ -127,7 +127,16 @@
   "UploadFiles": "Upload File(s)",
   "BatchInsert": "Insert Many Artworks at Once",
   "Funzioni per tutti gli utenti": "Common Functions",
+  "BCAddressKO": null,
+  "Dossier": "Opera",
+  "view_opera_nak": "You are not entitled to view operas",
+  "add_opera_nak": "You are not entitled to add operas",
+  "dna_mark_nak": "You are not entitled to mark operas with the DNA ink",
+  "add_dna_nak": "You are not entitled to insert dna cartridges",
+  "admin_nak": "You are not entitled to perform admin ops",
+  "InsertedDNA": "DNA info correctly inserted",
   "SignIn": {
+    "Label": null,
     "passwords differ": "Passwords do not match",
     "Username": "Username",
     "Register": "SIGN IN",
@@ -137,7 +146,5 @@
     "Forgot password?": "Forgot password?",
     "Don't have an account? Sign Up": "First time coming in? Sign in",
     "Already have an account? Sign in": "Are you already registered? Enter"
-  },
-  "Dossier": "Opera",
-  "BCAddressKO": {}
+  }
 }

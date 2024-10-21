@@ -8,6 +8,7 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { Footer } from "./Footer";
 import { Header } from "./Header";
+import { isLocalHost } from "./Utils";
 import { DTFooter, DTGrow } from "./components/useStyles";
 
 export const Manual = () => {
@@ -24,8 +25,12 @@ export const Manual = () => {
                 <Typography variant="body1">
                     <List>
                     <ListItem> <ListItemText primary="The Main user Manual" /> <Link color="inherit" href="/UserManual.pdf" target="_blank" rel="noopener"> /UserManual.pdf</Link>{" "} </ListItem>
-                    <ListItem> <ListItemText primary="Backend Implementation Notes" /> file:///Users/robi/SRC/InternetComputer/gramberg/target/doc/backend/index.html  </ListItem>
-                    <ListItem> <ListItemText primary="Frontend Implementation Notes" />file:///Users/robi/SRC/InternetComputer/gramberg/src/frontend/public/JSdocs/index.html  </ListItem>
+                    {isLocalHost() ? (
+                        <>
+                    <ListItem> <ListItemText primary="Backend Implementation Notes (Cut&Paste in Browser)" /> file:///Users/robi/SRC/InternetComputer/gramberg/target/doc/backend/index.html  </ListItem>
+                    <ListItem> <ListItemText primary="Frontend Implementation Notes (Cut&Paste in Browser)" />file:///Users/robi/SRC/InternetComputer/gramberg/src/frontend/public/JSdocs/index.html  </ListItem>
+                        </>
+                    ) : null }
                     </List>
                 </Typography>
             </Container>

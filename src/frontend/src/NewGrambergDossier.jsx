@@ -72,7 +72,7 @@ export const NewDossier = () => {
     };
 
     const onSubmit = (vals) => {
-        if (asset === {}) {
+        if (asset == {}) {
             appAlert("File immagine non scelto");
             return;
         }
@@ -346,21 +346,27 @@ export const BatchInsert = () => {
                     console.log("onBatchSubmit dossier_insert: ", vals);
                     backendActor
                         .dossier_insert(JSON.stringify(vals))
-                        .then((Ok_data) => {
-                            console.error("OKKKK");
-                            console.log(Ok_data);
-                            console.log("dossier_insert no json returns: ", Ok_data);
-                            console.log("dossier_insert returns: ", JSON.stringify(Ok_data));
-                            const response = JSON.parse(Ok_data.Ok);
+                        .then((Ret_data) => {
+                        if ("Ok" in Ret_data) {
+                            console.log("Batch dossier_insert returns: ", Ret_data);
+                            const response = JSON.parse(Ret_data.Ok);
                             console.log(response);
                             if (response) {
                                 setDisabledButs(true);
                                 navigate("/dossier");
                             } else {
-                                console.error(response);
-                                alert(response.error);
+                                appAlert(response.error);
                                 setDisabledButs(false);
                             }
+                        } else {
+                            const err = Ret_data.Err;
+                            console.log("dossier_query Err response: ", err);
+                            const inner_err = err.CanisterError.message;
+                            if (inner_err.includes("not allowed")) {
+                                appAlert(err.CanisterError.message);
+                                navigate("/dossier");
+                            } else navigate("/selfdefineuser");
+                        }
                         })
                         .catch((error) => {
                             console.error("CATCH");

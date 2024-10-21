@@ -95,6 +95,7 @@ pub fn change_rbac(jstring: String) -> ExecResult {
     ic_cdk::println!("change rbac input: {jstring} ");
     let r: Rbac = serde_json::from_str(&jstring).unwrap();
 
+    rbac_verify("change_rbac".to_string(), "admin_ok".to_string())?;
     let caller = ic_cdk::caller();
     let principal = caller.to_string();
     let conn = ic_sqlite::CONN.lock().unwrap();
@@ -118,6 +119,7 @@ pub fn change_rbac(jstring: String) -> ExecResult {
 #[query]
 pub fn rbac_query() -> JsonResult {
     let mut res: Vec<Rbac> = Vec::new();
+    rbac_verify("change_rbac".to_string(), "admin_ok".to_string())?;
     let rbac_sql = format!("select id, principal, friendly_name, view_opera_ok, add_opera_ok, dna_mark_ok, add_dna_ok, admin_ok from rbac");
     ic_cdk::println!("Query: {rbac_sql} ");
     let conn = ic_sqlite::CONN.lock().unwrap();

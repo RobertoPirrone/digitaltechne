@@ -6,7 +6,7 @@ use ic_cdk::{query, update};
 use serde::{Deserialize, Serialize};
 
 use crate::my_utils::*;
-use crate::rbac::{check_caller, Rbac};
+use crate::rbac::{rbac_verify};
 
 /// Cartrdige holds only info about a DNA sample
 #[derive(Debug, Serialize, Deserialize)]
@@ -87,13 +87,7 @@ pub fn cartridge_insert(jv: String) -> ExecResult {
     ic_cdk::println!("cartridge_insert input: {jv} ");
     let d: Cartridge = serde_json::from_str(&jv).unwrap();
     let caller = ic_cdk::caller().to_string();
-    ic_cdk::println!("caller : {caller} ");
-    let checked_caller: Rbac = check_caller()?;
-    if !checked_caller.add_dna_ok {
-        return Err(MyError::CanisterError {
-            message: format!("{:?}", "cartridge_insert: user not allowed"),
-        });
-    }
+    rbac_verify("cartridge_insert".to_string(), "add_dna_ok".to_string())?;
     let conn = ic_sqlite::CONN.lock().unwrap();
 
     let sql = format!(

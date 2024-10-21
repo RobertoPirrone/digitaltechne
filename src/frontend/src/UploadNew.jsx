@@ -65,7 +65,7 @@ export const UploadNew = ({ asset, setAsset, assets, setAssets, setDisabledButs,
         const extension = name.pop();
         const fileName = [uuidv4(), extension].join(".");
         // const fileName = [name, width, height, extension].join(".");
-        console.error("detailsFromFile: ", JSON.stringify(file.name));
+        console.log("detailsFromFile: ", JSON.stringify(file.name));
         const original_filename = file.name;
         const file_size = file.size;
         const mimetype = mime.getType(original_filename);
@@ -90,10 +90,8 @@ export const UploadNew = ({ asset, setAsset, assets, setAssets, setDisabledButs,
                         return { key, fileName, width, height, original_filename, extension, file_size, mimetype };
                     }),
                 );
-                console.error("preawait");
                 await batch.commit({ onProgress: ({ current, total }) => setProgress(current / total) });
-                console.error("postawait");
-                console.error("items: ", JSON.stringify(items));
+                console.log("items: ", JSON.stringify(items));
 
                 const asset_ar = [];
                 items.forEach((item) => {

@@ -2,7 +2,7 @@
 import React, { useCallback } from "react";
 import { canisterId } from "../../declarations/uploads";
 
-import { MyCheckIcon} from "./components/MostComponents";
+import { MyCheckIcon } from "./components/MostComponents";
 
 /**
  * yyyy-mm-dd -> dd/mm/yyyy
@@ -16,7 +16,7 @@ export const dmy = (s) => {
 };
 
 /**
- * Json pretty print 
+ * Json pretty print
  *
  * @function
  * @param   {object} obj
@@ -45,7 +45,7 @@ export const isLocalHost = () => {
 };
 
 /**
- * URL prefix for the assrt images, handling local/mainnet 
+ * URL prefix for the assrt images, handling local/mainnet
  *
  * @function
  * @return  {string}            asset_prefix
@@ -89,14 +89,13 @@ export const prettyDate = (isoStamp, lang) => {
 };
 
 export const fillIconField = (field, headerName) => {
-    return  ({
+    return {
         flex: 1,
         headerName: headerName,
         field: field,
         renderCell: (params) => {
-            let field_value = eval(`params.row.${field}`);
-            return (<MyCheckIcon value={field_value} />)
-        }
-    });
+            const field_value = eval(`params.row.${field}`);
+            return <MyCheckIcon value={field_value} />;
+        },
+    };
 };
-

@@ -135,6 +135,7 @@
   "add_dna_nak": "You are not entitled to insert dna cartridges",
   "admin_nak": "You are not entitled to perform admin ops",
   "InsertedDNA": "DNA info correctly inserted",
+  "InsertedMark": "DNA mark correctly inserted",
   "SignIn": {
     "Label": null,
     "passwords differ": "Passwords do not match",

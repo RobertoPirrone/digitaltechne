@@ -75,7 +75,7 @@ export const CartridgeInsert = () => {
                 appAlert(error.message ? error.message : JSON.stringify(error));
                 navigate("/dossier");
             });
-    }, [backendActor, navigate]);
+    }, [backendActor, navigate, t, isLoading]);
 
     const gotXls = (e) => {
         console.log("gotXls: ");
@@ -100,9 +100,10 @@ export const CartridgeInsert = () => {
     const onSubmit = (vals) => {
         vals.uuid = uuidv4();
         vals.dna_text = csvText;
-        if (assets[0] === "") {
+        if (assets[0] === undefined) {
             vals.dna_file_asset = "NO file";
         } else {
+            console.log(assets[0]);
             vals.dna_file_asset = assets[0].key;
         }
         vals.lab_name = "Laboratorio CNR Catania";
@@ -149,7 +150,7 @@ export const CartridgeInsert = () => {
                         </Grid>
                         <Grid item xs={6}>
                             {" "}
-                            <UploadNew asset={assets[0]} assets={assets} show={true} accept={"application/pdf"} setAsset={setAsset} setAssets={setAssets} setDisabledButs={setDisabledButs} show={false} />
+                            <UploadNew asset={assets[0]} assets={assets} accept={"application/pdf"} setAsset={setAsset} setAssets={setAssets} setDisabledButs={setDisabledButs} show={false} />
                         </Grid>
                         <Grid item xs={12}>
                             {" "}

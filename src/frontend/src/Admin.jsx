@@ -23,14 +23,14 @@ const hasRole = () => {
 export const Admin = () => {
     const { backendActor, principal } = useAuth();
     const userInfo = "pippo";
-    const { t } = useTranslation(['translation', 'rbac']);
+    const { t } = useTranslation(["translation", "rbac"]);
     const navigate = useNavigate();
     const AdminRole = hasRole("Admin", userInfo);
     const LaboratoryRole = hasRole("Laboratory", userInfo);
     const OwnerRole = hasRole("Owner", userInfo);
     const UserRole = hasRole("User", userInfo);
     const [rbacs, setRbacs] = useState({});
-    let columns = [];
+    const columns = [];
 
     columns.push({ flex: 1, field: "friendly_name", headerName: t("rbac:friendly_name") });
     columns.push(fillIconField("add_dna_ok", t("rbac:add_dna_ok")));
@@ -38,20 +38,22 @@ export const Admin = () => {
     columns.push(fillIconField("add_opera_ok", t("rbac:add_opera_ok")));
     columns.push(fillIconField("view_opera_ok", t("rbac:view_opera_ok")));
     columns.push(fillIconField("admin_ok", t("rbac:admin_ok")));
-    columns.push({ flex: 1, field: "id", 
+    columns.push({
+        flex: 1,
+        field: "id",
         headerName: t("button"),
         renderCell: (params) => {
             return (
-               <Button
-                onClick={() => {
-                    navigate("/change_rbac", { state: { row: params.row }, replace: true });
-                }}
-                color="primary"
-                autoFocus>
-                {t("Modify")}
-            </Button>
-        )
-        }
+                <Button
+                    onClick={() => {
+                        navigate("/change_rbac", { state: { row: params.row }, replace: true });
+                    }}
+                    color="primary"
+                    autoFocus>
+                    {t("Modify")}
+                </Button>
+            );
+        },
     });
 
     useEffect(() => {
@@ -73,17 +75,16 @@ export const Admin = () => {
             .then((Ret_data) => {
                 console.log("rbac_query returns: ", Ret_data);
                 if ("Ok" in Ret_data) {
-                console.log("rbac_query Ok: ", Ret_data.Ok);
-                    let parsed = JSON.parse(Ret_data.Ok);
+                    console.log("rbac_query Ok: ", Ret_data.Ok);
+                    const parsed = JSON.parse(Ret_data.Ok);
                     console.log("Admin check_caller rbacs: ");
-                    console.log( parsed.rbacs);
+                    console.log(parsed.rbacs);
                     setRbacs(parsed.rbacs);
                 } else {
                     const err = Ret_data.Err;
                     console.log("Admin check_caller Err response: ", err);
                     console.error(err);
                     // appAlert(err.CanisterError.message);
-
                 }
             })
             .catch((error) => {

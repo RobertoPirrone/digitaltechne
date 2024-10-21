@@ -135,6 +135,7 @@
   "add_dna_nak": "Non puoi inserire i dati delle cartucce DNA",
   "admin_nak": "Non puoi svolgere attività di Amministratore",
   "InsertedDNA": "Le informazioni DNA sono state aggiunte regolarmente",
+  "InsertedMark": "Il marchio DNA è stato correttamente registrato",
   "SignIn": {
     "Label": null,
     "passwords differ": "Le password non coincidono",

@@ -142,20 +142,26 @@ export const CartridgeInsert = () => {
             <div className={DTRoot}>
                 <Container component="main" maxWidth="lg">
                     <Grid container spacing={2} direction="column" alignItems="center">
-                        <Grid item>
+                        <Grid item xs={12}>
                             <Typography variant="h3">{t("CartridgeInsert")}</Typography>
                         </Grid>
-                        <Grid item>
+                        <Grid item xs={12}>
                             <XlsFile setDisabledButs={setDisabledButs} setCsvText={setCsvText} setJsonText={setJsonText} />
                         </Grid>
-                        <Grid item>
-                            {t("DnaFilePdf")}
-                            <UploadNew asset={assets[0]} assets={assets} accept={"application/pdf"} setAsset={setAsset} setAssets={setAssets} setDisabledButs={setDisabledButs} show={false} />
+                        <Grid item xs={12}>
+                            <Grid container spacing={2} direction="row" alignItems="center">
+                                <Grid item xs={"auto"}>
+                                    {t("DnaFilePdf")}
+                                </Grid>
+                                <Grid item xs={"auto"}>
+                                    <UploadNew asset={assets[0]} assets={assets} accept={"application/pdf"} setAsset={setAsset} setAssets={setAssets} setDisabledButs={setDisabledButs} show={false} />
+                                </Grid>
+                            </Grid>
                         </Grid>
-                        <Grid item>
+                        <Grid item xs={12}>
                             <MyTextField name="note" label={t("note")} onChange={(e) => setNote(e.target.value)} />
                         </Grid>
-                        <Grid item>
+                        <Grid item xs={12}>
                             <form onSubmit={handleSubmit(onSubmit)}>
                                 <MostSubmitButton disabled={disabledButs} label={t("dossier:Inserisci")} />
                             </form>

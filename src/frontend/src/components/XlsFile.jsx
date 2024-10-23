@@ -16,7 +16,7 @@ import { MostCheckbox, MostSelect, MostSubmitButton, MostTextField, MyAutocomple
 import { DTFooter, DTGrow } from "./useStyles";
 import { DTRoot } from "./useStyles";
 
-export const XlsFile = ({ setCsvText, setJsonText, setDisabledButs, accept = ".xls,.xlsx", label = "XlsFileXls *", multiple = false, sheetIndex = 1 }) => {
+export const XlsFile = ({ setCsvText, setJsonText, setDisabledButs, accept = ".xls,.xlsx", label = "XlsFile *", multiple = false, sheetIndex = 1 }) => {
     const {
         control,
         register,
@@ -64,7 +64,7 @@ export const XlsFile = ({ setCsvText, setJsonText, setDisabledButs, accept = ".x
 
     return (
         <>
-            <span className="padding10">{label}</span>
+            <Typography style={{display: 'inline-block'}} variant="body4"><span className="padding10">{label}</span> </Typography>
             <MyUploadButton accept={accept} finish={gotXls} setDisabledButs={setDisabledButs} setUploadedFileName={setUploadedFileName} uploadedFileName={uploadedFileName} />
         </>
     );

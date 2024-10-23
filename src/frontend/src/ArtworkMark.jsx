@@ -15,7 +15,6 @@ import Grid from "@mui/material/Grid";
 import { backend } from "../../declarations/backend";
 import { Footer } from "./Footer";
 import { Header } from "./Header";
-import { Upload } from "./Upload";
 import { UploadNew } from "./UploadNew";
 import { useAuth } from "./auth/use-auth-client";
 import { DocData } from "./components/DocData";

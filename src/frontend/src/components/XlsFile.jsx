@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 import * as XLSX from "xlsx";
 
-import { MostCheckbox, MostSelect, MostSubmitButton, MostTextField, MyAutocomplete, MyCheckbox, MyTextField } from "./MostComponents";
+import { MostCheckbox, MostSelect, MostSubmitButton, MostTextField, MyAutocomplete, MyCheckbox, MyTextField, MyUploadButton } from "./MostComponents";
 import { DTFooter, DTGrow } from "./useStyles";
 import { DTRoot } from "./useStyles";
 
@@ -30,10 +30,12 @@ export const XlsFile = ({ setCsvText, setJsonText, setDisabledButs, accept = ".x
     const [searchele, setSearchele] = useState(false);
     const [note, setNote] = useState("");
     const [file, setFile] = useState(null);
+    const [uploadedFileName, setUploadedFileName] = useState("");
+    const [xlsFile, setXlsFile] = useState({});
 
-    const gotXls = (e) => {
+    const gotXls = (file) => {
         console.log("gotXls: ");
-        setFile(e.target.files[0]);
+        // setFile(e.target.files[0]);
         const reader = new FileReader();
         reader.onload = (e) => {
             console.log("gotXls onload: ");
@@ -56,21 +58,14 @@ export const XlsFile = ({ setCsvText, setJsonText, setDisabledButs, accept = ".x
             if (setDisabledButs) setDisabledButs(false);
             console.log("gotXls post post: ");
         };
-        reader.readAsBinaryString(e.target.files[0]);
+        console.log(file);
+        reader.readAsBinaryString(file);
     };
 
     return (
         <>
-            <Grid container spacing={1} alignItems="center">
-                <Grid item xs={6}>
-                    {" "}
-                    <span className="padding10">{label}</span>
-                </Grid>
-                <Grid item xs={6}>
-                    {" "}
-                    <input type="file" accept={accept} multiple={multiple} onChange={gotXls} />{" "}
-                </Grid>
-            </Grid>
+            <span className="padding10">{label}</span>
+            <MyUploadButton accept={accept} finish={gotXls} setDisabledButs={setDisabledButs} setUploadedFileName={setUploadedFileName} uploadedFileName={uploadedFileName} />
         </>
     );
 };

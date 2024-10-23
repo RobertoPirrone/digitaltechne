@@ -15,7 +15,6 @@ import { SpecializedSelect } from "./components/SpecializedSelect";
 import { backend } from "../../declarations/backend";
 import { Footer } from "./Footer";
 import { Header } from "./Header";
-import { Upload } from "./Upload";
 import { UploadNew } from "./UploadNew";
 import { appAlert } from "./Utils";
 import { useAuth } from "./auth/use-auth-client";

@@ -75,7 +75,7 @@ export const CartridgeInsert = () => {
                 appAlert(error.message ? error.message : JSON.stringify(error));
                 navigate("/dossier");
             });
-    }, [backendActor, navigate, t, isLoading]);
+    }, [backendActor, navigate, t]);
 
     const gotXls = (e) => {
         console.log("gotXls: ");
@@ -139,42 +139,30 @@ export const CartridgeInsert = () => {
     return (
         <>
             <Header />
-            <h1>{t("CartridgeInsert")}</h1>
-            <Container component="main" maxWidth="md">
-                <div className={DTRoot}>
-                    <Grid container spacing={1} alignItems="center">
-                        <XlsFile setDisabledButs={setDisabledButs} setCsvText={setCsvText} setJsonText={setJsonText} />
-                        <Grid item xs={6}>
-                            {" "}
-                            <span className="padding10">{t("DnaFilePdf")}</span>
+            <div className={DTRoot}>
+                <Container component="main" maxWidth="lg">
+                    <Grid container spacing={2} direction="column" alignItems="center">
+                        <Grid item>
+                            <Typography variant="h3">{t("CartridgeInsert")}</Typography>
                         </Grid>
-                        <Grid item xs={6}>
-                            {" "}
+                        <Grid item>
+                            <XlsFile setDisabledButs={setDisabledButs} setCsvText={setCsvText} setJsonText={setJsonText} />
+                        </Grid>
+                        <Grid item>
+                            {t("DnaFilePdf")}
                             <UploadNew asset={assets[0]} assets={assets} accept={"application/pdf"} setAsset={setAsset} setAssets={setAssets} setDisabledButs={setDisabledButs} show={false} />
                         </Grid>
-                        <Grid item xs={12}>
-                            {" "}
-                            &nbsp;{" "}
+                        <Grid item>
+                            <MyTextField name="note" label={t("note")} onChange={(e) => setNote(e.target.value)} />
+                        </Grid>
+                        <Grid item>
+                            <form onSubmit={handleSubmit(onSubmit)}>
+                                <MostSubmitButton disabled={disabledButs} label={t("dossier:Inserisci")} />
+                            </form>
                         </Grid>
                     </Grid>
-
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                        <Grid container spacing={1} alignItems="center">
-                            <Grid item xs={12}>
-                                {" "}
-                                <MyTextField name="note" label={t("note")} onChange={(e) => setNote(e.target.value)} />{" "}
-                            </Grid>
-
-                            <Grid item xs={12}>
-                                {" "}
-                                &nbsp;{" "}
-                            </Grid>
-
-                            <MostSubmitButton disabled={disabledButs} label={t("dossier:Inserisci")} />
-                        </Grid>
-                    </form>
-                </div>
-            </Container>
+                </Container>
+            </div>
             <Footer />
         </>
     );

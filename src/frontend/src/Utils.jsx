@@ -40,7 +40,7 @@ export const prettyJson = (obj, preformatted, nl2br) => {
 export const isLocalHost = () => {
     let isLocal = true;
     const host = window.location.host;
-    if (host.endsWith("icp0.io") || host.endsWith("mostapps.it") || host.endsWith("mostapps.ch")) isLocal = false;
+    if (host.endsWith("icp0.io") || host.endsWith("mostapps.it") || host.endsWith("digitaltechne.ch")) isLocal = false;
     return isLocal;
 };
 

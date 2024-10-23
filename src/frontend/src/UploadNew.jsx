@@ -94,7 +94,8 @@ export const UploadNew = ({ asset, setAsset, assets, setAssets, setDisabledButs,
                 console.log("items: ", JSON.stringify(items));
 
                 const asset_ar = [];
-                items.forEach((item) => {
+                let item = {};
+                for (item of items) {
                     asset_ar.push({
                         key: item.key,
                         fileName: item.fileName,
@@ -103,7 +104,7 @@ export const UploadNew = ({ asset, setAsset, assets, setAssets, setDisabledButs,
                         file_size: item.file_size,
                         mimetype: item.mimetype,
                     });
-                });
+                }
                 setAssets(asset_ar);
                 setDisabledButs(false);
             } catch (e) {
@@ -120,26 +121,19 @@ export const UploadNew = ({ asset, setAsset, assets, setAssets, setDisabledButs,
 
     return (
         <>
-            <Grid container spacing={1} alignItems="center">
-                <Grid item xs={6}>
-                    {" "}
-                    <span className="padding10">{label}</span>
-                </Grid>
-                <Grid item xs={6}>
-                    {" "}
-                    <button type="button" className={"App-upload"} onClick={uploadPhotos}>
-                        {" "}
-                        📂 {t("UploadFiles")}{" "}
-                    </button>
-                    {uploadedFileName ? uploadedFileName : "No file"}
-                    {show && assets && assets[0] ? (
-                        <div key={`${asset_pfx}${assets[0].key}`} className={"App-image"}>
-                            <img src={`${asset_pfx}${assets[0].key}`} width={"500"} loading={"lazy"} />
-                        </div>
-                    ) : null}
-                </Grid>
-                {progress !== null && <div className={"App-progress"}>{Math.round(progress * 100)}%</div>}
-            </Grid>
+            {" "}
+            <span className="padding10">{label}</span>{" "}
+            <button type="button" className={"App-upload"} onClick={uploadPhotos}>
+                {" "}
+                📂 {t("UploadFiles")}{" "}
+            </button>
+            {uploadedFileName ? uploadedFileName : "No file"}
+            {show && assets && assets[0] ? (
+                <div key={`${asset_pfx}${assets[0].key}`} className={"App-image"}>
+                    <img src={`${asset_pfx}${assets[0].key}`} width={"500"} loading={"lazy"} alt={`${assets[0].key}`} />
+                </div>
+            ) : null}
+            {progress !== null && <div className={"App-progress"}>{Math.round(progress * 100)}%</div>}
         </>
     );
 };

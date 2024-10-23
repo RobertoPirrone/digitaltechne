@@ -1,10 +1,3 @@
-/**
- * JSX Components with sane defaults
- * @module MostComponents
- * @todo eliminare le routines Most* non più usate, e documentare le rimanenti
- */
-import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
 import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
 import WarningIcon from "@mui/icons-material/Warning";
@@ -16,6 +9,13 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import TextField from "@mui/material/TextField";
 import React from "react";
 import { Controller } from "react-hook-form";
+/**
+ * JSX Components with sane defaults
+ * @module MostComponents
+ * @todo eliminare le routines Most* non più usate, e documentare le rimanenti
+ */
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import Select from "react-select";
 import { DTSubmit } from "./useStyles";
 export { WarningIcon } from "@mui/icons-material/Warning";
@@ -432,4 +432,30 @@ export const GoToHomePage = () => {
         navigate("/home");
     }, 100);
     return <div />;
+};
+
+const fakeButton = (accept, finish, setDisabledButs, setUploadedFileName) => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = accept;
+    input.multiple = true;
+    input.onchange = () => {
+        setUploadedFileName(input.files[0].name);
+        setDisabledButs(false);
+        finish(input.files[0]);
+    };
+    input.click();
+};
+
+export const MyUploadButton = ({ accept, finish, setDisabledButs, setUploadedFileName, uploadedFileName }) => {
+    const { t } = useTranslation();
+    return (
+        <>
+            <button type="button" className={"App-upload"} onClick={() => fakeButton(accept, finish, setDisabledButs, setUploadedFileName)}>
+                {" "}
+                📂 {t("UploadFile")}{" "}
+            </button>
+            {uploadedFileName ? uploadedFileName : "No file"}
+        </>
+    );
 };

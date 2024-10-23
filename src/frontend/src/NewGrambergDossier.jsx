@@ -428,28 +428,16 @@ export const BatchInsert = () => {
     return (
         <>
             <Header />
-            <h1>{t("BatchInsert")}</h1>
             <Container component="main" maxWidth="md">
                 <div className={DTRoot}>
-                    <Grid container spacing={1} alignItems="center">
-                        <XlsFile sheetIndex={0} setJsonText={setJsonText} setDisabledButs={setDisabledButs1} label={"Metadata file (.xlsx format)"} />
-                        <UploadNew assets={assets} show={false} setAssets={setAssets} setDisabledButs={setDisabledButs2} label={t("dossier:LoadJpgs")} />
-                        <Grid item xs={12}>
-                            {" "}
-                            &nbsp;{" "}
-                        </Grid>
+                    <Grid container direction="column" spacing={1} alignItems="center">
+                        <Grid item > <h1>{t("BatchInsert")}</h1> </Grid>
+                        <Grid item > <UploadNew assets={assets} show={false} setAssets={setAssets} setDisabledButs={setDisabledButs1} label={t("dossier:LoadJpgs")} /> </Grid>
+                        <Grid item > <XlsFile sheetIndex={0} setJsonText={setJsonText} setDisabledButs={setDisabledButs2} label={"Metadata file (.xlsx format)"} /> </Grid>
+                        <Grid item > <form onSubmit={handleSubmit(onBatchSubmit)}> 
+                            <MostSubmitButton disabled={!(!disabledButs1 && !disabledButs2)} label={t("dossier:Inserisci")} />
+                        </form> </Grid>
                     </Grid>
-
-                    <form onSubmit={handleSubmit(onBatchSubmit)}>
-                        <Grid container spacing={1} alignItems="center">
-                            <Grid item xs={12}>
-                                {" "}
-                                &nbsp;{" "}
-                            </Grid>
-
-                            <MostSubmitButton disabled={disabledButs1 && disabledButs2} label={t("dossier:Inserisci")} />
-                        </Grid>
-                    </form>
                 </div>
             </Container>
             <Footer />

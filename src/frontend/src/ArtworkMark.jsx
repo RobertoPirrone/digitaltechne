@@ -205,7 +205,7 @@ export const ArtworkMark = (props) => {
                 <div className={DTRoot}>
                     <Grid container spacing={1}>
                         <Grid item xs={12} spacing={1}>
-                            <img src={`${asset_pfx}${dossierInfo.icon_uri}`} width={200} />
+                            <img src={`${asset_pfx}${dossierInfo.icon_uri}`} width={200} alt={`${dossierInfo.icon_uri}`} />
                         </Grid>
 
                         <Grid item xs={6}>

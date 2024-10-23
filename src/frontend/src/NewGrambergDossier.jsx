@@ -301,7 +301,7 @@ export const BatchInsert = () => {
         vals.insert_time = new Date();
         vals.username = "pippo";
 
-        if (disabledButs1&&disabledButs2) return;
+        if (disabledButs1 && disabledButs2) return;
         setDisabledButs1(true);
         setDisabledButs2(true);
         console.log("onBatchSubmit vals: ", vals);

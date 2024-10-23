@@ -127,6 +127,7 @@ export const UploadNew = ({ asset, setAsset, assets, setAssets, setDisabledButs,
                 {" "}
                 📂 {t("UploadFiles")}{" "}
             </button>
+            {" "}
             {uploadedFileName ? uploadedFileName : "No file"}
             {show && assets && assets[0] ? (
                 <div key={`${asset_pfx}${assets[0].key}`} className={"App-image"}>

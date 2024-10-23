@@ -83,7 +83,7 @@ export const NewDossier = () => {
                 appAlert(error.message ? error.message : JSON.stringify(error));
                 navigate("/dossier");
             });
-    }, [backendActor, navigate, t, isLoading]);
+    }, [backendActor, navigate, t]);
 
     const actionChange = (e, el) => {
         console.error(JSON.stringify(el));
@@ -261,6 +261,8 @@ export const BatchInsert = () => {
     const { t } = useTranslation(["translation", "dossier", "tipotecnica", "tiposupporto", "tipofirma"]);
     const [isLoading, setIsLoading] = useState(false);
     const [disabledButs, setDisabledButs] = useState(true);
+    const [disabledButs1, setDisabledButs1] = useState(true);
+    const [disabledButs2, setDisabledButs2] = useState(true);
     const [csvText, setCsvText] = useState("");
     const [jsonText, setJsonText] = useState("");
     const [files, setFiles] = useState([]);
@@ -300,8 +302,9 @@ export const BatchInsert = () => {
         vals.insert_time = new Date();
         vals.username = "pippo";
 
-        if (disabledButs) return;
-        setDisabledButs(true);
+        if (disabledButs1&&disabledButs2) return;
+        setDisabledButs1(true);
+        setDisabledButs2(true);
         console.log("onBatchSubmit vals: ", vals);
         console.log("onBatchSubmit json: ", jsonText);
         let r = {};
@@ -374,7 +377,7 @@ export const BatchInsert = () => {
             vals.tiposupporto = "PAPER";
             vals.private = false;
 
-            setDisabledButs(true);
+            // setDisabledButs(true);
             // console.log("onBatchSubmit dossier_insert: ");
             // console.log("onBatchSubmit dossier_insert: ", vals);
 
@@ -401,8 +404,8 @@ export const BatchInsert = () => {
                                 if (response) {
                                     navigate("/dossier");
                                 } else {
-                                    appAlert(response.error);
-                                    setDisabledButs(false);
+                                    appAlert(Ret_data);
+                                    navigate("/home");
                                 }
                             } else {
                                 const err = Ret_data.Err;
@@ -410,19 +413,17 @@ export const BatchInsert = () => {
                                 const inner_err = err.CanisterError.message;
                                 if (inner_err.includes("not allowed")) {
                                     appAlert(err.CanisterError.message);
-                                    navigate("/dossier");
+                                    navigate("/home");
                                 } else navigate("/selfdefineuser");
                             }
                         })
                         .catch((error) => {
                             console.error("CATCH");
                             appAlert(error.message ? error.message : JSON.stringify(error));
-                            setDisabledButs(false);
                         });
                 }
             }
         }
-        setDisabledButs(false);
     };
 
     return (
@@ -432,8 +433,8 @@ export const BatchInsert = () => {
             <Container component="main" maxWidth="md">
                 <div className={DTRoot}>
                     <Grid container spacing={1} alignItems="center">
-                        <XlsFile sheetIndex={0} setJsonText={setJsonText} label={"Metadata file (.xlsx format)"} />
-                        <UploadNew assets={assets} show={false} setAssets={setAssets} setDisabledButs={setDisabledButs} label={t("dossier:LoadJpgs")} />
+                        <XlsFile sheetIndex={0} setJsonText={setJsonText} setDisabledButs={setDisabledButs1} label={"Metadata file (.xlsx format)"} />
+                        <UploadNew assets={assets} show={false} setAssets={setAssets} setDisabledButs={setDisabledButs2} label={t("dossier:LoadJpgs")} />
                         <Grid item xs={12}>
                             {" "}
                             &nbsp;{" "}
@@ -447,7 +448,7 @@ export const BatchInsert = () => {
                                 &nbsp;{" "}
                             </Grid>
 
-                            <MostSubmitButton disabled={disabledButs} label={t("dossier:Inserisci")} />
+                            <MostSubmitButton disabled={disabledButs1 && disabledButs2} label={t("dossier:Inserisci")} />
                         </Grid>
                     </form>
                 </div>

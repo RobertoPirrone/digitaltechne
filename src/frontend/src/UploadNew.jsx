@@ -1,6 +1,7 @@
 import { HttpAgent } from "@dfinity/agent";
 import { AssetManager } from "@dfinity/assets";
 import { Ed25519KeyIdentity } from "@dfinity/identity";
+import CircularProgress from "@mui/material/CircularProgress";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import mime from "mime";
@@ -119,21 +120,23 @@ export const UploadNew = ({ asset, setAsset, assets, setAssets, setDisabledButs,
         input.click();
     };
 
+    console.log(assets);
+    console.log(assets[0]);
     return (
         <>
             {" "}
             <span className="padding10">{label}</span>{" "}
             <button type="button" className={"App-upload"} onClick={uploadPhotos}>
                 {" "}
-                📂 {t("UploadFiles")}{" "}
-            </button>
-            {" "}
+                📂 {t("UploadFiles")}
+            </button>{" "}
             {uploadedFileName ? uploadedFileName : "No file"}
-            {show && assets && assets[0] ? (
+            {show && assets[0].key ? (
                 <div key={`${asset_pfx}${assets[0].key}`} className={"App-image"}>
                     <img src={`${asset_pfx}${assets[0].key}`} width={"500"} loading={"lazy"} alt={`${assets[0].key}`} />
                 </div>
             ) : null}
+            <Typography>&nbsp;</Typography>
             {progress !== null && <div className={"App-progress"}>{Math.round(progress * 100)}%</div>}
         </>
     );

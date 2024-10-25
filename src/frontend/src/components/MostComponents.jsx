@@ -6,6 +6,7 @@ import Button from "@mui/material/Button";
 import Checkbox from "@mui/material/Checkbox";
 import CircularProgress from "@mui/material/CircularProgress";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import React from "react";
 import { Controller } from "react-hook-form";
@@ -398,16 +399,39 @@ export const MyTextField = ({
     fullWidth = true,
     margin = "dense",
     onChange,
+    errors,
     type = "text",
     variant = "outlined",
     //variant,
-    required, // serve per fare aggiungere * al campo obbligatorio, oppure se si usano controlli del browser togliendo noValidate dalla form
+    required = false, // serve per fare aggiungere * al campo obbligatorio, oppure se si usano controlli del browser togliendo noValidate dalla form
+    inputProps,
     InputProps,
     value,
     disabled = false,
     register, // se si vuole avere required gestito da form react bisogna passare register={register({ required: true })}
 }) => {
-    return <TextField onChange={onChange} name={name} label={label} type={type} id={name} value={value} disabled={disabled} />;
+    console.log(register);
+    if (register) {
+        register = register(name);
+        if (required) register.required = true;
+    }
+    console.log("register:", register);
+    return (
+        <>
+            <Grid item>
+                <TextField 
+                    required={required} 
+                    inputRef={register} 
+                    name={name} 
+                    label={label} 
+                    type={type} 
+                    id={name} 
+                    inputProps={inputProps}
+                    value={value} disabled={disabled} InputProps={InputProps} fullWidth={fullWidth} />
+                {errors?.[name] && <div className="formFieldError">{errors[name].type === "required" ? t("campo obbligatorio") : errors[name].type === "min" ? t("form errors min") : errors[name].type === "max" ? t("form errors max") : `Error ${errors[name].type}`}</div>}
+            </Grid>
+        </>
+    );
 };
 
 export const MyCheckIcon = ({ value }) => {
@@ -454,8 +478,7 @@ export const MyUploadButton = ({ accept, finish, setDisabledButs, setUploadedFil
             <button type="button" className={"App-upload"} onClick={() => fakeButton(accept, finish, setDisabledButs, setUploadedFileName)}>
                 {" "}
                 📂 {t("UploadFile")}{" "}
-            </button>
-            {" "}
+            </button>{" "}
             {uploadedFileName ? uploadedFileName : "No file"}
         </>
     );

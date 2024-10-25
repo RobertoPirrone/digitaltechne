@@ -1,4 +1,5 @@
 import Autocomplete from "@mui/material/Autocomplete";
+import CircularProgress from '@mui/material/CircularProgress';
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
@@ -34,6 +35,7 @@ export const NewDossier = () => {
     } = useForm();
     const [disabledButs, setDisabledButs] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
+    const [isUpLoading, setIsUpLoading] = useState(false);
     const [newDossierInfo, setNewDossierInfo] = useState({}); //pull down & C.
     const [searchele, setSearchele] = useState(false);
     const [lastInsert, setLastInsert] = useState(null);
@@ -44,12 +46,12 @@ export const NewDossier = () => {
     const [asset, setAsset] = useState({});
     const [assets, setAssets] = useState([{}]);
     const [privateDossier, setPrivateDossier] = useState(false);
-    const [nomeOpera, setNomeOpera] = useState("");
+//    const [nomeOpera, setNomeOpera] = useState("");
     const [tipoOpera, setTipoOpera] = useState("");
     const [luogoOpera, setLuogoOpera] = useState("");
     const [autore, setAutore] = useState("");
     const [tipotecnica, setTipotecnica] = useState("");
-    const [annoopera, setAnnoopera] = useState(1900);
+    const [annoopera, setAnnoopera] = useState("");
     const [numero_totale_copie, setNumero_totale_copie] = useState(0);
     const [dimensions, setDimensions] = useState("");
     const [tiposupporto, setTiposupporto] = useState("");
@@ -93,13 +95,31 @@ export const NewDossier = () => {
         setLastInsert({ what: what, id: id });
     };
 
-    const onSubmit = async (vals) => {
+    const onSubmit = (vals) => {
+        console.log("VALS");
+        console.log(vals);
+
         const tech = "";
         let seq = "";
         let master_uuid = "";
         let tipofirma = "";
         let max_cnt = 0;
 
+        let missing_elements = [];
+        let need_ele = null;
+        let content = "";
+        for (need_ele in ["annoopera", "nomeOpera", "tipotecnica", "copieFirmate", "copieNonFirmate", "copiePdA"] ) {
+
+            content = eval(`${need_ele}`)
+            console.log(need_ele, content);
+            if (content  === "") missing_elements.push(need_ele);
+        };
+        appAlert(missing_elements);
+        console.log(missing_elements.length);
+        if (missing_elements.length != 0) {
+            appAlert("missing elements: ",JSON.stringify(missing_elements));
+            abort();
+        }
         vals.uuid = uuidv4();
         master_uuid = vals.uuid;
         vals.ora_inserimento = new Date();
@@ -118,6 +138,7 @@ export const NewDossier = () => {
         }
         vals.icon_uri = assets[0].key;
         setDisabledButs(true);
+        setIsUpLoading(true);
         console.log("onSubmit: ", JSON.stringify(vals));
         for (tipofirma of ["SIGNED", "NOT_SIGNED", "ARTIST_PROOF"]) {
             if (tipofirma === "SIGNED") {
@@ -136,6 +157,7 @@ export const NewDossier = () => {
                 backendActor
                     .dossier_insert(JSON.stringify(vals))
                     .then((Ret_data) => {
+                        setIsUpLoading(false);
                         if ("Ok" in Ret_data) {
                             console.log("dossier_insert no json returns: ", Ret_data);
                             const response = JSON.parse(Ret_data.Ok);
@@ -188,58 +210,28 @@ export const NewDossier = () => {
             )}
             <Container component="main" maxWidth="md">
                 <div className={DTRoot}>
+
                     <UploadNew assets={assets} show={true} asset={assets[0]} setAssets={setAssets} setDisabledButs={setDisabledButs} label={t("dossier:LoadJpgs")} />
-
                     <form onSubmit={handleSubmit(onSubmit)}>
-                        <Grid container spacing={1} alignItems="center">
-                            <Grid item xs={12}>
-                                {" "}
-                                <MyTextField name="nomeopera" required={true} label={t("dossier:nomeopera")} onChange={(e) => setNomeOpera(e.target.value)} />{" "}
-                            </Grid>
-                            <Grid item xs={12}>
-                                {" "}
-                                <SpecializedSelect defaultValue={""} name="tipotecnica" label={t("tipotecnica:Label")} what={"tipotecnica"} onChange={(e, v) => setTipotecnica(e.target.value)} />{" "}
-                            </Grid>
-                            <Grid item xs={12}>
-                                {" "}
-                                <MyTextField name="annoopera" required={true} label={t("dossier:AnnoOpera")} onChange={(e) => setAnnoopera(e.target.value)} />{" "}
-                            </Grid>
-                            <Grid item xs={12}>
-                                {" "}
-                                <MyTextField name="numero_totale_copie" required={true} label={t("dossier:NumeroTotaleCopie")} onChange={(e) => setNumero_totale_copie(e.target.value)} />{" "}
-                            </Grid>
-                            <Grid item xs={12}>
-                                {" "}
-                                <MyTextField name="copie_firmate" required={true} label={t("dossier:CopieFirmate")} onChange={(e) => setCopieFirmate(e.target.value)} />{" "}
-                            </Grid>
-                            <Grid item xs={12}>
-                                {" "}
-                                <MyTextField name="copie_non_firmate" required={true} label={t("dossier:CopieNonFirmate")} onChange={(e) => setCopieNonFirmate(e.target.value)} />{" "}
-                            </Grid>
-                            <Grid item xs={12}>
-                                {" "}
-                                <MyTextField name="copie_PdA" required={true} label={t("dossier:CopiePdA")} onChange={(e) => setCopiePdA(e.target.value)} />{" "}
-                            </Grid>
-                            <Grid item xs={12}>
-                                {" "}
-                                <MyTextField name="dimensions" required={true} label={t("dossier:dimensions")} onChange={(e) => setDimensions(e.target.value)} />{" "}
-                            </Grid>
-                            <Grid item xs={12}>
-                                {" "}
-                                <SpecializedSelect defaultValue={""} name="tiposupporto" label={t("tiposupporto:Label")} what={"tiposupporto"} onChange={(e, v) => setTiposupporto(e.target.value)} />{" "}
-                            </Grid>
-
-                            <Grid item xs={12}>
-                                {" "}
-                                <Typography>Private</Typography> <MyCheckbox defaultChecked={false} onChange={(e, v) => setPrivateDossier(v.label)} />{" "}
-                            </Grid>
-                            <Grid item xs={12}>
+                        <Grid container direction="column" spacing={1} >
+                            <MyTextField name="nomeopera" required={true} register={register} errors={errors} label={t("dossier:nomeopera")} inputProps={{ maxLength: 4 }} />
+                            <SpecializedSelect defaultValue={""} name="tipotecnica" label={t("tipotecnica:Label")} what={"tipotecnica"} onChange={(e, v) => setTipotecnica(e.target.value)} />
+                            <MyTextField name="annoopera" required={true} label={t("dossier:AnnoOpera")} onChange={(e) => setAnnoopera(e.target.value)} />
+                            <MyTextField name="numero_totale_copie" required={true} label={t("dossier:NumeroTotaleCopie")} onChange={(e) => setNumero_totale_copie(e.target.value)} />
+                            <MyTextField name="copie_firmate" required={true} label={t("dossier:CopieFirmate")} onChange={(e) => setCopieFirmate(e.target.value)} />
+                            <MyTextField name="copie_non_firmate" required={true} label={t("dossier:CopieNonFirmate")} onChange={(e) => setCopieNonFirmate(e.target.value)} />
+                            <MyTextField name="copie_PdA" required={true} label={t("dossier:CopiePdA")} onChange={(e) => setCopiePdA(e.target.value)} />
+                            <MyTextField name="dimensions" required={true} label={t("dossier:dimensions")} onChange={(e) => setDimensions(e.target.value)} />
+                            <SpecializedSelect defaultValue={""} name="tiposupporto" label={t("tiposupporto:Label")} what={"tiposupporto"} onChange={(e, v) => setTiposupporto(e.target.value)} />
+                            <Typography display="inline">Private</Typography> <MyCheckbox defaultChecked={false} onChange={(e, v) => setPrivateDossier(v.label)} />
+                            <Grid item >
                                 {" "}
                                 &nbsp;{" "}
                             </Grid>
                             <MostSubmitButton disabled={disabledButs} label={t("dossier:Inserisci")} />
                         </Grid>
                     </form>
+                    {isUpLoading ? <CircularProgress /> : null}
                 </div>
             </Container>
             <Footer />

@@ -14,6 +14,7 @@
 
 import { FormControl } from "@mui/base/FormControl";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import Grid from "@mui/material/Grid";
 import InputLabel from "@mui/material/InputLabel";
 import ListSubheader from "@mui/material/ListSubheader";
 import MenuItem from "@mui/material/MenuItem";
@@ -63,7 +64,7 @@ const ComputeSelectRows = ({ what, label, defaultValue, onChange }) => {
         <>
             <FormControl sx={{ m: 1, minWidth: 120 }}>
                 <InputLabel htmlFor="grouped-select"> {label} </InputLabel>
-                <Select defaultValue={defaultValue} label={label} onChange={onChange}>
+                <Select fullWidth defaultValue={defaultValue} label={label} onChange={onChange}>
                     <option aria-label="None" value="" />
                     {rows}
                 </Select>
@@ -84,5 +85,9 @@ const ComputeSelectRows = ({ what, label, defaultValue, onChange }) => {
  * @example <SpecializedSelect defaultValue={""} name="tiposupporto" label={t("tiposupporto:Label")} what={"tiposupporto"} onChange={(e, v) => setTiposupporto(e.target.value)} />
  */
 export const SpecializedSelect = ({ name, onChange, label, what, defaultValue, language = "it" }) => {
-    return <ComputeSelectRows what={what} label={label} defaultValue={defaultValue} onChange={onChange} />;
+    return (
+        <Grid item>
+                <ComputeSelectRows what={what} label={label} defaultValue={defaultValue} onChange={onChange} />
+        </Grid>
+    )
 };

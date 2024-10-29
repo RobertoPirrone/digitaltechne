@@ -1,9 +1,11 @@
 //! Dossier/ Opera handling, modifed for Liliana Gramberg's Archive
-extern crate ic_cdk_macros;
-extern crate serde;
+// extern crate ic_cdk_macros;
+// extern crate serde;
 use candid::CandidType;
 use ic_cdk::{query, update};
 use serde::{Deserialize, Serialize};
+//use simple_logger::SimpleLogger;
+use logcall::logcall;
 
 use crate::my_utils::*;
 use crate::rbac::{rbac_verify};
@@ -145,6 +147,7 @@ pub fn dossier_struct_query(sql: String) -> Vec<Dossier> {
 ///
 /// offset and limit parameters are honored, although pagination is usually done in the forntend code
 #[query]
+#[logcall("error")]
 pub fn dossier_query(params: QueryParams) -> JsonResult {
     let caller = ic_cdk::caller().to_string();
     rbac_verify("dossier_query".to_string(), "view_opera_ok".to_string())?;
@@ -170,6 +173,7 @@ pub fn dossier_query(params: QueryParams) -> JsonResult {
 
 /// insert a new opera
 #[update]
+#[logcall("error")]
 pub fn dossier_insert(jv: String) -> ExecResult {
     ic_cdk::println!("dossier_insert input: {jv} ");
     rbac_verify("dossier_query".to_string(), "add_opera_ok".to_string())?;
@@ -185,7 +189,7 @@ pub fn dossier_insert(jv: String) -> ExecResult {
     return match conn.execute(&sql, []) {
         Ok(e) => Ok(format!("{:?}", e)),
         Err(err) => Err(MyError::CanisterError {
-            message: format!("{:?}", err),
+            message: format!("dossier_insert Error: {:?}", err),
         }),
     };
 }

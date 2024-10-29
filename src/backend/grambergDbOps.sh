@@ -112,7 +112,6 @@ fields='
     ora_inserimento TEXT NOT NULL,                     
     title TEXT NOT NULL,                     
     versione INTEGER,
-    dossieropera_id INTEGER NOT NULL,                           
     filename TEXT NOT NULL,                           
     filesize INTEGER,
     mimetype TEXT NOT NULL,                           

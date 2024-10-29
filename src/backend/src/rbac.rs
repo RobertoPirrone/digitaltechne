@@ -33,7 +33,7 @@ pub fn check_caller() -> CheckResult {
     // The anonymous principal is not allowed to interact with canister.
     // ic_cdk::println!("caller: {caller}, anon {:?} ", Principal::anonymous().to_string());
     let rbac_sql = format!("select id, principal, friendly_name, view_opera_ok, add_opera_ok, dna_mark_ok, add_dna_ok, admin_ok from rbac where principal = {:?}", caller.to_string());
-    ic_cdk::println!("Query: {rbac_sql} ");
+    // ic_cdk::println!("Query: {rbac_sql} ");
     let conn = ic_sqlite::CONN.lock().unwrap();
     let mut stmt = conn.prepare(&rbac_sql).unwrap();
     let mut rows = stmt.query([]).unwrap();
@@ -73,7 +73,6 @@ pub fn insert_caller(friendly_name: String) -> ExecResult {
     let caller = ic_cdk::caller();
     let principal = caller.to_string();
     let conn = ic_sqlite::CONN.lock().unwrap();
-    ic_cdk::println!("insert_caller");
     let rbac_insert_sql = format!(
         "insert into rbac \
                 (principal, friendly_name, view_opera_ok, add_opera_ok, dna_mark_ok, add_dna_ok, admin_ok) 
@@ -99,7 +98,6 @@ pub fn change_rbac(jstring: String) -> ExecResult {
     let caller = ic_cdk::caller();
     let principal = caller.to_string();
     let conn = ic_sqlite::CONN.lock().unwrap();
-    ic_cdk::println!("insert_caller");
     let change_rbac_sql = format!(
         "update rbac set \
             view_opera_ok = {}, add_opera_ok = {}, dna_mark_ok = {}, add_dna_ok = {}, admin_ok = {} 
@@ -121,7 +119,7 @@ pub fn rbac_query() -> JsonResult {
     let mut res: Vec<Rbac> = Vec::new();
     rbac_verify("change_rbac".to_string(), "admin_ok".to_string())?;
     let rbac_sql = format!("select id, principal, friendly_name, view_opera_ok, add_opera_ok, dna_mark_ok, add_dna_ok, admin_ok from rbac");
-    ic_cdk::println!("Query: {rbac_sql} ");
+    // ic_cdk::println!("Query: {rbac_sql} ");
     let conn = ic_sqlite::CONN.lock().unwrap();
     let mut stmt = conn.prepare(&rbac_sql).unwrap();
     let mut rows = stmt.query([]).unwrap();

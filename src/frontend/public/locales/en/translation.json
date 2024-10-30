@@ -1,11 +1,10 @@
 {
-  "Premi OK per visualizzare la documentazione": "Press OK to view the documentation",
   "OK": "OK",
   "HomeWelcome": "Welcome",
   "Manuale Utente": "User Manual",
-  "Benvenuto": "Welcome to",
+  "Benvenuto": "Welcome to the ",
   "WelcomeTarget": "Liliana Gramberg's Archive",
-  "Benvenuto2": "based on DigitalTechne, a innovative solution for artwork certification",
+  "Benvenuto2": "'s Archive, based on DigitalTechne, a innovative solution for artwork certification",
   "ToKnowMore2": "To know more about DigitalTechne solutions, please go to our ",
   "SiteName": "site ",
   "ToKnowMore3": " .  You can learn what our solution does, and discover the innovative technologies behind it. ",
@@ -136,16 +135,7 @@
   "admin_nak": "You are not entitled to perform admin ops",
   "InsertedDNA": "DNA info correctly inserted",
   "InsertedMark": "DNA mark correctly inserted",
-  "SignIn": {
-    "Label": null,
-    "passwords differ": "Passwords do not match",
-    "Username": "Username",
-    "Register": "SIGN IN",
-    "password2": "Repeat password",
-    "Sign In": "Sign In using Internet Identity",
-    "Remember me": "remember me",
-    "Forgot password?": "Forgot password?",
-    "Don't have an account? Sign Up": "First time coming in? Sign in",
-    "Already have an account? Sign in": "Are you already registered? Enter"
-  }
+  "ToKnowMoreArtist": "For an introduction to the ",
+  "ToKnowMoreArtist2": "'s production,  please refer to the official ",
+  "SignIn": null
 }

@@ -1,11 +1,10 @@
 {
-  "Premi OK per visualizzare la documentazione": "Premi OK per visualizzare la documentazione",
   "OK": "OK",
   "HomeWelcome": "Benvenuto",
   "Manuale Utente": "Manuale Utente",
-  "Benvenuto": "Benvenuto nell’",
+  "Benvenuto": "Benvenuto nell’ Archivio ",
   "WelcomeTarget": "Archivio Liliana Gramberg",
-  "Benvenuto2": "basato su DigitalTechne, una soluzione innovativa per la certificatione delle opere d'arte",
+  "Benvenuto2": ", basato su DigitalTechne, una soluzione innovativa per la certificazione delle opere d'arte",
   "ToKnowMore2": "Per saperne di più, visita il nostro ",
   "SiteName": "sito ",
   "ToKnowMore3": " .  Potrai scoprire quello che fa la nostra applicazione, e approfondire l'utilizzo delle tecnologie innovative su cui è basata.",
@@ -136,16 +135,7 @@
   "admin_nak": "Non puoi svolgere attività di Amministratore",
   "InsertedDNA": "Le informazioni DNA sono state aggiunte regolarmente",
   "InsertedMark": "Il marchio DNA è stato correttamente registrato",
-  "SignIn": {
-    "Label": null,
-    "passwords differ": "Le password non coincidono",
-    "Username": "Username",
-    "Register": "REGISTRATI",
-    "password2": "Ripeti la password",
-    "Sign In": "ENTRA",
-    "Remember me": "Ricordami",
-    "Forgot password?": "Password dimenticata?",
-    "Don't have an account? Sign Up": "Prima volta che entri? Registrati",
-    "Already have an account? Sign in": "Sei già registrato? Entra"
-  }
+  "ToKnowMoreArtist": "Per una introduzione al lavoro di",
+  "ToKnowMoreArtist2": " consultare il sito ufficiale",
+  "SignIn": null
 }

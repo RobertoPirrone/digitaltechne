@@ -17,7 +17,8 @@ function Login() {
     const { t, i18n } = useTranslation();
     const infoUrl = "/html/MISC/first_info.html";
     console.log("Login, isAuthenticated: ", isAuthenticated);
-    const logo = useContext(GlobalContext).globalOptions.logo;
+    const logo = useContext(GlobalContext).logo;
+    const autore = useContext(GlobalContext).autore;
 
     return (
         <>
@@ -28,8 +29,7 @@ function Login() {
                     <div className={DTPaper}>
                         <img src={logo} xwidth={400} className="XXXApp-logo" alt="logo" />
                         <Typography component="h1" variant="h5">
-                            {" "}
-                            {t("Liliana Gramberg's Artwork Archive")}{" "}
+                            {`${autore} ${t("Artwork Archive")}`}
                         </Typography>
                         <div className="w-1/2 mb-4">
                             <MostSubmitButton onClick={login} className="makeStyles-submit-4" label={t("SignIn.Sign In")} />

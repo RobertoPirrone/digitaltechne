@@ -8,13 +8,14 @@ import { ArtworkMark } from "./ArtworkMark";
 import { CartridgeInsert } from "./CartridgeInsert";
 import { ChangeRbac } from "./ChangeRbac";
 import { Dossier } from "./Dossier";
-import { DossierDetail } from "./DossierDetailGramberg";
+// import { DossierDetail } from "./DossierDetailGramberg";
 import { Home } from "./Home";
+import { GlobalProvider, GlobalContext } from "./Global";
 import { JsonCompare } from "./JsonCompare";
-import { LandingPage } from "./LandingPage";
+// import { LandingPage } from "./LandingPage";
 import { Manual } from "./Manual";
 import { NewDocument } from "./NewDocument";
-import { BatchInsert, NewDossier } from "./NewGrambergDossier";
+// import { BatchInsert, NewDossier } from "./NewGrambergDossier";
 import { Purchase } from "./Purchase";
 import { SelfDefineUser } from "./SelfDefineUser";
 // import { UserRoles } from "./UserRoles";
@@ -27,14 +28,45 @@ import { AuthProvider, useAuth } from "./auth/use-auth-client";
 
 import { backend } from "declarations/backend";
 
+let app = process.env.DFX_APPLICATION;
+
+let mod, LandingPage, DossierDetail, BatchInsert, NewDossier;
+switch (app) {
+    case 'gramberg':
+        mod = await import ("./LandingPageGramberg.jsx");
+        LandingPage = mod.LandingPage ;
+        mod = await import ("./DossierDetailGramberg.jsx");
+        DossierDetail = mod.DossierDetail;
+        mod = await import ("./NewDossierGramberg.jsx");
+        BatchInsert = mod.BatchInsert;
+        NewDossier = mod.NewDossier;
+        break;
+    case 'valsecchi':
+        mod = await import ("./LandingPageValsecchi.jsx");
+        LandingPage = mod.LandingPage ;
+        mod = await import ("./DossierDetailValsecchi.jsx");
+        DossierDetail = mod.DossierDetail;
+        mod = await import ("./NewDossierValsecchi.jsx");
+        BatchInsert = mod.BatchInsert;
+        NewDossier = mod.NewDossier;
+        break;
+    default:
+        const err = `Unknown application ${app}`;
+        alert(err);
+        throw new Error(err);
+}
+
 function Loading() {
     return <h2>🌀 Loading...</h2>;
 }
 
 function App() {
     const { isAuthenticated, identity } = useAuth();
+    console.error(process.env.DFX_APPLICATION);
+    console.error(process.env);
 
     return (
+        <GlobalProvider>
         <ThemeProvider theme={theme}>
             <div className="App">
                 {isAuthenticated ? (
@@ -67,6 +99,7 @@ function App() {
                 )}
             </div>
         </ThemeProvider>
+        </GlobalProvider>
     );
 }
 export default () => (

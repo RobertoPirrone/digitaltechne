@@ -1,47 +1,53 @@
-import React from "react";
-import { useTranslation, Trans } from 'react-i18next';
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+import React, { useContext } from "react";
+import { Trans, useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
-import { useAuth } from "./use-auth-client";
+import { GlobalContext } from "../Global";
 import { Home } from "../Home";
-import { DTPaper } from '../components/useStyles';
-import { MostSubmitButton } from '../components/MostComponents';
-import logo from '/Liliana Gramberg.jpg';
+import { MostSubmitButton } from "../components/MostComponents";
+import { DTPaper } from "../components/useStyles";
+import { useAuth } from "./use-auth-client";
+// import logo from '/Liliana Gramberg.jpg';
 // import logo from '/DT-noalpha.png';
 
 function Login() {
-  const { isAuthenticated, login } = useAuth();
-  const { t, i18n } = useTranslation();
-  const infoUrl = "/html/MISC/first_info.html";
-  console.log("Login, isAuthenticated: ", isAuthenticated );
+    const { isAuthenticated, login } = useAuth();
+    const { t, i18n } = useTranslation();
+    const infoUrl = "/html/MISC/first_info.html";
+    console.log("Login, isAuthenticated: ", isAuthenticated);
+    const logo = useContext(GlobalContext).globalOptions.logo;
 
-  return (
-      <>
-      { isAuthenticated  ? (
-          <Home /> ) : (
-    <Container component="main" maxWidth="xs">
-      <div className={DTPaper}>
-        <img src={logo} xwidth={400} className="XXXApp-logo" alt="logo" />
-        <Typography component="h1" variant="h5"> {t("Liliana Gramberg's Artwork Archive")} </Typography>
-        <div className="w-1/2 mb-4"> 
-          <MostSubmitButton onClick={login} className="makeStyles-submit-4" label={t('SignIn.Sign In')}/>
-        </div>
-          <Grid container>
-            <br />
-            <br />
-            <Grid item xs={12}>
-                <a href={infoUrl} rel="noreferrer">
-                {t('Clicca qui per help e informazioni')}
-              </a>
-            </Grid>
-          </Grid>
-      </div>
-    </Container>
-          )}
-      </>
-  );
+    return (
+        <>
+            {isAuthenticated ? (
+                <Home />
+            ) : (
+                <Container component="main" maxWidth="xs">
+                    <div className={DTPaper}>
+                        <img src={logo} xwidth={400} className="XXXApp-logo" alt="logo" />
+                        <Typography component="h1" variant="h5">
+                            {" "}
+                            {t("Liliana Gramberg's Artwork Archive")}{" "}
+                        </Typography>
+                        <div className="w-1/2 mb-4">
+                            <MostSubmitButton onClick={login} className="makeStyles-submit-4" label={t("SignIn.Sign In")} />
+                        </div>
+                        <Grid container>
+                            <br />
+                            <br />
+                            <Grid item xs={12}>
+                                <a href={infoUrl} rel="noreferrer">
+                                    {t("Clicca qui per help e informazioni")}
+                                </a>
+                            </Grid>
+                        </Grid>
+                    </div>
+                </Container>
+            )}
+        </>
+    );
 }
 
 export default Login;

@@ -38,11 +38,11 @@ const ComputeSelectRows = ({ what, label, defaultValue, onChange }) => {
     if (!ready) return "loading translations...";
     const obj2translate = `${what}:${what}_array`;
     const objs = t(obj2translate, { returnObjects: true });
-    console.log(JSON.stringify(objs));
+    // console.log(JSON.stringify(objs));
     let k = "";
     let lev2Label = "";
     for (const ele of Object.entries(objs)) {
-        console.log("ele: ", JSON.stringify(ele));
+        // console.log("ele: ", JSON.stringify(ele));
         const [key, value] = ele;
         if (value.constructor === Object) {
             lev2Label = value.Label;
@@ -57,8 +57,8 @@ const ComputeSelectRows = ({ what, label, defaultValue, onChange }) => {
         }
         rows.push( <MenuItem key={key} value={key}> {value} </MenuItem>,);
     }
-    console.log(`ROWS ${what}:  `);
-    console.log(rows);
+    // console.log(`ROWS ${what}:  `);
+    // console.log(rows);
 
     return (
         <>

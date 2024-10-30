@@ -21,6 +21,7 @@ import { appAlert } from "./Utils";
 import { useAuth } from "./auth/use-auth-client";
 import { DTRoot } from "./components/useStyles";
 import { useGlobalState } from "./state";
+import { GlobalContext } from "./Global";
 
 export const NewDossier = () => {
     const navigate = useNavigate();
@@ -59,7 +60,10 @@ export const NewDossier = () => {
     const [copieFirmate, setCopieFirmate] = useState(0);
     const [copieNonFirmate, setCopieNonFirmate] = useState(0);
     const [copiePdA, setCopiePdA] = useState(0);
+    const globalData = useContext(GlobalContext);
 
+    console.log('globalData');
+    console.log(globalData);
     useEffect(() => {
         if (isLoading) return;
         setIsLoading(true);

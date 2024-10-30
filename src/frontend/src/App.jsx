@@ -62,8 +62,7 @@ function Loading() {
 
 function App() {
     const { isAuthenticated, identity } = useAuth();
-    console.error(process.env.DFX_APPLICATION);
-    console.error(process.env);
+    // console.error(process.env);
 
     return (
         <GlobalProvider>

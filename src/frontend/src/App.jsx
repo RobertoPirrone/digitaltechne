@@ -12,7 +12,7 @@ import { Dossier } from "./Dossier";
 import { Home } from "./Home";
 import { GlobalProvider, GlobalContext } from "./Global";
 import { JsonCompare } from "./JsonCompare";
-// import { LandingPage } from "./LandingPage";
+import { LandingPage } from "./LandingPage";
 import { Manual } from "./Manual";
 import { NewDocument } from "./NewDocument";
 // import { BatchInsert, NewDossier } from "./NewGrambergDossier";
@@ -30,11 +30,9 @@ import { backend } from "declarations/backend";
 
 let app = process.env.DFX_APPLICATION;
 
-let mod, LandingPage, DossierDetail, BatchInsert, NewDossier;
+let mod, DossierDetail, BatchInsert, NewDossier;
 switch (app) {
     case 'gramberg':
-        mod = await import ("./LandingPageGramberg.jsx");
-        LandingPage = mod.LandingPage ;
         mod = await import ("./DossierDetailGramberg.jsx");
         DossierDetail = mod.DossierDetail;
         mod = await import ("./NewDossierGramberg.jsx");
@@ -42,8 +40,6 @@ switch (app) {
         NewDossier = mod.NewDossier;
         break;
     case 'valsecchi':
-        mod = await import ("./LandingPageValsecchi.jsx");
-        LandingPage = mod.LandingPage ;
         mod = await import ("./DossierDetailValsecchi.jsx");
         DossierDetail = mod.DossierDetail;
         mod = await import ("./NewDossierValsecchi.jsx");

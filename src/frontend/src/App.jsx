@@ -22,7 +22,7 @@ import { SelfDefineUser } from "./SelfDefineUser";
 import { VerifyMark } from "./VerifyMark";
 import Login from "./auth/Login";
 import { Logout } from "./auth/Logout";
-import { theme } from "./components/theme";
+// import { theme } from "./components/theme";
 import "./App.css";
 import { AuthProvider, useAuth } from "./auth/use-auth-client";
 
@@ -30,7 +30,7 @@ import { backend } from "declarations/backend";
 
 let app = process.env.DFX_APPLICATION;
 
-let mod, DossierDetail, BatchInsert, NewDossier;
+let mod, theme, DossierDetail, BatchInsert, NewDossier;
 switch (app) {
     case 'gramberg':
         mod = await import ("./DossierDetailGramberg.jsx");
@@ -38,6 +38,8 @@ switch (app) {
         mod = await import ("./NewDossierGramberg.jsx");
         BatchInsert = mod.BatchInsert;
         NewDossier = mod.NewDossier;
+        mod = await import ("./components/themeGramberg.jsx");
+        theme = mod.theme;
         break;
     case 'valsecchi':
         mod = await import ("./DossierDetailValsecchi.jsx");
@@ -45,6 +47,8 @@ switch (app) {
         mod = await import ("./NewDossierValsecchi.jsx");
         BatchInsert = mod.BatchInsert;
         NewDossier = mod.NewDossier;
+        mod = await import ("./components/themeValsecchi.jsx");
+        theme = mod.theme;
         break;
     default:
         const err = `Unknown application ${app}`;

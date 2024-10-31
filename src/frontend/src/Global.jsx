@@ -3,7 +3,7 @@ import React, { createContext, useState } from "react";
 
 const GlobalContext = createContext();
 
-const app = process.env.DFX_APPLICATION;
+const app = process.env.REACT_APP_APPLICATION;
 
 let application;
 let autore;

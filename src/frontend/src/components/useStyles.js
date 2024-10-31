@@ -8,7 +8,7 @@ export const DTGrow = styled("grow")({
 export const DTMenuButton = styled("menuButton")({
     marginRight: 1,
 });
-export const DTFooter = styled("menuButton")({
+export const DTFooter = styled("footer")({
     position: "fixed",
     bottom: "0",
     width: "100%",
@@ -16,7 +16,7 @@ export const DTFooter = styled("menuButton")({
     padding: theme.spacing(3, 2),
     whiteSpace: "nowrap",
     marginTop: "auto",
-    //background-color: '#f5f5f5'
+    // backgroundColor: 'black'
 });
 export const DTForm = styled("form")({
     width: "100%", // Fix IE 11 issue.

@@ -28,7 +28,8 @@ import { AuthProvider, useAuth } from "./auth/use-auth-client";
 
 import { backend } from "declarations/backend";
 
-let app = process.env.DFX_APPLICATION;
+let app = process.env.REACT_APP_APPLICATION;
+console.log(process.env);
 
 let mod, theme, DossierDetail, BatchInsert, NewDossier;
 switch (app) {

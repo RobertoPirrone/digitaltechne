@@ -30,7 +30,12 @@ export default defineConfig({
             },
         },
     },
-    plugins: [react(), environment("all", { prefix: "REACT_APP_" }), environment("all", { prefix: "CANISTER_" }), environment("all", { prefix: "DFX_" })],
+    plugins: [
+        react(), 
+        environment("all", { prefix: "REACT_APP_" }), 
+        environment("all", { prefix: "CANISTER_" }), 
+        environment("all", { prefix: "DFX_" })
+    ],
     resolve: {
         alias: [
             {

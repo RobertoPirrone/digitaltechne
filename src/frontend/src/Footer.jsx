@@ -18,16 +18,13 @@ function Copyright() {
 
 export const Footer = () => {
     return (
-        <div>
+        <>
             <div className="UnderFooter" />
-            <div className={DTFooter}>
-                <footer className={DTFooter}>
-                    <Container maxWidth="sm">
-                        {/* <Typography variant="body1">Roma, 2020</Typography>*/}
-                        <Copyright />
-                    </Container>
-                </footer>
-            </div>
-        </div>
+            <footer className={DTFooter}>
+                <Container maxWidth="sm">
+                    <Copyright />
+                </Container>
+            </footer>
+        </>
     );
 };

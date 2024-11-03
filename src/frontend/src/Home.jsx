@@ -71,19 +71,19 @@ export const Home = () => {
                     <h1>
                         {t("HomeWelcome")} {userInfo.name} {userInfo.surname}
                     </h1>
-                    <Grid container spacing={1} alignItems="flex-start" className="blackColor">
+                    <Grid container spacing={1} alignItems="flex-start" >
                         {AdminRole ? (
-                            <React.Fragment>
+                            <>
                                 <Grid item xs={6}>
                                     {t("Administrator")}
                                 </Grid>
                                 <Grid item xs={6}>
                                     <MostSubmitButton className="b_loginok" onClick={() => navigate("/admin")} label={t("Gestione Utenti")} id="user_roles" />
                                 </Grid>
-                            </React.Fragment>
+                            </>
                         ) : null}
                         {OwnerRole ? (
-                            <React.Fragment>
+                            <>
                                 <Grid item xs={6}>
                                     {t("Owner")}
                                 </Grid>
@@ -93,17 +93,17 @@ export const Home = () => {
                                     <MostSubmitButton className="b_loginok" onClick={() => navigate("/batchinsert", { replace: true })} label={t("BatchInsert")} id="batchinsert" />
                                     <MostSubmitButton className="b_loginok" onClick={() => navigate("/purchase", { replace: true })} label={t("Acquista Cartucce DNA")} id="purchase" />
                                 </Grid>
-                            </React.Fragment>
+                            </>
                         ) : null}
                         {UserRole ? (
-                            <React.Fragment>
+                            <>
                                 <Grid item xs={6}>
                                     {t("Laboratory")}
                                 </Grid>
                                 <Grid item xs={6}>
                                     <MostSubmitButton className="b_loginok" onClick={() => navigate("/cartridge_insert")} label={t("Registrazione Cartucce")} id="cartridge_insert" />
                                 </Grid>
-                            </React.Fragment>
+                            </>
                         ) : null}
                         <Grid item xs={6}>
                             {t("Funzioni per tutti gli utenti")}

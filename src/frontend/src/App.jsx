@@ -1,4 +1,5 @@
 import { ThemeProvider, createMuiTheme } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
 import React, { useState, Suspense } from "react";
 import { Route, Routes } from "react-router";
 import { BrowserRouter as Router } from "react-router-dom";
@@ -22,7 +23,7 @@ import { SelfDefineUser } from "./SelfDefineUser";
 import { VerifyMark } from "./VerifyMark";
 import Login from "./auth/Login";
 import { Logout } from "./auth/Logout";
-// import { theme } from "./components/theme";
+import { themeCommon } from "./components/themeCommon";
 import "./App.css";
 import { AuthProvider, useAuth } from "./auth/use-auth-client";
 
@@ -67,7 +68,9 @@ function App() {
 
     return (
         <GlobalProvider>
+        <ThemeProvider theme={themeCommon}>
         <ThemeProvider theme={theme}>
+            <CssBaseline/>
             <div className="App">
                 {isAuthenticated ? (
                     <Router>
@@ -98,6 +101,7 @@ function App() {
                     <Login />
                 )}
             </div>
+        </ThemeProvider>
         </ThemeProvider>
         </GlobalProvider>
     );

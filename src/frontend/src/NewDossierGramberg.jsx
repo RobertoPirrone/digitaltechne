@@ -112,6 +112,7 @@ export const NewDossier = () => {
         let missing_elements = [];
         let need_ele = null;
         let content = "";
+        // TBD per evitare eval, studiare: https://www.geeksforgeeks.org/how-to-use-dynamic-variable-names-in-javascript/
         for (need_ele in ["annoopera", "nomeOpera", "tipotecnica", "copieFirmate", "copieNonFirmate", "copiePdA"] ) {
 
             content = eval(`${need_ele}`)
@@ -201,17 +202,19 @@ export const NewDossier = () => {
     return (
         <div>
             <Header />
-            {application === "elivilla" ? (
-                <h1>{t("dossier:NewCelebrity")}</h1>
-            ) : application === "techne" ? (
-                <h1>{t("dossier:NewArtwork")}</h1>
-            ) : application === "hypnos" ? (
-                <h1>{t("dossier:NewPainting")}</h1>
-            ) : application === "cottolengo" ? (
-                <h1>{t("dossier:NewDrawing")}</h1>
-            ) : (
-                <h1>{t("dossier:NewDossier")}</h1>
-            )}
+            <Typography variant="h2">
+                {application === "elivilla" ? (
+                    t("dossier:NewCelebrity")
+                ) : application === "techne" ? (
+                    t("dossier:NewArtwork")
+                ) : application === "hypnos" ? (
+                    t("dossier:NewPainting")
+                ) : application === "cottolengo" ? (
+                    t("dossier:NewDrawing")
+                ) : (
+                    t("dossier:NewDossier")
+                )}
+            </Typography>
             <Container component="main" maxWidth="md">
                 <div className={DTRoot}>
 

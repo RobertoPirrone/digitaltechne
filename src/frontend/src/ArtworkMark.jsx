@@ -202,52 +202,42 @@ export const ArtworkMark = (props) => {
             <Header />
             <h1> {t("ArtworkMark")} </h1>
             <Container component="main" maxWidth="md">
-                <div className={DTRoot}>
-                    <Grid container spacing={1}>
-                        <Grid item xs={12} spacing={1}>
-                            <img src={`${asset_pfx}${dossierInfo.icon_uri}`} width={200} alt={`${dossierInfo.icon_uri}`} />
-                        </Grid>
-
-                        <Grid item xs={6}>
-                            {" "}
-                            <span className="padding10">{t("DNA Code")} </span>
-                        </Grid>
-                        <Grid item xs={6}>
-                            {" "}
-                            <MyAutocomplete name="mark_dull_code" required={true} label={t("mark_dull_code")} options={cartridgeUuids} freeSolo={false} onChange={(e, v) => setMarkDullCode(v)} />{" "}
-                        </Grid>
-
-                        <Grid item xs={6}>
-                            {" "}
-                            <span className="padding10">{t("Mark Side")} </span>
-                        </Grid>
-                        <Grid item xs={6}>
-                            {" "}
-                            <MyAutocomplete name="mark_side" required={true} label={t("mark_side")} options={mark_side_list} onChange={(e, v) => setMarkSide(v)} />{" "}
-                        </Grid>
-
-                        <Grid item xs={6}>
-                            {" "}
-                            <span className="padding10">{t("Mark Position")}</span>
-                        </Grid>
-                        <Grid item xs={6}>
-                            {" "}
-                            <MyAutocomplete name="mark_position" required={true} label={t("mark_position")} options={mark_position_list} onChange={(e, v) => setMarkPosition(v)} />{" "}
-                        </Grid>
-                        <Grid item xs={6}>
-                            {" "}
-                            <UploadNew assets={assets} show={false} setAssets={setAssets} setDisabledButs={setDisabledButs} label={t("dossier:LoadJpgs")} />{" "}
-                        </Grid>
-
-                        <Grid item xs={6}>
-                            {" "}
-                            &nbsp;{" "}
-                        </Grid>
+                <Grid container spacing={1}>
+                    <Grid item xs={12} spacing={1}>
+                        <img src={`${asset_pfx}${dossierInfo.icon_uri}`} width={200} alt={`${dossierInfo.icon_uri}`} />
                     </Grid>
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                        <MostSubmitButton disabled={disabledButs} label={t("dossier:Inserisci")} />
-                    </form>
-                </div>
+
+                    <Grid item xs={6}>
+                        <span className="padding10">{t("DNA Code")} </span>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <MyAutocomplete name="mark_dull_code" required={true} label={t("mark_dull_code")} options={cartridgeUuids} freeSolo={false} onChange={(e, v) => setMarkDullCode(v)} />{" "}
+                    </Grid>
+
+                    <Grid item xs={6}>
+                        <span className="padding10">{t("Mark Side")} </span>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <MyAutocomplete name="mark_side" required={true} label={t("mark_side")} options={mark_side_list} onChange={(e, v) => setMarkSide(v)} />{" "}
+                    </Grid>
+
+                    <Grid item xs={6}>
+                        <span className="padding10">{t("Mark Position")}</span>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <MyAutocomplete name="mark_position" required={true} label={t("mark_position")} options={mark_position_list} onChange={(e, v) => setMarkPosition(v)} />{" "}
+                    </Grid>
+                    <Grid item xs={12}>
+                        <UploadNew assets={assets} show={false} setAssets={setAssets} setDisabledButs={setDisabledButs} label={t("dossier:LoadJpgs")} />{" "}
+                    </Grid>
+
+                    <Grid item xs={6}>
+                        &nbsp;{" "}
+                    </Grid>
+                </Grid>
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <MostSubmitButton disabled={disabledButs} label={t("dossier:Inserisci")} />
+                </form>
             </Container>
             <Footer />
         </div>

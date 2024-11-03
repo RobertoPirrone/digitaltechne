@@ -28,7 +28,7 @@ th {
 
 .App {
     text-align: center;
-    color: #00e5ff;
+    // color: #00e5ff;
 }
 
 .App-logo {
@@ -56,7 +56,7 @@ th {
 }
 
 .App-link {
-    color: #61dafb;
+    // color: #61dafb;
 }
 
 @keyframes App-logo-spin {
@@ -172,7 +172,7 @@ th {
 .Header.MuiPaper-root,
 .Header :any-link,
 .Header .MuiIconButton-root {
-    background-color: #282c34 !important;
+    // background-color: #282c34 !important;
 }
 .blackColor,
 .blackColor :any-link {

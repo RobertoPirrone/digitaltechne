@@ -376,13 +376,14 @@ export function CountrySelect({ onChange: ignored, options, name, label, control
  * @prop freeSolo {bool} possibilità di inserire testo libero (tramite onInputChange), oppure solo da pull down (tramite onChange)
  * @return {JSX.Element} pull down code
  */
-export function MyAutocomplete({ onInputChange, onChange, options, value, label, field_name="", freeSolo = true }) {
+export function MyAutocomplete({ onInputChange, onChange, options, value, label, field_name="", required=true, freeSolo = true }) {
     if (field_name !== "") {
         return (
             <Grid item xs={12}>
                 <Grid container direction="row" >
                     <Grid item align="left" xs={4}>
                         <Typography display="inline">{field_name}&nbsp;&nbsp;&nbsp;</Typography>
+                        {required? "*" : null }
                     </Grid>
                     <Grid item xs={8}>
                         <Autocomplete options={options} value={value} freeSolo={freeSolo} 

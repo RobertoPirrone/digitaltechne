@@ -23,7 +23,7 @@ import { DocData } from "./components/DocData";
 import { GoTo, GoToHomePage, MostCheckbox, MostSelect, MostSubmitButton, MostTextField, MyAutocomplete, MyCheckbox, MyTextField } from "./components/MostComponents";
 import { DTRoot, DTSubmit } from "./components/useStyles";
 import { useGlobalState } from "./state";
-import { getAssetPfx } from "./utils";
+import { appAlert, getAssetPfx } from "./utils";
 
 /**
  * Operazione di marchiatura di un'opera
@@ -46,7 +46,7 @@ export const ArtworkMark = (props) => {
     dossierInfo = react_router_location.state.dossierInfo;
     console.log(`dossierInfo: ${JSON.stringify(dossierInfo)}`);
 
-    const { t } = useTranslation(["translation", "documento"]);
+    const { t } = useTranslation(["translation", "documento", "dossier"]);
     const [loading, setLoading] = useState(false);
     const [disabledButs, setDisabledButs] = useState(true);
     const [uploadInfo, setUploadInfo] = useState(null);
@@ -57,9 +57,6 @@ export const ArtworkMark = (props) => {
     const [titolo, setTitolo] = useState("");
     const [uploads, setUploads] = useState([]);
     const [progress, setProgress] = useState(null);
-    const appAlert = useCallback((text) => {
-        alert(text);
-    }, []);
     const [markDullCode, setMarkDullCode] = useState("");
     const mark_position_list = ["top_left", "top_center", "top_right", "center_left", "center_center", "center_right", "bottom_left", "bottom_center", "bottom_right"];
     const [markPosition, setMarkPosition] = useState("");
@@ -67,6 +64,7 @@ export const ArtworkMark = (props) => {
     const [markSide, setMarkSide] = useState("");
     // const [markArray, setMarkArray] = useState([{"id": 0, "markDullCode": "", "markPosition": "", "markSide": ""}]);
     const [markArray, setMarkArray] = useState([]);
+    const [ note, setNote ] = useState("");
 
 
     useEffect(() => {
@@ -166,7 +164,7 @@ export const ArtworkMark = (props) => {
         vals.ora_inserimento = new Date();
         vals.mark_dull_code = markDullCode;
         vals.mark_position = `${markSide} ${markPosition}`;
-        vals.note = "boh, qualcosa";
+        vals.note = note;
         vals.uuid = uuidv4();
 
         console.log(`onSubmit: ${JSON.stringify(vals)}`);
@@ -209,7 +207,7 @@ export const ArtworkMark = (props) => {
 
     const addDna = () => {
         if (markDullCode === "" || (markPosition === "" ) || (markSide === "")) {
-            appAlert(t("UnsetValues"));
+            appAlert(t("missingValues"));
             return;
         }
         console.log("addDna");
@@ -239,44 +237,25 @@ export const ArtworkMark = (props) => {
             <Header />
             <h1> {t("ArtworkMark")} </h1>
             <Container component="main" maxWidth="md" >
-                    <img src={`${asset_pfx}${dossierInfo.icon_uri}`} width={200} alt={`${dossierInfo.icon_uri}`} />
-                    <MostDataGrid columns={columns} rows={markArray} hideFooter={true} />
+                <img src={`${asset_pfx}${dossierInfo.icon_uri}`} width={200} alt={`${dossierInfo.icon_uri}`} />
+                <MostDataGrid columns={columns} rows={markArray} hideFooter={true} />
+
                 <Grid container spacing={1}>
-
-                    <Grid item xs={12}>
-                        &nbsp;
-                    </Grid>
-                    <Grid item xs={12}>
-                        <span className="padding10">{t("DNA Code")} </span>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <MyAutocomplete name="mark_dull_code" required={true} label={t("mark_dull_code")} options={cartridgeUuids} freeSolo={false} onChange={(e, v) => setMarkDullCode(v)} />{" "}
-                    </Grid>
-
-                    <Grid item xs={12}>
-                        <span className="padding10">{t("Mark Side")} </span>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <MyAutocomplete name="mark_side" required={true} label={t("mark_side")} options={mark_side_list} onChange={(e, v) => setMarkSide(v)} />{" "}
-                    </Grid>
-
-                    <Grid item xs={12}>
-                        <span className="padding10">{t("Mark Position")}</span>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <MyAutocomplete name="mark_position" required={true} label={t("mark_position")} options={mark_position_list} onChange={(e, v) => setMarkPosition(v)} />{" "}
-                    </Grid>
-                    <Grid item xs={12}>
-                        &nbsp;
-                    </Grid>
-                    <Grid item xs={12}>
-                        <UploadNew assets={assets} show={false} setAssets={setAssets} setDisabledButs={setDisabledButs} label={t("dossier:LoadJpgs")} />{" "}
-                    </Grid>
-
+                    <Grid item xs={12}> &nbsp; </Grid>
+                    <MyAutocomplete field_name={t("DNA Code")} name="mark_dull_code" required={true} label={t("mark_dull_code")} options={cartridgeUuids} freeSolo={false} onChange={(e, v) => setMarkDullCode(v)} />
+                    <MyAutocomplete field_name={t("Mark Side")} name="mark_side" required={true} label={t("mark_side")} options={mark_side_list} onChange={(e, v) => setMarkSide(v)} />
+                    <MyAutocomplete field_name={t("Mark Position")} name="mark_position" required={true} label={t("mark_position")} options={mark_position_list} onChange={(e, v) => setMarkPosition(v)} />
+                    <MyTextField field_name="Note" name="note" label={t("note")} onChange={(e) => setNote(e.target.value)} />
+                    <Grid item xs={12}> &nbsp; </Grid>
                     <Grid item xs={12}>
                         <MostSubmitButton variant="button" onClick={() => addDna()} label={t("dossier:AnotherDNA")} />
                     </Grid>
+                    <Grid item xs={12}> &nbsp; </Grid>
+                    <Grid item xs={12}>
+                        <UploadNew assets={assets} show={false} setAssets={setAssets} setDisabledButs={setDisabledButs} label={t("dossier:LoadJpgs")} />
+                    </Grid>
                 </Grid>
+
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <MostSubmitButton disabled={disabledButs} label={t("dossier:Inserisci")} />
                 </form>

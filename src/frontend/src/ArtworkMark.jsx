@@ -15,7 +15,9 @@ import Grid from "@mui/material/Grid";
 import { backend } from "../../declarations/backend";
 import { Footer } from "./Footer";
 import { Header } from "./Header";
+import { MostDataGrid } from "./components/MostDataGrid";
 import { UploadNew } from "./UploadNew";
+import { Table } from "./Table";
 import { useAuth } from "./auth/use-auth-client";
 import { DocData } from "./components/DocData";
 import { GoTo, GoToHomePage, MostCheckbox, MostSelect, MostSubmitButton, MostTextField, MyAutocomplete, MyCheckbox, MyTextField } from "./components/MostComponents";
@@ -43,6 +45,29 @@ export const ArtworkMark = (props) => {
     if (react_router_location.state === null) return <GoTo location={"/dossier"} />;
     dossierInfo = react_router_location.state.dossierInfo;
     console.log(`dossierInfo: ${JSON.stringify(dossierInfo)}`);
+
+    const { t } = useTranslation(["translation", "documento"]);
+    const [loading, setLoading] = useState(false);
+    const [disabledButs, setDisabledButs] = useState(true);
+    const [uploadInfo, setUploadInfo] = useState(null);
+    const [docs, setDocs] = useState([]);
+    const { control, register, handleSubmit, errors, setValue } = useForm();
+    const [tipoDocumento, setTipoDocumento] = useState("");
+    const [autore, setAutore] = useState("");
+    const [titolo, setTitolo] = useState("");
+    const [uploads, setUploads] = useState([]);
+    const [progress, setProgress] = useState(null);
+    const appAlert = useCallback((text) => {
+        alert(text);
+    }, []);
+    const [markDullCode, setMarkDullCode] = useState("");
+    const mark_position_list = ["top_left", "top_center", "top_right", "center_left", "center_center", "center_right", "bottom_left", "bottom_center", "bottom_right"];
+    const [markPosition, setMarkPosition] = useState("");
+    const mark_side_list = ["front", "back", "frame"];
+    const [markSide, setMarkSide] = useState("");
+    // const [markArray, setMarkArray] = useState([{"id": 0, "markDullCode": "", "markPosition": "", "markSide": ""}]);
+    const [markArray, setMarkArray] = useState([]);
+
 
     useEffect(() => {
         backendActor
@@ -92,30 +117,15 @@ export const ArtworkMark = (props) => {
         }
     }, [backendActor, navigate]);
 
-    const { t } = useTranslation(["translation", "documento"]);
-    const [loading, setLoading] = useState(false);
-    const [disabledButs, setDisabledButs] = useState(true);
-    const [uploadInfo, setUploadInfo] = useState(null);
-    const [docs, setDocs] = useState([]);
-    const { control, register, handleSubmit, errors, setValue } = useForm();
-    const [tipoDocumento, setTipoDocumento] = useState("");
-    const [autore, setAutore] = useState("");
-    const [titolo, setTitolo] = useState("");
-    const [uploads, setUploads] = useState([]);
-    const [progress, setProgress] = useState(null);
-    const appAlert = useCallback((text) => {
-        alert(text);
-    }, []);
-    const [markDullCode, setMarkDullCode] = useState("");
-    const mark_position_list = ["top_left", "top_center", "top_right", "center_left", "center_center", "center_right", "bottom_left", "bottom_center", "bottom_right"];
-    const [markPosition, setMarkPosition] = useState("");
-    const mark_side_list = ["front", "back", "frame"];
-    const [markSide, setMarkSide] = useState("");
-
     const onSubmit = (vals) => {
         // if (!asset) { appAlert("File non scelto"); return; }
         // vals.dossier_id = Number(dossier_id);
 
+        addDna();
+        if (markArray.length == 0) {
+            appAlert(t("missingValues"));
+            return
+        }
         let asset = {};
         for (asset of assets) {
             vals.uuid = uuidv4();
@@ -197,42 +207,74 @@ export const ArtworkMark = (props) => {
         return <GoToHomePage />;
     }
 
+    const addDna = () => {
+        if (markDullCode === "" || (markPosition === "" ) || (markSide === "")) {
+            appAlert(t("UnsetValues"));
+            return;
+        }
+        console.log("addDna");
+        console.log(markPosition);
+        console.log(markSide);
+        console.log("logç");
+        console.log(markArray);
+        console.log("dir:");
+        console.dir(markArray);
+        const id = markArray.length +1;
+        setMarkArray([...markArray, { "id": id, "markDullCode": markDullCode, "markPosition": markPosition, "markSide": markSide}]);
+        setDisabledButs(false);
+        setMarkDullCode("");
+        setMarkSide("");
+        setMarkPosition("");
+    };
+
+    let columns = [];
+    columns.push({ flex: 1, field: "markDullCode", headerName: t("DnaCode") });
+    columns.push({ flex: 1, field: "markSide", headerName: t("MarkSide") });
+    columns.push({ flex: 1, field: "markPosition", headerName: t("MarkPosition") });
+
+    let marks = [];
+
     return (
         <div>
             <Header />
             <h1> {t("ArtworkMark")} </h1>
-            <Container component="main" maxWidth="md">
+            <Container component="main" maxWidth="md" >
+                    <img src={`${asset_pfx}${dossierInfo.icon_uri}`} width={200} alt={`${dossierInfo.icon_uri}`} />
+                    <MostDataGrid columns={columns} rows={markArray} hideFooter={true} />
                 <Grid container spacing={1}>
-                    <Grid item xs={12} spacing={1}>
-                        <img src={`${asset_pfx}${dossierInfo.icon_uri}`} width={200} alt={`${dossierInfo.icon_uri}`} />
-                    </Grid>
 
-                    <Grid item xs={6}>
+                    <Grid item xs={12}>
+                        &nbsp;
+                    </Grid>
+                    <Grid item xs={12}>
                         <span className="padding10">{t("DNA Code")} </span>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={12}>
                         <MyAutocomplete name="mark_dull_code" required={true} label={t("mark_dull_code")} options={cartridgeUuids} freeSolo={false} onChange={(e, v) => setMarkDullCode(v)} />{" "}
                     </Grid>
 
-                    <Grid item xs={6}>
+                    <Grid item xs={12}>
                         <span className="padding10">{t("Mark Side")} </span>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={12}>
                         <MyAutocomplete name="mark_side" required={true} label={t("mark_side")} options={mark_side_list} onChange={(e, v) => setMarkSide(v)} />{" "}
                     </Grid>
 
-                    <Grid item xs={6}>
+                    <Grid item xs={12}>
                         <span className="padding10">{t("Mark Position")}</span>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={12}>
                         <MyAutocomplete name="mark_position" required={true} label={t("mark_position")} options={mark_position_list} onChange={(e, v) => setMarkPosition(v)} />{" "}
+                    </Grid>
+                    <Grid item xs={12}>
+                        &nbsp;
                     </Grid>
                     <Grid item xs={12}>
                         <UploadNew assets={assets} show={false} setAssets={setAssets} setDisabledButs={setDisabledButs} label={t("dossier:LoadJpgs")} />{" "}
                     </Grid>
 
-                    <Grid item xs={6}>
-                        &nbsp;{" "}
+                    <Grid item xs={12}>
+                        <MostSubmitButton variant="button" onClick={() => addDna()} label={t("dossier:AnotherDNA")} />
                     </Grid>
                 </Grid>
                 <form onSubmit={handleSubmit(onSubmit)}>

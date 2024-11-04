@@ -22,6 +22,7 @@ import { useAuth } from "./auth/use-auth-client";
 import { DocData } from "./components/DocData";
 import { GoTo, GoToHomePage, MostCheckbox, MostSelect, MostSubmitButton, MostTextField, MyAutocomplete, MyCheckbox, MyTextField } from "./components/MostComponents";
 import { DTRoot, DTSubmit } from "./components/useStyles";
+import { SpecializedSelect } from "./components/SpecializedSelect";
 import { useGlobalState } from "./state";
 import { appAlert, getAssetPfx } from "./utils";
 
@@ -226,9 +227,9 @@ export const ArtworkMark = (props) => {
     };
 
     let columns = [];
-    columns.push({ flex: 1, field: "markDullCode", headerName: t("DnaCode") });
-    columns.push({ flex: 1, field: "markSide", headerName: t("MarkSide") });
-    columns.push({ flex: 1, field: "markPosition", headerName: t("MarkPosition") });
+    columns.push({ flex: 1, field: "markDullCode", headerName: t("DNA Code") });
+    columns.push({ flex: 1, field: "markSide", headerName: t("Mark Side") });
+    columns.push({ flex: 1, field: "markPosition", headerName: t("Mark Position") });
 
     let marks = [];
 
@@ -242,13 +243,13 @@ export const ArtworkMark = (props) => {
 
                 <Grid container spacing={1}>
                     <Grid item xs={12}> &nbsp; </Grid>
-                    <MyAutocomplete field_name={t("DNA Code")} name="mark_dull_code" required={true} label={t("mark_dull_code")} options={cartridgeUuids} freeSolo={false} onChange={(e, v) => setMarkDullCode(v)} />
-                    <MyAutocomplete field_name={t("Mark Side")} name="mark_side" required={true} label={t("mark_side")} options={mark_side_list} onChange={(e, v) => setMarkSide(v)} />
-                    <MyAutocomplete field_name={t("Mark Position")} name="mark_position" required={true} label={t("mark_position")} options={mark_position_list} onChange={(e, v) => setMarkPosition(v)} />
+                    <MyAutocomplete field_name={t("DNA Code")} name="mark_dull_code" required={true} label={""} options={cartridgeUuids} freeSolo={false} onChange={(e, v) => setMarkDullCode(v)} />
+                    <SpecializedSelect field_name={t("Mark Side")} defaultValue={""} name="mark_side" label={t("Mark Side")} what={"mark_side"} onChange={(e, v) => setMarkSide(e.target.value)} />
+                    <SpecializedSelect field_name={t("Mark Position")} defaultValue={""} name="mark_position" label={t("Mark Position")} what={"mark_position"} onChange={(e, v) => setMarkPosition(e.target.value)} />
                     <MyTextField field_name="Note" name="note" label={t("note")} onChange={(e) => setNote(e.target.value)} />
                     <Grid item xs={12}> &nbsp; </Grid>
                     <Grid item xs={12}>
-                        <MostSubmitButton variant="button" onClick={() => addDna()} label={t("dossier:AnotherDNA")} />
+                        <MostSubmitButton variant="button" onClick={() => addDna()} label={t("AnotherDNA")} />
                     </Grid>
                     <Grid item xs={12}> &nbsp; </Grid>
                     <Grid item xs={12}>

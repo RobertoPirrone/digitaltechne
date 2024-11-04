@@ -20,6 +20,7 @@ import ListSubheader from "@mui/material/ListSubheader";
 import MenuItem from "@mui/material/MenuItem";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import Select from "@mui/material/Select";
+import Typography from "@mui/material/Typography";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
@@ -59,11 +60,11 @@ const ComputeSelectRows = ({ what, label, defaultValue, onChange }) => {
     }
     // console.log(`ROWS ${what}:  `);
     // console.log(rows);
+    // eliminato  dalla FormControl: <InputLabel htmlFor="grouped-select"> {label} </InputLabel>
 
     return (
         <>
             <FormControl sx={{ m: 1, minWidth: 120 }}>
-                <InputLabel htmlFor="grouped-select"> {label} </InputLabel>
                 <Select fullWidth defaultValue={defaultValue} label={label} onChange={onChange}>
                     <option aria-label="None" value="" />
                     {rows}
@@ -84,10 +85,18 @@ const ComputeSelectRows = ({ what, label, defaultValue, onChange }) => {
  * @return {JSX.Element} Select instructions
  * @example <SpecializedSelect defaultValue={""} name="tiposupporto" label={t("tiposupporto:Label")} what={"tiposupporto"} onChange={(e, v) => setTiposupporto(e.target.value)} />
  */
-export const SpecializedSelect = ({ name, onChange, label, what, defaultValue, language = "it" }) => {
+export const SpecializedSelect = ({ name, onChange, label, what, defaultValue, required=true, language = "it" }) => {
     return (
-        <Grid item>
-                <ComputeSelectRows what={what} label={label} defaultValue={defaultValue} onChange={onChange} />
+        <Grid item xs={12}>
+            <Grid container direction="row" >
+                <Grid item align="left" xs={4}>
+                    <Typography display="inline">{label}&nbsp;&nbsp;&nbsp;</Typography>
+                    {required? "*" : null }
+                </Grid>
+                <Grid item xs={8}>
+                    <ComputeSelectRows what={what} label={label} defaultValue={defaultValue} onChange={onChange} />
+                </Grid>
+            </Grid>
         </Grid>
     )
 };

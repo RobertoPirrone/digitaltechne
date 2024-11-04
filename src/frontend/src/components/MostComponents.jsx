@@ -8,6 +8,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
 import React from "react";
 import { Controller } from "react-hook-form";
 /**
@@ -375,13 +376,75 @@ export function CountrySelect({ onChange: ignored, options, name, label, control
  * @prop freeSolo {bool} possibilità di inserire testo libero (tramite onInputChange), oppure solo da pull down (tramite onChange)
  * @return {JSX.Element} pull down code
  */
-export function MyAutocomplete({ onInputChange, onChange, options, value, label, freeSolo = true }) {
-    return <Autocomplete options={options} value={value} freeSolo={freeSolo} renderInput={(params) => <TextField {...params} label={label} variant="outlined" />} getOptionLabel={(option) => option} onInputChange={onInputChange} onChange={onChange} />;
+export function MyAutocomplete({ onInputChange, onChange, options, value, label, field_name="", freeSolo = true }) {
+    if (field_name !== "") {
+        return (
+            <Grid item xs={12}>
+                <Grid container direction="row" >
+                    <Grid item align="left" xs={4}>
+                        <Typography display="inline">{field_name}&nbsp;&nbsp;&nbsp;</Typography>
+                    </Grid>
+                    <Grid item xs={8}>
+                        <Autocomplete options={options} value={value} freeSolo={freeSolo} 
+                            renderInput={(params) => <TextField {...params} label={label} variant="outlined" />} 
+                            getOptionLabel={(option) => option} onInputChange={onInputChange} onChange={onChange} 
+                        />
+                    </Grid>
+                </Grid>
+            </Grid>
+        );
+    } else {
+        return <Autocomplete options={options} value={value} freeSolo={freeSolo} renderInput={(params) => <TextField {...params} label={label} variant="outlined" />} getOptionLabel={(option) => option} onInputChange={onInputChange} onChange={onChange} />
+    }
 }
 
 export function MyCheckbox({ checked, onChange, options, value, label }) {
     return <Checkbox checked={checked} onChange={onChange} />;
 }
+
+const InnerTextField = ({
+    name,
+    label,
+    defaultValue,
+    autoComplete,
+    autoFocus = false,
+    fullWidth = true,
+    margin = "dense",
+    onChange,
+    errors,
+    type = "text",
+    variant = "outlined",
+    required = false, // serve per fare aggiungere * al campo obbligatorio, oppure se si usano controlli del browser togliendo noValidate dalla form
+    inputProps,
+    InputProps,
+    value,
+    disabled = false,
+    register, // se si vuole avere required gestito da form react bisogna passare register={register({ required: true })}
+}) => {
+    return  (
+        <>
+        <TextField 
+            required={required} 
+            inputRef={register} 
+            name={name} 
+            label={label} 
+            type={type} 
+            id={name} 
+            inputProps={inputProps}
+            value={value} disabled={disabled} InputProps={InputProps} fullWidth={fullWidth} />
+            {errors?.[name] && 
+                <div className="formFieldError">{errors[name].type === "required" ? 
+                    t("campo obbligatorio") : 
+                    errors[name].type === "min" ? 
+                        t("form errors min") : 
+                        errors[name].type === "max" ? 
+                            t("form errors max") : 
+                            `Error ${errors[name].type}`}
+                </div>
+            }
+        </>
+    )
+};
 
 /**
  * Wrapper intorno a TextField
@@ -398,11 +461,11 @@ export const MyTextField = ({
     autoFocus = false,
     fullWidth = true,
     margin = "dense",
+    field_name="",
     onChange,
     errors,
     type = "text",
     variant = "outlined",
-    //variant,
     required = false, // serve per fare aggiungere * al campo obbligatorio, oppure se si usano controlli del browser togliendo noValidate dalla form
     inputProps,
     InputProps,
@@ -416,22 +479,26 @@ export const MyTextField = ({
         if (required) register.required = true;
     }
     console.log("register:", register);
-    return (
-        <>
-            <Grid item>
-                <TextField 
-                    required={required} 
-                    inputRef={register} 
-                    name={name} 
-                    label={label} 
-                    type={type} 
-                    id={name} 
-                    inputProps={inputProps}
-                    value={value} disabled={disabled} InputProps={InputProps} fullWidth={fullWidth} />
-                {errors?.[name] && <div className="formFieldError">{errors[name].type === "required" ? t("campo obbligatorio") : errors[name].type === "min" ? t("form errors min") : errors[name].type === "max" ? t("form errors max") : `Error ${errors[name].type}`}</div>}
+    if (field_name !== "") {
+        return (
+            <Grid item xs={12}>
+                <Grid container direction="row" >
+                    <Grid item align="left" xs={4}>
+                        <Typography display="inline">{field_name}&nbsp;&nbsp;&nbsp;</Typography>
+                    </Grid>
+                    <Grid item xs={8}>
+                        <InnerTextField required={required} inputRef={register} name={name} label={label} type={type} id={name} inputProps={inputProps} value={value} disabled={disabled} InputProps={InputProps} fullWidth={fullWidth} errors={errors} />
+                    </Grid>
+                </Grid>
             </Grid>
-        </>
+        )
+    } else {
+        return (
+            <Grid item>
+                <InnerTextField required={required} inputRef={register} name={name} label={label} type={type} id={name} inputProps={inputProps} value={value} disabled={disabled} InputProps={InputProps} fullWidth={fullWidth} errors={errors} />
+            </Grid>
     );
+    }
 };
 
 export const MyCheckIcon = ({ value }) => {

@@ -1,0 +1,12 @@
+L1,L2,IT,EN
+LABEL,,Posizione Marker,DNA Mark Position
+top_left,,Alto a Sinistra,Top Left
+top_center,,Alto in Centro,Top Center
+top_right,,Alto a Destra,Top Right
+center_left,,Centro a sinistra,Center Left
+center_center,,Centro,Center
+center_right,,Centro a Destra,Center Right
+bottom_left,,Basso a Sinistra,Bottom Left
+bottom_center,,Basso in Centro,Bottom Center
+bottom_right,,Basso a Destra,Bottom Right
+

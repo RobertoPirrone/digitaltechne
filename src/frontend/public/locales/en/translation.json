@@ -137,5 +137,10 @@
   "InsertedMark": "DNA mark correctly inserted",
   "ToKnowMoreArtist": "For an introduction to the ",
   "ToKnowMoreArtist2": "'s production,  please refer to the official ",
-  "SignIn": null
+  "SignIn": null,
+  "DNA Code": "DNA ink Code",
+  "Mark Side": "Mark Side",
+  "Mark Position": "DNA Mark Position",
+  "missingValues": "Mandatory fields missing",
+  "AnotherDNA": "Add Another DNA Mark"
 }

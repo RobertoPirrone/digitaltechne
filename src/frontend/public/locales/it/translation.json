@@ -137,5 +137,10 @@
   "InsertedMark": "Il marchio DNA è stato correttamente registrato",
   "ToKnowMoreArtist": "Per una introduzione al lavoro di",
   "ToKnowMoreArtist2": " consultare il sito ufficiale",
-  "SignIn": null
+  "SignIn": null,
+  "DNA Code": "Codice dell’inchiostro DNA",
+  "Mark Side": "Lato su cui è posizionato il marker",
+  "Mark Position": "Posizione del marker DNA",
+  "missingValues": "Occorre riempire i campi obbligatori",
+  "AnotherDNA": "Aggiungi un altro Mark DNA"
 }

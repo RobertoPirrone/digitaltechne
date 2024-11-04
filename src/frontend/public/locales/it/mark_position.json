@@ -1,0 +1,14 @@
+{
+  "mark_position_array": {
+    "top_left": "Alto a Sinistra",
+    "top_center": "Alto in Centro",
+    "top_right": "Alto a Destra",
+    "center_left": "Centro a sinistra",
+    "center_center": "Centro",
+    "center_right": "Centro a Destra",
+    "bottom_left": "Basso a Sinistra",
+    "bottom_center": "Basso in Centro",
+    "bottom_right": "Basso a Destra"
+  },
+  "Label": "Posizione Marker"
+}

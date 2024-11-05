@@ -14,7 +14,7 @@ import { IconCode } from "./IconCode";
 import { Table } from "./Table";
 import { appAlert, prettyDate, prettyJson } from "./Utils";
 import { useAuth } from "./auth/use-auth-client";
-import { Check, GoToHomePage, Loading, MostButton2, MostSelect, MostSubmitButton, MostTextField, MyCheckIcon, WarningIcon } from "./components/MostComponents";
+import { Check, GoToHomePage, Loading, MostButton2, MostSelect, MostSubmitButton, MostTextField, MyCheckIcon, NewTableRow, WarningIcon } from "./components/MostComponents";
 import { MostDataGrid } from "./components/MostDataGrid";
 import { useGlobalState } from "./state";
 
@@ -154,70 +154,24 @@ export const DossierDetail = () => {
                     <Container component="main" maxWidth="md">
                         <table className="ethTable dossierDettaglioTable gray">
                             <tbody>
-                                <tr>
-                                    {" "}
-                                    <th>{t("dossier:Immagine")}</th>{" "}
-                                    <td>
-                                        {" "}
-                                        <IconCode row={dossierInfo} />{" "}
-                                    </td>{" "}
-                                </tr>
-                                <tr>
-                                    {" "}
-                                    <th>{t("documento:Id")}</th> <td>{dossierInfo.id}</td>{" "}
-                                </tr>
-                                <tr>
-                                    {" "}
-                                    <th>{t("documento:Proprietario")}</th> <td>{dossierInfo.friendly_name}</td>{" "}
-                                </tr>
-                                <tr>
-                                    {" "}
-                                    <th>{t("documento:Principal")}</th> <td>{dossierInfo.inserted_by}</td>{" "}
-                                </tr>
-                                <tr>
-                                    {" "}
-                                    <th>{t("dossier:nomeopera")}</th> <td>{dossierInfo.nomeopera}</td>{" "}
-                                </tr>
-                                <tr>
-                                    {" "}
-                                    <th>{t("documento:InsertTime")}</th> <td>{dataora}</td>{" "}
-                                </tr>
-                                <tr>
-                                    {" "}
-                                    <th>{t("dossier:autore")}</th> <td>{dossierInfo.autore} </td>
-                                </tr>
-                                <tr>
-                                    {" "}
-                                    <th>{t("tiposupporto:Label")}</th> <td> {t(`tiposupporto:tiposupporto_array.${dossierInfo.tiposupporto}`)}</td>{" "}
-                                </tr>
-                                <tr>
-                                    {" "}
-                                    <th>{t("tipofirma:Label")}</th> <td> {t(`tipofirma:tipofirma_array.${dossierInfo.tipofirma}`)} </td>{" "}
-                                </tr>
-                                <tr>
-                                    {" "}
-                                    <th>{t("tipotecnica:Label")}</th> <td> {t(`tipotecnica:tipotecnica_array.${dossierInfo.tipotecnica}`)} </td>{" "}
-                                </tr>
-                                <tr>
-                                    {" "}
-                                    <th>{t("dossier:AnnoOpera")}</th> <td> {dossierInfo.annoopera} </td>{" "}
-                                </tr>
-                                <tr>
-                                    {" "}
-                                    <th>{t("dossier:NumeroTotaleCopie")}</th> <td> {dossierInfo.numero_totale_copie} </td>{" "}
-                                </tr>
-                                <tr>
-                                    {" "}
-                                    <th>{t("dossier:SheetIdentifier")}</th> <td> {dossierInfo.sheet_identifier} </td>{" "}
-                                </tr>
-                                <tr>
-                                    {" "}
-                                    <th>{t("dossier:Dimensions")}</th> <td> {dossierInfo.dimensions} </td>{" "}
-                                </tr>
-                                <tr>
-                                    {" "}
-                                    <th>{t("dossier:riservato")}</th> <td>{dossierInfo.private}</td>{" "}
-                                </tr>
+                                <NewTableRow label={t("dossier:Immagine")} value={<IconCode row={dossierInfo} />} />
+                                <NewTableRow label={t("documento:Id")} value={dossierInfo.id} />
+                                <NewTableRow label={t("documento:Proprietario")} value={dossierInfo.friendly_name} />
+                                <NewTableRow label={t("documento:Principal")} value={dossierInfo.inserted_by} />
+                                <NewTableRow label={t("dossier:nomeopera")} value={dossierInfo.nomeopera} />
+                                <NewTableRow label={t("documento:InsertTime")} value={dataora} />
+                                <NewTableRow label={t("dossier:autore")} value={dossierInfo.autore} />
+                                <NewTableRow label={t("tiposupporto:Label")} value={t(`tiposupporto:tiposupporto_array.${dossierInfo.tiposupporto}`)} />
+                                <NewTableRow label={t("tipofirma:Label")} value={t(`tipofirma:tipofirma_array.${dossierInfo.tipofirma}`)} />
+                                <NewTableRow label={t("tipotecnica:Label")} value={t(`tipotecnica:tipotecnica_array.${dossierInfo.tipotecnica}`)} />
+                                <NewTableRow label={t("dossier:AnnoOpera")} value={dossierInfo.annoopera} />
+                                <NewTableRow label={t("dossier:NumeroTotaleCopie")} value={dossierInfo.numero_totale_copie} />
+                                <NewTableRow label={t("dossier:CopieFirmate")} value={dossierInfo.signed} />
+                                <NewTableRow label={t("dossier:CopieNonFirmate")} value={dossierInfo.not_signed} />
+                                <NewTableRow label={t("dossier:CopiePdA")} value={dossierInfo.artist_proof} />
+                                <NewTableRow label={t("dossier:SheetIdentifier")} value={dossierInfo.sheet_identifier} />
+                                <NewTableRow label={t("dossier:Dimensions")} value={dossierInfo.dimensions} />
+                                <NewTableRow label={t("dossier:riservato")} value={dossierInfo.private} />
                                 <tr>
                                     <th className="vertalignTop">{t("dossier:InBC")}</th>
                                     <td>

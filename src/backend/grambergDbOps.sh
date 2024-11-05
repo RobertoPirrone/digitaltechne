@@ -5,7 +5,7 @@ if [ $# -eq 1 -a x$1 = "x--ic" ] ; then
     export DFX_NETWORK=ic
 else
     network=""
-    dfx identity use default
+    dfx identity use NuovaIdentitaRobi
 fi
 echo Uso network $network, con identity $(dfx identity whoami)
 
@@ -21,6 +21,18 @@ create_table() {
     sql_cmd=$(printf "create table %s (%s)" $table "$fields")
     dfx canister call $network backend execute "$sql_cmd"
 }
+
+# TRACK
+fields=$(cat <<'EOF'
+id INTEGER PRIMARY KEY,
+principal TEXT NOT NULL,
+operation TEXT NOT NULL,
+system_time TEXT NOT NULL
+EOF
+)
+    create_table track "$fields"
+    dfx canister call $network backend execute 'create index track_id on track(id)'
+    exit 0
 
 # DOSSIER 
 fields=$(cat <<'EOF'

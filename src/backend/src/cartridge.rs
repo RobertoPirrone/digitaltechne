@@ -87,7 +87,7 @@ pub fn cartridge_insert(jv: String) -> ExecResult {
     ic_cdk::println!("cartridge_insert input: {jv} ");
     let d: Cartridge = serde_json::from_str(&jv).unwrap();
     let caller = ic_cdk::caller().to_string();
-    rbac_verify("cartridge_insert".to_string(), "add_dna_ok".to_string())?;
+    rbac_verify("cartridge_insert".to_string(), "add_dna_ok".to_string(), jv)?;
     let conn = ic_sqlite::CONN.lock().unwrap();
 
     let sql = format!(

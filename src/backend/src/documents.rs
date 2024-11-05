@@ -50,12 +50,9 @@ pub fn documenti_query(params: QueryDocumentsParams) -> JsonResult {
     let dossier_infos: Vec<Dossier>;
     let id = params.dossieropera_id.clone();
 
-    rbac_verify("documenti_query".to_string(), "view_opera_ok".to_string())?;
+    rbac_verify("documenti_query".to_string(), "view_opera_ok".to_string(), params.dossieropera_id.to_string())?;
     // devo anche restituire i dati del dossier
-    let dossier_sql = format!(
-        "select dossier.*, friendly_name  from dossier left outer join rbac where inserted_by = principal and dossier.id = {:?}",
-        id
-    );
+    let dossier_sql = format!( "inserted_by = principal and dossier.id = {}", id);
     dossier_infos = dossier_struct_query(dossier_sql.to_string());
     let dossier_info = dossier_infos[0].clone();
     let master_uuid = dossier_info.master_uuid.clone();

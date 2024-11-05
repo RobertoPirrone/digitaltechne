@@ -6,6 +6,7 @@ use ic_cdk::{query, update};
 use serde::{Deserialize, Serialize};
 
 use crate::my_utils::*;
+use crate::rbac::{rbac_verify};
 
 #[derive(Debug, Serialize, Deserialize)]
 struct KOMark {
@@ -91,6 +92,7 @@ pub fn artwork_mark_query(params: ArtworkMarkQueryParams) -> JsonResult {
 #[no_mangle]
 pub fn artwork_mark_insert(jv: String) -> ExecResult {
     ic_cdk::println!("artwork_mark_insert input: {jv} ");
+    rbac_verify("artwork_mark_insert".to_string(), "dna_mark_ok".to_string(), jv.to_string())?;
     let d: ArtworkMark = serde_json::from_str(&jv).unwrap();
     let conn = ic_sqlite::CONN.lock().unwrap();
     let caller = ic_cdk::caller().to_string();

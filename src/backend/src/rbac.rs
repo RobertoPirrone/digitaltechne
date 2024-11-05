@@ -76,6 +76,8 @@ pub fn check_caller() -> CheckResult {
 }
 
 /// insert  in rbac the data  for a new user, with sane defaults (only view)
+///
+/// It's performed by a new user, so no special capabilities required
 #[update]
 pub fn insert_caller(friendly_name: String) -> ExecResult {
     let caller = ic_cdk::caller();
@@ -102,7 +104,7 @@ pub fn change_rbac(jstring: String) -> ExecResult {
     ic_cdk::println!("change rbac input: {jstring} ");
     let r: Rbac = serde_json::from_str(&jstring).unwrap();
 
-    rbac_verify("change_rbac".to_string(), "admin_ok".to_string())?;
+    rbac_verify("change_rbac".to_string(), "admin_ok".to_string(), jstring.clone() )?;
     let caller = ic_cdk::caller();
     let principal = caller.to_string();
     let conn = ic_sqlite::CONN.lock().unwrap();
@@ -125,7 +127,6 @@ pub fn change_rbac(jstring: String) -> ExecResult {
 #[query]
 pub fn rbac_query() -> JsonResult {
     let mut res: Vec<Rbac> = Vec::new();
-    rbac_verify("change_rbac".to_string(), "admin_ok".to_string())?;
     let rbac_sql = format!("select id, principal, friendly_name, view_opera_ok, add_opera_ok, dna_mark_ok, add_dna_ok, admin_ok from rbac");
     // ic_cdk::println!("Query: {rbac_sql} ");
     let conn = ic_sqlite::CONN.lock().unwrap();
@@ -171,16 +172,14 @@ pub fn rbac_query() -> JsonResult {
 //  * https://internetcomputer.org/docs/current/developer-docs/smart-contracts/advanced-features/time-and-timestamps
 //  * https://forum.dfinity.org/t/timestamp-or-date-in-rust-or-motoko/1391
 #[update]
-pub fn track_operation(caller: String, calling_function: String, capability: String, flag: bool ) -> ExecResult {
-    ic_cdk::println!("rbac_verify: calling_function {:?}, capability {:?}, caller {:?}, result {:?}", calling_function, capability, caller, flag);
+pub fn track_operation(caller: String, calling_function: String, capability: String, payload: String, enabled: bool ) -> ExecResult {
+    ic_cdk::println!("track_operation: calling_function {:?}, capability {:?}, caller {:?}, result {:?}", calling_function, capability, caller, enabled);
     let timestamp = api::time();
     let seconds = timestamp / 1_000_000_000;
     let system_time = OffsetDateTime::from_unix_timestamp(seconds.try_into().unwrap()).unwrap();
-    // ic_cdk::println!("rbac_verify: time {:?}", timestamp);
-    ic_cdk::println!("rbac_verify: time {:?}", system_time);
 
     let conn = ic_sqlite::CONN.lock().unwrap();
-    let insert_track_sql = format!("insert into track (principal, operation, system_time) values ('{}', '{}', '{}' )", caller, calling_function, system_time);
+    let insert_track_sql = format!("insert into track (principal, operation, system_time, payload, enabled) values ('{}', '{}', '{}', '{}', {} )", caller, calling_function, system_time, payload, enabled);
     ic_cdk::println!("rbac_verify sql: {insert_track_sql} ");
     let insert_ret = match conn.execute(&insert_track_sql, []) {
             Ok(e) => Ok(format!("{:?}", e)),
@@ -195,7 +194,7 @@ pub fn track_operation(caller: String, calling_function: String, capability: Str
 
 /// check if user is allowed to perform the operation
 #[query]
-pub fn rbac_verify(calling_function: String, capability: String) -> ExecResult {
+pub fn rbac_verify(calling_function: String, capability: String, payload: String ) -> ExecResult {
     let checked_caller: Rbac = check_caller()?;
     let caller = ic_cdk::caller().to_string();
     let flag: bool;
@@ -207,9 +206,9 @@ pub fn rbac_verify(calling_function: String, capability: String) -> ExecResult {
         "admin_ok" => flag = checked_caller.admin_ok,
         _ => flag = false,
     }
-    ic_cdk::println!("rbac_verify: calling_function {:?}, capability {:?}, caller {:?}, result {:?}", calling_function, capability, caller, flag);
+    ic_cdk::println!("rbac_verify: calling_function {:?}, capability {:?}, caller {:?}, result {:?}, payload {:?}", calling_function, capability, caller, flag, payload);
 
-    let _ = track_operation(caller.clone(), calling_function.clone(), capability.clone(), flag);
+    let _ = track_operation(caller.clone(), calling_function.clone(), capability.clone(), payload.clone(), flag);
 
     if !flag {
         return Err(MyError::CanisterError {

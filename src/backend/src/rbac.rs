@@ -2,10 +2,18 @@
 extern crate ic_cdk_macros;
 extern crate serde;
 use candid::{CandidType};
-use ic_cdk::{query, update};
+use ic_cdk::{api, query, update};
+use time::{OffsetDateTime};
 use serde::{Deserialize, Serialize};
 
 use crate::my_utils::*;
+
+#[derive(CandidType, Debug, Serialize, Deserialize)]
+pub struct Track {
+    pub id: u64,
+    pub principal: String,
+    pub operation: String
+}
 
 #[derive(CandidType, Debug, Serialize, Deserialize)]
 pub struct Rbac {
@@ -158,6 +166,33 @@ pub fn rbac_query() -> JsonResult {
     Ok(jres)
 }
 
+// Inserts a row in the track table. Remember! it's a blockchain, updates on BC data are silently ropped for queries operations
+// Time:
+//  * https://internetcomputer.org/docs/current/developer-docs/smart-contracts/advanced-features/time-and-timestamps
+//  * https://forum.dfinity.org/t/timestamp-or-date-in-rust-or-motoko/1391
+#[update]
+pub fn track_operation(caller: String, calling_function: String, capability: String, flag: bool ) -> ExecResult {
+    ic_cdk::println!("rbac_verify: calling_function {:?}, capability {:?}, caller {:?}, result {:?}", calling_function, capability, caller, flag);
+    let timestamp = api::time();
+    let seconds = timestamp / 1_000_000_000;
+    let system_time = OffsetDateTime::from_unix_timestamp(seconds.try_into().unwrap()).unwrap();
+    // ic_cdk::println!("rbac_verify: time {:?}", timestamp);
+    ic_cdk::println!("rbac_verify: time {:?}", system_time);
+
+    let conn = ic_sqlite::CONN.lock().unwrap();
+    let insert_track_sql = format!("insert into track (principal, operation, system_time) values ('{}', '{}', '{}' )", caller, calling_function, system_time);
+    ic_cdk::println!("rbac_verify sql: {insert_track_sql} ");
+    let insert_ret = match conn.execute(&insert_track_sql, []) {
+            Ok(e) => Ok(format!("{:?}", e)),
+        Err(err) => Err(MyError::CanisterError {
+            message: format!("{:?}", err),
+        }),
+    };
+    ic_cdk::println!("insert_ret return : {:?} ", insert_ret);
+
+    return Ok("OK".to_string());
+}
+
 /// check if user is allowed to perform the operation
 #[query]
 pub fn rbac_verify(calling_function: String, capability: String) -> ExecResult {
@@ -173,6 +208,9 @@ pub fn rbac_verify(calling_function: String, capability: String) -> ExecResult {
         _ => flag = false,
     }
     ic_cdk::println!("rbac_verify: calling_function {:?}, capability {:?}, caller {:?}, result {:?}", calling_function, capability, caller, flag);
+
+    let _ = track_operation(caller.clone(), calling_function.clone(), capability.clone(), flag);
+
     if !flag {
         return Err(MyError::CanisterError {
             message: format!("{:?}: capability {:?} not allowed for user {:?}", calling_function, capability, caller ),

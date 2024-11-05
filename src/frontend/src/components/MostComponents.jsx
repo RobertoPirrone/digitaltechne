@@ -431,6 +431,7 @@ const InnerTextField = ({
             label={label} 
             type={type} 
             id={name} 
+            onChange={onChange}
             inputProps={inputProps}
             value={value} disabled={disabled} InputProps={InputProps} fullWidth={fullWidth} />
             {errors?.[name] && 
@@ -474,12 +475,11 @@ export const MyTextField = ({
     disabled = false,
     register, // se si vuole avere required gestito da form react bisogna passare register={register({ required: true })}
 }) => {
-    console.log(register);
     if (register) {
         register = register(name);
         if (required) register.required = true;
     }
-    console.log("register:", register);
+    // console.log("register:", register);
     if (field_name !== "") {
         return (
             <Grid item xs={12}>
@@ -488,7 +488,7 @@ export const MyTextField = ({
                         <Typography display="inline">{field_name}&nbsp;&nbsp;&nbsp;</Typography>
                     </Grid>
                     <Grid item xs={8}>
-                        <InnerTextField required={required} inputRef={register} name={name} label={label} type={type} id={name} inputProps={inputProps} value={value} disabled={disabled} InputProps={InputProps} fullWidth={fullWidth} errors={errors} />
+                        <InnerTextField required={required} inputRef={register} name={name} label={label} type={type} id={name} inputProps={inputProps} value={value} disabled={disabled} InputProps={InputProps} fullWidth={fullWidth} onChange={onChange} errors={errors} />
                     </Grid>
                 </Grid>
             </Grid>

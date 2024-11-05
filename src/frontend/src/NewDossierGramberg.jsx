@@ -47,12 +47,12 @@ export const NewDossier = () => {
     const [asset, setAsset] = useState({});
     const [assets, setAssets] = useState([{}]);
     const [privateDossier, setPrivateDossier] = useState(false);
-//    const [nomeOpera, setNomeOpera] = useState("");
+    const [nomeOpera, setNomeOpera] = useState("");
     const [tipoOpera, setTipoOpera] = useState("");
     const [luogoOpera, setLuogoOpera] = useState("");
     const [autore, setAutore] = useState("");
     const [tipotecnica, setTipotecnica] = useState("");
-    const [annoopera, setAnnoopera] = useState("");
+    const [annoopera, setAnnoopera] = useState();
     const [numero_totale_copie, setNumero_totale_copie] = useState(0);
     const [dimensions, setDimensions] = useState("");
     const [tiposupporto, setTiposupporto] = useState("");
@@ -62,12 +62,10 @@ export const NewDossier = () => {
     const [copiePdA, setCopiePdA] = useState(0);
     const globalData = useContext(GlobalContext);
 
-    console.log('globalData');
-    console.log(globalData);
+    console.dir(globalData);
     useEffect(() => {
         if (isLoading) return;
         setIsLoading(true);
-        console.log("chiamo backendActor.check_caller: ");
         backendActor
             .check_caller()
             .then((Ret_data) => {
@@ -90,18 +88,13 @@ export const NewDossier = () => {
             });
     }, [backendActor, navigate, t]);
 
-    const actionChange = (e, el) => {
-        console.error(JSON.stringify(el));
-        setAction(el.value);
-    };
-
     const onInsert = (what, id) => {
         setLastInsert({ what: what, id: id });
     };
 
     const onSubmit = (vals) => {
-        console.log("VALS");
-        console.log(vals);
+        // console.log("VALS");
+        // console.log(vals);
 
         const tech = "";
         let seq = "";
@@ -113,14 +106,13 @@ export const NewDossier = () => {
         let need_ele = null;
         let content = "";
         // TBD per evitare eval, studiare: https://www.geeksforgeeks.org/how-to-use-dynamic-variable-names-in-javascript/
-        for (need_ele in ["annoopera", "nomeOpera", "tipotecnica", "copieFirmate", "copieNonFirmate", "copiePdA"] ) {
+        for (need_ele of ["annoopera", "nomeOpera", "tipotecnica", "tiposupporto", "copieFirmate", "copieNonFirmate", "copiePdA"] ) {
 
             content = eval(`${need_ele}`)
             console.log(need_ele, content);
             if (content  === "") missing_elements.push(need_ele);
         };
-        appAlert(missing_elements);
-        console.log(missing_elements.length);
+        // console.log("missing_elements.length: ", missing_elements.length);
         if (missing_elements.length != 0) {
             appAlert("missing elements: ",JSON.stringify(missing_elements));
             abort();
@@ -135,6 +127,9 @@ export const NewDossier = () => {
         vals.tipotecnica = tipotecnica;
         vals.dimensions = dimensions;
         vals.numero_totale_copie = Number.parseInt(numero_totale_copie);
+        vals.signed = Number.parseInt(copieFirmate);
+        vals.not_signed = Number.parseInt(copieNonFirmate);
+        vals.artist_proof = Number.parseInt(copiePdA);
         vals.tiposupporto = tiposupporto;
         if (privateDossier === null || privateDossier === false) {
             vals.private = false;
@@ -144,7 +139,6 @@ export const NewDossier = () => {
         vals.icon_uri = assets[0].key;
         setDisabledButs(true);
         setIsUpLoading(true);
-        console.log("onSubmit: ", JSON.stringify(vals));
         for (tipofirma of ["SIGNED", "NOT_SIGNED", "ARTIST_PROOF"]) {
             if (tipofirma === "SIGNED") {
                 max_cnt = copieFirmate;
@@ -158,7 +152,7 @@ export const NewDossier = () => {
                 vals.master_uuid = master_uuid;
                 vals.tipofirma = tipofirma;
                 vals.sheet_identifier = `${tipofirma} ${seq.toString()} / ${max_cnt}`;
-                console.log("onSubmit dossier_insert: ", vals);
+                console.log(`onSubmit dossier_insert ${tipofirma}, ${seq}: `, vals);
                 backendActor
                     .dossier_insert(JSON.stringify(vals))
                     .then((Ret_data) => {
@@ -196,7 +190,6 @@ export const NewDossier = () => {
 
     // console.log("newDossierInfo: ", JSON.stringify(newDossierInfo));
     // console.log("newDossierInfo: ", JSON.stringify(newDossierInfo.autori));
-    console.log("princiapl: ", principal.toText());
     if (isLoading) return;
 
     return (
@@ -221,19 +214,18 @@ export const NewDossier = () => {
                     <UploadNew assets={assets} show={true} asset={assets[0]} setAssets={setAssets} setDisabledButs={setDisabledButs} label={t("dossier:LoadJpgs")} />
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <Grid container direction="column" spacing={1} >
-                            <MyTextField name="nomeopera" required={true} register={register} errors={errors} label={t("dossier:nomeopera")} inputProps={{ maxLength: 4 }} />
+                            <MyTextField field_name={t("dossier:nomeopera")} name="nomeOpera" required={true} errors={errors} label={t("dossier:nomeopera")} onChange={(e, v) => setNomeOpera(e.target.value)} inputProps={{ maxLength: 30 }} />
                             <SpecializedSelect defaultValue={""} name="tipotecnica" label={t("tipotecnica:Label")} what={"tipotecnica"} onChange={(e, v) => setTipotecnica(e.target.value)} />
-                            <MyTextField name="annoopera" required={true} label={t("dossier:AnnoOpera")} onChange={(e) => setAnnoopera(e.target.value)} />
-                            <MyTextField name="numero_totale_copie" required={true} label={t("dossier:NumeroTotaleCopie")} onChange={(e) => setNumero_totale_copie(e.target.value)} />
-                            <MyTextField name="copie_firmate" required={true} label={t("dossier:CopieFirmate")} onChange={(e) => setCopieFirmate(e.target.value)} />
-                            <MyTextField name="copie_non_firmate" required={true} label={t("dossier:CopieNonFirmate")} onChange={(e) => setCopieNonFirmate(e.target.value)} />
-                            <MyTextField name="copie_PdA" required={true} label={t("dossier:CopiePdA")} onChange={(e) => setCopiePdA(e.target.value)} />
-                            <MyTextField name="dimensions" required={true} label={t("dossier:dimensions")} onChange={(e) => setDimensions(e.target.value)} />
+                            <MyTextField field_name={t("dossier:AnnoOpera")} name="annoopera" required={true} label={t("dossier:AnnoOpera")} onChange={(e) => setAnnoopera(e.target.value)} />
+                            <MyTextField field_name={t("dossier:NumeroTotaleCopie")} name="numero_totale_copie" required={true} label={t("dossier:NumeroTotaleCopie")} onChange={(e) => setNumero_totale_copie(e.target.value)} />
+                            <MyTextField field_name={t("dossier:CopieFirmate")} name="copie_firmate" required={true} label={t("dossier:CopieFirmate")} onChange={(e) => setCopieFirmate(e.target.value)} />
+                            <MyTextField field_name={t("dossier:CopieNonFirmate")} name="copie_non_firmate" required={true} label={t("dossier:CopieNonFirmate")} onChange={(e) => setCopieNonFirmate(e.target.value)} />
+                            <MyTextField field_name={t("dossier:CopiePdA")} name="copie_PdA" required={true} label={t("dossier:CopiePdA")} onChange={(e) => setCopiePdA(e.target.value)} />
+                            <MyTextField field_name={t("dossier:dimensions")} name="dimensions" required={true} label={t("dossier:dimensions")} onChange={(e) => setDimensions(e.target.value)} />
                             <SpecializedSelect defaultValue={""} name="tiposupporto" label={t("tiposupporto:Label")} what={"tiposupporto"} onChange={(e, v) => setTiposupporto(e.target.value)} />
                             <Typography display="inline">Private</Typography> <MyCheckbox defaultChecked={false} onChange={(e, v) => setPrivateDossier(v.label)} />
                             <Grid item >
-                                {" "}
-                                &nbsp;{" "}
+                                &nbsp;
                             </Grid>
                             <MostSubmitButton disabled={disabledButs} label={t("dossier:Inserisci")} />
                         </Grid>

@@ -54,7 +54,6 @@ export const UploadNew = ({ asset, setAsset, assets, setAssets, setDisabledButs,
             reader.readAsDataURL(file);
         });
         if (accept === "image/*") {
-            console.log("IIIIIIII");
             const [width, height] = await new Promise((resolve) => {
                 const img = new Image();
                 img.onload = () => resolve([img.naturalWidth, img.naturalHeight]);
@@ -66,7 +65,7 @@ export const UploadNew = ({ asset, setAsset, assets, setAssets, setDisabledButs,
         const extension = name.pop();
         const fileName = [uuidv4(), extension].join(".");
         // const fileName = [name, width, height, extension].join(".");
-        console.log("detailsFromFile: ", JSON.stringify(file.name));
+        // console.log("detailsFromFile: ", JSON.stringify(file.name));
         const original_filename = file.name;
         const file_size = file.size;
         const mimetype = mime.getType(original_filename);
@@ -92,7 +91,7 @@ export const UploadNew = ({ asset, setAsset, assets, setAssets, setDisabledButs,
                     }),
                 );
                 await batch.commit({ onProgress: ({ current, total }) => setProgress(current / total) });
-                console.log("items: ", JSON.stringify(items));
+                // console.log("items: ", JSON.stringify(items));
 
                 const asset_ar = [];
                 let item = {};
@@ -120,7 +119,7 @@ export const UploadNew = ({ asset, setAsset, assets, setAssets, setDisabledButs,
         input.click();
     };
 
-    console.log(assets);
+    // console.log(assets);
     console.log(assets[0]);
     return (
         <>

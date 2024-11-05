@@ -123,10 +123,17 @@ export const ArtworkMark = (props) => {
         addDna();
         if (markArray.length == 0) {
             appAlert(t("missingValues"));
-            return
+            abort();
         }
+        console.log("markArray:");
+        console.dir(markArray);
+
         let asset = {};
         for (asset of assets) {
+            console.log("ASSET:");
+            console.dir(asset);
+            if (!('filename' in asset)) continue;
+
             vals.uuid = uuidv4();
             vals.dossieropera_id = Number(dossier_id);
             vals.title = titolo;
@@ -208,8 +215,9 @@ export const ArtworkMark = (props) => {
 
     const addDna = () => {
         if (markDullCode === "" || (markPosition === "" ) || (markSide === "")) {
-            appAlert(t("missingValues"));
-            return;
+            let err_string = t("missingValues");
+            appAlert(`${err_string}: markDullCode ${markDullCode}, markPosition ${markPosition}, markSide ${markSide}`);
+            abort();
         }
         console.log("addDna");
         console.log(markPosition);
@@ -221,9 +229,10 @@ export const ArtworkMark = (props) => {
         const id = markArray.length +1;
         setMarkArray([...markArray, { "id": id, "markDullCode": markDullCode, "markPosition": markPosition, "markSide": markSide}]);
         setDisabledButs(false);
-        setMarkDullCode("");
-        setMarkSide("");
-        setMarkPosition("");
+        // setMarkDullCode("");
+        // setMarkSide("");
+        // setMarkPosition("");
+        console.log("addDna finito");
     };
 
     let columns = [];
@@ -243,9 +252,9 @@ export const ArtworkMark = (props) => {
 
                 <Grid container spacing={1}>
                     <Grid item xs={12}> &nbsp; </Grid>
-                    <MyAutocomplete field_name={t("DNA Code")} name="mark_dull_code" required={true} label={""} options={cartridgeUuids} freeSolo={false} onChange={(e, v) => setMarkDullCode(v)} />
-                    <SpecializedSelect field_name={t("Mark Side")} defaultValue={""} name="mark_side" label={t("Mark Side")} what={"mark_side"} onChange={(e, v) => setMarkSide(e.target.value)} />
-                    <SpecializedSelect field_name={t("Mark Position")} defaultValue={""} name="mark_position" label={t("Mark Position")} what={"mark_position"} onChange={(e, v) => setMarkPosition(e.target.value)} />
+                    <MyAutocomplete field_name={t("DNA Code")} name="markDullCode" required={true} label={""} options={cartridgeUuids} freeSolo={false} onChange={(e, v) => setMarkDullCode(v)} />
+                    <SpecializedSelect field_name={t("Mark Side")} defaultValue={""} name="markSide" label={t("Mark Side")} what={"mark_side"} onChange={(e, v) => setMarkSide(e.target.value)} />
+                    <SpecializedSelect field_name={t("Mark Position")} defaultValue={""} name="markPosition" label={t("Mark Position")} what={"mark_position"} onChange={(e, v) => setMarkPosition(e.target.value)} />
                     <MyTextField field_name="Note" name="note" label={t("note")} onChange={(e) => setNote(e.target.value)} />
                     <Grid item xs={12}> &nbsp; </Grid>
                     <Grid item xs={12}>

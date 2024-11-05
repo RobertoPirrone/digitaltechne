@@ -19,6 +19,9 @@ pub struct Dossier {
     tipotecnica: String,
     annoopera: u64,
     numero_totale_copie: u64,
+    signed: u64,
+    not_signed: u64,
+    artist_proof: u64,
     dimensions: String,
     private: bool,
     icon_uri: String,
@@ -98,7 +101,10 @@ pub fn dossier_pulldowns() -> JsonResult {
 
 /// internal dossier query. returns an array of [`Dossier`]
 #[query]
-pub fn dossier_struct_query(sql: String) -> Vec<Dossier> {
+pub fn dossier_struct_query(where_clause: String) -> Vec<Dossier> {
+    //ic_cdk::println!("dossier_struct_query: {where_clause} ");
+    let fields = "dossier.id, uuid, autore, nomeopera, ora_inserimento, inserted_by, tipotecnica, annoopera, numero_totale_copie, dimensions, private, icon_uri, tipofirma, tiposupporto, has_artwork_mark, master_uuid, sheet_identifier, signed, not_signed, artist_proof, friendly_name";
+    let sql = format!("select {} from dossier left outer join rbac where {} ", fields, where_clause );
     ic_cdk::println!("dossier_struct_query: {sql} ");
     let mut dossiers = Vec::new();
     let conn = ic_sqlite::CONN.lock().unwrap();
@@ -126,7 +132,10 @@ pub fn dossier_struct_query(sql: String) -> Vec<Dossier> {
                         has_artwork_mark: row.get(14).unwrap(),
                         master_uuid: row.get(15).unwrap(),
                         sheet_identifier: row.get(16).unwrap(),
-                        friendly_name: row.get(17).unwrap(),
+                        signed: row.get(17).unwrap(),
+                        not_signed: row.get(18).unwrap(),
+                        artist_proof: row.get(19).unwrap(),
+                        friendly_name: row.get(20).unwrap(),
                     };
 
                     dossiers.push(res_row)
@@ -147,18 +156,14 @@ pub fn dossier_struct_query(sql: String) -> Vec<Dossier> {
 #[query]
 pub fn dossier_query(params: QueryParams) -> JsonResult {
     let caller = ic_cdk::caller().to_string();
-    rbac_verify("dossier_query".to_string(), "view_opera_ok".to_string())?;
-    // let owner_sql = format!("select * from dossier where inserted_by = '{:}' and private = true limit {:?} offset {:?}", caller, params.limit, params.offset );
-    // let public_sql = format!("select * from dossier where inserted_by = '{:}' and private = false limit {:?} offset {:?}", caller, params.limit, params.offset );
-    let owner_sql = format!("select dossier.*, friendly_name from dossier left outer join rbac where inserted_by = '{:}' and inserted_by = principal and inserted_by = '{:}' and private = true order by annoopera limit {:?} offset {:?}", caller, caller, params.limit, params.offset );
-    let public_sql = format!("select dossier.*, friendly_name from dossier left outer join rbac where inserted_by = principal and private = false order by annoopera limit {:?} offset {:?}", params.limit, params.offset );
-    ic_cdk::println!("Query: {owner_sql} ");
+    rbac_verify("dossier_query".to_string(), "view_opera_ok".to_string(), "Dontcare".to_string())?;
+    let owner_sql = format!("inserted_by = '{:}' and inserted_by = principal and inserted_by = '{:}' and private = true order by annoopera limit {:?} offset {:?}", 
+        caller, caller, params.limit, params.offset );
+    let public_sql = format!("inserted_by = principal and private = false order by annoopera limit {:?} offset {:?}", params.limit, params.offset );
 
     let owner_dossier_infos = dossier_struct_query(owner_sql.to_string());
     ic_cdk::println!("dossier_query owner_sql : {:?} ", owner_dossier_infos);
     let public_dossier_infos = dossier_struct_query(public_sql.to_string());
-    ic_cdk::println!("dossier_query public_sql : {:?} ", public_sql);
-
 
     let rs = DossierReturnStruct {
         success: true,
@@ -173,15 +178,15 @@ pub fn dossier_query(params: QueryParams) -> JsonResult {
 #[update]
 pub fn dossier_insert(jv: String) -> ExecResult {
     ic_cdk::println!("dossier_insert input: {jv} ");
-    rbac_verify("dossier_query".to_string(), "add_opera_ok".to_string())?;
+    rbac_verify("dossier_insert".to_string(), "add_opera_ok".to_string(), jv.to_string())?;
     let d: Dossier = serde_json::from_str(&jv).unwrap();
     let caller = ic_cdk::caller().to_string();
     let conn = ic_sqlite::CONN.lock().unwrap();
 
     let sql = format!("insert into dossier \
-        (uuid, autore, nomeopera, ora_inserimento, inserted_by, icon_uri, tipotecnica, annoopera, numero_totale_copie, dimensions, private, tipofirma, tiposupporto, master_uuid, sheet_identifier) 
-        values ('{}', '{}', '{}', '{}', '{}', '{}', '{}', {}, {}, '{}', {}, '{}', '{}', '{}', '{}')",
-        d.uuid, d.autore, d.nomeopera, d.ora_inserimento, caller, d.icon_uri , d.tipotecnica, d.annoopera, d.numero_totale_copie,  d.dimensions, d.private, d.tipofirma, d.tiposupporto, d.master_uuid, d.sheet_identifier
+        (uuid, autore, nomeopera, ora_inserimento, inserted_by, icon_uri, tipotecnica, annoopera, numero_totale_copie, signed, not_signed, artist_proof, dimensions, private, tipofirma, tiposupporto, master_uuid, sheet_identifier) 
+        values ('{}', '{}', '{}', '{}', '{}', '{}', '{}', {}, {}, {}, {}, {}, '{}', {}, '{}', '{}', '{}', '{}')",
+        d.uuid, d.autore, d.nomeopera, d.ora_inserimento, caller, d.icon_uri , d.tipotecnica, d.annoopera, d.numero_totale_copie, d.signed, d.not_signed, d.artist_proof, d.dimensions, d.private, d.tipofirma, d.tiposupporto, d.master_uuid, d.sheet_identifier
         );
     return match conn.execute(&sql, []) {
         Ok(e) => Ok(format!("{:?}", e)),

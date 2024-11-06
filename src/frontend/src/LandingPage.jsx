@@ -17,7 +17,6 @@ export function LandingPage() {
         i18n.changeLanguage(lng);
     };
     const infoUrl = "/html/MISC/first_info.html";
-    const app_instance = process.env.REACT_APP_INSTANCEE;
     const logo = useContext(GlobalContext).logo;
     const autore = useContext(GlobalContext).autore;
     const officialURL = useContext(GlobalContext).officialURL;

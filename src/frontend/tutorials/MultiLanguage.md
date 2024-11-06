@@ -68,7 +68,7 @@ deactivate
 
 ## Nationalized Pull Down Menus
 
-Pull down menus should appear in the current language, uat the keys associated with the prompts must be the same in any language
+Pull down menus should appear in the current language, but the keys associated with the prompts must be the same in any language
 
 Json files are built starting from an ad hoc file (i..e. a file for each menu) and calling xsl2i18n with the command line option **--pulldown** . This creates json files used by useTranslate with these characteristics:
 - field **Label**, name of the pulldown
@@ -85,7 +85,7 @@ And then they can be called via the *SpecializedSelect* component
 # Excel file structure
 The xlsx file (or also .csv) has 4 columns:
 - L1 main key
-- L2 possible second level key used only for pulldowns
+- L2 possible second level key 
 - it prompt in Italian
 - en prompt in English
 
@@ -125,5 +125,5 @@ You get files like this: public/locales/en/tipotecnica.json
 ```
 
 So the second level requires:
-- a row with key, constant "L2" and the nationalized prompts
+- a row with key, constant "L2" (for pulldowns add also the nationalized prompts)
 - n rows where the first column is missing, in the second there is the second level key and then the nationalized prompts

@@ -3,7 +3,7 @@ unset DFX_NETWORK
 bash make_did.sh
 dfx build frontend
 dfx build backend
-dfx identity use default
+dfx identity use NuovaIdentitaRobi
 dfx canister install frontend --mode upgrade
 dfx canister install backend --mode upgrade
 exit 0

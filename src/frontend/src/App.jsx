@@ -9,54 +9,29 @@ import { ArtworkMark } from "./ArtworkMark";
 import { CartridgeInsert } from "./CartridgeInsert";
 import { ChangeRbac } from "./ChangeRbac";
 import { Dossier } from "./Dossier";
-// import { DossierDetail } from "./DossierDetailGramberg";
 import { Home } from "./Home";
 import { GlobalProvider, GlobalContext } from "./Global";
 import { JsonCompare } from "./JsonCompare";
 import { LandingPage } from "./LandingPage";
 import { Manual } from "./Manual";
 import { NewDocument } from "./NewDocument";
-// import { BatchInsert, NewDossier } from "./NewGrambergDossier";
 import { Purchase } from "./Purchase";
 import { SelfDefineUser } from "./SelfDefineUser";
-// import { UserRoles } from "./UserRoles";
 import { VerifyMark } from "./VerifyMark";
 import Login from "./auth/Login";
 import { Logout } from "./auth/Logout";
+import { theme } from  "./components/themePalette";
 import { themeCommon } from "./components/themeCommon";
 import "./App.css";
 import { AuthProvider, useAuth } from "./auth/use-auth-client";
-
 import { backend } from "declarations/backend";
 
-let app = process.env.REACT_APP_APPLICATION;
-console.log(process.env);
+import { DossierDetail } from "./DossierDetailGramberg";
+import { BatchInsert, NewDossier } from "./NewDossierGramberg";
 
-let mod, theme, DossierDetail, BatchInsert, NewDossier;
-switch (app) {
-    case 'gramberg':
-        mod = await import ("./DossierDetailGramberg.jsx");
-        DossierDetail = mod.DossierDetail;
-        mod = await import ("./NewDossierGramberg.jsx");
-        BatchInsert = mod.BatchInsert;
-        NewDossier = mod.NewDossier;
-        mod = await import ("./components/themeGramberg.jsx");
-        theme = mod.theme;
-        break;
-    case 'valsecchi':
-        mod = await import ("./DossierDetailValsecchi.jsx");
-        DossierDetail = mod.DossierDetail;
-        mod = await import ("./NewDossierValsecchi.jsx");
-        BatchInsert = mod.BatchInsert;
-        NewDossier = mod.NewDossier;
-        mod = await import ("./components/themeValsecchi.jsx");
-        theme = mod.theme;
-        break;
-    default:
-        const err = `Unknown application ${app}`;
-        alert(err);
-        throw new Error(err);
-}
+console.log("meta.env: ");
+console.dir(import.meta.env);
+const app = import.meta.env.VITE_APPLICATION;
 
 function Loading() {
     return <h2>🌀 Loading...</h2>;
@@ -64,7 +39,6 @@ function Loading() {
 
 function App() {
     const { isAuthenticated, identity } = useAuth();
-    // console.error(process.env);
 
     return (
         <GlobalProvider>

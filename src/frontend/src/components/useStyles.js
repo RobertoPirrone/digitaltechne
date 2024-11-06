@@ -1,6 +1,5 @@
 import { styled } from "@mui/system";
-// TBD fare poi una import condizionale, al momento non è grave, i due temi hanno solo il colore diverso
-import { theme } from "./themeGramberg";
+import { theme } from "./themePalette";
 
 export const DTGrow = styled("grow")({
     flexGrow: 1,

@@ -109,13 +109,13 @@ export const NewDossier = () => {
         for (need_ele of ["annoopera", "nomeOpera", "tipotecnica", "tiposupporto", "copieFirmate", "copieNonFirmate", "copiePdA"] ) {
 
             content = eval(`${need_ele}`)
-            console.log(need_ele, content);
+            // console.log("Need_ele: ", need_ele, content);
             if (content  === "") missing_elements.push(need_ele);
         };
         // console.log("missing_elements.length: ", missing_elements.length);
         if (missing_elements.length != 0) {
-            appAlert("missing elements: ",JSON.stringify(missing_elements));
-            abort();
+            appAlert(`${t("missingValues")}: ${JSON.stringify(missing_elements)}`);
+            return false;
         }
         vals.uuid = uuidv4();
         master_uuid = vals.uuid;
@@ -212,7 +212,7 @@ export const NewDossier = () => {
                 <div className={DTRoot}>
 
                     <UploadNew assets={assets} show={true} asset={assets[0]} setAssets={setAssets} setDisabledButs={setDisabledButs} label={t("dossier:LoadJpgs")} />
-                    <form onSubmit={handleSubmit(onSubmit)}>
+                    <form >
                         <Grid container direction="column" spacing={1} >
                             <MyTextField field_name={t("dossier:nomeopera")} name="nomeOpera" required={true} errors={errors} label={t("dossier:nomeopera")} onChange={(e, v) => setNomeOpera(e.target.value)} inputProps={{ maxLength: 30 }} />
                             <SpecializedSelect defaultValue={""} name="tipotecnica" label={t("tipotecnica:Label")} what={"tipotecnica"} onChange={(e, v) => setTipotecnica(e.target.value)} />
@@ -227,7 +227,7 @@ export const NewDossier = () => {
                             <Grid item >
                                 &nbsp;
                             </Grid>
-                            <MostSubmitButton disabled={disabledButs} label={t("dossier:Inserisci")} />
+                            <MostSubmitButton onClick={handleSubmit(onSubmit)} disabled={disabledButs} label={t("dossier:Inserisci")} />
                         </Grid>
                     </form>
                     {isUpLoading ? <CircularProgress /> : null}

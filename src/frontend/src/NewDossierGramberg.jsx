@@ -306,6 +306,7 @@ export const BatchInsert = () => {
         let max_cnt = 0;
         let switch_row = false;
 
+        try {
         for (r of jsonText) {
             console.log("jsonText element: ", r);
 
@@ -364,6 +365,9 @@ export const BatchInsert = () => {
             vals.tipofirma = "SIGNED";
             vals.dimensions = r.Dimensions === null ? "UNK" : r.Dimensions;
             vals.numero_totale_copie = r.EditionNumber != null ? Number.parseInt(r.EditionNumber) : 1;
+            vals.signed = (r.SIGNED) ? Number.parseInt(r.SIGNED) : 0;
+            vals.not_signed = (r.NOT_SIGNED) ? Number.parseInt(r.NOT_SIGNED) : 0;
+            vals.artist_proof = (r.ARTIST_PROOF) ? Number.parseInt(r.ARTIST_PROOF) : 0;
             vals.tiposupporto = "PAPER";
             vals.private = false;
 
@@ -413,6 +417,10 @@ export const BatchInsert = () => {
                         });
                 }
             }
+        }
+        } catch (e) {
+            // console.log(e.message);
+            appAlert(`insert Error: ${e.message}`);
         }
     };
 

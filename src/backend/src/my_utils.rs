@@ -1,9 +1,9 @@
 //! RBAC (Role based access control) utils and return types
 extern crate ic_cdk_macros;
 extern crate serde;
-use candid::{CandidType};
+use candid::CandidType;
 use ic_cdk::api::call::RejectionCode;
-use ic_cdk::{query};
+use ic_cdk::query;
 use serde::Deserialize;
 
 use crate::rbac::*;
@@ -33,4 +33,3 @@ pub fn whoami() -> String {
     let caller = ic_cdk::caller();
     caller.to_string()
 }
-

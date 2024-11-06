@@ -6,7 +6,7 @@ use ic_cdk::{query, update};
 use serde::{Deserialize, Serialize};
 
 use crate::my_utils::*;
-use crate::rbac::{rbac_verify};
+use crate::rbac::rbac_verify;
 
 /// Cartrdige holds only info about a DNA sample
 #[derive(Debug, Serialize, Deserialize)]

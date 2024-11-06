@@ -53,4 +53,3 @@ pub fn query(sql: String) -> QueryResult {
     }
     Ok(res)
 }
-

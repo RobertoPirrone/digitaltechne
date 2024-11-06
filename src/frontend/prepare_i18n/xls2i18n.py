@@ -40,6 +40,7 @@ def xls2i18n():
         report = ""
         xlsx = load_workbook(filename=xlsx_name)['Sheet']
        
+        # italiano e inglese ci sono sempre, ma lasciamo spazio a altro
         header = xlsx[1]
         langs = [ header[2].value, header[3].value]
         if len(header) ==5:

@@ -551,3 +551,17 @@ export const MyUploadButton = ({ accept, finish, setDisabledButs, setUploadedFil
         </>
     );
 };
+
+
+/// Shortcut for a DossierDetail Row
+export const NewTableRow = ({label, value}) => {
+    return (
+        <tr>
+            <th>{label}</th>
+            <td>
+                {value}
+            </td>
+        </tr>
+    );
+};
+

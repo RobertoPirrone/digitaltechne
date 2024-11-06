@@ -217,7 +217,7 @@ export const ArtworkMark = (props) => {
         if (markDullCode === "" || (markPosition === "" ) || (markSide === "")) {
             let err_string = t("missingValues");
             appAlert(`${err_string}: markDullCode ${markDullCode}, markPosition ${markPosition}, markSide ${markSide}`);
-            abort();
+            return false;
         }
         console.log("addDna");
         console.log(markPosition);

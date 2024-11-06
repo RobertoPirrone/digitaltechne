@@ -6,7 +6,7 @@ use ic_cdk::{query, update};
 use serde::{Deserialize, Serialize};
 
 use crate::my_utils::*;
-use crate::rbac::{rbac_verify};
+use crate::rbac::rbac_verify;
 
 #[derive(CandidType, Debug, Serialize, Deserialize, Clone)]
 pub struct Dossier {
@@ -56,7 +56,6 @@ struct DistinctResult {
     ele: String,
 }
 
-
 /// pull down menus for opera insert. only autore is currently used
 #[query]
 pub fn dossier_pulldowns() -> JsonResult {
@@ -104,7 +103,10 @@ pub fn dossier_pulldowns() -> JsonResult {
 pub fn dossier_struct_query(where_clause: String) -> Vec<Dossier> {
     //ic_cdk::println!("dossier_struct_query: {where_clause} ");
     let fields = "dossier.id, uuid, autore, nomeopera, ora_inserimento, inserted_by, tipotecnica, annoopera, numero_totale_copie, dimensions, private, icon_uri, tipofirma, tiposupporto, has_artwork_mark, master_uuid, sheet_identifier, signed, not_signed, artist_proof, friendly_name";
-    let sql = format!("select {} from dossier left outer join rbac where {} ", fields, where_clause );
+    let sql = format!(
+        "select {} from dossier left outer join rbac where {} ",
+        fields, where_clause
+    );
     ic_cdk::println!("dossier_struct_query: {sql} ");
     let mut dossiers = Vec::new();
     let conn = ic_sqlite::CONN.lock().unwrap();
@@ -149,17 +151,23 @@ pub fn dossier_struct_query(where_clause: String) -> Vec<Dossier> {
     return dossiers;
 }
 
-
 /// returns public and private dossier
 ///
 /// offset and limit parameters are honored, although pagination is usually done in the forntend code
 #[query]
 pub fn dossier_query(params: QueryParams) -> JsonResult {
     let caller = ic_cdk::caller().to_string();
-    rbac_verify("dossier_query".to_string(), "view_opera_ok".to_string(), "Dontcare".to_string())?;
+    rbac_verify(
+        "dossier_query".to_string(),
+        "view_opera_ok".to_string(),
+        "Dontcare".to_string(),
+    )?;
     let owner_sql = format!("inserted_by = '{:}' and inserted_by = principal and inserted_by = '{:}' and private = true order by annoopera limit {:?} offset {:?}", 
         caller, caller, params.limit, params.offset );
-    let public_sql = format!("inserted_by = principal and private = false order by annoopera limit {:?} offset {:?}", params.limit, params.offset );
+    let public_sql = format!(
+        "inserted_by = principal and private = false order by annoopera limit {:?} offset {:?}",
+        params.limit, params.offset
+    );
 
     let owner_dossier_infos = dossier_struct_query(owner_sql.to_string());
     ic_cdk::println!("dossier_query owner_sql : {:?} ", owner_dossier_infos);

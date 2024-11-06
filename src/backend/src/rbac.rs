@@ -1,10 +1,10 @@
 //! RBAC (Role based access control) utils and return types
 extern crate ic_cdk_macros;
 extern crate serde;
-use candid::{CandidType};
+use candid::CandidType;
 use ic_cdk::{api, query, update};
-use time::{OffsetDateTime};
 use serde::{Deserialize, Serialize};
+use time::OffsetDateTime;
 
 use crate::my_utils::*;
 
@@ -12,7 +12,7 @@ use crate::my_utils::*;
 pub struct Track {
     pub id: u64,
     pub principal: String,
-    pub operation: String
+    pub operation: String,
 }
 
 #[derive(CandidType, Debug, Serialize, Deserialize)]
@@ -32,7 +32,6 @@ pub struct RbacReturnStruct {
     success: bool,
     rbacs: Vec<Rbac>,
 }
-
 
 /// Returns the [`Rbac`] struct associated with the authenticated caller
 #[query]
@@ -104,19 +103,24 @@ pub fn change_rbac(jstring: String) -> ExecResult {
     ic_cdk::println!("change rbac input: {jstring} ");
     let r: Rbac = serde_json::from_str(&jstring).unwrap();
 
-    rbac_verify("change_rbac".to_string(), "admin_ok".to_string(), jstring.clone() )?;
+    rbac_verify("change_rbac".to_string(), "admin_ok".to_string(), jstring.clone())?;
     let caller = ic_cdk::caller();
     let principal = caller.to_string();
     let conn = ic_sqlite::CONN.lock().unwrap();
     let change_rbac_sql = format!(
         "update rbac set \
             view_opera_ok = {}, add_opera_ok = {}, dna_mark_ok = {}, add_dna_ok = {}, admin_ok = {} 
-            where principal = '{}'", 
-            r.view_opera_ok, r.add_opera_ok, r.dna_mark_ok, r.add_dna_ok, r.admin_ok, r.principal
+            where principal = '{}'",
+        r.view_opera_ok, r.add_opera_ok, r.dna_mark_ok, r.add_dna_ok, r.admin_ok, r.principal
     );
     ic_cdk::println!("change_rbac sql: {change_rbac_sql} ");
     return match conn.execute(&change_rbac_sql, []) {
-        Ok(ok) => return Ok(format!("change_rbac: updated {} permissions, with return {}", principal, ok )),
+        Ok(ok) => {
+            return Ok(format!(
+                "change_rbac: updated {} permissions, with return {}",
+                principal, ok
+            ))
+        }
         Err(err) => Err(MyError::CanisterError {
             message: format!("{:?}", err),
         }),
@@ -127,7 +131,9 @@ pub fn change_rbac(jstring: String) -> ExecResult {
 #[query]
 pub fn rbac_query() -> JsonResult {
     let mut res: Vec<Rbac> = Vec::new();
-    let rbac_sql = format!("select id, principal, friendly_name, view_opera_ok, add_opera_ok, dna_mark_ok, add_dna_ok, admin_ok from rbac");
+    let rbac_sql = format!(
+        "select id, principal, friendly_name, view_opera_ok, add_opera_ok, dna_mark_ok, add_dna_ok, admin_ok from rbac"
+    );
     // ic_cdk::println!("Query: {rbac_sql} ");
     let conn = ic_sqlite::CONN.lock().unwrap();
     let mut stmt = conn.prepare(&rbac_sql).unwrap();
@@ -148,7 +154,7 @@ pub fn rbac_query() -> JsonResult {
                         admin_ok: row.get(7).unwrap(),
                     };
                     res.push(rbac);
-                },
+                }
                 None => break,
             },
             Err(err) => {
@@ -160,7 +166,7 @@ pub fn rbac_query() -> JsonResult {
     }
     let ret_payload = RbacReturnStruct {
         success: true,
-        rbacs: res
+        rbacs: res,
     };
     let jres = serde_json::to_string(&ret_payload).unwrap();
     ic_cdk::println!("JRES: {jres} ");
@@ -172,17 +178,32 @@ pub fn rbac_query() -> JsonResult {
 //  * https://internetcomputer.org/docs/current/developer-docs/smart-contracts/advanced-features/time-and-timestamps
 //  * https://forum.dfinity.org/t/timestamp-or-date-in-rust-or-motoko/1391
 #[update]
-pub fn track_operation(caller: String, calling_function: String, capability: String, payload: String, enabled: bool ) -> ExecResult {
-    ic_cdk::println!("track_operation: calling_function {:?}, capability {:?}, caller {:?}, result {:?}", calling_function, capability, caller, enabled);
+pub fn track_operation(
+    caller: String,
+    calling_function: String,
+    capability: String,
+    payload: String,
+    enabled: bool,
+) -> ExecResult {
+    ic_cdk::println!(
+        "track_operation: calling_function {:?}, capability {:?}, caller {:?}, result {:?}",
+        calling_function,
+        capability,
+        caller,
+        enabled
+    );
     let timestamp = api::time();
     let seconds = timestamp / 1_000_000_000;
     let system_time = OffsetDateTime::from_unix_timestamp(seconds.try_into().unwrap()).unwrap();
 
     let conn = ic_sqlite::CONN.lock().unwrap();
-    let insert_track_sql = format!("insert into track (principal, operation, system_time, payload, enabled) values ('{}', '{}', '{}', '{}', {} )", caller, calling_function, system_time, payload, enabled);
+    let insert_track_sql = format!(
+        "insert into track (principal, operation, system_time, payload, enabled) values ('{}', '{}', '{}', '{}', {} )",
+        caller, calling_function, system_time, payload, enabled
+    );
     ic_cdk::println!("rbac_verify sql: {insert_track_sql} ");
     let insert_ret = match conn.execute(&insert_track_sql, []) {
-            Ok(e) => Ok(format!("{:?}", e)),
+        Ok(e) => Ok(format!("{:?}", e)),
         Err(err) => Err(MyError::CanisterError {
             message: format!("{:?}", err),
         }),
@@ -194,11 +215,11 @@ pub fn track_operation(caller: String, calling_function: String, capability: Str
 
 /// check if user is allowed to perform the operation
 #[query]
-pub fn rbac_verify(calling_function: String, capability: String, payload: String ) -> ExecResult {
+pub fn rbac_verify(calling_function: String, capability: String, payload: String) -> ExecResult {
     let checked_caller: Rbac = check_caller()?;
     let caller = ic_cdk::caller().to_string();
     let flag: bool;
-    match  capability.as_str() {
+    match capability.as_str() {
         "view_opera_ok" => flag = checked_caller.view_opera_ok,
         "add_opera_ok" => flag = checked_caller.add_opera_ok,
         "dna_mark_ok" => flag = checked_caller.dna_mark_ok,
@@ -206,14 +227,30 @@ pub fn rbac_verify(calling_function: String, capability: String, payload: String
         "admin_ok" => flag = checked_caller.admin_ok,
         _ => flag = false,
     }
-    ic_cdk::println!("rbac_verify: calling_function {:?}, capability {:?}, caller {:?}, result {:?}, payload {:?}", calling_function, capability, caller, flag, payload);
+    ic_cdk::println!(
+        "rbac_verify: calling_function {:?}, capability {:?}, caller {:?}, result {:?}, payload {:?}",
+        calling_function,
+        capability,
+        caller,
+        flag,
+        payload
+    );
 
-    let _ = track_operation(caller.clone(), calling_function.clone(), capability.clone(), payload.clone(), flag);
+    let _ = track_operation(
+        caller.clone(),
+        calling_function.clone(),
+        capability.clone(),
+        payload.clone(),
+        flag,
+    );
 
     if !flag {
         return Err(MyError::CanisterError {
-            message: format!("{:?}: capability {:?} not allowed for user {:?}", calling_function, capability, caller ),
+            message: format!(
+                "{:?}: capability {:?} not allowed for user {:?}",
+                calling_function, capability, caller
+            ),
         });
     }
-    return Ok("OK".to_string()) ;
+    return Ok("OK".to_string());
 }

@@ -10,7 +10,9 @@ Example at the end of this README
 # TBD:  Mui React Select with grouping
 
 usually run inside venv
-need openpyxl
+pip install  openpyxl csv
+pip install google-cloud-translate==2.0.1 polib
+GOOGLE_APPLICATION_CREDENTIALS=./google_key.json
 
 
 Scripts:

@@ -76,7 +76,12 @@ def xls2i18n():
                         # Per i pull down bilivello posso nazionalizzare anche il nome del gruppo
                         L2_dict={}
                         new_L2_key = L1
-                        L2_dict["Label"]=cur_value
+                        # dict annidati non di tipo pulldown, la label non esiste
+                        print(cur_value, type(cur_value))
+                        if  cur_value is not None:
+                            L2_dict["Label"]=cur_value
+                        else:
+                            print("ZZZZZZZZZZZZZZZZZZZZZZ NOne")
                         
                     elif  L1 is None and L2 is None:
                         break
@@ -88,7 +93,8 @@ def xls2i18n():
 
                     elif  L1 is None:
                         # siamo dentro un L2 
-                        L2_dict[L2] = cur_value
+                        if  cur_value is not None:
+                            L2_dict[L2] = cur_value
 
                     else:
                         Log.error(f"ELSE {L1}, {L2}, main value {main_value}, cur_value {cur_value}" )

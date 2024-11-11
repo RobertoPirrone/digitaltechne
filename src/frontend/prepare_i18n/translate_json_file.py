@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import json, sys,re
+import json, sys,re,os
 # pip3 install google-cloud-translate==2.0.1
 # ricevo: 
 #   * lingua
@@ -12,15 +12,12 @@ import json, sys,re
 
 
 def translate_text(target, text):
-
-
     # return re.sub('\n','\nAA', text)
-
     """Translates text into the target language.
 
-    Target must be an ISO 639-1 language code. (e.g. it, en,...)
-    text is newline separated string of strings
-    See https://g.co/cloud/translate/v2/translate-reference#supported_languages
+    * target must be an ISO 639-1 language code. (e.g. it, en,...). See https://g.co/cloud/translate/v2/translate-reference#supported_languages
+    * text is a newline separated string of strings
+
     """
     import six
     from google.cloud import translate_v2 as translate
@@ -44,34 +41,43 @@ def translate_text(target, text):
     return (result["translatedText"])
 
 if not (len(sys.argv) == 3 or len(sys.argv) == 4):
-    print("Uso: sys.argv[0] lang target_file [rows]")
+    print("Uso: sys.argv[0] lang src_file_path [rows]")
+    print("target_file will be locales/lang/file")
     exit (1)
 lang=sys.argv[1]
-tgt_file=sys.argv[2]
+src_file=sys.argv[2]
 
-with open (tgt_file, "r") as f:
-    tgt=json.loads(f.read())
+with open (src_file, "r") as f:
+    src=json.loads(f.read())
 
 if len(sys.argv) == 4:
     rows=sys.argv[3]
 else:
-    rows=tgt
+    rows=src
 
 keys=[]
 it_values=[]
 
 for key, it_value in rows.items():
-    print(key)
+    print(key, it_value)
     if type(it_value) == dict:
-        print("DICT")
+        print(f"DICT: {it_value.items()}")
         for dict_key, dict_it_value in it_value.items():
-            keys.append(f"DICT-{key}-{dict_key}")
-            it_values.append(dict_it_value)
+            if type(dict_it_value) == dict:
+                for inner_dict_key, inner_dict_it_value in dict_it_value.items():
+                    keys.append(f"DICT3-{key}-{dict_key}-{inner_dict_key}")
+                    it_values.append(inner_dict_it_value)
+            else:
+                keys.append(f"DICT-{key}-{dict_key}")
+                it_values.append(dict_it_value)
     else:
         keys.append(key)
         it_values.append(it_value)
 
 # da array di stringhe a unica stringa con EOL
+print("XXXXit_values")
+print(it_values)
+print(keys)
 translated = translate_text(lang, "\n".join(it_values))
 print(f"{keys=}\n {translated=}")
 
@@ -86,7 +92,20 @@ tgt = list(zip(keys,trans_list))
 tgt_dict = {}
 for k,v in tgt:
     print(k,v)
-    if "DICT" in k:
+    if "DICT3" in k:
+        if m := re.match('DICT3-(.*?)-(.*?)-(.*)',k):
+            L1=m[1]
+            L2=m[2]
+            L3=m[3]
+            print(f"{L1=}, {L2=}, {L3=}")
+            if L1 not in tgt_dict:
+                tgt_dict[L1] = {}
+            if L2 not in tgt_dict[L1]:
+                tgt_dict[L1][L2] = {}
+            tgt_dict[L1][L2][L3] = v
+        else:
+            print(f"KOOOO level 3: {k}")
+    elif "DICT" in k:
         if m := re.match('DICT-(.*?)-(.*)',k):
             L1=m[1]
             L2=m[2]
@@ -95,15 +114,20 @@ for k,v in tgt:
                 tgt_dict[L1] = {}
             tgt_dict[L1][L2] = v
         else:
-            print(f"KOOOO: {k}")
+            print(f"KOOOO level 2: {k}")
 
     else:
         tgt_dict[k] = v
 
 
-print("FINITO")
+basename=os.path.basename(src_file)
+print(basename)
 print (json.dumps(tgt_dict, ensure_ascii=False, indent=2))
-exit(0)
+try:
+    os.mkdir(f"locales/{lang}")
+except Exception as e:
+    pass
 
+tgt_file=f"locales/{lang}/{basename}"
 with open (tgt_file, "w") as f:
     f.write(json.dumps(tgt_dict, ensure_ascii=False, indent=2))

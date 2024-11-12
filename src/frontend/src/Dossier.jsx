@@ -18,13 +18,13 @@ import PropagateLoader from "react-spinners/PropagateLoader";
 import { useLocation, useParams } from "react-router-dom";
 import { canisterId } from "../../declarations/uploads";
 import { Footer } from "./Footer";
+import { GlobalContext } from "./Global";
 import { Header } from "./Header";
 import { Table } from "./Table";
 import { appAlert, getAssetPfx } from "./Utils";
 import { useAuth } from "./auth/use-auth-client";
 import { Check, MostCheckbox, MostSubmitButton, MyCheckIcon, WarningIcon } from "./components/MostComponents";
 import { MostDataGrid } from "./components/MostDataGrid";
-import { useGlobalState } from "./state";
 
 let dossier_uuid = null;
 let want_detail = false;
@@ -54,9 +54,7 @@ export const Dossier = () => {
     const [dossierVisione, setDossierVisione] = useState([]); //elenco dossier
     const [masterOnly, setMasterOnly] = useState(false); //elenco dossier
     const [checkedPubblici, setCheckedPubblici] = React.useState(false);
-    const [application, setApplication] = useGlobalState("application");
-    const [username, setusername] = useGlobalState("username");
-    const [trueidentity, setIdentity] = useGlobalState("identity");
+    const {userName, application} = useContext(GlobalContext);
 
     dossier_uuid = react_router_location.pathname.split("/")[2];
     if (dossier_uuid != null) {

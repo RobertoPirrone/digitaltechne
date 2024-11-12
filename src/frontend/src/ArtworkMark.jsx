@@ -23,7 +23,6 @@ import { DocData } from "./components/DocData";
 import { GoTo, GoToHomePage, MostCheckbox, MostSelect, MostSubmitButton, MostTextField, MyAutocomplete, MyCheckbox, MyTextField } from "./components/MostComponents";
 import { DTRoot, DTSubmit } from "./components/useStyles";
 import { SpecializedSelect } from "./components/SpecializedSelect";
-import { useGlobalState } from "./state";
 import { appAlert, getAssetPfx } from "./utils";
 
 /**

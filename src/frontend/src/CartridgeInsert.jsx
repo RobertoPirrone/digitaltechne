@@ -19,7 +19,6 @@ import { MostCheckbox, MostSelect, MostSubmitButton, MostTextField, MyAutocomple
 import { XlsFile } from "./components/XlsFile";
 import { DTFooter, DTGrow } from "./components/useStyles";
 import { DTRoot } from "./components/useStyles";
-import { useGlobalState } from "./state";
 
 /*
  * Inserimento nella tavola cartridge

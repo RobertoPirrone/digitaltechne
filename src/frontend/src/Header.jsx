@@ -20,12 +20,12 @@ import { Link } from "react-router-dom";
 import logo from "/DT-noalpha.png";
 import HelpDialog from "./components/HelpDialog";
 import { DTGrow, DTHeaderTitle, DTMenuButton, DTSectionUser } from "./components/useStyles";
-import { useGlobalState } from "./state";
+import { GlobalContext } from "./Global";
 
 export function Header(props) {
     const { t, i18n } = useTranslation();
     const [langDialog, setLangDialog] = useState(false);
-    const [username, setUsername] = useGlobalState("username");
+    const username= useContext(GlobalContext);
     const catalogoUrl = "/catalogo.html";
 
     function linguaWin() {

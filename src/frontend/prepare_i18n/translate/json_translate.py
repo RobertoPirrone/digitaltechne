@@ -1,14 +1,14 @@
 import json, sys,re,os
 from translate_google import translate_text
 
-def json_tran(src_file, lang, rows):
+def json_tran(src_file, lang):
     with open (src_file, "r") as f:
         src=json.loads(f.read())
 
     keys=[]
     it_values=[]
 
-    for key, it_value in rows.items():
+    for key, it_value in src.items():
         print(key, it_value)
         if type(it_value) == dict:
             print(f"DICT: {it_value.items()}")
@@ -24,16 +24,11 @@ def json_tran(src_file, lang, rows):
             keys.append(key)
             it_values.append(it_value)
 
-    # da array di stringhe a unica stringa con EOL
-    translated = translate_text(lang, "\n".join(it_values))
-    print(f"{keys=}\n {translated=}")
-
-    # da stringa con EOL a array
-    trans_list = [ t for t in translated.split('\n')]
-    print(f"{translated=}")
+    translated = translate_text(lang, it_values)
+    # print(f"{keys=}\n {translated=}")
 
     # unisco le due liste in una sola, i dict interni rimangono appiattiti
-    tgt = list(zip(keys,trans_list))
+    tgt = list(zip(keys,translated))
 
     # da lista a dict, ricostruendo eventuali dict interni
     tgt_dict = {}
@@ -65,16 +60,28 @@ def json_tran(src_file, lang, rows):
 
         else:
             tgt_dict[k] = v
+    
+    return tgt_dict
 
+# MAIN
+if not (len(sys.argv) == 3):
+    print(f"\tUso: python {sys.argv[0]} target_lang src_file_path")
+    print("\n\ttarget_file will be locales/lang/file")
+    print("\tfrom a json translation file creates a new file with the same keys, in a different language")
+    exit (1)
 
-    basename=os.path.basename(src_file)
-    print(basename)
-    print (json.dumps(tgt_dict, ensure_ascii=False, indent=2))
-    try:
-        os.mkdir(f"locales/{lang}")
-    except Exception as e:
-        pass
+lang=sys.argv[1]
+src_file=sys.argv[2]
+tgt_dict = json_tran(src_file, lang)
+basename=os.path.basename(src_file)
+print(basename)
+print (json.dumps(tgt_dict, ensure_ascii=False, indent=2))
+try:
+    os.mkdir(f"locales/{lang}")
+except Exception as e:
+    pass
 
-    tgt_file=f"locales/{lang}/{basename}"
-    with open (tgt_file, "w") as f:
-        f.write(json.dumps(tgt_dict, ensure_ascii=False, indent=2))
+tgt_file=f"locales/{lang}/{basename}"
+with open (tgt_file, "w") as f:
+    f.write(json.dumps(tgt_dict, ensure_ascii=False, indent=2))
+

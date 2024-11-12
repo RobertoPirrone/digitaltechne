@@ -8,10 +8,10 @@ The management of nationalized strings has always had problems:
 - In the Internet Computer world it is better to work on the Front End, without creating support tables on the backend
 - It is necessary to translate the strings even in unknown languages
 
-In this project there are 4 main features:
+Features of this project are:
 - Retrieval of prompts from existing json files (those that are normally in .../public/locales/??/\*). The prompts are inserted into an Excel file, one prompt per line, with columns: prompt name, English and Italian value
 - Look for missing translation strings
-- Possible translation into a new language
+- Possible translation into a new language (both from json and from xlsx files)
 - Extraction from the xls file of the nationalized prompts:
     - standard translation file
     - specialized files for pull down menus
@@ -20,18 +20,18 @@ Please note that the python script must be run in a venv environment, for instan
 
 ```
 . .my-venv/bin/activate
-python i18n2xls.py ../public/locales dossier
+python translate/i18n2xls.py ../public/locales dossier
 deactivate
 ```
 
 
-The working directory is .../src/frontend/prepare\_18n, they are python scripts in a virtual environment
+The working directory is .../src/frontend/prepare\_18n, python scripts in a virtual environment, and are contained in a *translate* subdirectory
 
 ## Recovery
 With this operation, the dossier.json files are recovered from the en, it, etc. directories of the current sources, and are inserted into a dossier.xlsx file
 
 ```
-python i18n2xls.py ../public/locales dossier
+python translate/i18n2xls.py ../public/locales dossier
 ```
 
 ## Missing translations
@@ -43,16 +43,30 @@ So there is a small script that checks exactly that.
 It can be run either on a single file, i.e.:
 
 ```
-    python missing_translations.py ../SRC/Admin.jsx
+    python translate/missing_translations.py ../SRC/Admin.jsx
 ```
 
 or recursively:
 
 ```
-    find ../src/ -name \*.jsx -exec python missing_translations.py '{}' \;
+    find ../src/ -name \*.jsx -exec python translate/missing_translations.py '{}' \;
 ```
 
 ## Translation
+
+translation comes in different flavours, according to the file type.
+
+The xlsx variant adds (or overwites) a column of an existing xls file
+
+```
+    python translate/xlsx_translate.py de src_files/translation.xlsx
+```
+
+The json variant creates a new json file
+
+```
+    python translate/json_translate.py  de locales/en/tipotecnica.json
+```
 
 ## Extraction
 
@@ -62,7 +76,7 @@ It will then be necessary to verify the produced files and copy them to ../publi
 
 ```
 . .my-venv/bin/activate
-python xls2i18n.py ./dossier.xlsx
+python translate/xls2i18n.py ./dossier.xlsx
 deactivate
 ```
 

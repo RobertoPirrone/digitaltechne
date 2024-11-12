@@ -3,7 +3,7 @@ import csv
 from openpyxl import Workbook, load_workbook
 import subprocess
 from operator import itemgetter, attrgetter
-from xlsx_subr import x2lang_loop
+from translate_google import translate_text
 
 def x2lang_loop(xlsx, lang, col_idx):
     '''
@@ -33,25 +33,41 @@ def x2lang_loop(xlsx, lang, col_idx):
             xlsx.cell(row=i, column=col_idx).value = t
 
 # MAIN
-if not (len(sys.argv) != 3:
-    print(f"Uso: python {sys.argv[0]} target_lang src_file_path")
-    print("creates a new column in the xlsx file, with the translations for the target language")
-    print("the file is modified in place, but a backup copy is held in ./save")
+if len(sys.argv) != 3:
+    print(f"\n\tUsage: python {sys.argv[0]} target_lang xlsx_file")
+    print(f"\t\tf.i.:   python {sys.argv[0]} de translations.xlsx")
+    print("\tcreates a new column in the xlsx file, with the translations for the target language")
+    print("\tthe file is modified in place, but a backup copy is held in ./save")
     exit (1)
 
-lang=sys.argv[1]
+lang=sys.argv[1].upper()
 src_file=sys.argv[2]
 
-dirname, tail = os.path.split(fname)
+dirname, tail = os.path.split(src_file)
 basename = tail.split(".")[0]
 suffix = tail.split(".")[1]
 xlsx_name = f"{dirname}/{basename}.xlsx"
 
 wb = load_workbook(filename=xlsx_name)
-wb.save('./suca.xlsx')
+try:
+    os.mkdir('save')
+except:
+    pass
+wb.save(f'save/{basename}.xlsx')
+
 xlsx = wb['Sheet']
 
+# column to use: overwrite if already exists, otherwise add a new column
 header = xlsx[1]
+found=False
+for h in header:
+    if h.value == lang:
+        found=True
+        break
+col_idx = h.col_idx
+if not found:
+    col_idx += 1
+
 x2lang_loop(xlsx,lang, col_idx)
 wb.save(xlsx_name)
 

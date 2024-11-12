@@ -1,14 +1,9 @@
 import json, sys,re,os
 from translate_google import translate_text
 
-def json_tran(src_file,lang):
+def json_tran(src_file, lang, rows):
     with open (src_file, "r") as f:
         src=json.loads(f.read())
-
-    if len(sys.argv) == 5:
-        rows=sys.argv[3]
-    else:
-        rows=src
 
     keys=[]
     it_values=[]
@@ -30,9 +25,6 @@ def json_tran(src_file,lang):
             it_values.append(it_value)
 
     # da array di stringhe a unica stringa con EOL
-    print("XXXXit_values")
-    print(it_values)
-    print(keys)
     translated = translate_text(lang, "\n".join(it_values))
     print(f"{keys=}\n {translated=}")
 

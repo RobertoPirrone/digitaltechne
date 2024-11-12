@@ -21,7 +21,12 @@ lang=sys.argv[1]
 file_type=sys.argv[2]
 src_file=sys.argv[3]
 
+if len(sys.argv) == 5:
+    rows=sys.argv[4]
+else:
+    rows=""
+
 if file_type == "JSON":
-    json_tran(src_file, lang)
+    json_tran(src_file, lang, rows)
 if file_type == "XLSX":
-    xlsx_tran(src_file, lang)
+    xlsx_tran(src_file, lang, rows)

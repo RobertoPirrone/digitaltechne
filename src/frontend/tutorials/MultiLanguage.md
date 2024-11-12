@@ -68,6 +68,13 @@ The json variant creates a new json file
     python translate/json_translate.py  de locales/en/tipotecnica.json
 ```
 
+The text variant creates a new text file, and can be used for the markup files used in the manuals. destination file is a mandatory parameter
+
+```
+    python translate/text_translate.py fr ../../docs/docs/USER_MANUAL/artwork_mark/artwork_mark.rst artwork_mark.rst
+```
+
+
 ## Extraction
 
 With this operation, starting from the dossier.xlsx file, the dossier.json files are created in the en, it, etc. directories under ./locales.

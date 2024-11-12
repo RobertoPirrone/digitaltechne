@@ -119,4 +119,10 @@ def i18n2xls():
         Log.error(f"(error: {e}")
 
 if __name__ == "__main__":
+    if len(sys.argv) != 3:
+        print(f"\n\tUsage: python {sys.argv[0]} json_directory file")
+        print("\tCreates xlsx file containing columns for keys and translated values from json translation files, f.i.:")
+        print("\t\tpython translate/i18n2xls.py ../public/locales dossier")
+        exit (0)
+
     i18n2xls()

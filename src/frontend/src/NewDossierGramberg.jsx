@@ -15,18 +15,16 @@ import { SpecializedSelect } from "./components/SpecializedSelect";
 
 import { backend } from "../../declarations/backend";
 import { Footer } from "./Footer";
+import { GlobalContext } from "./Global";
 import { Header } from "./Header";
 import { UploadNew } from "./UploadNew";
 import { appAlert } from "./Utils";
 import { useAuth } from "./auth/use-auth-client";
 import { DTRoot } from "./components/useStyles";
-import { useGlobalState } from "./state";
-import { GlobalContext } from "./Global";
 
 export const NewDossier = () => {
     const navigate = useNavigate();
-    const [username, setUsername] = useGlobalState("username");
-    const [application, setapplication] = useGlobalState("application");
+    const {userName, application} = useContext(GlobalContext);
     const {
         control,
         register,
@@ -240,7 +238,7 @@ export const NewDossier = () => {
 
 export const BatchInsert = () => {
     const navigate = useNavigate();
-    const [username, setUsername] = useGlobalState("username");
+    const {userName, application} = useContext(GlobalContext);
     const {
         control,
         register,

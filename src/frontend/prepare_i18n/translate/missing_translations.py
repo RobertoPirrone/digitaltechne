@@ -1,8 +1,12 @@
 import sys,re, json
 from pathlib import Path
 
-print(f"{sys.argv[1]}:")
+if len(sys.argv) != 2:
+    print(f"Usage: python {sys.argv[0]} jsx_file")
+    print("prints on stdout missing occurences of translation strings in t(...)")
+    exit (0)
 
+print(f"{sys.argv[1]}:")
 with open (sys.argv[1]) as r:
     lines = r.read()
 

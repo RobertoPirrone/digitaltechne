@@ -4,7 +4,9 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import Collapse from "@mui/material/Collapse";
 import Container from "@mui/material/Container";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import Grid from "@mui/material/Grid";
 import Switch from "@mui/material/Switch";
+import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
 import React, { useContext, useState, useMemo, useEffect, useCallback } from "react";
 import { useForm } from "react-hook-form";
@@ -104,6 +106,21 @@ export const Dossier = () => {
                     } else {
                         const master_only = response.ret_public.filter((ele) => ele.uuid === ele.master_uuid);
                         console.log("dossier_query master_only: ", master_only);
+                        let row = "";
+                        for (row of master_only) {
+                            const all_rows =  response.ret_public.filter((ele) => ele.master_uuid === row.master_uuid);
+                            const tot_cnt = all_rows.length;
+                            const mark_cnt = (all_rows.filter((ele) => ele.has_artwork_mark )).length;
+                            if (mark_cnt !== 0) {
+                                const mark_count = `(${mark_cnt}/${tot_cnt})`;
+                                console.log(mark_count);
+                                row.mark_count = mark_count;
+                                row.has_artwork_mark = true;
+                            } else {
+                                row.mark_count = 0;
+                                row.has_artwork_mark = false;
+                                }
+                            }
                         setDossierPubblici(master_only);
                     }
 
@@ -196,7 +213,14 @@ export const Dossier = () => {
         headerName: t("dossier:InBC"),
         field: "contract_initialized",
         renderCell: (params) => {
-            return <MyCheckIcon value={params.row.has_artwork_mark} />;
+            return (
+                <Grid container align="center" direction="row" >
+                <Grid item xs={6}><MyCheckIcon value={params.row.has_artwork_mark} /></Grid>
+                {(params.row.mark_count) ?
+                    <Grid item xs={6}><Typography><br /><br />{params.row.mark_count}</Typography></Grid>
+                : null }
+                </Grid>
+            )
         },
     });
 

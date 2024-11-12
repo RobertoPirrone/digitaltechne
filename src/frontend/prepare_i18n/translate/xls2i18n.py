@@ -148,6 +148,13 @@ def xls2i18n():
     except Exception as e:
         Log.error(f"xls2i18n error: {e}")
 
+# MAIN 
 if __name__ == "__main__":
-    xls2i18n()
+
+    if len(sys.argv) != 2:
+        print(f"\n\tUsage: python {sys.argv[0]} xlsx_file")
+        print("\tCreates json translation files from a xlsx file containing columns for keys and translated values")
+        exit (0)
+
+        xls2i18n()
 

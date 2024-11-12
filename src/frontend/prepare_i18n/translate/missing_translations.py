@@ -2,8 +2,8 @@ import sys,re, json
 from pathlib import Path
 
 if len(sys.argv) != 2:
-    print(f"Usage: python {sys.argv[0]} jsx_file")
-    print("prints on stdout missing occurences of translation strings in t(...)")
+    print(f"\n\tUsage: python {sys.argv[0]} jsx_file")
+    print("\tprints on stdout missing occurences of translation strings in t(...)")
     exit (0)
 
 print(f"{sys.argv[1]}:")

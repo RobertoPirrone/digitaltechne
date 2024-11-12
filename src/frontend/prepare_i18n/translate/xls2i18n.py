@@ -6,10 +6,71 @@ import csv
 from openpyxl import Workbook, load_workbook
 import subprocess
 from operator import itemgetter, attrgetter
-from xlsx_subr import x2json_loop
 
 Log = logging.getLogger(__name__)
 Log.error(sys.argv)
+
+# loop sulle righe di un file xlsx già aperto restituisce json di key/value da mettere nei file di public/locales
+def x2json_loop(xlsx, idx):
+    '''
+    xlsx: array di righe del file xls
+    idx: colonna su cui si lavora
+    mode:   * x2json restituisce json di key/value da mettere nei file di public/locales
+            * x2lang richiama google translate per creare la colonna di una nuova lingua
+    '''
+    new_L2_key=None
+    for in_rows in [xlsx]:
+
+        label = in_rows[2][idx].value
+        Log.error(f"TITLE: {label}")
+        trans_dict = {}
+        L2_dict={}
+        for s in in_rows.iter_rows(min_row=3):
+            Log.error(s)
+            L1=s[0].value
+            L2=s[1].value
+            main_value=s[2].value
+            cur_value=s[idx].value
+            # Log.error(f"For s: {L1=} {L2=}, {main_value=} {cur_value=}")
+
+            if L1 is not None and L2 is not None and L2 == "L2":
+                # inizia un livello 2
+                print ("Inizio L2, ", L1)
+                if new_L2_key is not None:
+                    # sputo fuori l'attuale L2  e reinizializzo
+                    trans_dict[new_L2_key] = L2_dict
+                # Per i pull down bilivello posso nazionalizzare anche il nome del gruppo
+                L2_dict={}
+                new_L2_key = L1
+                # dict annidati non di tipo pulldown, la label non esiste
+                print(cur_value, type(cur_value))
+                if  cur_value is not None:
+                    L2_dict["Label"]=cur_value
+                else:
+                    print("ZZZZZZZZZZZZZZZZZZZZZZ NOne")
+                
+            elif  L1 is None and L2 is None:
+                break
+
+            elif L2 is None: 
+                # livello 1
+                print(cur_value)
+                trans_dict[L1] = cur_value
+
+            elif  L1 is None:
+                # siamo dentro un L2 
+                if  cur_value is not None:
+                    L2_dict[L2] = cur_value
+
+            else:
+                Log.error(f"ELSE {L1}, {L2}, main value {main_value}, cur_value {cur_value}" )
+
+        if new_L2_key is not None:
+            # ho ancora un dict in canna
+            print(f"esco {new_L2_key}")
+            trans_dict[new_L2_key] = L2_dict
+
+        return trans_dict
 
 def xls2i18n():
     Log.error("xls2i18n")

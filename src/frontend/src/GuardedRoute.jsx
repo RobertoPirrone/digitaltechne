@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Route, redirect } from "react-router-dom";
-import { useGlobalState } from "./state";
+import { GlobalContext } from "./Global";
 
 const GuardedRoute = ({ component: Component, ...rest }) => {
   //console.log("rest",rest);
-  const [username, setUsername] = useGlobalState("username");
+  const userName = useContext(GlobalContext).userName;
 
   // prop forcereload forza azzeramento stato ad ogni accesso
   // della componente (aggiunta key univoca)
@@ -19,7 +19,6 @@ const GuardedRoute = ({ component: Component, ...rest }) => {
   let slash = mode.indexOf("/");
   if (slash !== -1) mode = mode.substr(0, slash);
 
-  const { userInfo, setUserInfo } = useGlobalHook("userStore");
   const [loading, setLoading] = useState(true);
 
   const isonow = () => new Date().toISOString();
@@ -28,9 +27,8 @@ const GuardedRoute = ({ component: Component, ...rest }) => {
     console.log("--- " + isonow() + " GuardedRoute", mode);
     //console.log("call get_userinfo");
     let url = "get_userinfo";
-  }, [setUserInfo, mode]);
+  }, [ mode]);
 
-  //console.log("GuardedRoute: loading:",loading,"userInfo",userInfo,"mode",mode);
   if (loading)
     return (
       <div>
@@ -42,7 +40,7 @@ const GuardedRoute = ({ component: Component, ...rest }) => {
     <Route
       {...rest}
       render={(rest) =>
-        username ? forcereload ? <Component {...rest} mode={mode} key={isonow()} /> : <Component {...rest} mode={mode} /> : <Redirect to="/login" />
+        userName ? forcereload ? <Component {...rest} mode={mode} key={isonow()} /> : <Component {...rest} mode={mode} /> : <Redirect to="/login" />
       }
     />
   );

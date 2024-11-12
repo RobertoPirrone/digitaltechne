@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useLocation, useParams } from "react-router-dom";
 import { backend } from "../../declarations/backend";
 import { Footer } from "./Footer";
+import { GlobalContext } from "./Global";
 import { Header } from "./Header";
 import { IconCode } from "./IconCode";
 import { Table } from "./Table";
@@ -16,7 +17,6 @@ import { appAlert, prettyDate, prettyJson } from "./Utils";
 import { useAuth } from "./auth/use-auth-client";
 import { Check, GoToHomePage, Loading, MostButton2, MostSelect, MostSubmitButton, MostTextField, MyCheckIcon, NewTableRow, WarningIcon } from "./components/MostComponents";
 import { MostDataGrid } from "./components/MostDataGrid";
-import { useGlobalState } from "./state";
 
 import { HttpAgent } from "@dfinity/agent";
 import { Ed25519KeyIdentity } from "@dfinity/identity";
@@ -40,7 +40,7 @@ export const DossierDetail = () => {
     const [isVideo, setIsVideo] = useState(null);
     const [docs, setDocs] = useState([]); //elenco documenti relativi a dossier_id
     const [doc_bc_sync, setDoc_bc_sync] = useState(true);
-    const [application, setApplication] = useGlobalState("application");
+    const application = useContext(GlobalContext).application;
 
     const { i18n, t } = useTranslation(["translation", "documento", "dossier", "tipofirma", "tipotecnica", "tiposupporto"]);
     const { control, register, handleSubmit, errors } = useForm();

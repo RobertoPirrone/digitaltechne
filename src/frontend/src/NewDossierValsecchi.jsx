@@ -15,18 +15,16 @@ import { SpecializedSelect } from "./components/SpecializedSelect";
 
 import { backend } from "../../declarations/backend";
 import { Footer } from "./Footer";
+import { GlobalContext } from "./Global";
 import { Header } from "./Header";
 import { UploadNew } from "./UploadNew";
 import { appAlert } from "./Utils";
 import { useAuth } from "./auth/use-auth-client";
 import { DTRoot } from "./components/useStyles";
-import { useGlobalState } from "./state";
-import { GlobalContext } from "./Global";
 
 export const NewDossier = () => {
     const navigate = useNavigate();
-    const [username, setUsername] = useGlobalState("username");
-    const [application, setapplication] = useGlobalState("application");
+    const {userName, application} = useContext(GlobalContext);
     const {
         control,
         register,
@@ -47,12 +45,12 @@ export const NewDossier = () => {
     const [asset, setAsset] = useState({});
     const [assets, setAssets] = useState([{}]);
     const [privateDossier, setPrivateDossier] = useState(false);
-//    const [nomeOpera, setNomeOpera] = useState("");
+    const [nomeOpera, setNomeOpera] = useState("");
     const [tipoOpera, setTipoOpera] = useState("");
     const [luogoOpera, setLuogoOpera] = useState("");
     const [autore, setAutore] = useState("");
     const [tipotecnica, setTipotecnica] = useState("");
-    const [annoopera, setAnnoopera] = useState("");
+    const [annoopera, setAnnoopera] = useState();
     const [numero_totale_copie, setNumero_totale_copie] = useState(0);
     const [dimensions, setDimensions] = useState("");
     const [tiposupporto, setTiposupporto] = useState("");
@@ -62,12 +60,10 @@ export const NewDossier = () => {
     const [copiePdA, setCopiePdA] = useState(0);
     const globalData = useContext(GlobalContext);
 
-    console.log('globalData');
-    console.log(globalData);
+    console.dir(globalData);
     useEffect(() => {
         if (isLoading) return;
         setIsLoading(true);
-        console.log("chiamo backendActor.check_caller: ");
         backendActor
             .check_caller()
             .then((Ret_data) => {
@@ -90,18 +86,13 @@ export const NewDossier = () => {
             });
     }, [backendActor, navigate, t]);
 
-    const actionChange = (e, el) => {
-        console.error(JSON.stringify(el));
-        setAction(el.value);
-    };
-
     const onInsert = (what, id) => {
         setLastInsert({ what: what, id: id });
     };
 
     const onSubmit = (vals) => {
-        console.log("VALS");
-        console.log(vals);
+        // console.log("VALS");
+        // console.log(vals);
 
         const tech = "";
         let seq = "";
@@ -112,17 +103,17 @@ export const NewDossier = () => {
         let missing_elements = [];
         let need_ele = null;
         let content = "";
-        for (need_ele in ["annoopera", "nomeOpera", "tipotecnica", "copieFirmate", "copieNonFirmate", "copiePdA"] ) {
+        // TBD per evitare eval, studiare: https://www.geeksforgeeks.org/how-to-use-dynamic-variable-names-in-javascript/
+        for (need_ele of ["annoopera", "nomeOpera", "tipotecnica", "tiposupporto", "copieFirmate", "copieNonFirmate", "copiePdA"] ) {
 
             content = eval(`${need_ele}`)
-            console.log(need_ele, content);
+            // console.log("Need_ele: ", need_ele, content);
             if (content  === "") missing_elements.push(need_ele);
         };
-        appAlert(missing_elements);
-        console.log(missing_elements.length);
+        // console.log("missing_elements.length: ", missing_elements.length);
         if (missing_elements.length != 0) {
-            appAlert("missing elements: ",JSON.stringify(missing_elements));
-            abort();
+            appAlert(`${t("missingValues")}: ${JSON.stringify(missing_elements)}`);
+            return false;
         }
         vals.uuid = uuidv4();
         master_uuid = vals.uuid;
@@ -134,6 +125,9 @@ export const NewDossier = () => {
         vals.tipotecnica = tipotecnica;
         vals.dimensions = dimensions;
         vals.numero_totale_copie = Number.parseInt(numero_totale_copie);
+        vals.signed = Number.parseInt(copieFirmate);
+        vals.not_signed = Number.parseInt(copieNonFirmate);
+        vals.artist_proof = Number.parseInt(copiePdA);
         vals.tiposupporto = tiposupporto;
         if (privateDossier === null || privateDossier === false) {
             vals.private = false;
@@ -143,7 +137,6 @@ export const NewDossier = () => {
         vals.icon_uri = assets[0].key;
         setDisabledButs(true);
         setIsUpLoading(true);
-        console.log("onSubmit: ", JSON.stringify(vals));
         for (tipofirma of ["SIGNED", "NOT_SIGNED", "ARTIST_PROOF"]) {
             if (tipofirma === "SIGNED") {
                 max_cnt = copieFirmate;
@@ -157,7 +150,7 @@ export const NewDossier = () => {
                 vals.master_uuid = master_uuid;
                 vals.tipofirma = tipofirma;
                 vals.sheet_identifier = `${tipofirma} ${seq.toString()} / ${max_cnt}`;
-                console.log("onSubmit dossier_insert: ", vals);
+                console.log(`onSubmit dossier_insert ${tipofirma}, ${seq}: `, vals);
                 backendActor
                     .dossier_insert(JSON.stringify(vals))
                     .then((Ret_data) => {
@@ -195,44 +188,44 @@ export const NewDossier = () => {
 
     // console.log("newDossierInfo: ", JSON.stringify(newDossierInfo));
     // console.log("newDossierInfo: ", JSON.stringify(newDossierInfo.autori));
-    console.log("princiapl: ", principal.toText());
     if (isLoading) return;
 
     return (
         <div>
             <Header />
-            {application === "elivilla" ? (
-                <h1>{t("dossier:NewCelebrity")}</h1>
-            ) : application === "techne" ? (
-                <h1>{t("dossier:NewArtwork")}</h1>
-            ) : application === "hypnos" ? (
-                <h1>{t("dossier:NewPainting")}</h1>
-            ) : application === "cottolengo" ? (
-                <h1>{t("dossier:NewDrawing")}</h1>
-            ) : (
-                <h1>{t("dossier:NewDossier")}</h1>
-            )}
+            <Typography variant="h2">
+                {application === "elivilla" ? (
+                    t("dossier:NewCelebrity")
+                ) : application === "techne" ? (
+                    t("dossier:NewArtwork")
+                ) : application === "hypnos" ? (
+                    t("dossier:NewPainting")
+                ) : application === "cottolengo" ? (
+                    t("dossier:NewDrawing")
+                ) : (
+                    t("dossier:NewDossier")
+                )}
+            </Typography>
             <Container component="main" maxWidth="md">
                 <div className={DTRoot}>
 
                     <UploadNew assets={assets} show={true} asset={assets[0]} setAssets={setAssets} setDisabledButs={setDisabledButs} label={t("dossier:LoadJpgs")} />
-                    <form onSubmit={handleSubmit(onSubmit)}>
+                    <form >
                         <Grid container direction="column" spacing={1} >
-                            <MyTextField name="nomeopera" required={true} register={register} errors={errors} label={t("dossier:nomeopera")} inputProps={{ maxLength: 4 }} />
+                            <MyTextField field_name={t("dossier:nomeopera")} name="nomeOpera" required={true} errors={errors} label={t("dossier:nomeopera")} onChange={(e, v) => setNomeOpera(e.target.value)} inputProps={{ maxLength: 30 }} />
                             <SpecializedSelect defaultValue={""} name="tipotecnica" label={t("tipotecnica:Label")} what={"tipotecnica"} onChange={(e, v) => setTipotecnica(e.target.value)} />
-                            <MyTextField name="annoopera" required={true} label={t("dossier:AnnoOpera")} onChange={(e) => setAnnoopera(e.target.value)} />
-                            <MyTextField name="numero_totale_copie" required={true} label={t("dossier:NumeroTotaleCopie")} onChange={(e) => setNumero_totale_copie(e.target.value)} />
-                            <MyTextField name="copie_firmate" required={true} label={t("dossier:CopieFirmate")} onChange={(e) => setCopieFirmate(e.target.value)} />
-                            <MyTextField name="copie_non_firmate" required={true} label={t("dossier:CopieNonFirmate")} onChange={(e) => setCopieNonFirmate(e.target.value)} />
-                            <MyTextField name="copie_PdA" required={true} label={t("dossier:CopiePdA")} onChange={(e) => setCopiePdA(e.target.value)} />
-                            <MyTextField name="dimensions" required={true} label={t("dossier:dimensions")} onChange={(e) => setDimensions(e.target.value)} />
+                            <MyTextField field_name={t("dossier:AnnoOpera")} name="annoopera" required={true} label={t("dossier:AnnoOpera")} onChange={(e) => setAnnoopera(e.target.value)} />
+                            <MyTextField field_name={t("dossier:NumeroTotaleCopie")} name="numero_totale_copie" required={true} label={t("dossier:NumeroTotaleCopie")} onChange={(e) => setNumero_totale_copie(e.target.value)} />
+                            <MyTextField field_name={t("dossier:CopieFirmate")} name="copie_firmate" required={true} label={t("dossier:CopieFirmate")} onChange={(e) => setCopieFirmate(e.target.value)} />
+                            <MyTextField field_name={t("dossier:CopieNonFirmate")} name="copie_non_firmate" required={true} label={t("dossier:CopieNonFirmate")} onChange={(e) => setCopieNonFirmate(e.target.value)} />
+                            <MyTextField field_name={t("dossier:CopiePdA")} name="copie_PdA" required={true} label={t("dossier:CopiePdA")} onChange={(e) => setCopiePdA(e.target.value)} />
+                            <MyTextField field_name={t("dossier:dimensions")} name="dimensions" required={true} label={t("dossier:dimensions")} onChange={(e) => setDimensions(e.target.value)} />
                             <SpecializedSelect defaultValue={""} name="tiposupporto" label={t("tiposupporto:Label")} what={"tiposupporto"} onChange={(e, v) => setTiposupporto(e.target.value)} />
                             <Typography display="inline">Private</Typography> <MyCheckbox defaultChecked={false} onChange={(e, v) => setPrivateDossier(v.label)} />
                             <Grid item >
-                                {" "}
-                                &nbsp;{" "}
+                                &nbsp;
                             </Grid>
-                            <MostSubmitButton disabled={disabledButs} label={t("dossier:Inserisci")} />
+                            <MostSubmitButton onClick={handleSubmit(onSubmit)} disabled={disabledButs} label={t("dossier:Inserisci")} />
                         </Grid>
                     </form>
                     {isUpLoading ? <CircularProgress /> : null}
@@ -245,7 +238,7 @@ export const NewDossier = () => {
 
 export const BatchInsert = () => {
     const navigate = useNavigate();
-    const [username, setUsername] = useGlobalState("username");
+    const {userName, application} = useContext(GlobalContext);
     const {
         control,
         register,
@@ -311,6 +304,7 @@ export const BatchInsert = () => {
         let max_cnt = 0;
         let switch_row = false;
 
+        try {
         for (r of jsonText) {
             console.log("jsonText element: ", r);
 
@@ -369,6 +363,9 @@ export const BatchInsert = () => {
             vals.tipofirma = "SIGNED";
             vals.dimensions = r.Dimensions === null ? "UNK" : r.Dimensions;
             vals.numero_totale_copie = r.EditionNumber != null ? Number.parseInt(r.EditionNumber) : 1;
+            vals.signed = (r.SIGNED) ? Number.parseInt(r.SIGNED) : 0;
+            vals.not_signed = (r.NOT_SIGNED) ? Number.parseInt(r.NOT_SIGNED) : 0;
+            vals.artist_proof = (r.ARTIST_PROOF) ? Number.parseInt(r.ARTIST_PROOF) : 0;
             vals.tiposupporto = "PAPER";
             vals.private = false;
 
@@ -418,6 +415,10 @@ export const BatchInsert = () => {
                         });
                 }
             }
+        }
+        } catch (e) {
+            // console.log(e.message);
+            appAlert(`insert Error: ${e.message}`);
         }
     };
 

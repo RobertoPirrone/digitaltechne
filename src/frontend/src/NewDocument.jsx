@@ -21,7 +21,6 @@ import { useAuth } from "./auth/use-auth-client";
 import { DocData } from "./components/DocData";
 import { GoToHomePage, MostCheckbox, MostSelect, MostSubmitButton, MostTextField, MyAutocomplete, MyCheckbox, MyTextField } from "./components/MostComponents";
 import { DTRoot, DTSubmit } from "./components/useStyles";
-import { useGlobalState } from "./state";
 
 /**
  * NewDocument: inserimento di un documento su IC

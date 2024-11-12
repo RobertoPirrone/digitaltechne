@@ -1,3 +1,5 @@
 .my-venv
 locales
+save
+__pycache__
 tipotecnica.xlsx

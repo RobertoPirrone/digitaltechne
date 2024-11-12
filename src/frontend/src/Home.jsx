@@ -6,6 +6,7 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 
 import { Footer } from "./Footer";
+import { GlobalContext } from "./Global";
 import { Header } from "./Header";
 import { appAlert } from "./Utils";
 import { useAuth } from "./auth/use-auth-client";
@@ -27,6 +28,7 @@ export const Home = () => {
     const LaboratoryRole = hasRole("Laboratory", userInfo);
     const OwnerRole = hasRole("Owner", userInfo);
     const UserRole = hasRole("User", userInfo);
+    const {userName, setUserName} = useContext(GlobalContext);
     console.log("AAAA");
 
     useEffect(() => {
@@ -48,7 +50,8 @@ export const Home = () => {
             .then((Ret_data) => {
                 // console.log("dossier returns: ", JSON.stringify(Ret_data));
                 if ("Ok" in Ret_data) {
-                    console.log("Home check_caller Ok response: ", Ret_data);
+                    console.log("Home check_caller Ok response: ", Ret_data.Ok);
+                    setUserName(Ret_data.Ok.friendly_name);
                 } else {
                     const err = Ret_data.Err;
                     console.log("Home check_caller Err response: ", err);
@@ -69,7 +72,7 @@ export const Home = () => {
             <div className="content-container">
                 <Container component="main" maxWidth="md">
                     <h1>
-                        {t("HomeWelcome")} {userInfo.name} {userInfo.surname}
+                        {t("HomeWelcome")} {userName} 
                     </h1>
                     <Grid container spacing={1} alignItems="flex-start" >
                         {AdminRole ? (

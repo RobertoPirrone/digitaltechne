@@ -9,6 +9,7 @@ let application;
 let autore;
 let logo;
 let officialURL;
+
 switch (app) {
     case "gramberg":
         application = "gramberg";
@@ -27,8 +28,9 @@ switch (app) {
 }
 
 const GlobalProvider = ({ children }) => {
+    const [userName, setUserName] = useState('')
 
-    return <GlobalContext.Provider value={{ application, autore, logo, officialURL }}>{children}</GlobalContext.Provider>;
+    return <GlobalContext.Provider value={{ application, autore, logo, officialURL, userName, setUserName }}>{children}</GlobalContext.Provider>;
 };
 
 export { GlobalProvider, GlobalContext };

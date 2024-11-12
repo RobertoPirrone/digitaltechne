@@ -13,7 +13,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 //import logosa from './Smartars.png';
@@ -25,7 +25,7 @@ import { GlobalContext } from "./Global";
 export function Header(props) {
     const { t, i18n } = useTranslation();
     const [langDialog, setLangDialog] = useState(false);
-    const username= useContext(GlobalContext);
+    const userName= useContext(GlobalContext).userName;
     const catalogoUrl = "/catalogo.html";
 
     function linguaWin() {
@@ -169,7 +169,7 @@ export function Header(props) {
             </Menu>
 
             <Menu id="user-menu" anchorEl={anchorEl1} anchorOrigin={{ vertical: "top", horizontal: "right" }} transformOrigin={{ vertical: "top", horizontal: "right" }} keepMounted open={Boolean(anchorEl1)} onClose={handleClose1}>
-                <MenuItem disabled>{username}</MenuItem>
+                <MenuItem disabled>{userName}</MenuItem>
                 <MenuItem component={Link} to="/logout" onClick={handleClose1}>
                     {" "}
                     {t("Logout")}{" "}

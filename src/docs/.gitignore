@@ -1,3 +1,5 @@
 .venv
 docs/_build
 docs/rtd_build
+docs/rtd_html_de
+docs/rtd_html_it

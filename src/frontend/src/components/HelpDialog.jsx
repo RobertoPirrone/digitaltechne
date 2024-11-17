@@ -11,7 +11,7 @@ import React, { useState, useEffect } from "react";
 import Draggable from "react-draggable";
 import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router-dom";
-// import { getLang } from "../i18n";
+import i18n from "../i18n";
 
 function getLocation(rawlocation) {
     const uri_array = rawlocation.pathname.split("/");
@@ -21,13 +21,17 @@ function getLocation(rawlocation) {
 }
 export function getFullManualUrl(lang) {
     // const fullManualUrl = app_server_url + '/Docs/' + lang + '/USER_MANUAL/USER_MANUAL.html?'+window._env_.FE_VERSION
-    // const fullManualUrl = 'UserManual.pdf'
-    const fullManualUrl = "rtd_html/USER_MANUAL/user_manual.html";
+    let fullManualUrl = "";
+    if (lang == "en") 
+        fullManualUrl = `rtd_html_${lang}/USER_MANUAL/user_manual.html`;
+    else
+        fullManualUrl = `rtd_html_${lang}/USER_MANUAL/user_manual_${lang}.html`;
     return fullManualUrl;
 }
 function getManualUrl(lang, fullManualUrl, location) {
     if (location === "") return fullManualUrl;
-    const manualUrl = `html/USER_MANUAL/${location}/${location}.html`;
+    let manualUrl = "";
+    manualUrl = `html_${lang}/USER_MANUAL/${location}/${location}_${lang}.html`;
     console.log(manualUrl);
     return manualUrl;
 }
@@ -39,9 +43,8 @@ function getBodyHeight() {
 }
 
 export function HelpIframe(props) {
-    const { i18n } = useTranslation();
+    const { i18n } = useTranslation(["translation"]);
     const location = getLocation(useLocation());
-    // const lang = getLang(i18n.language);
     const lang = "it";
     const fullManualUrl = getFullManualUrl(lang);
     let manualUrl;
@@ -55,10 +58,9 @@ export function HelpIframe(props) {
 export default function HelpDialog(props) {
     const [open, setOpen] = React.useState(false);
     const [size, setSize] = useState(null);
-    const { t, i18n } = useTranslation();
+    const { t, i18n } = useTranslation(["translation"]);
     const location = getLocation(useLocation());
-    const lang = "it";
-    // const lang = getLang(i18n.language)
+    const lang = i18n.language;
     const fullManualUrl = getFullManualUrl(lang);
     const manualUrl = getManualUrl(lang, fullManualUrl, location);
 

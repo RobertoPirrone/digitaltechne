@@ -1,0 +1,15 @@
+{
+  "tipotecnica_array": {
+    "EMBOSSING": "Prägung",
+    "ETCHING": "Radierung",
+    "LITOGRAPHY": "Lithographie",
+    "MIXED": "Gemischte Technik",
+    "WOODCUT": "Holzschnitt",
+    "PLASTER": {
+      "Label": "Pla_en",
+      "P2": "Gips2",
+      "P3": "Gips3"
+    }
+  },
+  "Label": "Techniktyp"
+}

@@ -21,8 +21,6 @@ def x2json_loop(xlsx, idx):
     new_L2_key=None
     for in_rows in [xlsx]:
 
-        label = in_rows[2][idx].value
-        Log.error(f"TITLE: {label}")
         trans_dict = {}
         L2_dict={}
         for s in in_rows.iter_rows(min_row=3):
@@ -123,6 +121,8 @@ def xls2i18n():
             trans_dict = x2json_loop(xlsx, idx)
 
             Log.error(trans_dict)
+            label = xlsx[2][idx].value
+            Log.error(f"TITLE: {label}")
             if pulldown:
                 out_dict = {f"{basename}_array": trans_dict}
                 out_dict['Label'] = label
@@ -151,10 +151,11 @@ def xls2i18n():
 # MAIN 
 if __name__ == "__main__":
 
-    if len(sys.argv) != 2:
-        print(f"\n\tUsage: python {sys.argv[0]} xlsx_file")
+    if len(sys.argv) != 3:
+        print(f"\n\tUsage: python {sys.argv[0]} [--pulldown]  xlsx_file")
         print("\tCreates json translation files from a xlsx file containing columns for keys and translated values")
+        print("\t--pulldown builds the nationalized pulldown values")
         exit (0)
 
-        xls2i18n()
+    xls2i18n()
 

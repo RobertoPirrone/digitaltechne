@@ -3,17 +3,21 @@
 # dfx canister call uploads authorize '(principal "uybjb-x2bz4-k5mwy-4h4fk-7ca6d-evlpb-trrht-7wzsu-bkjxr-53jik-jqe")'
 
 unset DFX_NETWORK
+dfx identity use NuovaIdentitaRobi
 
 dfx canister create internet_identity
 dfx build internet_identity 
+dfx generate internet_identity
 dfx canister install internet_identity 
 
 dfx canister create uploads
 dfx build uploads 
+dfx generate uploads
 dfx canister install uploads 
 
 dfx canister create frontend
 dfx canister create backend
+
 
 dfx build backend
 bash make_did.sh

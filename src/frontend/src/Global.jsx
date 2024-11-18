@@ -17,6 +17,12 @@ switch (app) {
         logo = "/Liliana Gramberg.jpg";
         officialURL = "https://lilianagramberg.com";
         break;
+    case "digitaltechne":
+        application = "digitaltechne";
+        autore = "DigitalTechne sagl";
+        logo = "/DT-noalpha.png";
+        officialURL = "https://digitaltechne.ch";
+        break;
     case "valsecchi":
         application = "valsecchi";
         autore = "Carlo Valsecchi";

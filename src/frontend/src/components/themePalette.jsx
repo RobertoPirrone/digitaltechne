@@ -5,6 +5,13 @@ const app = import.meta.env.VITE_APPLICATION;
 let palette = {};
 
 switch (app) {
+    case 'digitaltechne':
+        palette = {
+            primary: red,
+            background: { default: "#f8f8f8" }
+        };
+        break;
+
     case 'gramberg':
         palette = {
             primary: lime,

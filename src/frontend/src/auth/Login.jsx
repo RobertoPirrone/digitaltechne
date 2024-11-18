@@ -26,15 +26,17 @@ function Login() {
                 <Home />
             ) : (
                 <Container component="main" maxWidth="xs">
-                    <div className={DTPaper}>
-                        <img src={logo} xwidth={400} className="XXXApp-logo" alt="logo" />
-                        <Typography component="h1" variant="h5">
-                            {`${autore} ${t("Artwork Archive")}`}
-                        </Typography>
-                        <div className="w-1/2 mb-4">
-                            <MostSubmitButton onClick={login} className="makeStyles-submit-4" label={t("SignIn.Sign In")} />
-                        </div>
-                        <Grid container>
+                    <Grid container>
+                        <Grid item xs={12}>
+                            <img src={logo} width={400} className="XXXApp-logo" alt="logo" />
+                            <Grid item xs={12}>
+                                <Typography component="h1" variant="h5">
+                                    {`${autore} ${t("Artwork Archive")}`}
+                                </Typography>
+                                <div className="w-1/2 mb-4">
+                                    <MostSubmitButton onClick={login} className="makeStyles-submit-4" label={t("SignIn.Sign In")} />
+                                </div>
+                            </Grid>
                             <br />
                             <br />
                             <Grid item xs={12}>
@@ -43,7 +45,7 @@ function Login() {
                                 </a>
                             </Grid>
                         </Grid>
-                    </div>
+                    </Grid>
                 </Container>
             )}
         </>
